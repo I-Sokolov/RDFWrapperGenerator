@@ -8,8 +8,7 @@ namespace RDFWrappers
 {
     class Schema
     {
-
-        class Property
+        public class Property
         {
             public Int64 id;
             public Int64 type;
@@ -31,23 +30,24 @@ namespace RDFWrappers
             public bool IsObject() { return type == Engine.x86_64.OBJECTPROPERTY_TYPE; }
         }
 
-        class ClassProperty
+        public class ClassProperty
         {
             public string name;
             public Int64 min;
             public Int64 max;
         }
 
-        class Class
+        public class Class
         {
             public Int64 id;
             public List<Int64> parents = new List<Int64>();
             public List<ClassProperty> properties = new List<ClassProperty>();
         }
 
+        public SortedList<string, Class> m_classes = new SortedList<string, Class>();
+
         private Int64 m_model = 0;
         private SortedList<string, Property> m_properties = new SortedList<string, Property>();
-        private SortedList<string, Class> m_classes = new SortedList<string, Class>();
 
         /// <summary>
         /// 

@@ -34,7 +34,7 @@ namespace RDFWrappers
                 //
                 //
                 CSGenerator csgen = new CSGenerator (@"O:\DevArea\RDF\RDFWrappers\EngineEx_Template.cs");
-                csgen.Run(schema);
+                csgen.WriteWrapper(schema, @"O:\DevArea\RDF\csgpackagesourcecode\engine (build 1054)\C#\ArrayInOut-CS\ArrayInOut-CS\EngineGenerated.cs");
 
                 x86_64.CloseModel(model);
                 return 0;

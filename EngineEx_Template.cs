@@ -147,7 +147,7 @@ public class INSTANCE_CLASS : Instance
     {
 //## FactoryMethod template part
         /// <summary> 
-        /// Create instance of Material
+        /// Create instance of INSTANCE_CLASS
         /// </summary>
         /// <param name="model">The handle to the model</param>
         /// <param name="name">Name of the instance (optional)</param>
