@@ -22,12 +22,13 @@ namespace RDFWrappers
                     Console.WriteLine("Generate wrapper classes to work with RDF Geometry Kernel model");
                     Console.WriteLine("(specify file name in command line if you want genrate for custom model)");
                 }
-
+                Console.WriteLine();
                 //
                 //
                 var model = x86_64.OpenModel(fileName);
 
                 var schema = new Schema(model);
+                schema.ToConsole();
 
                 x86_64.CloseModel(model);
                 return 0;

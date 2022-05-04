@@ -11,7 +11,6 @@ namespace RDFWrappers
 
         class Property
         {
-            public string name;
             public Int64 id;
             public Int64 type;
             public List<Int64> resrtictions = new List<Int64>();
@@ -32,24 +31,23 @@ namespace RDFWrappers
             public bool IsObject() { return type == Engine.x86_64.OBJECTPROPERTY_TYPE; }
         }
 
-        class PropertyCardinality
+        class ClassProperty
         {
-            public Property prop;
+            public string name;
             public Int64 min;
             public Int64 max;
         }
 
         class Class
         {
-            public string name;
             public Int64 id;
             public List<Int64> parents = new List<Int64>();
-            public List<PropertyCardinality> properties = new List<PropertyCardinality>();
+            public List<ClassProperty> properties = new List<ClassProperty>();
         }
 
         private Int64 m_model = 0;
-        private List<Class> m_classes;
-        private List<Property> m_properties;
+        private SortedList<string, Property> m_properties = new SortedList<string, Property>();
+        private SortedList<string, Class> m_classes = new SortedList<string, Class>();
 
         /// <summary>
         /// 
@@ -59,8 +57,8 @@ namespace RDFWrappers
         {
             m_model = model;
 
-            m_properties = CollectAllProperties();
-            m_classes = CollectClasses();
+            CollectProperties();
+            CollectClasses();
         }
 
         private string GetNameOfClass (Int64 clsid)
@@ -70,31 +68,24 @@ namespace RDFWrappers
             return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(namePtr);
         }
 
-        private List<Class> CollectClasses ()
+        private void CollectClasses ()
         {
-            var list = new List<Class>();
-
-            Int64 it = Engine.x86_64.GetClassesByIterator(m_model, 0);
-            while (it != 0)
+            Int64 clsid = Engine.x86_64.GetClassesByIterator(m_model, 0);
+            while (clsid != 0)
             {
+                string name = GetNameOfClass(clsid);
+
                 var cls = new Class();
-                cls.name = GetNameOfClass(it);
-                cls.id = Engine.x86_64.GetClassByName(m_model, cls.name);
-                System.Diagnostics.Debug.Assert(cls.id == it);
-                
-                Console.Write("{0}:", cls.name);
+                cls.id = clsid;
                 
                 CollectClassParents(cls);
-                Console.WriteLine();
 
                 CollectClassProperties(cls);
 
-                list.Add(cls);
+                m_classes.Add(name, cls);
 
-                it = Engine.x86_64.GetClassesByIterator(m_model, it);
+                clsid = Engine.x86_64.GetClassesByIterator(m_model, clsid);
             }
-
-            return list;
         }
 
         private void CollectClassParents (Class cls)
@@ -103,8 +94,6 @@ namespace RDFWrappers
             while (parent!=0)
             {
                 cls.parents.Add(parent);
-                Console.Write(" {0}", GetNameOfClass (parent));
-
                 parent = Engine.x86_64.GetParentsByIterator(cls.id, parent);
             }
         }
@@ -114,18 +103,68 @@ namespace RDFWrappers
             foreach (var prop in m_properties)
             {
                 Int64 min, max;
-                Engine.x86_64.GetClassPropertyCardinalityRestriction(cls.id, prop.id, out min, out max);
+                Engine.x86_64.GetClassPropertyCardinalityRestriction(cls.id, prop.Value.id, out min, out max);
 
                 if (min >= 0 && max > 0)
                 {
-                    var clsprop = new PropertyCardinality();
+                    var clsprop = new ClassProperty();
 
+                    clsprop.name = prop.Key;
                     clsprop.min = min;
                     clsprop.max = max;
 
                     cls.properties.Add(clsprop);
+                }
+            }
+        }
 
-                    Console.Write("    {0}: {1}", prop.name, prop.TypeName());
+        private void CollectProperties()
+        {
+            Int64 propid = Engine.x86_64.GetPropertiesByIterator(m_model, 0);
+            while (propid != 0)
+            {
+                IntPtr namePtr = IntPtr.Zero;
+                Engine.x86_64.GetNameOfProperty(propid, out namePtr);
+
+                string name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(namePtr);
+
+                Property prop = new Property();
+                prop.id = propid;
+                prop.type = Engine.x86_64.GetPropertyType(prop.id);
+
+                var restrict = Engine.x86_64.GetRangeRestrictionsByIterator(prop.id, 0);
+                while (restrict != 0)
+                {
+                    prop.resrtictions.Add(restrict);
+                    restrict = Engine.x86_64.GetRangeRestrictionsByIterator(prop.id, restrict);
+                }
+
+                m_properties.Add(name, prop);
+
+                propid = Engine.x86_64.GetPropertiesByIterator(m_model, propid);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ToConsole ()
+        {
+            Console.WriteLine("-------- Extracted shcema ----------------");
+            foreach (var cls in m_classes)
+            {
+                Console.Write("{0}:", cls.Key);
+                foreach (var parent in cls.Value.parents)
+                {
+                    Console.Write(" {0}", GetNameOfClass(parent));
+                }
+                Console.WriteLine();
+
+                foreach (var clsprop in cls.Value.properties)
+                {
+                    var prop = m_properties[clsprop.name];
+
+                    Console.Write("    {0}: {1}", clsprop.name, prop.TypeName());
                     if (prop.resrtictions.Count > 0)
                     {
                         Console.Write("[");
@@ -139,38 +178,7 @@ namespace RDFWrappers
                     Console.WriteLine(" ({0}-{1})", clsprop.min, clsprop.max);
                 }
             }
+            Console.WriteLine();
         }
-
-        private List<Property> CollectAllProperties()
-        {
-            var list = new List<Property>();
-
-            Int64 it = Engine.x86_64.GetPropertiesByIterator(m_model, 0);
-            while (it != 0)
-            {
-                IntPtr namePtr = IntPtr.Zero;
-                Engine.x86_64.GetNameOfProperty(it, out namePtr);
-
-                Property prop = new Property();
-                prop.name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(namePtr);
-                prop.id = Engine.x86_64.GetPropertyByName(m_model, prop.name);
-                prop.type = Engine.x86_64.GetPropertyType(prop.id);
-
-                var restrict = Engine.x86_64.GetRangeRestrictionsByIterator(prop.id, 0);
-                while (restrict != 0)
-                {
-                    prop.resrtictions.Add(restrict);
-                    restrict = Engine.x86_64.GetRangeRestrictionsByIterator(prop.id, restrict);
-                }
-
-                list.Add(prop);
-
-                it = Engine.x86_64.GetPropertiesByIterator(m_model, it);
-            }
-
-            return list;
-
-        }
-
     }
 }
