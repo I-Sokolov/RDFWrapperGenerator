@@ -1,7 +1,8 @@
 {
   "profiles": {
     "RDFWrappers": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": true
     }
   }
 }

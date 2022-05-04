@@ -14,16 +14,17 @@ namespace RDFWrappers
             public string name;
             public Int64 id;
             public Int64 type;
+            public List<Int64> resrtictions = new List<Int64>();
 
             public string TypeName()
             {
                 switch (type)
                 {
-                    case Engine.x86_64.OBJECTPROPERTY_TYPE:                        return "Int64";
-                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_BOOLEAN:                        return "bool";
-                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_CHAR:                        return "string";
-                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_INTEGER: return "long";
-                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_DOUBLE: return "double";
+                    case Engine.x86_64.OBJECTPROPERTY_TYPE:             return "Instance";
+                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_BOOLEAN:   return "bool";
+                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_CHAR:      return "string";
+                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_INTEGER:   return "long";
+                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_DOUBLE:    return "double";
                 }
                 throw new ApplicationException("Unknown property type");
             }
@@ -62,6 +63,13 @@ namespace RDFWrappers
             m_classes = CollectClasses();
         }
 
+        private string GetNameOfClass (Int64 clsid)
+        {
+            IntPtr namePtr = IntPtr.Zero;
+            Engine.x86_64.GetNameOfClass(clsid, out namePtr);
+            return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(namePtr);
+        }
+
         private List<Class> CollectClasses ()
         {
             var list = new List<Class>();
@@ -69,13 +77,11 @@ namespace RDFWrappers
             Int64 it = Engine.x86_64.GetClassesByIterator(m_model, 0);
             while (it != 0)
             {
-                IntPtr namePtr = IntPtr.Zero;
-                Engine.x86_64.GetNameOfClass(it, out namePtr);
-
                 var cls = new Class();
-                cls.name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(namePtr);
+                cls.name = GetNameOfClass(it);
                 cls.id = Engine.x86_64.GetClassByName(m_model, cls.name);
-
+                System.Diagnostics.Debug.Assert(cls.id == it);
+                
                 Console.Write("{0}:", cls.name);
                 
                 CollectClassParents(cls);
@@ -97,11 +103,7 @@ namespace RDFWrappers
             while (parent!=0)
             {
                 cls.parents.Add(parent);
-
-                IntPtr pname = IntPtr.Zero;
-                Engine.x86_64.GetNameOfClass(parent, out pname);
-                var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(pname);
-                Console.Write(" {0}", name);
+                Console.Write(" {0}", GetNameOfClass (parent));
 
                 parent = Engine.x86_64.GetParentsByIterator(cls.id, parent);
             }
@@ -114,15 +116,27 @@ namespace RDFWrappers
                 Int64 min, max;
                 Engine.x86_64.GetClassPropertyCardinalityRestriction(cls.id, prop.id, out min, out max);
 
-                if (max > 0)
+                if (min >= 0 && max > 0)
                 {
                     var clsprop = new PropertyCardinality();
-                    clsprop.prop = prop;
+
                     clsprop.min = min;
                     clsprop.max = max;
+
                     cls.properties.Add(clsprop);
 
-                    Console.WriteLine("    {0} {1} ({2}-{3})", prop.IsObject() ? "Object" : prop.TypeName(), prop.name, clsprop.min, clsprop.max);
+                    Console.Write("    {0}: {1}", prop.name, prop.TypeName());
+                    if (prop.resrtictions.Count > 0)
+                    {
+                        Console.Write("[");
+                        foreach (var r in prop.resrtictions)
+                        {
+                            string n = GetNameOfClass(r);
+                            Console.Write("{0} ", n);
+                        }
+                        Console.Write("]");
+                    }
+                    Console.WriteLine(" ({0}-{1})", clsprop.min, clsprop.max);
                 }
             }
         }
@@ -141,6 +155,13 @@ namespace RDFWrappers
                 prop.name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(namePtr);
                 prop.id = Engine.x86_64.GetPropertyByName(m_model, prop.name);
                 prop.type = Engine.x86_64.GetPropertyType(prop.id);
+
+                var restrict = Engine.x86_64.GetRangeRestrictionsByIterator(prop.id, 0);
+                while (restrict != 0)
+                {
+                    prop.resrtictions.Add(restrict);
+                    restrict = Engine.x86_64.GetRangeRestrictionsByIterator(prop.id, restrict);
+                }
 
                 list.Add(prop);
 
