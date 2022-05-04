@@ -13,7 +13,7 @@ namespace Engine
         public const Int64 DATATYPEPROPERTY_TYPE_INTEGER   = 4;
         public const Int64 DATATYPEPROPERTY_TYPE_DOUBLE    = 5;
 
-        public const string EngineDLL = @"engine.dll";
+        public const string EngineDLL = @"..\engine.dll";
 
         //
         //  Meta information API Calls
