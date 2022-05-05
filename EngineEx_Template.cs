@@ -30,7 +30,7 @@ namespace Engine
                 var clsid1 = x86_64.GetInstanceClass(m_instance);
                 var model = x86_64.GetModel(m_instance);
                 var clsid2 = x86_64.GetClassByName(model, cls);
-                System.Diagnostics.Trace.Assert(clsid1 != clsid2);
+                System.Diagnostics.Trace.Assert(clsid1 == clsid2);
             }
 #endif
         }
@@ -110,6 +110,133 @@ namespace Engine
         /// 
         /// </summary>
         /// <param name="name"></param>
+        /// <returns></returns>
+        public double[] GetDatatypeProperty_double(string name)
+        {
+            var propId = GetPropertyId(name);
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                System.Diagnostics.Debug.Assert(card == 1);
+
+                var values = new double[card];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+
+                return values;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public long[] GetDatatypeProperty_long(string name)
+        {
+            var propId = GetPropertyId(name);
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                System.Diagnostics.Debug.Assert(card == 1);
+
+                var values = new long[card];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+
+                return values;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool[] GetDatatypeProperty_bool(string name)
+        {
+            var propId = GetPropertyId(name);
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                System.Diagnostics.Debug.Assert(card == 1);
+
+                var values = new long[card];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+
+                var bools = new bool[card];
+                for (int i = 0; i < card; i++)
+                {
+                    bools[i] = values[i] != 0;
+                }
+
+                return bools;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string[] GetDatatypeProperty_string(string name)
+        {
+            var propId = GetPropertyId(name);
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                System.Diagnostics.Debug.Assert(card == 1);
+
+                var values = new IntPtr[card];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+
+                var strings = new string[card];
+                for (int i = 0; i < (int)card; i++)
+                {
+                    strings[i] = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(values[i]);
+                }
+                return strings;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
         /// <param name="instance"></param>
         public void SetObjectProperty(string name, Int64 instance)
         {
@@ -135,8 +262,11 @@ public class CLASS_NAME : /*BASE CLASS*/Instance
        //
 //## TEMPLATE: SetDataProperty
         public void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", value); }
+        public double[] get_PROPERTY_NAME() { return GetDatatypeProperty_double("PROPERTY_NAME"); }
+
 //## TEMPLATE: SetObjectProperty
         public void set_PROPERTY_NAME(Instance instance) { SetObjectProperty("PROPERTY_NAME", instance); }
+        
 //## TEMPLATE: EndWrapperClass
     }
 //## TEMPLATE - BeginFactoryClass
