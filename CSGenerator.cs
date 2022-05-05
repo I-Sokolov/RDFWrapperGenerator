@@ -68,7 +68,7 @@ namespace RDFWrappers
         {
             using (var writer = new StreamWriter(outputFile))
             {
-                writer.WriteLine(m_templateParts[TemplatePart.BeginFile]);
+                writer.Write(m_templateParts[TemplatePart.BeginFile]);
 
                 //
                 foreach (var cls in m_schema.m_classes)
@@ -77,7 +77,7 @@ namespace RDFWrappers
                 }
 
                 //
-                writer.WriteLine(m_templateParts[TemplatePart.BeginFactoryClass]);
+                writer.Write(m_templateParts[TemplatePart.BeginFactoryClass]);
 
                 //
                 foreach (var cls in m_schema.m_classes)
@@ -86,7 +86,7 @@ namespace RDFWrappers
                 }
 
                 //
-                writer.WriteLine(m_templateParts[TemplatePart.EndFile]);
+                writer.Write(m_templateParts[TemplatePart.EndFile]);
             }
         }
 
@@ -119,7 +119,7 @@ namespace RDFWrappers
             }
             textBeginWrapper = textBeginWrapper.Replace(KWD_BASE_CLASS, parentName);
 
-            writer.WriteLine(textBeginWrapper);
+            writer.Write(textBeginWrapper);
 
             //
             //
@@ -134,7 +134,7 @@ namespace RDFWrappers
 
             //
             //
-            writer.WriteLine(m_templateParts[TemplatePart.EndWrapperClass]);
+            writer.Write(m_templateParts[TemplatePart.EndWrapperClass]);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace RDFWrappers
                     {
                         var text = m_templateParts[TemplatePart.StartPropertiesBlock];
                         text = text.Replace(KWD_CLASS_NAME, properiesOfClass);
-                        writer.WriteLine(text);
+                        writer.Write(text);
                         first = false;
                     }
 
@@ -201,7 +201,7 @@ namespace RDFWrappers
             }
             else
             {
-                writer.Write("//TODO array " + classProp.name);
+                writer.WriteLine("//TODO array " + classProp.name);
             }
         }
 
@@ -214,7 +214,7 @@ namespace RDFWrappers
         {
             var text = m_templateParts[TemplatePart.SetObjectProperty];
             text = text.Replace(KWD_PROPERTY_NAME, name);
-            writer.WriteLine(text);
+            writer.Write(text);
         }
 
         private void AddSingleDataProperty(StreamWriter writer, string name, Schema.Property prop)
@@ -222,7 +222,7 @@ namespace RDFWrappers
             var text = m_templateParts[TemplatePart.SetDataProperty];
             text = text.Replace(KWD_PROPERTY_NAME, name);
             text = text.Replace(KWD_DATA_TYPE, prop.DataType());
-            writer.WriteLine(text);
+            writer.Write(text);
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace RDFWrappers
         {
             var text = m_templateParts[TemplatePart.FactoryMethod];
             text = text.Replace(KWD_CLASS_NAME, clsName);
-            writer.WriteLine(text);
+            writer.Write(text);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace RDFWrappers
                     else
                     {
                         string str = m_templateParts[part];
-                        str = str + "\r\n" + line;
+                        str = str + line + "\r\n";
                         m_templateParts[part] = str;
                     }
                 }
