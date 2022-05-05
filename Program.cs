@@ -33,8 +33,13 @@ namespace RDFWrappers
                 
                 //
                 //
-                CSGenerator csgen = new CSGenerator (@"O:\DevArea\RDF\RDFWrappers\EngineEx_Template.cs");
-                csgen.WriteWrapper(schema, @"O:\DevArea\RDF\csgpackagesourcecode\engine (build 1054)\C#\ArrayInOut-CS\ArrayInOut-CS\EngineGenerated.cs");
+                string csTemplate = @"O:\DevArea\RDF\RDFWrappers\EngineEx_Template.cs";
+                string csWrapper = @"O:\DevArea\RDF\csgpackagesourcecode\engine (build 1054)\C#\ArrayInOut-CS\ArrayInOut-CS\EngineGenerated.cs";
+
+                CSGenerator csgen = new CSGenerator (schema, csTemplate);
+                csgen.WriteWrapper(csWrapper);
+
+                System.Console.Write("C# wrapper is written to " + csWrapper);
 
                 x86_64.CloseModel(model);
                 return 0;

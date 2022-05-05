@@ -125,9 +125,12 @@ namespace Engine
 /// <summary>
 /// 
 /// </summary>
-public class INSTANCE_CLASS : Instance
+public class INSTANCE_CLASS : /*BASE CLASS*/Instance
     {
-        public INSTANCE_CLASS(Int64 instance) : base (instance, "INSTANCE_CLASS")  {}
+        public INSTANCE_CLASS(Int64 instance, string chekClassName = null) 
+            : base (instance, (chekClassName!=null) ? chekClassName : "INSTANCE_CLASS") 
+        {
+        }
 
 //## TEMPLATE: SetDataProperty
         public void set_PROPERTY_NAME (double value) { SetDatatypeProperty ("ROPERTY_NAME", value); }

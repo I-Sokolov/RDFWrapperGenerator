@@ -61,7 +61,7 @@ namespace RDFWrappers
             CollectClasses();
         }
 
-        private string GetNameOfClass (Int64 clsid)
+        public string GetNameOfClass (Int64 clsid)
         {
             IntPtr namePtr = IntPtr.Zero;
             Engine.x86_64.GetNameOfClass(clsid, out namePtr);
