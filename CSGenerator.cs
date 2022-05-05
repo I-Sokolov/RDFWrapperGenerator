@@ -21,7 +21,7 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
-        enum TemplatePart
+        enum Template
         { 
             BeginFile,
             BeginWrapperClass,
@@ -43,7 +43,7 @@ namespace RDFWrappers
         /// </summary>
         Schema m_schema;
 
-        Dictionary<TemplatePart, string> m_templateParts = new Dictionary<TemplatePart, string>();
+        Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
         HashSet<string> m_addedProperties;
 
@@ -56,9 +56,9 @@ namespace RDFWrappers
         {
             m_schema = schema;
 
-            foreach (var part in Enum.GetValues(TemplatePart.BeginFile.GetType ()))
+            foreach (var template in Enum.GetValues(Template.BeginFile.GetType ()))
             {
-                m_templateParts.Add((TemplatePart)part, "");
+                m_template.Add((Template)template, "");
             }
 
             ReadTemplate(templateFile);
@@ -72,7 +72,7 @@ namespace RDFWrappers
         {
             using (var writer = new StreamWriter(outputFile))
             {
-                writer.Write(m_templateParts[TemplatePart.BeginFile]);
+                writer.Write(m_template[Template.BeginFile]);
 
                 //
                 foreach (var cls in m_schema.m_classes)
@@ -81,7 +81,7 @@ namespace RDFWrappers
                 }
 
                 //
-                writer.Write(m_templateParts[TemplatePart.BeginFactoryClass]);
+                writer.Write(m_template[Template.BeginFactoryClass]);
 
                 //
                 foreach (var cls in m_schema.m_classes)
@@ -90,7 +90,7 @@ namespace RDFWrappers
                 }
 
                 //
-                writer.Write(m_templateParts[TemplatePart.EndFile]);
+                writer.Write(m_template[Template.EndFile]);
             }
         }
 
@@ -109,7 +109,7 @@ namespace RDFWrappers
 
             //
             //
-            string textBeginWrapper = m_templateParts[TemplatePart.BeginWrapperClass];
+            string textBeginWrapper = m_template[Template.BeginWrapperClass];
             textBeginWrapper = textBeginWrapper.Replace(KWD_CLASS_NAME, clsName);
 
             //first parent is the base class
@@ -138,7 +138,7 @@ namespace RDFWrappers
 
             //
             //
-            writer.Write(m_templateParts[TemplatePart.EndWrapperClass]);
+            writer.Write(m_template[Template.EndWrapperClass]);
         }
 
         /// <summary>
@@ -172,13 +172,13 @@ namespace RDFWrappers
                 {
                     if (first)
                     {
-                        var text = m_templateParts[TemplatePart.StartPropertiesBlock];
+                        var text = m_template[Template.StartPropertiesBlock];
                         text = text.Replace(KWD_CLASS_NAME, properiesOfClass);
                         writer.Write(text);
                         first = false;
                     }
 
-                    AddProperty(writer, prop);
+                    WritePropertyMethods(writer, prop);
                 }
             }
         }
@@ -188,24 +188,35 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="classProp"></param>
-        private void AddProperty (StreamWriter writer, Schema.ClassProperty classProp)
+        private void WritePropertyMethods (StreamWriter writer, Schema.ClassProperty classProp)
         {
             var prop = m_schema.m_properties[classProp.name];
 
-            if (classProp.max < 2)
+            if (!prop.IsObject())
             {
-                if (prop.IsObject())
+                if (classProp.max < 2)
                 {
-                    AddSingleObjectProperty(writer, classProp.name, prop);
+                    WriteAccessDataProperty(writer, classProp.name, prop, Template.SetDataProperty);
                 }
                 else
                 {
-                    AddSingleDataProperty(writer, classProp.name, prop);
+                    WriteAccessDataProperty(writer, classProp.name, prop, Template.SetDataArrayProperty);
                 }
+
+                WriteAccessDataProperty(writer, classProp.name, prop, Template.GetDataProperty);
             }
             else
             {
-                writer.WriteLine("//TODO array " + classProp.name);
+                if (classProp.max < 2)
+                {
+                    WriteAccessObjectProperty(writer, classProp.name, prop, Template.SetObjectProperty);
+                }
+                else
+                {
+                    WriteAccessObjectProperty(writer, classProp.name, prop, Template.SetObjectArrayProperty);
+                }
+
+                WriteAccessObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
             }
         }
 
@@ -213,19 +224,55 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="writer"></param>
+        /// <param name="name"></param>
         /// <param name="prop"></param>
-        private void AddSingleObjectProperty(StreamWriter writer, string name, Schema.Property prop)
+        /// <param name="template"></param>
+        private void WriteAccessDataProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
         {
-            var text = m_templateParts[TemplatePart.SetObjectProperty];
+            var text = m_template[template];
             text = text.Replace(KWD_PROPERTY_NAME, name);
+            text = text.Replace(KWD_DATA_TYPE, prop.DataType());
             writer.Write(text);
         }
 
-        private void AddSingleDataProperty(StreamWriter writer, string name, Schema.Property prop)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="name"></param>
+        /// <param name="prop"></param>
+        /// <param name="template"></param>
+        private void WriteAccessObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
         {
-            var text = m_templateParts[TemplatePart.SetDataProperty];
+            if (prop.resrtictions.Count > 0)
+            {
+                foreach (var restr in prop.resrtictions)
+                {
+                    string instClass = m_schema.GetNameOfClass(restr);
+                    WriteAccessObjectProperty(writer, name, instClass, prop, template);
+                }
+            }
+            else
+            {
+                WriteAccessObjectProperty(writer, name, "Instance", prop, template);
+            }
+
+            WriteAccessObjectProperty(writer, name, "Int64", prop, template);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="name"></param>
+        /// <param name="instanceClass"></param>
+        /// <param name="prop"></param>
+        /// <param name="template"></param>
+        private void WriteAccessObjectProperty(StreamWriter writer, string name, string instanceClass, Schema.Property prop, Template template)
+        {
+            var text = m_template[Template.SetObjectProperty];
             text = text.Replace(KWD_PROPERTY_NAME, name);
-            text = text.Replace(KWD_DATA_TYPE, prop.DataType());
             writer.Write(text);
         }
 
@@ -237,7 +284,7 @@ namespace RDFWrappers
         /// <param name="cls"></param>
         private void WriteClassFactory(StreamWriter writer, string clsName, Schema.Class cls)
         {
-            var text = m_templateParts[TemplatePart.FactoryMethod];
+            var text = m_template[Template.FactoryMethod];
             text = text.Replace(KWD_CLASS_NAME, clsName);
             writer.Write(text);
         }
@@ -248,7 +295,7 @@ namespace RDFWrappers
         /// <param name="templateFile"></param>
         private void ReadTemplate(string templateFile)
         {
-            TemplatePart part = TemplatePart.BeginFile;
+            Template part = Template.BeginFile;
 
             using (var reader = new StreamReader(templateFile))
             {
@@ -265,9 +312,9 @@ namespace RDFWrappers
                     }
                     else
                     {
-                        string str = m_templateParts[part];
+                        string str = m_template[part];
                         str = str + line + "\r\n";
-                        m_templateParts[part] = str;
+                        m_template[part] = str;
                     }
                 }
             }
