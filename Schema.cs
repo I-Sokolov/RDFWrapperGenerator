@@ -14,7 +14,7 @@ namespace RDFWrappers
             public Int64 type;
             public List<Int64> resrtictions = new List<Int64>();
 
-            public string TypeName()
+            public string DataType()
             {
                 switch (type)
                 {
@@ -45,9 +45,9 @@ namespace RDFWrappers
         }
 
         public SortedList<string, Class> m_classes = new SortedList<string, Class>();
+        public SortedList<string, Property> m_properties = new SortedList<string, Property>();
 
         private Int64 m_model = 0;
-        private SortedList<string, Property> m_properties = new SortedList<string, Property>();
 
         /// <summary>
         /// 
@@ -164,7 +164,7 @@ namespace RDFWrappers
                 {
                     var prop = m_properties[clsprop.name];
 
-                    Console.Write("    {0}: {1}", clsprop.name, prop.TypeName());
+                    Console.Write("    {0}: {1}", clsprop.name, prop.DataType());
                     if (prop.resrtictions.Count > 0)
                     {
                         Console.Write("[");

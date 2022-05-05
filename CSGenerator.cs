@@ -13,8 +13,10 @@ namespace RDFWrappers
         /// 
         /// </summary>
         const string KWD_PREPROC = "//##";
-        const string KWD_INSTANCE_CLASS = "INSTANCE_CLASS";
         const string KWD_BASE_CLASS = "/*BASE CLASS*/Instance";
+        const string KWD_CLASS_NAME = "CLASS_NAME";
+        const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
+        const string KWD_DATA_TYPE = "double";
 
         /// <summary>
         /// 
@@ -23,6 +25,7 @@ namespace RDFWrappers
         { 
             BeginFile,
             BeginWrapperClass,
+            StartPropertiesBlock,
             SetDataProperty,
             SetObjectProperty,
             EndWrapperClass,
@@ -37,6 +40,8 @@ namespace RDFWrappers
         Schema m_schema;
 
         Dictionary<TemplatePart, string> m_templateParts = new Dictionary<TemplatePart, string>();
+
+        HashSet<string> m_addedProperties;
 
         /// <summary>
         /// 
@@ -94,12 +99,14 @@ namespace RDFWrappers
         /// <param name="cls"></param>
         private void WriteClassWrapper (StreamWriter writer, string clsName, Schema.Class cls)
         {
+            m_addedProperties = new HashSet<string>();
+
             AssertIdentifier(clsName);
 
             //
             //
             string textBeginWrapper = m_templateParts[TemplatePart.BeginWrapperClass];
-            textBeginWrapper = textBeginWrapper.Replace(KWD_INSTANCE_CLASS, clsName);
+            textBeginWrapper = textBeginWrapper.Replace(KWD_CLASS_NAME, clsName);
 
             //first parent is the base class
             var parentName = "Instance";
@@ -115,15 +122,15 @@ namespace RDFWrappers
             writer.WriteLine(textBeginWrapper);
 
             //
-            // only single inheritance is suppirted, dirrectly take properties from othe parents
-            while (itParent.MoveNext ())
-            {
-                AddParentProperties(itParent.Current);
-            }
+            //
+            AddProperties(writer, clsName, cls.properties);
 
             //
-            //
-            AddProperties(clsName, cls.properties);
+            // only single inheritance is suppirted, dirrectly take properties from othe parents
+            while (itParent.MoveNext())
+            {
+                AddParentProperties(writer, itParent.Current);
+            }
 
             //
             //
@@ -134,9 +141,17 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="parentClassId"></param>
-        private void AddParentProperties (Int64 parentClassId)
+        private void AddParentProperties (StreamWriter writer, Int64 parentClassId)
         {
+            string parentName = m_schema.GetNameOfClass(parentClassId);
+            var parentClass = m_schema.m_classes[parentName];
 
+            AddProperties(writer, parentName, parentClass.properties);
+            
+            foreach (var nextParent in parentClass.parents)
+            {
+                AddParentProperties(writer, nextParent);
+            }
         }
 
         /// <summary>
@@ -144,9 +159,70 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="properiesOfClass"></param>
         /// <param name="properties"></param>
-        private void AddProperties (string properiesOfClass, List<Schema.ClassProperty> properties)
+        private void AddProperties (StreamWriter writer, string properiesOfClass, List<Schema.ClassProperty> properties)
         {
+            bool first = true;
+            foreach (var prop in properties)
+            {
+                if (m_addedProperties.Add (prop.name))
+                {
+                    if (first)
+                    {
+                        var text = m_templateParts[TemplatePart.StartPropertiesBlock];
+                        text = text.Replace(KWD_CLASS_NAME, properiesOfClass);
+                        writer.WriteLine(text);
+                        first = false;
+                    }
 
+                    AddProperty(writer, prop);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="classProp"></param>
+        private void AddProperty (StreamWriter writer, Schema.ClassProperty classProp)
+        {
+            var prop = m_schema.m_properties[classProp.name];
+
+            if (classProp.max < 2)
+            {
+                if (prop.IsObject())
+                {
+                    AddSingleObjectProperty(writer, classProp.name, prop);
+                }
+                else
+                {
+                    AddSingleDataProperty(writer, classProp.name, prop);
+                }
+            }
+            else
+            {
+                writer.Write("//TODO array " + classProp.name);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="prop"></param>
+        private void AddSingleObjectProperty(StreamWriter writer, string name, Schema.Property prop)
+        {
+            var text = m_templateParts[TemplatePart.SetObjectProperty];
+            text = text.Replace(KWD_PROPERTY_NAME, name);
+            writer.WriteLine(text);
+        }
+
+        private void AddSingleDataProperty(StreamWriter writer, string name, Schema.Property prop)
+        {
+            var text = m_templateParts[TemplatePart.SetDataProperty];
+            text = text.Replace(KWD_PROPERTY_NAME, name);
+            text = text.Replace(KWD_DATA_TYPE, prop.DataType());
+            writer.WriteLine(text);
         }
 
         /// <summary>
@@ -158,7 +234,7 @@ namespace RDFWrappers
         private void WriteClassFactory(StreamWriter writer, string clsName, Schema.Class cls)
         {
             var text = m_templateParts[TemplatePart.FactoryMethod];
-            text = text.Replace(KWD_INSTANCE_CLASS, clsName);
+            text = text.Replace(KWD_CLASS_NAME, clsName);
             writer.WriteLine(text);
         }
 
@@ -178,7 +254,7 @@ namespace RDFWrappers
                 {
                     nline++;
 
-                    if (line.StartsWith(KWD_PREPROC))
+                    if (line.Contains(KWD_PREPROC))
                     {
                         part++;
                         Verify(line.Contains(part.ToString()), string.Format("Expected line {0} contains '{1}' substing while parsing template fle {2}", nline, part.ToString(), templateFile));

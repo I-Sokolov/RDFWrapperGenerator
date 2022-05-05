@@ -119,28 +119,26 @@ namespace Engine
         }
 
     }
-
 //## TEMPLATE: BeginWrapperClass
-
 /// <summary>
 /// 
 /// </summary>
-public class INSTANCE_CLASS : /*BASE CLASS*/Instance
+public class CLASS_NAME : /*BASE CLASS*/Instance
     {
-        public INSTANCE_CLASS(Int64 instance, string chekClassName = null) 
-            : base (instance, (chekClassName!=null) ? chekClassName : "INSTANCE_CLASS") 
+        public CLASS_NAME(Int64 instance, string chekClassName = null) 
+            : base (instance, (chekClassName!=null) ? chekClassName : "CLASS_NAME") 
         {
         }
-
+//## TEMPLATE StartPropertiesBlock
+       //
+       // Properties with assigned cardinality with CLASS_NAME
+       //
 //## TEMPLATE: SetDataProperty
-        public void set_PROPERTY_NAME (double value) { SetDatatypeProperty ("ROPERTY_NAME", value); }
-
+        public void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", value); }
 //## TEMPLATE: SetObjectProperty
-        public void set_RPOPERTY_NAME (Instance instance) { SetObjectProperty("PROPERTY_NAME", instance); }
+        public void set_PROPERTY_NAME(Instance instance) { SetObjectProperty("PROPERTY_NAME", instance); }
 //## TEMPLATE: EndWrapperClass
-
     }
-
 //## TEMPLATE - BeginFactoryClass
 
     /// <summary>
@@ -150,12 +148,12 @@ public class INSTANCE_CLASS : /*BASE CLASS*/Instance
     {
 //## FactoryMethod template part
         /// <summary> 
-        /// Create instance of INSTANCE_CLASS
+        /// Create instance of CLASS_NAME
         /// </summary>
         /// <param name="model">The handle to the model</param>
         /// <param name="name">Name of the instance (optional)</param>
         /// <returns>Returns a handle to created instance</returns>
-        public static INSTANCE_CLASS INSTANCE_CLASS(Int64 model, string name=null) { return new INSTANCE_CLASS (CreateInstance(model, "INSTANCE_CLASS", name));}
+        public static CLASS_NAME CLASS_NAME(Int64 model, string name=null) { return new CLASS_NAME (CreateInstance(model, "CLASS_NAME", name));}
 
 //## EndFile template part
         private static Int64 CreateInstance(Int64 model, string className, string instanseName)
