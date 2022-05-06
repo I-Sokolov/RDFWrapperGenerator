@@ -324,6 +324,7 @@ namespace RDFWrappers
             text = text.Replace(KWD_PROPERTY_NAME, name);
             text = text.Replace(KWD_DATA_TYPE, prop.DataType());
             text = text.Replace(KWD_asType, "", true, null);
+            text = text.Replace("string?", "string");
             writer.Write(text);
         }
 
