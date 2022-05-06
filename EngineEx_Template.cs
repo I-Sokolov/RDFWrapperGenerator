@@ -39,7 +39,7 @@ namespace Engine
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            var res = Engine.x86_64.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -61,7 +61,7 @@ namespace Engine
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            var res = Engine.x86_64.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -89,7 +89,7 @@ namespace Engine
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            var res = Engine.x86_64.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)

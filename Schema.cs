@@ -138,6 +138,9 @@ namespace RDFWrappers
                     prop.resrtictions.Add(restrict);
                     restrict = Engine.x86_64.GetRangeRestrictionsByIterator(prop.id, restrict);
                 }
+                System.Diagnostics.Debug.Assert( //other cases not testes
+                    prop.resrtictions.Count == 0 && !prop.IsObject()
+                    || prop.resrtictions.Count == 1 && prop.IsObject());
 
                 m_properties.Add(name, prop);
 
