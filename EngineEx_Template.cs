@@ -25,12 +25,36 @@ namespace Engine
 //## TEMPLATE SetDataArrayProperty
         public void set_PROPERTY_NAME(double[] values) { SetDatatypeProperty ("PROPERTY_NAME", values); }
 //## TEMPLATE GetDataProperty
-        public double[] get_PROPERTY_NAME() { return GetDatatypeProperty_double("PROPERTY_NAME"); }
+        public double? get_PROPERTY_NAME() { var arr = GetDatatypeProperty_double("PROPERTY_NAME"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+//## TEMPLATE GetDataArrayProperty
+        public double[] get_PROPERTY_NAMEasType() { return GetDatatypeProperty_double("PROPERTY_NAME"); }
 //## TEMPLATE: SetObjectProperty
         public void set_PROPERTY_NAME(Instance instance) { SetObjectProperty("PROPERTY_NAME", instance); }
 //## TEMPLATE SetObjectArrayProperty
         public void set_PROPERTY_NAME(Instance[] instances) { SetObjectProperty("PROPERTY_NAME", instances); }
 //## TEMPLATE GetObjectProperty
+        public Instance get_PROPERTY_NAMEasTYpe() 
+        {
+            var propId = GetPropertyId("PROPERTY_NAME");
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                var values = new Int64[1];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)1);
+
+                return new Instance(values[0], null);
+            }
+            else
+            {
+                return null;
+            }
+        }
+//## TEMPLATE GetObjectArrayProperty
         public Instance[] get_PROPERTY_NAMEasTYPE() 
         {
             var propId = GetPropertyId("PROPERTY_NAME");
@@ -58,7 +82,7 @@ namespace Engine
                 return null;
             }
         }
-//## TEMPLATE GetObjectPropertyInt64
+//## TEMPLATE GetObjectArrayPropertyInt64
         public Int64[] get_PROPERTY_NAME_Int64()  //TODO - do we need this variant ?
         {
             var propId = GetPropertyId("PROPERTY_NAME");

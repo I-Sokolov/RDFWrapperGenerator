@@ -32,10 +32,12 @@ namespace RDFWrappers
             SetDataProperty,
             SetDataArrayProperty,
             GetDataProperty,
+            GetDataArrayProperty,
             SetObjectProperty,
             SetObjectArrayProperty,
             GetObjectProperty,
-            GetObjectPropertyInt64,
+            GetObjectArrayProperty,
+            GetObjectArrayPropertyInt64,
             EndWrapperClass,
             BeginFactoryClass,
             FactoryMethod,
@@ -225,13 +227,14 @@ namespace RDFWrappers
                 if (classProp.max == 1)
                 {
                     WriteAccessDataProperty(writer, classProp.name, prop, Template.SetDataProperty);
+                    WriteAccessDataProperty(writer, classProp.name, prop, Template.GetDataProperty);
                 }
                 else
                 {
                     WriteAccessDataProperty(writer, classProp.name, prop, Template.SetDataArrayProperty);
+                    WriteAccessDataProperty(writer, classProp.name, prop, Template.GetDataArrayProperty);
                 }
 
-                WriteAccessDataProperty(writer, classProp.name, prop, Template.GetDataProperty);
             }
             else
             {
@@ -318,6 +321,7 @@ namespace RDFWrappers
             var text = m_template[template];
             text = text.Replace(KWD_PROPERTY_NAME, name);
             text = text.Replace(KWD_DATA_TYPE, prop.DataType());
+            text = text.Replace(KWD_asType, "", true, null);
             writer.Write(text);
         }
 
@@ -334,7 +338,7 @@ namespace RDFWrappers
             var text = m_template[template];
             text = text.Replace(KWD_PROPERTY_NAME, name);
             text = text.Replace(KWD_OBJECT_TYPE, objectType);
-            text = text.Replace(KWD_asType, asType);
+            text = text.Replace(KWD_asType, asType, true, null);
             writer.Write(text);
         }
 
