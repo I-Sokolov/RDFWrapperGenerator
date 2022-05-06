@@ -241,6 +241,7 @@ namespace RDFWrappers
                 if (classProp.max == 1)
                 {
                     WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectProperty);
+                    //do we need this? we lose restrictions control! WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.SetObjectProperty);
                     WriteGetObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
                 }
                 else

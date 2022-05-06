@@ -165,6 +165,9 @@ namespace Engine
         /// <param name="instance"></param>
         public static implicit operator Int64(Instance instance) => instance.m_instance;
 
+        public static bool operator ==(Instance i1, Instance i2) => ((i1 is null) ? (i2 is null) : (i1.m_instance == i2.m_instance));
+        public static bool operator !=(Instance i1, Instance i2) => (!(i1 == i2));
+
         /// <summary>
         /// 
         /// </summary>
@@ -298,8 +301,6 @@ namespace Engine
 
             if (card > 0)
             {
-                System.Diagnostics.Debug.Assert(card == 1);
-
                 var values = new double[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
@@ -327,8 +328,6 @@ namespace Engine
 
             if (card > 0)
             {
-                System.Diagnostics.Debug.Assert(card == 1);
-
                 var values = new long[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
@@ -356,8 +355,6 @@ namespace Engine
 
             if (card > 0)
             {
-                System.Diagnostics.Debug.Assert(card == 1);
-
                 var values = new long[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
@@ -391,8 +388,6 @@ namespace Engine
 
             if (card > 0)
             {
-                System.Diagnostics.Debug.Assert(card == 1);
-
                 var values = new IntPtr[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
