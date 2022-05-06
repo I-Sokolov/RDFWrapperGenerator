@@ -117,15 +117,19 @@ namespace RDFWrappers
             textBeginWrapper = textBeginWrapper.Replace(KWD_CLASS_NAME, clsName);
 
             //first parent is the base class
-            var parentName = "Instance";
+            var baseClass = "Instance";
             var itParent = cls.parents.GetEnumerator();
             if (itParent.MoveNext())
             {
                 var parentId = itParent.Current;
-                parentName = m_schema.GetNameOfClass(parentId);
-                AssertIdentifier(parentName);
+                baseClass = m_schema.GetNameOfClass(parentId);
+                AssertIdentifier(baseClass);
+
+                //gather base classes properties to avoid override here
+                CollectParentProperties(parentId);
             }
-            textBeginWrapper = textBeginWrapper.Replace(KWD_BASE_CLASS, parentName);
+            
+            textBeginWrapper = textBeginWrapper.Replace(KWD_BASE_CLASS, baseClass);
 
             writer.Write(textBeginWrapper);
 
@@ -137,7 +141,7 @@ namespace RDFWrappers
             // only single inheritance is suppirted, dirrectly take properties from othe parents
             while (itParent.MoveNext())
             {
-                AddParentProperties(writer, itParent.Current);
+                WriteParentProperties(writer, itParent.Current);
             }
 
             //
@@ -148,8 +152,28 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="parentId"></param>
+        private void CollectParentProperties(Int64 parentId)
+        {
+            string parentName = m_schema.GetNameOfClass(parentId);
+            var parentClass = m_schema.m_classes[parentName];
+
+            foreach (var cp in parentClass.properties)
+            {
+                m_addedProperties.Add(cp.name);
+            }
+
+            foreach (var nextParent in parentClass.parents)
+            {
+                CollectParentProperties(nextParent);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="parentClassId"></param>
-        private void AddParentProperties (StreamWriter writer, Int64 parentClassId)
+        private void WriteParentProperties (StreamWriter writer, Int64 parentClassId)
         {
             string parentName = m_schema.GetNameOfClass(parentClassId);
             var parentClass = m_schema.m_classes[parentName];
@@ -158,7 +182,7 @@ namespace RDFWrappers
             
             foreach (var nextParent in parentClass.parents)
             {
-                AddParentProperties(writer, nextParent);
+                WriteParentProperties(writer, nextParent);
             }
         }
 

@@ -18,7 +18,7 @@ namespace Engine
         }
 //## TEMPLATE StartPropertiesBlock
        //
-       // Properties with assigned cardinality with CLASS_NAME
+       // Properties with assigned cardinality to CLASS_NAME
        //
 //## TEMPLATE: SetDataProperty
         public void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", value); }
