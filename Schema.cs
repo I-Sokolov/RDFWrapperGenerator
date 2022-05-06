@@ -113,6 +113,10 @@ namespace RDFWrappers
                     clsprop.min = min;
                     clsprop.max = max;
 
+                    //looking for examples of bool and sring properties with cardinality > 1
+                    System.Diagnostics.Debug.Assert(prop.Value.DataType() != "bool" || clsprop.max == 1);
+                    System.Diagnostics.Debug.Assert(prop.Value.DataType() != "string" || clsprop.max == 1);
+
                     cls.properties.Add(clsprop);
                 }
             }
