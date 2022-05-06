@@ -133,7 +133,7 @@ namespace Engine
     /// <summary>
     /// Generic instance
     /// </summary>
-    public class Instance
+    public class Instance : IEquatable<Instance>, IComparable, IComparable<Instance>
     {
         /// <summary>
         /// 
@@ -164,9 +164,6 @@ namespace Engine
         /// </summary>
         /// <param name="instance"></param>
         public static implicit operator Int64(Instance instance) => instance.m_instance;
-
-        public static bool operator ==(Instance i1, Instance i2) => ((i1 is null) ? (i2 is null) : (i1.m_instance == i2.m_instance));
-        public static bool operator !=(Instance i1, Instance i2) => (!(i1 == i2));
 
         /// <summary>
         /// 
@@ -445,6 +442,34 @@ namespace Engine
 
             var res = x86_64.SetObjectProperty(m_instance, propId, ref inst[0], inst.Length);
             System.Diagnostics.Debug.Assert(res == 0);
+        }
+
+
+        public static bool operator ==(Instance i1, Instance i2) => (Equals(i1, i2));
+        public static bool operator !=(Instance i1, Instance i2) => (!(i1 == i2));
+
+        public override bool Equals(Object obj) 
+        {
+            return Equals(obj as Instance); 
+        }
+
+        public bool Equals(Instance other)     
+        {
+            return (other == null) ? false : (other.m_instance == m_instance);
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo (obj as Instance);
+        }
+
+        public int CompareTo(Instance other)
+        {
+            return (other == null) ? 1 : m_instance.CompareTo(other.m_instance);
+        }
+        public override int GetHashCode()
+        {
+            return m_instance.GetHashCode();
         }
 
     }
