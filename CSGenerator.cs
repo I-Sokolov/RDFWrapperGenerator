@@ -222,7 +222,7 @@ namespace RDFWrappers
 
             if (!prop.IsObject())
             {
-                if (classProp.max < 2)
+                if (classProp.max == 1)
                 {
                     WriteAccessDataProperty(writer, classProp.name, prop, Template.SetDataProperty);
                 }
@@ -235,16 +235,17 @@ namespace RDFWrappers
             }
             else
             {
-                if (classProp.max < 2)
+                if (classProp.max == 1)
                 {
                     WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectProperty);
                 }
                 else
                 {
                     WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectArrayProperty);
+                    WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.SetObjectArrayProperty);
                 }
 
-                WriteCetObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
+                WriteGetObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
             }
         }
 
@@ -270,8 +271,6 @@ namespace RDFWrappers
                 Verify(false, "This case was not tested yet: no restriction");
                 WriteAccessObjectProperty(writer, name, "Instance", "", template);
             }
-
-            WriteAccessObjectProperty(writer, name, "Int64", "", template);
         }
 
         /// <summary>
@@ -281,7 +280,7 @@ namespace RDFWrappers
         /// <param name="name"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteCetObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
+        private void WriteGetObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
         {
             if (prop.resrtictions.Count > 0)
             {

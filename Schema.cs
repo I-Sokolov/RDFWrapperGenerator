@@ -105,7 +105,7 @@ namespace RDFWrappers
                 Int64 min, max;
                 Engine.x86_64.GetClassPropertyCardinalityRestriction(cls.id, prop.Value.id, out min, out max);
 
-                if (min >= 0 && max > 0)
+                if (min >= 0)
                 {
                     var clsprop = new ClassProperty();
 
