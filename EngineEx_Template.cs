@@ -360,6 +360,28 @@ namespace Engine
                 return null;
             }
         }
+//## TEMPLATE GetObjectPropertyGeneric
+        public Int64[] get_PROPERTY_NAME_Int64() 
+        {
+            var propId = GetPropertyId("PROPERTY_NAME");
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                var values = new Int64[card];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+
+                return values;
+            }
+            else
+            {
+                return null;
+            }
+        }
         //## TEMPLATE: EndWrapperClass
     }
 

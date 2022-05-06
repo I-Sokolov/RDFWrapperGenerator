@@ -17,6 +17,7 @@ namespace RDFWrappers
         const string KWD_CLASS_NAME = "CLASS_NAME";
         const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
         const string KWD_DATA_TYPE = "double";
+        const string KWD_OBJECT_TYPE = "Instance";
 
         /// <summary>
         /// 
@@ -227,22 +228,6 @@ namespace RDFWrappers
         /// <param name="name"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteAccessDataProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
-        {
-            var text = m_template[template];
-            text = text.Replace(KWD_PROPERTY_NAME, name);
-            text = text.Replace(KWD_DATA_TYPE, prop.DataType());
-            writer.Write(text);
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="name"></param>
-        /// <param name="prop"></param>
-        /// <param name="template"></param>
         private void WriteAccessObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
         {
             if (prop.resrtictions.Count > 0)
@@ -255,10 +240,27 @@ namespace RDFWrappers
             }
             else
             {
+                Verify(false, "This branch needs to be tested");
                 WriteAccessObjectProperty(writer, name, "Instance", prop, template);
             }
 
             WriteAccessObjectProperty(writer, name, "Int64", prop, template);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="name"></param>
+        /// <param name="prop"></param>
+        /// <param name="template"></param>
+        private void WriteAccessDataProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
+        {
+            var text = m_template[template];
+            text = text.Replace(KWD_PROPERTY_NAME, name);
+            text = text.Replace(KWD_DATA_TYPE, prop.DataType());
+            writer.Write(text);
         }
 
         /// <summary>
@@ -269,10 +271,11 @@ namespace RDFWrappers
         /// <param name="instanceClass"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteAccessObjectProperty(StreamWriter writer, string name, string instanceClass, Schema.Property prop, Template template)
+        private void WriteAccessObjectProperty(StreamWriter writer, string name, string objectClass, Schema.Property prop, Template template)
         {
-            var text = m_template[Template.SetObjectProperty];
+            var text = m_template[template];
             text = text.Replace(KWD_PROPERTY_NAME, name);
+            text = text.Replace(KWD_OBJECT_TYPE, objectClass);
             writer.Write(text);
         }
 
