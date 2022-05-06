@@ -28,6 +28,7 @@ namespace RDFWrappers
             None,
             BeginFile,
             BeginWrapperClass,
+            FactoryMethod,
             StartPropertiesBlock,
             SetDataProperty,
             SetDataArrayProperty,
@@ -39,8 +40,6 @@ namespace RDFWrappers
             GetObjectArrayProperty,
             GetObjectArrayPropertyInt64,
             EndWrapperClass,
-            BeginFactoryClass,
-            FactoryMethod,
             EndFile
         }
 
@@ -87,15 +86,6 @@ namespace RDFWrappers
                 }
 
                 //
-                writer.Write(m_template[Template.BeginFactoryClass]);
-
-                //
-                foreach (var cls in m_schema.m_classes)
-                {
-                    WriteClassFactory(writer, cls.Key, cls.Value);
-                }
-
-                //
                 writer.Write(m_template[Template.EndFile]);
             }
         }
@@ -134,6 +124,10 @@ namespace RDFWrappers
             textBeginWrapper = textBeginWrapper.Replace(KWD_BASE_CLASS, baseClass);
 
             writer.Write(textBeginWrapper);
+
+            //
+            //
+            WriteClassFactory(writer, clsName, cls);
 
             //
             //

@@ -16,6 +16,9 @@ namespace Engine
             : base (instance, (chekClassName!=null) ? chekClassName : "CLASS_NAME") 
         {
         }
+//## TEMPLATE: FactoryMethod template part
+        /// <summary>Create instance of CLASS_NAME</summary>
+        public static new CLASS_NAME Create(Int64 model, string name=null) { return new CLASS_NAME(Instance.Create(model, "CLASS_NAME", name), "CLASS_NAME");}
 //## TEMPLATE StartPropertiesBlock
        //
        // Properties with assigned cardinality to CLASS_NAME
@@ -107,29 +110,7 @@ namespace Engine
 //## TEMPLATE: EndWrapperClass
     }
 
-//## TEMPLATE - BeginFactoryClass
-    /// <summary>
-    /// Factory class to create instances
-    /// </summary>
-    public class Create
-    {
-//## TEMPLATE: FactoryMethod template part
-        /// <summary>Create instance of CLASS_NAME</summary>
-        public static CLASS_NAME CLASS_NAME(Int64 model, string name=null) { return new CLASS_NAME (CreateInstance(model, "CLASS_NAME", name));}
 //## TEMPLATE: EndFile template part
-
-        private static Int64 CreateInstance(Int64 model, string className, string instanseName)
-        {
-            Int64 clsid = x86_64.GetClassByName(model, className);
-            System.Diagnostics.Debug.Assert(clsid != 0);
-
-            Int64 instance = x86_64.CreateInstance(clsid, instanseName);
-            System.Diagnostics.Debug.Assert(instance != 0);
-
-            return instance;
-        }
-    }
-
     /// <summary>
     /// Generic instance
     /// </summary>
@@ -158,6 +139,26 @@ namespace Engine
             }
 #endif
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="className"></param>
+        /// <param name="instanseName"></param>
+        /// <returns></returns>
+        public static Int64 Create(Int64 model, string className, string instanseName)
+        {
+            Int64 clsid = x86_64.GetClassByName(model, className);
+            System.Diagnostics.Debug.Assert(clsid != 0);
+
+            Int64 instance = x86_64.CreateInstance(clsid, instanseName);
+            System.Diagnostics.Debug.Assert(instance != 0);
+
+            return instance;
+        }
+
+        public static Int64 Create(Int64 model, string className) { return Create(model, className, null); }
 
         /// <summary>
         /// 
@@ -465,7 +466,7 @@ namespace Engine
 
         public int CompareTo(Instance other)
         {
-            return (other == null) ? 1 : m_instance.CompareTo(other.m_instance);
+            return (other==null)?1:m_instance.CompareTo (other.m_instance);
         }
         public override int GetHashCode()
         {
