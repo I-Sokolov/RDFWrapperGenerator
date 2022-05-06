@@ -18,12 +18,14 @@ namespace RDFWrappers
         const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
         const string KWD_DATA_TYPE = "double";
         const string KWD_OBJECT_TYPE = "Instance";
+        const string KWD_asType = "asTYPE";
 
         /// <summary>
         /// 
         /// </summary>
         enum Template
         { 
+            None,
             BeginFile,
             BeginWrapperClass,
             StartPropertiesBlock,
@@ -33,6 +35,7 @@ namespace RDFWrappers
             SetObjectProperty,
             SetObjectArrayProperty,
             GetObjectProperty,
+            GetObjectPropertyInt64,
             EndWrapperClass,
             BeginFactoryClass,
             FactoryMethod,
@@ -210,14 +213,14 @@ namespace RDFWrappers
             {
                 if (classProp.max < 2)
                 {
-                    WriteAccessObjectProperty(writer, classProp.name, prop, Template.SetObjectProperty);
+                    WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectProperty);
                 }
                 else
                 {
-                    WriteAccessObjectProperty(writer, classProp.name, prop, Template.SetObjectArrayProperty);
+                    WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectArrayProperty);
                 }
 
-                WriteAccessObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
+                WriteCetObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
             }
         }
 
@@ -228,23 +231,55 @@ namespace RDFWrappers
         /// <param name="name"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteAccessObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
+        private void WriteSetObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
         {
             if (prop.resrtictions.Count > 0)
             {
                 foreach (var restr in prop.resrtictions)
                 {
                     string instClass = m_schema.GetNameOfClass(restr);
-                    WriteAccessObjectProperty(writer, name, instClass, prop, template);
+                    WriteAccessObjectProperty(writer, name, instClass, "", template);
                 }
             }
             else
             {
-                Verify(false, "This branch needs to be tested");
-                WriteAccessObjectProperty(writer, name, "Instance", prop, template);
+                Verify(false, "This case was not tested yet: no restriction");
+                WriteAccessObjectProperty(writer, name, "Instance", "", template);
             }
 
-            WriteAccessObjectProperty(writer, name, "Int64", prop, template);
+            WriteAccessObjectProperty(writer, name, "Int64", "", template);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="name"></param>
+        /// <param name="prop"></param>
+        /// <param name="template"></param>
+        private void WriteCetObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
+        {
+            if (prop.resrtictions.Count > 0)
+            {
+                bool first = true;
+                foreach (var restr in prop.resrtictions)
+                {
+                    Verify(first, "This case was not tested yet: more then one restriction");
+
+                    string instClass = m_schema.GetNameOfClass(restr);
+                    string asType = first ? "" : instClass;
+                    WriteAccessObjectProperty(writer, name, instClass, asType, template);
+
+                    first = false;
+                }
+            }
+            else
+            {
+                Verify(false, "This case was not tested yet: no restriction");
+                WriteAccessObjectProperty(writer, name, "Instance", "", template);
+            }
+
+            //no needs in generic? WriteAccessObjectProperty(writer, name, "Int64", "", template);
         }
 
 
@@ -268,14 +303,15 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="name"></param>
-        /// <param name="instanceClass"></param>
-        /// <param name="prop"></param>
+        /// <param name="objectType"></param>
+        /// <param name="asType"></param>
         /// <param name="template"></param>
-        private void WriteAccessObjectProperty(StreamWriter writer, string name, string objectClass, Schema.Property prop, Template template)
+        private void WriteAccessObjectProperty(StreamWriter writer, string name, string objectType, string asType, Template template)
         {
             var text = m_template[template];
             text = text.Replace(KWD_PROPERTY_NAME, name);
-            text = text.Replace(KWD_OBJECT_TYPE, objectClass);
+            text = text.Replace(KWD_OBJECT_TYPE, objectType);
+            text = text.Replace(KWD_asType, asType);
             writer.Write(text);
         }
 
