@@ -33,7 +33,7 @@ namespace Engine
 //## TEMPLATE SetObjectArrayProperty
         public void set_PROPERTY_NAME(Instance[] instances) { SetObjectProperty("PROPERTY_NAME", instances); }
 //## TEMPLATE GetObjectProperty
-        public Instance get_PROPERTY_NAMEasTYpe() 
+        public Instance get_PROPERTY_NAMEasTYPe() 
         {
             var propId = GetPropertyId("PROPERTY_NAME");
 

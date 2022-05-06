@@ -241,14 +241,17 @@ namespace RDFWrappers
                 if (classProp.max == 1)
                 {
                     WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectProperty);
+                    WriteGetObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
                 }
                 else
                 {
                     WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectArrayProperty);
                     WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.SetObjectArrayProperty);
+
+                    WriteGetObjectProperty(writer, classProp.name, prop, Template.GetObjectArrayProperty);
+                    WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.GetObjectArrayPropertyInt64);
                 }
 
-                WriteGetObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
             }
         }
 
@@ -304,8 +307,6 @@ namespace RDFWrappers
                 Verify(false, "This case was not tested yet: no restriction");
                 WriteAccessObjectProperty(writer, name, "Instance", "", template);
             }
-
-            //no needs in generic? WriteAccessObjectProperty(writer, name, "Int64", "", template);
         }
 
 
