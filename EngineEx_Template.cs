@@ -210,7 +210,7 @@ namespace Engine
         public void SetDatatypeProperty(string name, double value)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, ref value, 1);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -220,7 +220,7 @@ namespace Engine
         public void SetDatatypeProperty(string name, double[] values)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, values, values.Length);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -230,7 +230,7 @@ namespace Engine
         public void SetDatatypeProperty(string name, long value)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, ref value, 1);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -240,7 +240,7 @@ namespace Engine
         public void SetDatatypeProperty(string name, long[] values)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, values, values.Length);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -251,7 +251,7 @@ namespace Engine
         {
             var propId = GetPropertyId(name);
             byte v = (byte)(value ? 1 : 0);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, ref v, 1);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref v, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -265,7 +265,7 @@ namespace Engine
                 bytes[i] = values[i] ? (byte)1 : (byte)0;
 
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, bytes, values.Length);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, bytes, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -275,7 +275,7 @@ namespace Engine
         public void SetDatatypeProperty(string name, string value)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, ref value, 1);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -285,7 +285,7 @@ namespace Engine
         public void SetDatatypeProperty(string name, string[] values)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDataTypeProperty(m_instance, propId, values, values.Length);
+            var res = x86_64.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
