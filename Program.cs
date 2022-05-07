@@ -29,7 +29,7 @@ namespace RDFWrappers
                 var model = x86_64.OpenModel(fileName);
 
                 var schema = new Schema(model);
-                schema.ToConsole();
+                //schema.ToConsole();
                 
                 //
                 //
@@ -39,7 +39,17 @@ namespace RDFWrappers
                 CSGenerator csgen = new CSGenerator (schema, csTemplate);
                 csgen.WriteWrapper(csWrapper);
 
-                System.Console.Write("C# wrapper is written to " + csWrapper);
+                System.Console.WriteLine("C# wrapper is written to " + csWrapper);
+                System.Console.WriteLine();
+
+                string cppTemplate = @"O:\DevArea\RDF\RDFWrappers\EngineEx_Template.h";
+                string cppWrapper = @"O:\DevArea\RDF\csgpackagesourcecode\engine (build 1054)\C++\BooleanOperation\BooleanOperation\EngineExGenerated.h";
+
+                CSGenerator cppgen = new CSGenerator(schema, cppTemplate);
+                cppgen.WriteWrapper(cppWrapper);
+
+                System.Console.WriteLine("C++ wrapper is written to " + cppWrapper);
+                System.Console.WriteLine();
 
                 x86_64.CloseModel(model);
                 return 0;

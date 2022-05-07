@@ -31,6 +31,8 @@ namespace RDFWrappers
         { 
             None,
             BeginFile,
+            ClassForwardDeclaration,
+            BeginAllClasses,
             BeginWrapperClass,
             StartPropertiesBlock,
             SetDataProperty,
@@ -49,11 +51,16 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
+        bool m_cs; //cs or cpp
+        string TInt64;
+
         Schema m_schema;
 
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
         Dictionary<string, string> m_replacements;
+
+        HashSet<string> m_generatedClasses;
 
         HashSet<string> m_addedProperties;
 
@@ -64,6 +71,10 @@ namespace RDFWrappers
         /// <param name="templateFile"></param>
         public CSGenerator (Schema schema, string templateFile)
         {
+            m_cs = templateFile.EndsWith(".cs", StringComparison.InvariantCultureIgnoreCase);
+
+            TInt64 = m_cs ? "Int64" : "__int64";
+
             m_schema = schema;
 
             foreach (var template in Enum.GetValues(Template.BeginFile.GetType ()))
@@ -80,11 +91,27 @@ namespace RDFWrappers
         /// <param name="outputFile"></param>
         public void WriteWrapper(string outputFile)
         {
+            m_generatedClasses = new HashSet<string>();
+
             using (var writer = new StreamWriter(outputFile))
             {
                 writer.Write(m_template[Template.BeginFile]);
 
                 //
+                // write forward declarationa
+                //
+                m_replacements = new Dictionary<string, string>();
+                foreach (var cls in m_schema.m_classes)
+                {
+                    m_replacements[KWD_CLASS_NAME] = cls.Key;
+                    WriteByTemplate(writer, Template.ClassForwardDeclaration);
+                }
+
+                //
+                // write class definitions
+                //
+                writer.Write(m_template[Template.BeginAllClasses]);
+
                 foreach (var cls in m_schema.m_classes)
                 {
                     WriteClassWrapper(writer, cls.Key, cls.Value);
@@ -104,6 +131,20 @@ namespace RDFWrappers
         /// <param name="cls"></param>
         private void WriteClassWrapper (StreamWriter writer, string clsName, Schema.Class cls)
         {
+            if (!m_generatedClasses.Add (clsName))
+            {
+                return;
+            }
+
+            if (!m_cs) //c++ requires base classes defined first
+            {
+                foreach (var parentId in cls.parents)
+                {
+                    var parentName = m_schema.GetNameOfClass(parentId);
+                    WriteClassWrapper(writer, parentName, m_schema.m_classes[parentName]);
+                }
+            }
+
             AssertIdentifier(clsName);
 
             m_addedProperties = new HashSet<string>();
@@ -268,16 +309,16 @@ namespace RDFWrappers
                 if (classProp.max == 1)
                 {
                     WriteSetObjectProperty(writer, prop, Template.SetObjectProperty);
-                    //do we need this? we lose restrictions control! WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.SetObjectProperty);
+                    //do we need this? we lose restrictions control! WriteAccessObjectProperty(writer, classProp.name, TInt64, "", Template.SetObjectProperty);
                     WriteGetObjectProperty(writer, prop, Template.GetObjectProperty);
                 }
                 else
                 {
                     WriteSetObjectProperty(writer, prop, Template.SetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, "Int64", "", Template.SetObjectArrayProperty);
+                    WriteAccessObjectProperty(writer, TInt64, "", Template.SetObjectArrayProperty);
 
                     WriteGetObjectProperty(writer, prop, Template.GetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, "Int64", "", Template.GetObjectArrayPropertyInt64);
+                    WriteAccessObjectProperty(writer, TInt64, "", Template.GetObjectArrayPropertyInt64);
                 }
 
             }

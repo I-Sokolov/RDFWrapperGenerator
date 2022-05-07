@@ -6,6 +6,10 @@ using System.Runtime.InteropServices;
 
 namespace Engine
 {
+// Classes list:
+//## TEMPLATE: ClassForwardDeclaration (not really required in C#)
+//     CLASS_NAME
+//## TEMPLATE: BeginAllClasses - empty in C#
 //## TEMPLATE: BeginWrapperClass
 
     /// <summary>

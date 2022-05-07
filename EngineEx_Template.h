@@ -11,6 +11,11 @@ typedef const char* string;
 
 namespace RDF
 {
+//## TEMPLATE: ClassForwardDeclaration
+    class CLASS_NAME;
+//## TEMPLATE: BeginAllClasses
+
+
     /// <summary>
     /// Provides utility methods to interact with a genetic instnace of OWL class
     /// You also can use object of this class instead of __int64 handle of the OWL instance in any place where the handle is required
@@ -151,13 +156,14 @@ namespace RDF
             }
         }
     };
+
 //## TEMPLATE: BeginWrapperClass
 
     /// <summary>
     /// Provides utility methods to interact with an instnace of OWL class CLASS_NAME
-    /// You also can use object of this C# class instead of __int64 handle of the OWL instance in any place where the handle is required
+    /// You also can use object of this C++ class instead of __int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
-    class CLASS_NAME : /*BASE CLASS*/Instance
+    class CLASS_NAME : public /*BASE CLASS*/Instance
     {
     public:
         /// <summary>
@@ -173,10 +179,9 @@ namespace RDF
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="chekClassName">Expected OWL class of the isnatnce, used for diagnostic (optionally)</param>
-        CLASS_NAME(__int64 instance, string chekClassName = null)
+        CLASS_NAME(__int64 instance = null, string chekClassName = null)
             : /*BASE CLASS*/Instance(instance, (chekClassName != null) ? chekClassName : "CLASS_NAME")
-        {
-        }
+        {}
 //## TEMPLATE StartPropertiesBlock
 
        //
@@ -197,17 +202,17 @@ namespace RDF
         double* get_PROPERTY_NAMEasType(__int64* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: SetObjectProperty
         ///<summary>Sets relationship from this instance to an instance of Instance</summary>
-        void set_PROPERTY_NAME(Instance instance) { SetObjectProperty("PROPERTY_NAME", &instance, 1); }
+        void set_PROPERTY_NAME(Instance& instance) { SetObjectProperty<Instance>("PROPERTY_NAME", &instance, 1); }
 //## TEMPLATE SetObjectArrayProperty
         ///<summary>Sets relationships from this instance to an array of Instance. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        void set_PROPERTY_NAME(Instance* instances, __int64 count) { SetObjectProperty("PROPERTY_NAME", instances, count); }
+        void set_PROPERTY_NAME(Instance* instances, __int64 count) { SetObjectProperty<Instance>("PROPERTY_NAME", instances, count); }
 //## TEMPLATE GetObjectProperty
         ///<summary>Get related instance</summary>
         Instance* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Instance>("PROPERTY_NAME", null); }
 //## TEMPLATE GetObjectArrayProperty
         ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         Instance* get_PROPERTY_NAMEasTYPE(__int64* pCount) { return GetObjectProperty<Instance>("PROPERTY_NAME", pCount); }
-//## TEMPLATE GetObjectArrayProperty__int64
+//## TEMPLATE GetObjectArrayPropertyInt64
         __int64* get_PROPERTY_NAME_int64(__int64* pCount) { return GetObjectProperty<__int64>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: EndWrapperClass
     };
