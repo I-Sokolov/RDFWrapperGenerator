@@ -13,10 +13,14 @@ namespace RDFWrappers
         /// 
         /// </summary>
         const string KWD_PREPROC = "//##";
-        const string KWD_BASE_CLASS = "/*BASE CLASS*/Instance";
+
         const string KWD_CLASS_NAME = "CLASS_NAME";
+        const string KWD_BASE_CLASS = "/*BASE CLASS*/Instance";
+        const string KWD_PROPERTIES_OF = "PROPERTIES_OF_CLASS";
         const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
         const string KWD_DATA_TYPE = "double";
+        const string KWD_CARDINALITY_MIN = "CARDINALITY_MIN";
+        const string KWD_CARDINALITY_MAX = "CARDINALITY_MAX";
         const string KWD_OBJECT_TYPE = "Instance";
         const string KWD_asType = "asTYPE";
 
@@ -28,7 +32,6 @@ namespace RDFWrappers
             None,
             BeginFile,
             BeginWrapperClass,
-            FactoryMethod,
             StartPropertiesBlock,
             SetDataProperty,
             SetDataArrayProperty,
@@ -49,6 +52,8 @@ namespace RDFWrappers
         Schema m_schema;
 
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
+
+        Dictionary<string, string> m_replacements;
 
         HashSet<string> m_addedProperties;
 
@@ -99,17 +104,22 @@ namespace RDFWrappers
         /// <param name="cls"></param>
         private void WriteClassWrapper (StreamWriter writer, string clsName, Schema.Class cls)
         {
-            m_addedProperties = new HashSet<string>();
-
             AssertIdentifier(clsName);
 
-            //
-            //
-            string textBeginWrapper = m_template[Template.BeginWrapperClass];
-            textBeginWrapper = textBeginWrapper.Replace(KWD_CLASS_NAME, clsName);
+            m_addedProperties = new HashSet<string>();
+            m_replacements = new Dictionary<string, string>();
 
-            //first parent is the base class
+            m_replacements.Add("string?", "string");
+
+            //
+            //
+            m_replacements.Add(KWD_CLASS_NAME, clsName);
+
+            //
+            //
             var baseClass = "Instance";
+            
+            //first parent is the base class
             var itParent = cls.parents.GetEnumerator();
             if (itParent.MoveNext())
             {
@@ -120,18 +130,16 @@ namespace RDFWrappers
                 //gather base classes properties to avoid override here
                 CollectParentProperties(parentId);
             }
-            
-            textBeginWrapper = textBeginWrapper.Replace(KWD_BASE_CLASS, baseClass);
 
-            writer.Write(textBeginWrapper);
+            m_replacements[KWD_BASE_CLASS] = baseClass;
 
             //
             //
-            WriteClassFactory(writer, clsName, cls);
+            WriteByTemplate(writer, Template.BeginWrapperClass);
 
             //
             //
-            AddProperties(writer, clsName, cls.properties);
+            WriteProperties(writer, clsName, cls.properties);
 
             //
             // only single inheritance is suppirted, dirrectly take properties from othe parents
@@ -142,7 +150,7 @@ namespace RDFWrappers
 
             //
             //
-            writer.Write(m_template[Template.EndWrapperClass]);
+            WriteByTemplate(writer,Template.EndWrapperClass);
         }
 
         /// <summary>
@@ -165,6 +173,25 @@ namespace RDFWrappers
             }
         }
 
+        private void WriteByTemplate(StreamWriter writer, Template template)
+        {
+            string code = m_template[template];
+
+            foreach (var r in m_replacements)
+            {
+                if (r.Key.Equals(KWD_asType))
+                {
+                    code = code.Replace(r.Key, r.Value, true, null); //ignore case
+                }
+                else 
+                {
+                    code = code.Replace(r.Key, r.Value);
+                }
+            }
+
+            writer.Write(code);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -174,7 +201,7 @@ namespace RDFWrappers
             string parentName = m_schema.GetNameOfClass(parentClassId);
             var parentClass = m_schema.m_classes[parentName];
 
-            AddProperties(writer, parentName, parentClass.properties);
+            WriteProperties(writer, parentName, parentClass.properties);
             
             foreach (var nextParent in parentClass.parents)
             {
@@ -187,8 +214,10 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="properiesOfClass"></param>
         /// <param name="properties"></param>
-        private void AddProperties (StreamWriter writer, string properiesOfClass, List<Schema.ClassProperty> properties)
+        private void WriteProperties (StreamWriter writer, string properiesOfClass, List<Schema.ClassProperty> properties)
         {
+            m_replacements[KWD_PROPERTIES_OF] = properiesOfClass;
+
             bool first = true;
             foreach (var prop in properties)
             {
@@ -196,9 +225,7 @@ namespace RDFWrappers
                 {
                     if (first)
                     {
-                        var text = m_template[Template.StartPropertiesBlock];
-                        text = text.Replace(KWD_CLASS_NAME, properiesOfClass);
-                        writer.Write(text);
+                        WriteByTemplate(writer, Template.StartPropertiesBlock);
                         first = false;
                     }
 
@@ -216,17 +243,23 @@ namespace RDFWrappers
         {
             var prop = m_schema.m_properties[classProp.name];
 
+            m_replacements[KWD_PROPERTY_NAME] = classProp.name;
+            m_replacements[KWD_DATA_TYPE] = prop.DataType();
+            m_replacements[KWD_CARDINALITY_MIN] = classProp.min.ToString();
+            m_replacements[KWD_CARDINALITY_MAX] = classProp.max.ToString();
+            m_replacements[KWD_asType] = "";
+
             if (!prop.IsObject())
             {
                 if (classProp.max == 1)
                 {
-                    WriteAccessDataProperty(writer, classProp.name, prop, Template.SetDataProperty);
-                    WriteAccessDataProperty(writer, classProp.name, prop, Template.GetDataProperty);
+                    WriteByTemplate(writer, Template.SetDataProperty);
+                    WriteByTemplate(writer, Template.GetDataProperty);
                 }
                 else
                 {
-                    WriteAccessDataProperty(writer, classProp.name, prop, Template.SetDataArrayProperty);
-                    WriteAccessDataProperty(writer, classProp.name, prop, Template.GetDataArrayProperty);
+                    WriteByTemplate(writer, Template.SetDataArrayProperty);
+                    WriteByTemplate(writer, Template.GetDataArrayProperty);
                 }
 
             }
@@ -234,17 +267,17 @@ namespace RDFWrappers
             {
                 if (classProp.max == 1)
                 {
-                    WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectProperty);
+                    WriteSetObjectProperty(writer, prop, Template.SetObjectProperty);
                     //do we need this? we lose restrictions control! WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.SetObjectProperty);
-                    WriteGetObjectProperty(writer, classProp.name, prop, Template.GetObjectProperty);
+                    WriteGetObjectProperty(writer, prop, Template.GetObjectProperty);
                 }
                 else
                 {
-                    WriteSetObjectProperty(writer, classProp.name, prop, Template.SetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.SetObjectArrayProperty);
+                    WriteSetObjectProperty(writer, prop, Template.SetObjectArrayProperty);
+                    WriteAccessObjectProperty(writer, "Int64", "", Template.SetObjectArrayProperty);
 
-                    WriteGetObjectProperty(writer, classProp.name, prop, Template.GetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, classProp.name, "Int64", "", Template.GetObjectArrayPropertyInt64);
+                    WriteGetObjectProperty(writer, prop, Template.GetObjectArrayProperty);
+                    WriteAccessObjectProperty(writer, "Int64", "", Template.GetObjectArrayPropertyInt64);
                 }
 
             }
@@ -254,23 +287,22 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        /// <param name="name"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteSetObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
+        private void WriteSetObjectProperty(StreamWriter writer, Schema.Property prop, Template template)
         {
             if (prop.resrtictions.Count > 0)
             {
                 foreach (var restr in prop.resrtictions)
                 {
                     string instClass = m_schema.GetNameOfClass(restr);
-                    WriteAccessObjectProperty(writer, name, instClass, "", template);
+                    WriteAccessObjectProperty(writer, instClass, "", template);
                 }
             }
             else
             {
                 Verify(false, "This case was not tested yet: no restriction");
-                WriteAccessObjectProperty(writer, name, "Instance", "", template);
+                WriteAccessObjectProperty(writer, "Instance", "", template);
             }
         }
 
@@ -278,10 +310,9 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        /// <param name="name"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteGetObjectProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
+        private void WriteGetObjectProperty(StreamWriter writer, Schema.Property prop, Template template)
         {
             if (prop.resrtictions.Count > 0)
             {
@@ -292,7 +323,7 @@ namespace RDFWrappers
 
                     string instClass = m_schema.GetNameOfClass(restr);
                     string asType = first ? "" : instClass;
-                    WriteAccessObjectProperty(writer, name, instClass, asType, template);
+                    WriteAccessObjectProperty(writer, instClass, asType, template);
 
                     first = false;
                 }
@@ -300,57 +331,26 @@ namespace RDFWrappers
             else
             {
                 Verify(false, "This case was not tested yet: no restriction");
-                WriteAccessObjectProperty(writer, name, "Instance", "", template);
+                WriteAccessObjectProperty(writer, "Instance", "", template);
             }
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="name"></param>
-        /// <param name="prop"></param>
-        /// <param name="template"></param>
-        private void WriteAccessDataProperty(StreamWriter writer, string name, Schema.Property prop, Template template)
-        {
-            var text = m_template[template];
-            text = text.Replace(KWD_PROPERTY_NAME, name);
-            text = text.Replace(KWD_DATA_TYPE, prop.DataType());
-            text = text.Replace(KWD_asType, "", true, null);
-            text = text.Replace("string?", "string");
-            writer.Write(text);
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        /// <param name="name"></param>
         /// <param name="objectType"></param>
         /// <param name="asType"></param>
         /// <param name="template"></param>
-        private void WriteAccessObjectProperty(StreamWriter writer, string name, string objectType, string asType, Template template)
+        private void WriteAccessObjectProperty(StreamWriter writer, string objectType, string asType, Template template)
         {
-            var text = m_template[template];
-            text = text.Replace(KWD_PROPERTY_NAME, name);
-            text = text.Replace(KWD_OBJECT_TYPE, objectType);
-            text = text.Replace(KWD_asType, asType, true, null);
-            writer.Write(text);
+            m_replacements[KWD_OBJECT_TYPE] = objectType;
+            m_replacements[KWD_asType] = asType;
+            WriteByTemplate(writer, template);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="clsName"></param>
-        /// <param name="cls"></param>
-        private void WriteClassFactory(StreamWriter writer, string clsName, Schema.Class cls)
-        {
-            var text = m_template[Template.FactoryMethod];
-            text = text.Replace(KWD_CLASS_NAME, clsName);
-            writer.Write(text);
-        }
 
         /// <summary>
         /// 

@@ -7,35 +7,56 @@ using System.Runtime.InteropServices;
 namespace Engine
 {
 //## TEMPLATE: BeginWrapperClass
+
     /// <summary>
-    /// 
+    /// Provides utility methods to interact with an instnace of OWL class CLASS_NAME
+    /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class CLASS_NAME : /*BASE CLASS*/Instance
     {
+        /// <summary>
+        /// Create new instace of OWL class CLASS_NAME and returns object of this C# class to interact with
+        /// </summary>
+        /// <param name="model">The handle to the model</param>
+        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
+        /// <returns></returns>
+        public static new CLASS_NAME Create(Int64 model, string name=null) { return new CLASS_NAME(Instance.Create(model, "CLASS_NAME", name), "CLASS_NAME");}
+        
+        /// <summary>
+        /// Constructs object of this C# class that wraps existing OWL instance
+        /// </summary>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="chekClassName">Expected OWL class of the isnatnce, used for diagnostic (optionally)</param>
         public CLASS_NAME(Int64 instance, string chekClassName = null) 
             : base (instance, (chekClassName!=null) ? chekClassName : "CLASS_NAME") 
-        {
+        {            
         }
-//## TEMPLATE: FactoryMethod template part
-        /// <summary>Create instance of CLASS_NAME</summary>
-        public static new CLASS_NAME Create(Int64 model, string name=null) { return new CLASS_NAME(Instance.Create(model, "CLASS_NAME", name), "CLASS_NAME");}
 //## TEMPLATE StartPropertiesBlock
+
        //
-       // Properties with assigned cardinality to CLASS_NAME
+       // Properties with known cardinality restrictions to PROPERTIES_OF_CLASS
        //
+
 //## TEMPLATE: SetDataProperty
+        ///<summary>Sets value of PROPERTY_NAME</summary>
         public void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", value); }
 //## TEMPLATE SetDataArrayProperty
+        ///<summary>Sets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         public void set_PROPERTY_NAME(double[] values) { SetDatatypeProperty ("PROPERTY_NAME", values); }
 //## TEMPLATE GetDataProperty
+        ///<summary>Gets value of PROPERTY_NAME, returns null is the property was not set</summary>
         public double? get_PROPERTY_NAME() { var arr = GetDatatypeProperty_double("PROPERTY_NAME"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
 //## TEMPLATE GetDataArrayProperty
+        ///<summary>Gets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         public double[] get_PROPERTY_NAMEasType() { return GetDatatypeProperty_double("PROPERTY_NAME"); }
 //## TEMPLATE: SetObjectProperty
+        ///<summary>Sets relationship from this instance to an instance of Instance</summary>
         public void set_PROPERTY_NAME(Instance instance) { SetObjectProperty("PROPERTY_NAME", instance); }
 //## TEMPLATE SetObjectArrayProperty
+        ///<summary>Sets relationships from this instance to an array of Instance. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         public void set_PROPERTY_NAME(Instance[] instances) { SetObjectProperty("PROPERTY_NAME", instances); }
 //## TEMPLATE GetObjectProperty
+        ///<summary>Get related instance</summary>
         public Instance get_PROPERTY_NAMEasTYPe() 
         {
             var propId = GetPropertyId("PROPERTY_NAME");
@@ -58,6 +79,7 @@ namespace Engine
             }
         }
 //## TEMPLATE GetObjectArrayProperty
+        ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         public Instance[] get_PROPERTY_NAMEasTYPE() 
         {
             var propId = GetPropertyId("PROPERTY_NAME");
@@ -86,7 +108,8 @@ namespace Engine
             }
         }
 //## TEMPLATE GetObjectArrayPropertyInt64
-        public Int64[] get_PROPERTY_NAME_Int64()  //TODO - do we need this variant ?
+        ///<summary>Get an array of handles of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
+        public Int64[] get_PROPERTY_NAME_Int64()  
         {
             var propId = GetPropertyId("PROPERTY_NAME");
 
@@ -111,21 +134,42 @@ namespace Engine
     }
 
 //## TEMPLATE: EndFile template part
+
     /// <summary>
-    /// Generic instance
+    /// Provides utility methods to interact with a genetic instnace of OWL class
+    /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Instance : IEquatable<Instance>, IComparable, IComparable<Instance>
     {
         /// <summary>
-        /// 
+        /// Create an isnatnce of specified class
+        /// </summary>
+        public static Int64 Create(Int64 model, string className, string instanseName)
+        {
+            Int64 clsid = x86_64.GetClassByName(model, className);
+            System.Diagnostics.Debug.Assert(clsid != 0);
+
+            Int64 instance = x86_64.CreateInstance(clsid, instanseName);
+            System.Diagnostics.Debug.Assert(instance != 0);
+
+            return instance;
+        }
+
+        /// <summary>
+        /// Create an isnatnce of specified class
+        /// </summary>
+        public static Int64 Create(Int64 model, string className) { return Create(model, className, null); }
+
+        /// <summary>
+        /// underlyed instance handle
         /// </summary>
         protected Int64 m_instance = 0;
 
         /// <summary>
-        /// 
+        /// Constructs object that wraps existing OWL instance
         /// </summary>
-        /// <param name="instance"></param>
-        /// <param name="cls"></param>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="chekClassName">Expected OWL class of the isnatnce, used for diagnostic (optionally)</param>
         public Instance(Int64 instance, string cls)
         {
             m_instance = instance;
@@ -140,37 +184,15 @@ namespace Engine
 #endif
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="className"></param>
-        /// <param name="instanseName"></param>
-        /// <returns></returns>
-        public static Int64 Create(Int64 model, string className, string instanseName)
-        {
-            Int64 clsid = x86_64.GetClassByName(model, className);
-            System.Diagnostics.Debug.Assert(clsid != 0);
-
-            Int64 instance = x86_64.CreateInstance(clsid, instanseName);
-            System.Diagnostics.Debug.Assert(instance != 0);
-
-            return instance;
-        }
-
-        public static Int64 Create(Int64 model, string className) { return Create(model, className, null); }
 
         /// <summary>
-        /// 
+        /// Conversion to instance handle, so the object of the class can be used anywhere where a handle required
         /// </summary>
-        /// <param name="instance"></param>
         public static implicit operator Int64(Instance instance) => instance.m_instance;
 
         /// <summary>
-        /// 
+        /// Get property id from property name
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public Int64 GetPropertyId(string name)
         {
             var model = x86_64.GetModel(m_instance);
@@ -185,8 +207,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         public void SetDatatypeProperty(string name, double value)
         {
             var propId = GetPropertyId(name);
@@ -197,8 +217,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         public void SetDatatypeProperty(string name, double[] values)
         {
             var propId = GetPropertyId(name);
@@ -209,8 +227,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         public void SetDatatypeProperty(string name, long value)
         {
             var propId = GetPropertyId(name);
@@ -221,8 +237,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="values"></param>
         public void SetDatatypeProperty(string name, long[] values)
         {
             var propId = GetPropertyId(name);
@@ -233,8 +247,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         public void SetDatatypeProperty(string name, bool value)
         {
             var propId = GetPropertyId(name);
@@ -246,8 +258,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="values"></param>
         public void SetDatatypeProperty(string name, bool[] values)
         {
             byte[] bytes = new byte[values.Length];
@@ -260,10 +270,8 @@ namespace Engine
         }
 
         /// <summary>
-        /// 1111
+        /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         public void SetDatatypeProperty(string name, string value)
         {
             var propId = GetPropertyId(name);
@@ -274,8 +282,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
         public void SetDatatypeProperty(string name, string[] values)
         {
             var propId = GetPropertyId(name);
@@ -286,8 +292,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public double[] GetDatatypeProperty_double(string name)
         {
             var propId = GetPropertyId(name);
@@ -313,8 +317,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public long[] GetDatatypeProperty_long(string name)
         {
             var propId = GetPropertyId(name);
@@ -340,8 +342,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public bool[] GetDatatypeProperty_bool(string name)
         {
             var propId = GetPropertyId(name);
@@ -373,8 +373,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public string[] GetDatatypeProperty_string(string name)
         {
             var propId = GetPropertyId(name);
@@ -405,8 +403,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="instance"></param>
         public void SetObjectProperty(string name, Int64 instance)
         {
             var propId = GetPropertyId(name);
@@ -417,8 +413,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="instances"></param>
         public void SetObjectProperty(string name, Instance[] instances)
         {
             var inst = new Int64[instances.Length];
@@ -431,8 +425,6 @@ namespace Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="instances"></param>
         public void SetObjectProperty(string name, Int64[] instances)
         {
             var propId = GetPropertyId(name);
@@ -446,28 +438,51 @@ namespace Engine
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool operator ==(Instance i1, Instance i2) => (Equals(i1, i2));
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool operator !=(Instance i1, Instance i2) => (!(i1 == i2));
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override bool Equals(Object obj) 
         {
             return Equals(obj as Instance); 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool Equals(Instance other)     
         {
             return (other == null) ? false : (other.m_instance == m_instance);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int CompareTo(object obj)
         {
             return CompareTo (obj as Instance);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int CompareTo(Instance other)
         {
             return (other==null)?1:m_instance.CompareTo (other.m_instance);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public override int GetHashCode()
         {
             return m_instance.GetHashCode();
