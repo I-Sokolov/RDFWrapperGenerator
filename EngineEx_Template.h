@@ -208,6 +208,7 @@ namespace RDF
         ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         Instance* get_PROPERTY_NAMEasTYPE(__int64* pCount) { return GetObjectProperty<Instance>("PROPERTY_NAME", pCount); }
 //## TEMPLATE GetObjectArrayProperty__int64
+        __int64* get_PROPERTY_NAME_int64(__int64* pCount) { return GetObjectProperty<__int64>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: EndWrapperClass
     };
 //## TEMPLATE: EndFile template part
