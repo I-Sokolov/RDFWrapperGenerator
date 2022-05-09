@@ -68,11 +68,11 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="schema"></param>
-        /// <param name="templateFile"></param>
-        public CSGenerator (Schema schema, string templateFile)
+        /// <param name="cs"></param>
+        public CSGenerator (Schema schema, bool cs)
         {
-            m_cs = templateFile.EndsWith(".cs", StringComparison.InvariantCultureIgnoreCase);
-
+            m_cs = cs;
+            
             TInt64 = m_cs ? "Int64" : "__int64";
 
             m_schema = schema;
@@ -82,7 +82,7 @@ namespace RDFWrappers
                 m_template.Add((Template)template, "");
             }
 
-            ReadTemplate(templateFile);
+            ParseTemplate();
         }
 
         /// <summary>
@@ -396,32 +396,52 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="templateFile"></param>
-        private void ReadTemplate(string templateFile)
+        private void ParseTemplate()
         {
-            Template part = Template.BeginFile;
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetCallingAssembly();
 
-            using (var reader = new StreamReader(templateFile))
+            var templateName = m_cs ? "EngineEx_Template.cs" : "EngineEx_Template.h";
+
+            string resourceName = FormatResourceName(assembly, templateName);
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             {
-                int nline = 0;
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                Verify(stream != null, "Failed get resource " + resourceName);
+                using (StreamReader reader = new StreamReader(stream)) //to read from file use new StreamReader(templateFile))
                 {
-                    nline++;
+                    Verify(reader != null, "Failed create stream reader for " + templateName);
+                    Template part = Template.BeginFile;
+                    int nline = 0;
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        nline++;
 
-                    if (line.Contains(KWD_PREPROC))
-                    {
-                        part++;
-                        Verify(line.Contains(part.ToString()), string.Format("Expected line {0} contains '{1}' substing while parsing template fle {2}", nline, part.ToString(), templateFile));
-                    }
-                    else
-                    {
-                        string str = m_template[part];
-                        str = str + line + "\r\n";
-                        m_template[part] = str;
+                        if (line.Contains(KWD_PREPROC))
+                        {
+                            part++;
+                            Verify(line.Contains(part.ToString()), string.Format("Expected line {0} contains '{1}' substing while parsing template fle {2}", nline, part.ToString(), templateName));
+                        }
+                        else
+                        {
+                            string str = m_template[part];
+                            str = str + line + "\r\n";
+                            m_template[part] = str;
+                        }
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <param name="resourceName"></param>
+        /// <returns></returns>
+        private static string FormatResourceName(System.Reflection.Assembly assembly, string resourceName)
+        {
+            return assembly.GetName().Name + "." + resourceName.Replace(" ", "_").Replace("\\", ".").Replace("/", ".");
         }
 
         /// <summary>

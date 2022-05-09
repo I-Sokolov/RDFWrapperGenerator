@@ -12,6 +12,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EngineEx_Template.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="EngineEx_Template.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EngineEx_Template.cs" />
+    <EmbeddedResource Include="EngineEx_Template.h" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="6.0.0" />
   </ItemGroup>
 
