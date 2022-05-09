@@ -35,7 +35,7 @@ namespace RDFWrappers
                 //
                 string csWrapper = @"O:\DevArea\RDF\csgpackagesourcecode\engine (build 1054)\C#\EgineExExamples\EngineExGenerated.cs";
 
-                CSGenerator csgen = new CSGenerator (schema, true);
+                Generator csgen = new Generator (schema, true);
                 csgen.WriteWrapper(csWrapper);
 
                 System.Console.WriteLine("C# wrapper is written to " + csWrapper);
@@ -43,7 +43,7 @@ namespace RDFWrappers
 
                 string cppWrapper = @"O:\DevArea\RDF\csgpackagesourcecode\engine (build 1054)\C++\BooleanOperation\BooleanOperation\EngineExGenerated.h";
 
-                CSGenerator cppgen = new CSGenerator(schema, false);
+                Generator cppgen = new Generator(schema, false);
                 cppgen.WriteWrapper(cppWrapper);
 
                 System.Console.WriteLine("C++ wrapper is written to " + cppWrapper);

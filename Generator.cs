@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RDFWrappers
 {
-    class CSGenerator
+    class Generator
     {
         /// <summary>
         /// 
@@ -69,7 +69,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="cs"></param>
-        public CSGenerator (Schema schema, bool cs)
+        public Generator (Schema schema, bool cs)
         {
             m_cs = cs;
             
