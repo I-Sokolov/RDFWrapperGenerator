@@ -30,9 +30,9 @@ namespace Engine
         /// Constructs object of this C# class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
-        /// <param name="chekClassName">Expected OWL class of the isnatnce, used for diagnostic (optionally)</param>
-        public CLASS_NAME(Int64 instance, string chekClassName = null) 
-            : base (instance, (chekClassName!=null) ? chekClassName : "CLASS_NAME") 
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
+        public CLASS_NAME(Int64 instance, string checkClassName = null) 
+            : base (instance, (checkClassName!=null) ? checkClassName : "CLASS_NAME") 
         {            
         }
 //## TEMPLATE StartPropertiesBlock
@@ -146,7 +146,7 @@ namespace Engine
     public class Instance : IEquatable<Instance>, IComparable, IComparable<Instance>
     {
         /// <summary>
-        /// Create an isnatnce of specified class
+        /// Create an instance of specified class
         /// </summary>
         public static Int64 Create(Int64 model, string className, string instanseName)
         {
@@ -160,7 +160,7 @@ namespace Engine
         }
 
         /// <summary>
-        /// Create an isnatnce of specified class
+        /// Create an instance of specified class
         /// </summary>
         public static Int64 Create(Int64 model, string className) { return Create(model, className, null); }
 
@@ -173,7 +173,7 @@ namespace Engine
         /// Constructs object that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
-        /// <param name="chekClassName">Expected OWL class of the isnatnce, used for diagnostic (optionally)</param>
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
         public Instance(Int64 instance, string cls)
         {
             m_instance = instance;
