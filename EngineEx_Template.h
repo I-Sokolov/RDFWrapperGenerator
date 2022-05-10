@@ -58,9 +58,9 @@ namespace NAMESPACE_NAME
             m_instance = instance;
 #ifdef _DEBUG
             if (m_instance != 0 && cls != null) {
-                auto clsid1 = GetInstanceClass(m_instance);
-                auto model = GetModel(m_instance);
-                auto clsid2 = GetClassByName(model, cls);
+                int64_t clsid1 = GetInstanceClass(m_instance);
+                int64_t model = GetModel(m_instance);
+                int64_t clsid2 = GetClassByName(model, cls);
                 ASSERT(clsid1 == clsid2);
             }
 #endif
@@ -77,10 +77,10 @@ namespace NAMESPACE_NAME
         /// </summary>
         int64_t GetPropertyId(string name)
         {
-            auto model = GetModel(m_instance);
+            int64_t model = GetModel(m_instance);
             ASSERT(model != 0);
 
-            auto propId = GetPropertyByName(model, name);
+            int64_t propId = GetPropertyByName(model, name);
             ASSERT(propId != 0);
 
             return propId;
@@ -91,8 +91,8 @@ namespace NAMESPACE_NAME
         /// </summary>
         template<typename TElem> void SetDatatypeProperty(string name, TElem* values, int64_t count)
         {
-            auto propId = GetPropertyId(name);
-            auto res = ::SetDatatypeProperty(m_instance, propId, values, count);
+            int64_t propId = GetPropertyId(name);
+            int64_t res = ::SetDatatypeProperty(m_instance, propId, values, count);
             ASSERT(res == 0);
         }
 
@@ -102,11 +102,11 @@ namespace NAMESPACE_NAME
         /// </summary>
         template<typename TElem> TElem* GetDatatypeProperty(string name, int64_t* pCount)
         {
-            auto propId = GetPropertyId(name);
+            int64_t propId = GetPropertyId(name);
 
             TElem* values = NULL;
             int64_t count = 0;
-            auto res = ::GetDatatypeProperty(m_instance, propId, (void**)&values, &count);
+            int64_t res = ::GetDatatypeProperty(m_instance, propId, (void**)&values, &count);
             ASSERT(res == 0);
 
             if (pCount) {
@@ -127,8 +127,8 @@ namespace NAMESPACE_NAME
         /// </summary>
         template<class TInstance> void SetObjectProperty(string name, const TInstance* instances, int64_t count)
         {
-            auto propId = GetPropertyId(name);
-            auto res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
+            int64_t propId = GetPropertyId(name);
+            int64_t res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
             ASSERT(res == 0);
         }
 
@@ -137,11 +137,11 @@ namespace NAMESPACE_NAME
         /// </summary>
         template<class TInstance> TInstance* GetObjectProperty(string name, int64_t* pCount)
         {
-            auto propId = GetPropertyId(name);
+            int64_t propId = GetPropertyId(name);
 
             int64_t* values = NULL;
             int64_t count = 0;
-            auto res = ::GetObjectProperty(m_instance, propId, &values, &count);
+            int64_t res = ::GetObjectProperty(m_instance, propId, &values, &count);
             ASSERT(res == 0);
 
             if (pCount) {

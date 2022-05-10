@@ -20,7 +20,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model);
 /// <returns></returns>
 int main()
 {
-	auto model = OpenModel(nullptr);
+	int64_t model = OpenModel(NULL);
 
 	CreateRedBox(model);
 
@@ -57,7 +57,7 @@ static int64_t CreateRedBox(int64_t model)
 
 	//or you easy use existing instance handlers with classes
 	int64_t colorClass = GetClassByName(model, "Color");
-	int64_t colorInstance = CreateInstance(colorClass, nullptr);
+	int64_t colorInstance = CreateInstance(colorClass, NULL);
 
 	//get wrapper object from instance handler
 	Color color(colorInstance);
@@ -89,11 +89,11 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	//teste to set/get different property types
 
 	Texture texture = Texture::Create(model);
-	auto curve = NURBSCurve::Create(model);
+	NURBSCurve curve = NURBSCurve::Create(model);
 
 	//double
 	double* lseg = curve.get_segmentationLength();
-	ASSERT(lseg == null);
+	ASSERT(lseg == NULL);
 	curve.set_segmentationLength(0.5);
 	lseg = curve.get_segmentationLength();
 	ASSERT(*lseg == 0.5);
@@ -101,7 +101,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	//double []
 	int64_t cnt;
 	double* org = texture.get_origin(&cnt);
-	ASSERT(org == null);
+	ASSERT(org == NULL);
 	double orgset[] = {1, 2, 3};
 	texture.set_origin(orgset, 3);
 	org = texture.get_origin(&cnt);
@@ -110,14 +110,14 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 
 	//long
 	long* setting = curve.get_setting();
-	ASSERT(setting == null);
+	ASSERT(setting == NULL);
 	curve.set_setting(13);
 	setting = curve.get_setting();
 	ASSERT(*setting == 13);
 
 	//long[]
 	long* km = curve.get_knotMultiplicities(&cnt);
-	ASSERT(km == null);
+	ASSERT(km == NULL);
 	long kmset[] = {3, 5, 6};
 	curve.set_knotMultiplicities(kmset, 3);
 	km = curve.get_knotMultiplicities(&cnt);
@@ -126,7 +126,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 
 	//string 
 	const char** tname = texture.get_name();
-	ASSERT(tname == null);
+	ASSERT(tname == NULL);
 	texture.set_name("test");
 	tname = texture.get_name();
 	ASSERT(0 == strcmp(*tname, "test"));
@@ -136,7 +136,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 
 	//bool
 	bool* closed = curve.get_closed();
-	ASSERT(closed == null);
+	ASSERT(closed == NULL);
 	curve.set_closed(true);
 	closed = curve.get_closed();
 	ASSERT(closed && *closed);
@@ -146,7 +146,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 
 	//object
 	Material* material = curve.get_material();
-	ASSERT(material == null);
+	ASSERT(material == NULL);
 	int64_t mat = Material::Create(model);
 	curve.set_material(Material(mat));
 	material = curve.get_material();
@@ -156,9 +156,9 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 
 	//object []
 	Point3D* ptg = curve.get_controlPoints(&cnt);
-	ASSERT(ptg == null);
+	ASSERT(ptg == NULL);
 	int64_t* ptg64 = curve.get_controlPoints_int64(&cnt);
-	ASSERT(ptg64 == null);
+	ASSERT(ptg64 == NULL);
 
 	Point3D pts[] = {Point3D::Create(model), Point3D::Create(model)};
 	ASSERT(pts[0] != pts[1]);
