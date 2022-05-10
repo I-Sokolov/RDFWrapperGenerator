@@ -1,8 +1,11 @@
 // CPP_GeometryKernel.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
 #include <assert.h>
+
 
 #include "Engine\engine.h"
 #include "..\GeometryKernel.h"
@@ -24,6 +27,8 @@ int main()
 	MoreExamplesToAccessDifferentTypesOfProperties(model);
 
 	CloseModel(model);
+
+	printf("finsihed successfully\n");
 }
 
 
