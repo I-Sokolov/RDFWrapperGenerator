@@ -4,7 +4,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Engine
+namespace NAMESPACE_NAME
 {
 // Classes list:
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)

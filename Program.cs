@@ -53,7 +53,6 @@ namespace RDFWrappers
                 var schema = new Schema(model);
                 if (options.printClasses)
                 {
-                    Console.WriteLine("--------------- The model schema ---------------");
                     schema.ToConsole();
                     Console.WriteLine();
                 }

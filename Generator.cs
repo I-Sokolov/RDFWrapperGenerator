@@ -14,6 +14,7 @@ namespace RDFWrappers
         /// </summary>
         const string KWD_PREPROC = "//##";
 
+        const string KWD_NAMESPACE = "NAMESPACE_NAME";
         const string KWD_CLASS_NAME = "CLASS_NAME";
         const string KWD_BASE_CLASS = "/*BASE CLASS*/Instance";
         const string KWD_PROPERTIES_OF = "PROPERTIES_OF_CLASS";
@@ -96,12 +97,14 @@ namespace RDFWrappers
 
             using (var writer = new StreamWriter(outputFile))
             {
-                writer.Write(m_template[Template.BeginFile]);
+                m_replacements = new Dictionary<string, string>();
+                m_replacements[KWD_NAMESPACE] = m_namespace;
+
+                WriteByTemplate(writer, Template.BeginFile);
 
                 //
                 // write forward declarationa
                 //
-                m_replacements = new Dictionary<string, string>();
                 foreach (var cls in m_schema.m_classes)
                 {
                     m_replacements[KWD_CLASS_NAME] = cls.Key;

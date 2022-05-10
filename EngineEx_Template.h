@@ -9,7 +9,7 @@
 typedef const char* string;
 #define null NULL
 
-namespace RDF
+namespace NAMESPACE_NAME
 {
 //## TEMPLATE: ClassForwardDeclaration
     class CLASS_NAME;
