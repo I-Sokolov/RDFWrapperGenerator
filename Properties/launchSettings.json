@@ -2,7 +2,7 @@
   "profiles": {
     "RDFWrappers": {
       "commandName": "Project",
-      "commandLineArgs": "--cs ..\\..\\..\\Examples\\GeometryKernel.cs --h ..\\..\\..\\Examples\\GeometryKernel.h",
+      "commandLineArgs": "--model \"CustomModel.bin\" --printClasses",
       "nativeDebugging": true
     }
   }

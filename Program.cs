@@ -47,8 +47,12 @@ namespace RDFWrappers
                 {
                     options.modelFile = null;
                 }
+                else
+                {
+                    Generator.Verify(System.IO.File.Exists(options.modelFile), "File does not exist: " + options.modelFile);
+                }
 
-                string baseName = (options.modelFile == null ? "GeometryKernel" : options.modelFile);
+                string baseName = (options.modelFile == null ? "GeometryKernel" : System.IO.Path.GetFileNameWithoutExtension (options.modelFile));
 
                 if (string.IsNullOrWhiteSpace (options.csFile))
                 {
