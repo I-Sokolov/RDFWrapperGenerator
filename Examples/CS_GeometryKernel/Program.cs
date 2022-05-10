@@ -1,5 +1,5 @@
 ﻿using System;
-using Engine;
+using RDF;
 using GeometryKernel;
 using System.Diagnostics;
 
@@ -13,13 +13,13 @@ namespace CS_GeometryKernel
 		/// <param name="args"></param>
         static void Main(string[] args)
         {
-            var model = x86_64.OpenModel(null as byte[]);
+            var model = engine.OpenModel(null as byte[]);
 
             CreateRedBox(model);
 
 			MoreExamplesToAccessDifferentTypesOfProperties(model);
 
-            x86_64.CloseModel(model);
+            engine.CloseModel(model);
         }
 
 		/// <summary>
@@ -39,15 +39,15 @@ namespace CS_GeometryKernel
 			colorComponent.set_B(0);
 
 			//you can use instance and property handlers API
-			Int64 propW = x86_64.GetPropertyByName(model, "W");
+			Int64 propW = engine.GetPropertyByName(model, "W");
 			double w = 0.5;
-			x86_64.SetDatatypeProperty(colorComponent, propW, ref w, 1);
+			engine.SetDatatypeProperty(colorComponent, propW, ref w, 1);
 			//the code above is equivalent to
 			colorComponent.set_W(0.5);
 
 			//or you easy use existing instance handlers with classes
-			Int64 colorClass = x86_64.GetClassByName(model, "Color");
-			Int64 colorInstance = x86_64.CreateInstance(colorClass, null as string);
+			Int64 colorClass = engine.GetClassByName(model, "Color");
+			Int64 colorInstance = engine.CreateInstance(colorClass, null as string);
 
 			//get wrapper object from instance handler
 			Color color = new Color(colorInstance);

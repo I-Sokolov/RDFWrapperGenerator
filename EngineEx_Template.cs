@@ -2,7 +2,7 @@
 // Helper classes (C# wrappers)
 //
 using System;
-using Engine;
+using RDF;
 
 namespace NAMESPACE_NAME
 {
@@ -67,7 +67,7 @@ namespace NAMESPACE_NAME
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
+            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -90,7 +90,7 @@ namespace NAMESPACE_NAME
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
+            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -119,7 +119,7 @@ namespace NAMESPACE_NAME
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
+            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -150,10 +150,10 @@ namespace NAMESPACE_NAME
         /// </summary>
         public static Int64 Create(Int64 model, string className, string instanseName)
         {
-            Int64 clsid = x86_64.GetClassByName(model, className);
+            Int64 clsid = engine.GetClassByName(model, className);
             System.Diagnostics.Debug.Assert(clsid != 0);
 
-            Int64 instance = x86_64.CreateInstance(clsid, instanseName);
+            Int64 instance = engine.CreateInstance(clsid, instanseName);
             System.Diagnostics.Debug.Assert(instance != 0);
 
             return instance;
@@ -180,9 +180,9 @@ namespace NAMESPACE_NAME
 #if DEBUG
             if (m_instance != 0 && cls != null)
             {
-                var clsid1 = x86_64.GetInstanceClass(m_instance);
-                var model = x86_64.GetModel(m_instance);
-                var clsid2 = x86_64.GetClassByName(model, cls);
+                var clsid1 = engine.GetInstanceClass(m_instance);
+                var model = engine.GetModel(m_instance);
+                var clsid2 = engine.GetClassByName(model, cls);
                 System.Diagnostics.Trace.Assert(clsid1 == clsid2);
             }
 #endif
@@ -199,10 +199,10 @@ namespace NAMESPACE_NAME
         /// </summary>
         public Int64 GetPropertyId(string name)
         {
-            var model = x86_64.GetModel(m_instance);
+            var model = engine.GetModel(m_instance);
             System.Diagnostics.Debug.Assert(model != 0);
 
-            var propId = x86_64.GetPropertyByName(model, name);
+            var propId = engine.GetPropertyByName(model, name);
             System.Diagnostics.Debug.Assert(propId != 0);
 
             return propId;
@@ -214,7 +214,7 @@ namespace NAMESPACE_NAME
         public void SetDatatypeProperty(string name, double value)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref value, 1);
+            var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -224,7 +224,7 @@ namespace NAMESPACE_NAME
         public void SetDatatypeProperty(string name, double[] values)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, values, values.Length);
+            var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -234,7 +234,7 @@ namespace NAMESPACE_NAME
         public void SetDatatypeProperty(string name, long value)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref value, 1);
+            var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -244,7 +244,7 @@ namespace NAMESPACE_NAME
         public void SetDatatypeProperty(string name, long[] values)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, values, values.Length);
+            var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -255,7 +255,7 @@ namespace NAMESPACE_NAME
         {
             var propId = GetPropertyId(name);
             byte v = (byte)(value ? 1 : 0);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref v, 1);
+            var res = engine.SetDatatypeProperty(m_instance, propId, ref v, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -269,7 +269,7 @@ namespace NAMESPACE_NAME
                 bytes[i] = values[i] ? (byte)1 : (byte)0;
 
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, bytes, values.Length);
+            var res = engine.SetDatatypeProperty(m_instance, propId, bytes, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -279,7 +279,7 @@ namespace NAMESPACE_NAME
         public void SetDatatypeProperty(string name, string value)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, ref value, 1);
+            var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -289,7 +289,7 @@ namespace NAMESPACE_NAME
         public void SetDatatypeProperty(string name, string[] values)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetDatatypeProperty(m_instance, propId, values, values.Length);
+            var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -302,7 +302,7 @@ namespace NAMESPACE_NAME
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -327,7 +327,7 @@ namespace NAMESPACE_NAME
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -352,7 +352,7 @@ namespace NAMESPACE_NAME
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -383,7 +383,7 @@ namespace NAMESPACE_NAME
 
             Int64 card = 0;
             IntPtr valuesPtr = IntPtr.Zero;
-            var res = Engine.x86_64.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
+            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
             System.Diagnostics.Debug.Assert(res == 0);
 
             if (card > 0)
@@ -410,7 +410,7 @@ namespace NAMESPACE_NAME
         public void SetObjectProperty(string name, Int64 instance)
         {
             var propId = GetPropertyId(name);
-            var res = x86_64.SetObjectProperty(m_instance, propId, ref instance, 1);
+            var res = engine.SetObjectProperty(m_instance, propId, ref instance, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 
@@ -437,7 +437,7 @@ namespace NAMESPACE_NAME
             for (int i = 0; i < instances.Length; i++)
                 inst[i] = instances[i];
 
-            var res = x86_64.SetObjectProperty(m_instance, propId, ref inst[0], inst.Length);
+            var res = engine.SetObjectProperty(m_instance, propId, ref inst[0], inst.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
 

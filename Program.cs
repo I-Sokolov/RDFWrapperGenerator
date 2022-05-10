@@ -1,6 +1,7 @@
 ﻿using System;
 using CommandLine;
 
+
 namespace RDFWrappers
 {
     class Program
@@ -67,7 +68,7 @@ namespace RDFWrappers
                 // Main course
                 //
                 Console.WriteLine("Generating classes for " + baseName);
-                var model = Engine.x86_64.OpenModel(options.modelFile);
+                var model = RDF.engine.OpenModel(options.modelFile);
                 Console.WriteLine();
 
                 var schema = new Schema(model);
@@ -103,7 +104,7 @@ namespace RDFWrappers
                 }
                 System.Console.WriteLine();
 
-                Engine.x86_64.CloseModel(model);
+                RDF.engine.CloseModel(model);
                 return 0;
             }
             catch (Exception e)
