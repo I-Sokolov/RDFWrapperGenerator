@@ -52,7 +52,8 @@ namespace RDFWrappers
         /// 
         /// </summary>
         bool m_cs; //cs or cpp
-        string TInt64;
+        string m_TInt64;
+        string m_namespace;
 
         Schema m_schema;
 
@@ -69,11 +70,11 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="cs"></param>
-        public Generator (Schema schema, bool cs)
+        public Generator (Schema schema, bool cs, string namespace_)
         {
-            m_cs = cs;
-            
-            TInt64 = m_cs ? "Int64" : "__int64";
+            m_cs = cs;            
+            m_TInt64 = m_cs ? "Int64" : "int64_t";
+            m_namespace = namespace_;
 
             m_schema = schema;
 
@@ -315,10 +316,10 @@ namespace RDFWrappers
                 else
                 {
                     WriteSetObjectProperty(writer, prop, Template.SetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, TInt64, "", Template.SetObjectArrayProperty);
+                    WriteAccessObjectProperty(writer, m_TInt64, "", Template.SetObjectArrayProperty);
 
                     WriteGetObjectProperty(writer, prop, Template.GetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, TInt64, "", Template.GetObjectArrayPropertyInt64);
+                    WriteAccessObjectProperty(writer, m_TInt64, "", Template.GetObjectArrayPropertyInt64);
                 }
 
             }
@@ -449,7 +450,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="exceptionMsg"></param>
-        private void Verify (bool condition, string exceptionMsg)
+        public static void Verify (bool condition, string exceptionMsg)
         {
             System.Diagnostics.Trace.Assert(condition);
             if (!condition)
