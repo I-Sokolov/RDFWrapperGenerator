@@ -292,7 +292,7 @@ namespace RDFWrappers
             var prop = m_schema.m_properties[classProp.name];
 
             m_replacements[KWD_PROPERTY_NAME] = classProp.name;
-            m_replacements[KWD_DATA_TYPE] = prop.DataType();
+            m_replacements[KWD_DATA_TYPE] = prop.DataType(m_cs);
             m_replacements[KWD_CARDINALITY_MIN] = classProp.min.ToString();
             m_replacements[KWD_CARDINALITY_MAX] = classProp.max.ToString();
             m_replacements[KWD_asType] = "";

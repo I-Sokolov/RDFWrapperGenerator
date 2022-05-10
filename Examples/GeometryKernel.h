@@ -6,8 +6,6 @@
 #define ASSERT assert
 #endif
 
-typedef const char* string;
-#define null NULL
 
 namespace GeometryKernel
 {
@@ -162,7 +160,7 @@ namespace GeometryKernel
         /// <summary>
         /// Create an instance of specified class
         /// </summary>
-        static int64_t Create(int64_t model, string className, string instanseName)
+        static int64_t Create(int64_t model, const char* className, const char* instanseName)
         {
             int64_t clsid = GetClassByName(model, className);
             ASSERT(clsid != 0);
@@ -176,18 +174,18 @@ namespace GeometryKernel
         /// <summary>
         /// Create an instance of specified class
         /// </summary>
-        static int64_t Create(int64_t model, string className) { return Create(model, className, null); }
+        static int64_t Create(int64_t model, const char* className) { return Create(model, className, NULL); }
 
         /// <summary>
         /// Constructs object that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Instance(int64_t instance, string cls)
+        Instance(int64_t instance, const char* cls)
         {
             m_instance = instance;
 #ifdef _DEBUG
-            if (m_instance != 0 && cls != null) {
+            if (m_instance != 0 && cls != NULL) {
                 int64_t clsid1 = GetInstanceClass(m_instance);
                 int64_t model = GetModel(m_instance);
                 int64_t clsid2 = GetClassByName(model, cls);
@@ -205,7 +203,7 @@ namespace GeometryKernel
         /// <summary>
         /// Get property id from property name
         /// </summary>
-        int64_t GetPropertyId(string name)
+        int64_t GetPropertyId(const char* name)
         {
             int64_t model = GetModel(m_instance);
             ASSERT(model != 0);
@@ -219,7 +217,7 @@ namespace GeometryKernel
         /// <summary>
         /// 
         /// </summary>
-        template<typename TElem> void SetDatatypeProperty(string name, TElem* values, int64_t count)
+        template<typename TElem> void SetDatatypeProperty(const char* name, TElem* values, int64_t count)
         {
             int64_t propId = GetPropertyId(name);
             int64_t res = ::SetDatatypeProperty(m_instance, propId, values, count);
@@ -230,7 +228,7 @@ namespace GeometryKernel
         /// <summary>
         /// 
         /// </summary>
-        template<typename TElem> TElem* GetDatatypeProperty(string name, int64_t* pCount)
+        template<typename TElem> TElem* GetDatatypeProperty(const char* name, int64_t* pCount)
         {
             int64_t propId = GetPropertyId(name);
 
@@ -247,7 +245,7 @@ namespace GeometryKernel
                 return values;
             }
             else {
-                return null;
+                return NULL;
             }
         }
 
@@ -255,7 +253,7 @@ namespace GeometryKernel
         /// <summary>
         /// 
         /// </summary>
-        template<class TInstance> void SetObjectProperty(string name, const TInstance* instances, int64_t count)
+        template<class TInstance> void SetObjectProperty(const char* name, const TInstance* instances, int64_t count)
         {
             int64_t propId = GetPropertyId(name);
             int64_t res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
@@ -265,7 +263,7 @@ namespace GeometryKernel
         /// <summary>
         /// 
         /// </summary>
-        template<class TInstance> TInstance* GetObjectProperty(string name, int64_t* pCount)
+        template<class TInstance> TInstance* GetObjectProperty(const char* name, int64_t* pCount)
         {
             int64_t propId = GetPropertyId(name);
 
@@ -282,7 +280,7 @@ namespace GeometryKernel
                 return (TInstance*)values;
             }
             else {
-                return null;
+                return NULL;
             }
         }
     };
@@ -301,15 +299,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static GeometricItem Create(int64_t model, string name=null) { return GeometricItem(Instance::Create(model, "GeometricItem", name), "GeometricItem");}
+        static GeometricItem Create(int64_t model, const char* name=NULL) { return GeometricItem(Instance::Create(model, "GeometricItem", name), "GeometricItem");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        GeometricItem(int64_t instance = null, string checkClassName = null)
-            : Instance(instance, (checkClassName != null) ? checkClassName : "GeometricItem")
+        GeometricItem(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Instance(instance, (checkClassName != NULL) ? checkClassName : "GeometricItem")
         {}
 
        //
@@ -319,7 +317,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Material</summary>
         void set_material(const Material& instance) { SetObjectProperty<Material>("material", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Material* get_material() { return GetObjectProperty<Material>("material", null); }
+        Material* get_material() { return GetObjectProperty<Material>("material", NULL); }
     };
 
     /// <summary>
@@ -335,15 +333,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static AdvancedFace Create(int64_t model, string name=null) { return AdvancedFace(Instance::Create(model, "AdvancedFace", name), "AdvancedFace");}
+        static AdvancedFace Create(int64_t model, const char* name=NULL) { return AdvancedFace(Instance::Create(model, "AdvancedFace", name), "AdvancedFace");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        AdvancedFace(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "AdvancedFace")
+        AdvancedFace(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "AdvancedFace")
         {}
 
        //
@@ -360,7 +358,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Surface</summary>
         void set_surface(const Surface& instance) { SetObjectProperty<Surface>("surface", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Surface* get_surface() { return GetObjectProperty<Surface>("surface", null); }
+        Surface* get_surface() { return GetObjectProperty<Surface>("surface", NULL); }
     };
 
     /// <summary>
@@ -376,15 +374,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Face Create(int64_t model, string name=null) { return Face(Instance::Create(model, "Face", name), "Face");}
+        static Face Create(int64_t model, const char* name=NULL) { return Face(Instance::Create(model, "Face", name), "Face");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Face(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Face")
+        Face(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Face")
         {}
     };
 
@@ -401,15 +399,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static AdvancedFace2D Create(int64_t model, string name=null) { return AdvancedFace2D(Instance::Create(model, "AdvancedFace2D", name), "AdvancedFace2D");}
+        static AdvancedFace2D Create(int64_t model, const char* name=NULL) { return AdvancedFace2D(Instance::Create(model, "AdvancedFace2D", name), "AdvancedFace2D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        AdvancedFace2D(int64_t instance = null, string checkClassName = null)
-            : AdvancedFace(instance, (checkClassName != null) ? checkClassName : "AdvancedFace2D")
+        AdvancedFace2D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : AdvancedFace(instance, (checkClassName != NULL) ? checkClassName : "AdvancedFace2D")
         {}
 
        //
@@ -418,16 +416,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of clipped</summary>
         void set_clipped(bool value) { SetDatatypeProperty ("clipped", &value, 1); }
-        ///<summary>Gets value of clipped, returns null is the property was not set</summary>
-        bool* get_clipped() { return GetDatatypeProperty<bool>("clipped", null); }
+        ///<summary>Gets value of clipped, returns NULL is the property was not set</summary>
+        bool* get_clipped() { return GetDatatypeProperty<bool>("clipped", NULL); }
         ///<summary>Sets value of scalingX</summary>
         void set_scalingX(double value) { SetDatatypeProperty ("scalingX", &value, 1); }
-        ///<summary>Gets value of scalingX, returns null is the property was not set</summary>
-        double* get_scalingX() { return GetDatatypeProperty<double>("scalingX", null); }
+        ///<summary>Gets value of scalingX, returns NULL is the property was not set</summary>
+        double* get_scalingX() { return GetDatatypeProperty<double>("scalingX", NULL); }
         ///<summary>Sets value of scalingY</summary>
         void set_scalingY(double value) { SetDatatypeProperty ("scalingY", &value, 1); }
-        ///<summary>Gets value of scalingY, returns null is the property was not set</summary>
-        double* get_scalingY() { return GetDatatypeProperty<double>("scalingY", null); }
+        ///<summary>Gets value of scalingY, returns NULL is the property was not set</summary>
+        double* get_scalingY() { return GetDatatypeProperty<double>("scalingY", NULL); }
     };
 
     /// <summary>
@@ -443,15 +441,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static AdvancedFace3D Create(int64_t model, string name=null) { return AdvancedFace3D(Instance::Create(model, "AdvancedFace3D", name), "AdvancedFace3D");}
+        static AdvancedFace3D Create(int64_t model, const char* name=NULL) { return AdvancedFace3D(Instance::Create(model, "AdvancedFace3D", name), "AdvancedFace3D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        AdvancedFace3D(int64_t instance = null, string checkClassName = null)
-            : AdvancedFace(instance, (checkClassName != null) ? checkClassName : "AdvancedFace3D")
+        AdvancedFace3D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : AdvancedFace(instance, (checkClassName != NULL) ? checkClassName : "AdvancedFace3D")
         {}
     };
 
@@ -468,15 +466,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Curve Create(int64_t model, string name=null) { return Curve(Instance::Create(model, "Curve", name), "Curve");}
+        static Curve Create(int64_t model, const char* name=NULL) { return Curve(Instance::Create(model, "Curve", name), "Curve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Curve(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Curve")
+        Curve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Curve")
         {}
     };
 
@@ -493,15 +491,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static AdvancedFaceMapped Create(int64_t model, string name=null) { return AdvancedFaceMapped(Instance::Create(model, "AdvancedFaceMapped", name), "AdvancedFaceMapped");}
+        static AdvancedFaceMapped Create(int64_t model, const char* name=NULL) { return AdvancedFaceMapped(Instance::Create(model, "AdvancedFaceMapped", name), "AdvancedFaceMapped");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        AdvancedFaceMapped(int64_t instance = null, string checkClassName = null)
-            : AdvancedFace(instance, (checkClassName != null) ? checkClassName : "AdvancedFaceMapped")
+        AdvancedFaceMapped(int64_t instance = NULL, const char* checkClassName = NULL)
+            : AdvancedFace(instance, (checkClassName != NULL) ? checkClassName : "AdvancedFaceMapped")
         {}
 
        //
@@ -510,12 +508,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of scalingX</summary>
         void set_scalingX(double value) { SetDatatypeProperty ("scalingX", &value, 1); }
-        ///<summary>Gets value of scalingX, returns null is the property was not set</summary>
-        double* get_scalingX() { return GetDatatypeProperty<double>("scalingX", null); }
+        ///<summary>Gets value of scalingX, returns NULL is the property was not set</summary>
+        double* get_scalingX() { return GetDatatypeProperty<double>("scalingX", NULL); }
         ///<summary>Sets value of scalingY</summary>
         void set_scalingY(double value) { SetDatatypeProperty ("scalingY", &value, 1); }
-        ///<summary>Gets value of scalingY, returns null is the property was not set</summary>
-        double* get_scalingY() { return GetDatatypeProperty<double>("scalingY", null); }
+        ///<summary>Gets value of scalingY, returns NULL is the property was not set</summary>
+        double* get_scalingY() { return GetDatatypeProperty<double>("scalingY", NULL); }
     };
 
     /// <summary>
@@ -531,15 +529,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static AlignedSegment Create(int64_t model, string name=null) { return AlignedSegment(Instance::Create(model, "AlignedSegment", name), "AlignedSegment");}
+        static AlignedSegment Create(int64_t model, const char* name=NULL) { return AlignedSegment(Instance::Create(model, "AlignedSegment", name), "AlignedSegment");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        AlignedSegment(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "AlignedSegment")
+        AlignedSegment(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "AlignedSegment")
         {}
 
        //
@@ -548,20 +546,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
-        ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", null); }
+        ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
+        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of offsetY</summary>
         void set_offsetY(double value) { SetDatatypeProperty ("offsetY", &value, 1); }
-        ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", null); }
+        ///<summary>Gets value of offsetY, returns NULL is the property was not set</summary>
+        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_segment(const Curve& instance) { SetObjectProperty<Curve>("segment", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_segment() { return GetObjectProperty<Curve>("segment", null); }
+        Curve* get_segment() { return GetObjectProperty<Curve>("segment", NULL); }
         ///<summary>Sets values of tangentDirectionStart. OWL cardinality 3..3</summary>
         void set_tangentDirectionStart(double* values, int64_t count) { SetDatatypeProperty ("tangentDirectionStart", values, count); }
         ///<summary>Gets values of tangentDirectionStart. OWL cardinality 3..3</summary>
@@ -581,15 +579,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static AlignedSegments Create(int64_t model, string name=null) { return AlignedSegments(Instance::Create(model, "AlignedSegments", name), "AlignedSegments");}
+        static AlignedSegments Create(int64_t model, const char* name=NULL) { return AlignedSegments(Instance::Create(model, "AlignedSegments", name), "AlignedSegments");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        AlignedSegments(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "AlignedSegments")
+        AlignedSegments(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "AlignedSegments")
         {}
 
        //
@@ -618,15 +616,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Alignment Create(int64_t model, string name=null) { return Alignment(Instance::Create(model, "Alignment", name), "Alignment");}
+        static Alignment Create(int64_t model, const char* name=NULL) { return Alignment(Instance::Create(model, "Alignment", name), "Alignment");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Alignment(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Alignment")
+        Alignment(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Alignment")
         {}
 
        //
@@ -636,19 +634,19 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of AlignedSegments</summary>
         void set_horizontal(const AlignedSegments& instance) { SetObjectProperty<AlignedSegments>("horizontal", &instance, 1); }
         ///<summary>Get related instance</summary>
-        AlignedSegments* get_horizontal() { return GetObjectProperty<AlignedSegments>("horizontal", null); }
+        AlignedSegments* get_horizontal() { return GetObjectProperty<AlignedSegments>("horizontal", NULL); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
-        ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", null); }
+        ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
+        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of type</summary>
         void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
-        ///<summary>Gets value of type, returns null is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", null); }
+        ///<summary>Gets value of type, returns NULL is the property was not set</summary>
+        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
         ///<summary>Sets relationship from this instance to an instance of AlignedSegments</summary>
         void set_vertical(const AlignedSegments& instance) { SetObjectProperty<AlignedSegments>("vertical", &instance, 1); }
         ///<summary>Get related instance</summary>
-        AlignedSegments* get_vertical() { return GetObjectProperty<AlignedSegments>("vertical", null); }
+        AlignedSegments* get_vertical() { return GetObjectProperty<AlignedSegments>("vertical", NULL); }
     };
 
     /// <summary>
@@ -664,15 +662,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Environment Create(int64_t model, string name=null) { return Environment(Instance::Create(model, "Environment", name), "Environment");}
+        static Environment Create(int64_t model, const char* name=NULL) { return Environment(Instance::Create(model, "Environment", name), "Environment");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Environment(int64_t instance = null, string checkClassName = null)
-            : Instance(instance, (checkClassName != null) ? checkClassName : "Environment")
+        Environment(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Instance(instance, (checkClassName != NULL) ? checkClassName : "Environment")
         {}
     };
 
@@ -689,15 +687,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Light Create(int64_t model, string name=null) { return Light(Instance::Create(model, "Light", name), "Light");}
+        static Light Create(int64_t model, const char* name=NULL) { return Light(Instance::Create(model, "Light", name), "Light");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Light(int64_t instance = null, string checkClassName = null)
-            : Environment(instance, (checkClassName != null) ? checkClassName : "Light")
+        Light(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Environment(instance, (checkClassName != NULL) ? checkClassName : "Light")
         {}
 
        //
@@ -707,7 +705,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Color</summary>
         void set_color(const Color& instance) { SetObjectProperty<Color>("color", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Color* get_color() { return GetObjectProperty<Color>("color", null); }
+        Color* get_color() { return GetObjectProperty<Color>("color", NULL); }
     };
 
     /// <summary>
@@ -723,15 +721,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static AmbientLight Create(int64_t model, string name=null) { return AmbientLight(Instance::Create(model, "AmbientLight", name), "AmbientLight");}
+        static AmbientLight Create(int64_t model, const char* name=NULL) { return AmbientLight(Instance::Create(model, "AmbientLight", name), "AmbientLight");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        AmbientLight(int64_t instance = null, string checkClassName = null)
-            : Light(instance, (checkClassName != null) ? checkClassName : "AmbientLight")
+        AmbientLight(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Light(instance, (checkClassName != NULL) ? checkClassName : "AmbientLight")
         {}
     };
 
@@ -748,15 +746,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Appearance Create(int64_t model, string name=null) { return Appearance(Instance::Create(model, "Appearance", name), "Appearance");}
+        static Appearance Create(int64_t model, const char* name=NULL) { return Appearance(Instance::Create(model, "Appearance", name), "Appearance");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Appearance(int64_t instance = null, string checkClassName = null)
-            : Instance(instance, (checkClassName != null) ? checkClassName : "Appearance")
+        Appearance(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Instance(instance, (checkClassName != NULL) ? checkClassName : "Appearance")
         {}
     };
 
@@ -773,15 +771,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Arc3D Create(int64_t model, string name=null) { return Arc3D(Instance::Create(model, "Arc3D", name), "Arc3D");}
+        static Arc3D Create(int64_t model, const char* name=NULL) { return Arc3D(Instance::Create(model, "Arc3D", name), "Arc3D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Arc3D(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Arc3D")
+        Arc3D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Arc3D")
         {}
 
        //
@@ -790,24 +788,24 @@ namespace GeometryKernel
 
         ///<summary>Sets value of hasNormals</summary>
         void set_hasNormals(bool value) { SetDatatypeProperty ("hasNormals", &value, 1); }
-        ///<summary>Gets value of hasNormals, returns null is the property was not set</summary>
-        bool* get_hasNormals() { return GetDatatypeProperty<bool>("hasNormals", null); }
+        ///<summary>Gets value of hasNormals, returns NULL is the property was not set</summary>
+        bool* get_hasNormals() { return GetDatatypeProperty<bool>("hasNormals", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
         ///<summary>Sets value of size</summary>
         void set_size(double value) { SetDatatypeProperty ("size", &value, 1); }
-        ///<summary>Gets value of size, returns null is the property was not set</summary>
-        double* get_size() { return GetDatatypeProperty<double>("size", null); }
+        ///<summary>Gets value of size, returns NULL is the property was not set</summary>
+        double* get_size() { return GetDatatypeProperty<double>("size", NULL); }
         ///<summary>Sets value of start</summary>
         void set_start(double value) { SetDatatypeProperty ("start", &value, 1); }
-        ///<summary>Gets value of start, returns null is the property was not set</summary>
-        double* get_start() { return GetDatatypeProperty<double>("start", null); }
+        ///<summary>Gets value of start, returns NULL is the property was not set</summary>
+        double* get_start() { return GetDatatypeProperty<double>("start", NULL); }
     };
 
     /// <summary>
@@ -823,15 +821,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SplineCurve Create(int64_t model, string name=null) { return SplineCurve(Instance::Create(model, "SplineCurve", name), "SplineCurve");}
+        static SplineCurve Create(int64_t model, const char* name=NULL) { return SplineCurve(Instance::Create(model, "SplineCurve", name), "SplineCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SplineCurve(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "SplineCurve")
+        SplineCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "SplineCurve")
         {}
 
        //
@@ -840,8 +838,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of closed</summary>
         void set_closed(bool value) { SetDatatypeProperty ("closed", &value, 1); }
-        ///<summary>Gets value of closed, returns null is the property was not set</summary>
-        bool* get_closed() { return GetDatatypeProperty<bool>("closed", null); }
+        ///<summary>Gets value of closed, returns NULL is the property was not set</summary>
+        bool* get_closed() { return GetDatatypeProperty<bool>("closed", NULL); }
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 2..-1</summary>
         void set_controlPoints(const Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("controlPoints", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 2..-1</summary>
@@ -851,20 +849,20 @@ namespace GeometryKernel
         int64_t* get_controlPoints_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("controlPoints", pCount); }
         ///<summary>Sets value of count</summary>
         void set_count(long value) { SetDatatypeProperty ("count", &value, 1); }
-        ///<summary>Gets value of count, returns null is the property was not set</summary>
-        long* get_count() { return GetDatatypeProperty<long>("count", null); }
+        ///<summary>Gets value of count, returns NULL is the property was not set</summary>
+        long* get_count() { return GetDatatypeProperty<long>("count", NULL); }
         ///<summary>Sets value of degree</summary>
         void set_degree(long value) { SetDatatypeProperty ("degree", &value, 1); }
-        ///<summary>Gets value of degree, returns null is the property was not set</summary>
-        long* get_degree() { return GetDatatypeProperty<long>("degree", null); }
+        ///<summary>Gets value of degree, returns NULL is the property was not set</summary>
+        long* get_degree() { return GetDatatypeProperty<long>("degree", NULL); }
         ///<summary>Sets value of segmentationLength</summary>
         void set_segmentationLength(double value) { SetDatatypeProperty ("segmentationLength", &value, 1); }
-        ///<summary>Gets value of segmentationLength, returns null is the property was not set</summary>
-        double* get_segmentationLength() { return GetDatatypeProperty<double>("segmentationLength", null); }
+        ///<summary>Gets value of segmentationLength, returns NULL is the property was not set</summary>
+        double* get_segmentationLength() { return GetDatatypeProperty<double>("segmentationLength", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -880,15 +878,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BezierCurve Create(int64_t model, string name=null) { return BezierCurve(Instance::Create(model, "BezierCurve", name), "BezierCurve");}
+        static BezierCurve Create(int64_t model, const char* name=NULL) { return BezierCurve(Instance::Create(model, "BezierCurve", name), "BezierCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BezierCurve(int64_t instance = null, string checkClassName = null)
-            : SplineCurve(instance, (checkClassName != null) ? checkClassName : "BezierCurve")
+        BezierCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : SplineCurve(instance, (checkClassName != NULL) ? checkClassName : "BezierCurve")
         {}
     };
 
@@ -905,15 +903,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Surface Create(int64_t model, string name=null) { return Surface(Instance::Create(model, "Surface", name), "Surface");}
+        static Surface Create(int64_t model, const char* name=NULL) { return Surface(Instance::Create(model, "Surface", name), "Surface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Surface(int64_t instance = null, string checkClassName = null)
-            : Face(instance, (checkClassName != null) ? checkClassName : "Surface")
+        Surface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Face(instance, (checkClassName != NULL) ? checkClassName : "Surface")
         {}
     };
 
@@ -930,15 +928,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static FiniteSurface Create(int64_t model, string name=null) { return FiniteSurface(Instance::Create(model, "FiniteSurface", name), "FiniteSurface");}
+        static FiniteSurface Create(int64_t model, const char* name=NULL) { return FiniteSurface(Instance::Create(model, "FiniteSurface", name), "FiniteSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        FiniteSurface(int64_t instance = null, string checkClassName = null)
-            : Surface(instance, (checkClassName != null) ? checkClassName : "FiniteSurface")
+        FiniteSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Surface(instance, (checkClassName != NULL) ? checkClassName : "FiniteSurface")
         {}
     };
 
@@ -955,15 +953,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SplineSurface Create(int64_t model, string name=null) { return SplineSurface(Instance::Create(model, "SplineSurface", name), "SplineSurface");}
+        static SplineSurface Create(int64_t model, const char* name=NULL) { return SplineSurface(Instance::Create(model, "SplineSurface", name), "SplineSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SplineSurface(int64_t instance = null, string checkClassName = null)
-            : FiniteSurface(instance, (checkClassName != null) ? checkClassName : "SplineSurface")
+        SplineSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : FiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "SplineSurface")
         {}
 
        //
@@ -979,44 +977,44 @@ namespace GeometryKernel
         int64_t* get_controlPoints_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("controlPoints", pCount); }
         ///<summary>Sets value of segmentationLength</summary>
         void set_segmentationLength(double value) { SetDatatypeProperty ("segmentationLength", &value, 1); }
-        ///<summary>Gets value of segmentationLength, returns null is the property was not set</summary>
-        double* get_segmentationLength() { return GetDatatypeProperty<double>("segmentationLength", null); }
+        ///<summary>Gets value of segmentationLength, returns NULL is the property was not set</summary>
+        double* get_segmentationLength() { return GetDatatypeProperty<double>("segmentationLength", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
         ///<summary>Sets value of uClosed</summary>
         void set_uClosed(bool value) { SetDatatypeProperty ("uClosed", &value, 1); }
-        ///<summary>Gets value of uClosed, returns null is the property was not set</summary>
-        bool* get_uClosed() { return GetDatatypeProperty<bool>("uClosed", null); }
+        ///<summary>Gets value of uClosed, returns NULL is the property was not set</summary>
+        bool* get_uClosed() { return GetDatatypeProperty<bool>("uClosed", NULL); }
         ///<summary>Sets value of uCount</summary>
         void set_uCount(long value) { SetDatatypeProperty ("uCount", &value, 1); }
-        ///<summary>Gets value of uCount, returns null is the property was not set</summary>
-        long* get_uCount() { return GetDatatypeProperty<long>("uCount", null); }
+        ///<summary>Gets value of uCount, returns NULL is the property was not set</summary>
+        long* get_uCount() { return GetDatatypeProperty<long>("uCount", NULL); }
         ///<summary>Sets value of uDegree</summary>
         void set_uDegree(long value) { SetDatatypeProperty ("uDegree", &value, 1); }
-        ///<summary>Gets value of uDegree, returns null is the property was not set</summary>
-        long* get_uDegree() { return GetDatatypeProperty<long>("uDegree", null); }
+        ///<summary>Gets value of uDegree, returns NULL is the property was not set</summary>
+        long* get_uDegree() { return GetDatatypeProperty<long>("uDegree", NULL); }
         ///<summary>Sets value of uSegmentationParts</summary>
         void set_uSegmentationParts(long value) { SetDatatypeProperty ("uSegmentationParts", &value, 1); }
-        ///<summary>Gets value of uSegmentationParts, returns null is the property was not set</summary>
-        long* get_uSegmentationParts() { return GetDatatypeProperty<long>("uSegmentationParts", null); }
+        ///<summary>Gets value of uSegmentationParts, returns NULL is the property was not set</summary>
+        long* get_uSegmentationParts() { return GetDatatypeProperty<long>("uSegmentationParts", NULL); }
         ///<summary>Sets value of vClosed</summary>
         void set_vClosed(bool value) { SetDatatypeProperty ("vClosed", &value, 1); }
-        ///<summary>Gets value of vClosed, returns null is the property was not set</summary>
-        bool* get_vClosed() { return GetDatatypeProperty<bool>("vClosed", null); }
+        ///<summary>Gets value of vClosed, returns NULL is the property was not set</summary>
+        bool* get_vClosed() { return GetDatatypeProperty<bool>("vClosed", NULL); }
         ///<summary>Sets value of vCount</summary>
         void set_vCount(long value) { SetDatatypeProperty ("vCount", &value, 1); }
-        ///<summary>Gets value of vCount, returns null is the property was not set</summary>
-        long* get_vCount() { return GetDatatypeProperty<long>("vCount", null); }
+        ///<summary>Gets value of vCount, returns NULL is the property was not set</summary>
+        long* get_vCount() { return GetDatatypeProperty<long>("vCount", NULL); }
         ///<summary>Sets value of vDegree</summary>
         void set_vDegree(long value) { SetDatatypeProperty ("vDegree", &value, 1); }
-        ///<summary>Gets value of vDegree, returns null is the property was not set</summary>
-        long* get_vDegree() { return GetDatatypeProperty<long>("vDegree", null); }
+        ///<summary>Gets value of vDegree, returns NULL is the property was not set</summary>
+        long* get_vDegree() { return GetDatatypeProperty<long>("vDegree", NULL); }
         ///<summary>Sets value of vSegmentationParts</summary>
         void set_vSegmentationParts(long value) { SetDatatypeProperty ("vSegmentationParts", &value, 1); }
-        ///<summary>Gets value of vSegmentationParts, returns null is the property was not set</summary>
-        long* get_vSegmentationParts() { return GetDatatypeProperty<long>("vSegmentationParts", null); }
+        ///<summary>Gets value of vSegmentationParts, returns NULL is the property was not set</summary>
+        long* get_vSegmentationParts() { return GetDatatypeProperty<long>("vSegmentationParts", NULL); }
     };
 
     /// <summary>
@@ -1032,15 +1030,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BezierSurface Create(int64_t model, string name=null) { return BezierSurface(Instance::Create(model, "BezierSurface", name), "BezierSurface");}
+        static BezierSurface Create(int64_t model, const char* name=NULL) { return BezierSurface(Instance::Create(model, "BezierSurface", name), "BezierSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BezierSurface(int64_t instance = null, string checkClassName = null)
-            : SplineSurface(instance, (checkClassName != null) ? checkClassName : "BezierSurface")
+        BezierSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : SplineSurface(instance, (checkClassName != NULL) ? checkClassName : "BezierSurface")
         {}
 
        //
@@ -1049,8 +1047,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of setting</summary>
         void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
-        ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", null); }
+        ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
+        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
     };
 
     /// <summary>
@@ -1066,15 +1064,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static TransitionalCurve Create(int64_t model, string name=null) { return TransitionalCurve(Instance::Create(model, "TransitionalCurve", name), "TransitionalCurve");}
+        static TransitionalCurve Create(int64_t model, const char* name=NULL) { return TransitionalCurve(Instance::Create(model, "TransitionalCurve", name), "TransitionalCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        TransitionalCurve(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "TransitionalCurve")
+        TransitionalCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "TransitionalCurve")
         {}
 
        //
@@ -1084,27 +1082,27 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
+        Vector* get_direction() { return GetObjectProperty<Vector>("direction", NULL); }
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
+        Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets value of radiusI</summary>
         void set_radiusI(double value) { SetDatatypeProperty ("radiusI", &value, 1); }
-        ///<summary>Gets value of radiusI, returns null is the property was not set</summary>
-        double* get_radiusI() { return GetDatatypeProperty<double>("radiusI", null); }
+        ///<summary>Gets value of radiusI, returns NULL is the property was not set</summary>
+        double* get_radiusI() { return GetDatatypeProperty<double>("radiusI", NULL); }
         ///<summary>Sets value of radiusII</summary>
         void set_radiusII(double value) { SetDatatypeProperty ("radiusII", &value, 1); }
-        ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
-        double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", null); }
+        ///<summary>Gets value of radiusII, returns NULL is the property was not set</summary>
+        double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -1120,15 +1118,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BiQuadraticParabola Create(int64_t model, string name=null) { return BiQuadraticParabola(Instance::Create(model, "BiQuadraticParabola", name), "BiQuadraticParabola");}
+        static BiQuadraticParabola Create(int64_t model, const char* name=NULL) { return BiQuadraticParabola(Instance::Create(model, "BiQuadraticParabola", name), "BiQuadraticParabola");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BiQuadraticParabola(int64_t instance = null, string checkClassName = null)
-            : TransitionalCurve(instance, (checkClassName != null) ? checkClassName : "BiQuadraticParabola")
+        BiQuadraticParabola(int64_t instance = NULL, const char* checkClassName = NULL)
+            : TransitionalCurve(instance, (checkClassName != NULL) ? checkClassName : "BiQuadraticParabola")
         {}
     };
 
@@ -1145,15 +1143,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Solid Create(int64_t model, string name=null) { return Solid(Instance::Create(model, "Solid", name), "Solid");}
+        static Solid Create(int64_t model, const char* name=NULL) { return Solid(Instance::Create(model, "Solid", name), "Solid");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Solid(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Solid")
+        Solid(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Solid")
         {}
     };
 
@@ -1170,15 +1168,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Blend Create(int64_t model, string name=null) { return Blend(Instance::Create(model, "Blend", name), "Blend");}
+        static Blend Create(int64_t model, const char* name=NULL) { return Blend(Instance::Create(model, "Blend", name), "Blend");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Blend(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Blend")
+        Blend(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Blend")
         {}
 
        //
@@ -1188,31 +1186,31 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_bottomPolygon(const Curve& instance) { SetObjectProperty<Curve>("bottomPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_bottomPolygon() { return GetObjectProperty<Curve>("bottomPolygon", null); }
+        Curve* get_bottomPolygon() { return GetObjectProperty<Curve>("bottomPolygon", NULL); }
         ///<summary>Sets value of forceSolid</summary>
         void set_forceSolid(bool value) { SetDatatypeProperty ("forceSolid", &value, 1); }
-        ///<summary>Gets value of forceSolid, returns null is the property was not set</summary>
-        bool* get_forceSolid() { return GetDatatypeProperty<bool>("forceSolid", null); }
+        ///<summary>Gets value of forceSolid, returns NULL is the property was not set</summary>
+        bool* get_forceSolid() { return GetDatatypeProperty<bool>("forceSolid", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets value of hasBottom</summary>
         void set_hasBottom(bool value) { SetDatatypeProperty ("hasBottom", &value, 1); }
-        ///<summary>Gets value of hasBottom, returns null is the property was not set</summary>
-        bool* get_hasBottom() { return GetDatatypeProperty<bool>("hasBottom", null); }
+        ///<summary>Gets value of hasBottom, returns NULL is the property was not set</summary>
+        bool* get_hasBottom() { return GetDatatypeProperty<bool>("hasBottom", NULL); }
         ///<summary>Sets value of hasTop</summary>
         void set_hasTop(bool value) { SetDatatypeProperty ("hasTop", &value, 1); }
-        ///<summary>Gets value of hasTop, returns null is the property was not set</summary>
-        bool* get_hasTop() { return GetDatatypeProperty<bool>("hasTop", null); }
+        ///<summary>Gets value of hasTop, returns NULL is the property was not set</summary>
+        bool* get_hasTop() { return GetDatatypeProperty<bool>("hasTop", NULL); }
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_topPolygon(const Curve& instance) { SetObjectProperty<Curve>("topPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_topPolygon() { return GetObjectProperty<Curve>("topPolygon", null); }
+        Curve* get_topPolygon() { return GetObjectProperty<Curve>("topPolygon", NULL); }
     };
 
     /// <summary>
@@ -1228,15 +1226,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BlossCurve Create(int64_t model, string name=null) { return BlossCurve(Instance::Create(model, "BlossCurve", name), "BlossCurve");}
+        static BlossCurve Create(int64_t model, const char* name=NULL) { return BlossCurve(Instance::Create(model, "BlossCurve", name), "BlossCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BlossCurve(int64_t instance = null, string checkClassName = null)
-            : TransitionalCurve(instance, (checkClassName != null) ? checkClassName : "BlossCurve")
+        BlossCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : TransitionalCurve(instance, (checkClassName != NULL) ? checkClassName : "BlossCurve")
         {}
     };
 
@@ -1253,15 +1251,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BooleanOperation Create(int64_t model, string name=null) { return BooleanOperation(Instance::Create(model, "BooleanOperation", name), "BooleanOperation");}
+        static BooleanOperation Create(int64_t model, const char* name=NULL) { return BooleanOperation(Instance::Create(model, "BooleanOperation", name), "BooleanOperation");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BooleanOperation(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "BooleanOperation")
+        BooleanOperation(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "BooleanOperation")
         {}
 
        //
@@ -1271,23 +1269,23 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Deviation</summary>
         void set_deviation(const Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", null); }
+        Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_firstObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("firstObject", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_firstObject() { return GetObjectProperty<GeometricItem>("firstObject", null); }
+        GeometricItem* get_firstObject() { return GetObjectProperty<GeometricItem>("firstObject", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_secondObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("secondObject", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", null); }
+        GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", NULL); }
         ///<summary>Sets value of setting</summary>
         void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
-        ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", null); }
+        ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
+        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
         ///<summary>Sets value of type</summary>
         void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
-        ///<summary>Gets value of type, returns null is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", null); }
+        ///<summary>Gets value of type, returns NULL is the property was not set</summary>
+        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
     };
 
     /// <summary>
@@ -1303,15 +1301,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BooleanOperation2D Create(int64_t model, string name=null) { return BooleanOperation2D(Instance::Create(model, "BooleanOperation2D", name), "BooleanOperation2D");}
+        static BooleanOperation2D Create(int64_t model, const char* name=NULL) { return BooleanOperation2D(Instance::Create(model, "BooleanOperation2D", name), "BooleanOperation2D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BooleanOperation2D(int64_t instance = null, string checkClassName = null)
-            : Face(instance, (checkClassName != null) ? checkClassName : "BooleanOperation2D")
+        BooleanOperation2D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Face(instance, (checkClassName != NULL) ? checkClassName : "BooleanOperation2D")
         {}
 
        //
@@ -1321,19 +1319,19 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Deviation</summary>
         void set_deviation(const Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", null); }
+        Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_firstObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("firstObject", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_firstObject() { return GetObjectProperty<GeometricItem>("firstObject", null); }
+        GeometricItem* get_firstObject() { return GetObjectProperty<GeometricItem>("firstObject", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_secondObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("secondObject", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", null); }
+        GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", NULL); }
         ///<summary>Sets value of type</summary>
         void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
-        ///<summary>Gets value of type, returns null is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", null); }
+        ///<summary>Gets value of type, returns NULL is the property was not set</summary>
+        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
     };
 
     /// <summary>
@@ -1349,15 +1347,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BoundaryRepresentation Create(int64_t model, string name=null) { return BoundaryRepresentation(Instance::Create(model, "BoundaryRepresentation", name), "BoundaryRepresentation");}
+        static BoundaryRepresentation Create(int64_t model, const char* name=NULL) { return BoundaryRepresentation(Instance::Create(model, "BoundaryRepresentation", name), "BoundaryRepresentation");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BoundaryRepresentation(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "BoundaryRepresentation")
+        BoundaryRepresentation(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "BoundaryRepresentation")
         {}
 
        //
@@ -1366,12 +1364,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of consistencyCheck</summary>
         void set_consistencyCheck(long value) { SetDatatypeProperty ("consistencyCheck", &value, 1); }
-        ///<summary>Gets value of consistencyCheck, returns null is the property was not set</summary>
-        long* get_consistencyCheck() { return GetDatatypeProperty<long>("consistencyCheck", null); }
+        ///<summary>Gets value of consistencyCheck, returns NULL is the property was not set</summary>
+        long* get_consistencyCheck() { return GetDatatypeProperty<long>("consistencyCheck", NULL); }
         ///<summary>Sets value of epsilon</summary>
         void set_epsilon(double value) { SetDatatypeProperty ("epsilon", &value, 1); }
-        ///<summary>Gets value of epsilon, returns null is the property was not set</summary>
-        double* get_epsilon() { return GetDatatypeProperty<double>("epsilon", null); }
+        ///<summary>Gets value of epsilon, returns NULL is the property was not set</summary>
+        double* get_epsilon() { return GetDatatypeProperty<double>("epsilon", NULL); }
         ///<summary>Sets relationships from this instance to an array of Face. OWL cardinality 0..-1</summary>
         void set_faces(const Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
@@ -1385,8 +1383,8 @@ namespace GeometryKernel
         long* get_flags(int64_t* pCount) { return GetDatatypeProperty<long>("flags", pCount); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets values of indices. OWL cardinality 0..-1</summary>
         void set_indices(long* values, int64_t count) { SetDatatypeProperty ("indices", values, count); }
         ///<summary>Gets values of indices. OWL cardinality 0..-1</summary>
@@ -1401,8 +1399,8 @@ namespace GeometryKernel
         long* get_normalIndices(int64_t* pCount) { return GetDatatypeProperty<long>("normalIndices", pCount); }
         ///<summary>Sets value of relativeEpsilon</summary>
         void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", &value, 1); }
-        ///<summary>Gets value of relativeEpsilon, returns null is the property was not set</summary>
-        double* get_relativeEpsilon() { return GetDatatypeProperty<double>("relativeEpsilon", null); }
+        ///<summary>Gets value of relativeEpsilon, returns NULL is the property was not set</summary>
+        double* get_relativeEpsilon() { return GetDatatypeProperty<double>("relativeEpsilon", NULL); }
         ///<summary>Sets values of textureCoordinates. OWL cardinality 0..-1</summary>
         void set_textureCoordinates(double* values, int64_t count) { SetDatatypeProperty ("textureCoordinates", values, count); }
         ///<summary>Gets values of textureCoordinates. OWL cardinality 0..-1</summary>
@@ -1430,15 +1428,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Box Create(int64_t model, string name=null) { return Box(Instance::Create(model, "Box", name), "Box");}
+        static Box Create(int64_t model, const char* name=NULL) { return Box(Instance::Create(model, "Box", name), "Box");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Box(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Box")
+        Box(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Box")
         {}
 
        //
@@ -1447,16 +1445,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets value of width</summary>
         void set_width(double value) { SetDatatypeProperty ("width", &value, 1); }
-        ///<summary>Gets value of width, returns null is the property was not set</summary>
-        double* get_width() { return GetDatatypeProperty<double>("width", null); }
+        ///<summary>Gets value of width, returns NULL is the property was not set</summary>
+        double* get_width() { return GetDatatypeProperty<double>("width", NULL); }
     };
 
     /// <summary>
@@ -1472,15 +1470,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BSplineCurve Create(int64_t model, string name=null) { return BSplineCurve(Instance::Create(model, "BSplineCurve", name), "BSplineCurve");}
+        static BSplineCurve Create(int64_t model, const char* name=NULL) { return BSplineCurve(Instance::Create(model, "BSplineCurve", name), "BSplineCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BSplineCurve(int64_t instance = null, string checkClassName = null)
-            : SplineCurve(instance, (checkClassName != null) ? checkClassName : "BSplineCurve")
+        BSplineCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : SplineCurve(instance, (checkClassName != NULL) ? checkClassName : "BSplineCurve")
         {}
 
        //
@@ -1497,8 +1495,8 @@ namespace GeometryKernel
         double* get_knots(int64_t* pCount) { return GetDatatypeProperty<double>("knots", pCount); }
         ///<summary>Sets value of setting</summary>
         void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
-        ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", null); }
+        ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
+        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
     };
 
     /// <summary>
@@ -1514,15 +1512,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static BSplineSurface Create(int64_t model, string name=null) { return BSplineSurface(Instance::Create(model, "BSplineSurface", name), "BSplineSurface");}
+        static BSplineSurface Create(int64_t model, const char* name=NULL) { return BSplineSurface(Instance::Create(model, "BSplineSurface", name), "BSplineSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        BSplineSurface(int64_t instance = null, string checkClassName = null)
-            : SplineSurface(instance, (checkClassName != null) ? checkClassName : "BSplineSurface")
+        BSplineSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : SplineSurface(instance, (checkClassName != NULL) ? checkClassName : "BSplineSurface")
         {}
 
        //
@@ -1531,8 +1529,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of setting</summary>
         void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
-        ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", null); }
+        ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
+        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
         ///<summary>Sets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
         void set_uKnotMultiplicities(long* values, int64_t count) { SetDatatypeProperty ("uKnotMultiplicities", values, count); }
         ///<summary>Gets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
@@ -1564,15 +1562,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ConicalCurve Create(int64_t model, string name=null) { return ConicalCurve(Instance::Create(model, "ConicalCurve", name), "ConicalCurve");}
+        static ConicalCurve Create(int64_t model, const char* name=NULL) { return ConicalCurve(Instance::Create(model, "ConicalCurve", name), "ConicalCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ConicalCurve(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "ConicalCurve")
+        ConicalCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "ConicalCurve")
         {}
 
        //
@@ -1581,20 +1579,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of a</summary>
         void set_a(double value) { SetDatatypeProperty ("a", &value, 1); }
-        ///<summary>Gets value of a, returns null is the property was not set</summary>
-        double* get_a() { return GetDatatypeProperty<double>("a", null); }
+        ///<summary>Gets value of a, returns NULL is the property was not set</summary>
+        double* get_a() { return GetDatatypeProperty<double>("a", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
         ///<summary>Sets value of size</summary>
         void set_size(double value) { SetDatatypeProperty ("size", &value, 1); }
-        ///<summary>Gets value of size, returns null is the property was not set</summary>
-        double* get_size() { return GetDatatypeProperty<double>("size", null); }
+        ///<summary>Gets value of size, returns NULL is the property was not set</summary>
+        double* get_size() { return GetDatatypeProperty<double>("size", NULL); }
         ///<summary>Sets value of start</summary>
         void set_start(double value) { SetDatatypeProperty ("start", &value, 1); }
-        ///<summary>Gets value of start, returns null is the property was not set</summary>
-        double* get_start() { return GetDatatypeProperty<double>("start", null); }
+        ///<summary>Gets value of start, returns NULL is the property was not set</summary>
+        double* get_start() { return GetDatatypeProperty<double>("start", NULL); }
     };
 
     /// <summary>
@@ -1610,15 +1608,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Circle Create(int64_t model, string name=null) { return Circle(Instance::Create(model, "Circle", name), "Circle");}
+        static Circle Create(int64_t model, const char* name=NULL) { return Circle(Instance::Create(model, "Circle", name), "Circle");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Circle(int64_t instance = null, string checkClassName = null)
-            : ConicalCurve(instance, (checkClassName != null) ? checkClassName : "Circle")
+        Circle(int64_t instance = NULL, const char* checkClassName = NULL)
+            : ConicalCurve(instance, (checkClassName != NULL) ? checkClassName : "Circle")
         {}
     };
 
@@ -1635,15 +1633,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static CircleByPoints Create(int64_t model, string name=null) { return CircleByPoints(Instance::Create(model, "CircleByPoints", name), "CircleByPoints");}
+        static CircleByPoints Create(int64_t model, const char* name=NULL) { return CircleByPoints(Instance::Create(model, "CircleByPoints", name), "CircleByPoints");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        CircleByPoints(int64_t instance = null, string checkClassName = null)
-            : Circle(instance, (checkClassName != null) ? checkClassName : "CircleByPoints")
+        CircleByPoints(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Circle(instance, (checkClassName != NULL) ? checkClassName : "CircleByPoints")
         {}
 
        //
@@ -1672,15 +1670,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ClippedPyramid Create(int64_t model, string name=null) { return ClippedPyramid(Instance::Create(model, "ClippedPyramid", name), "ClippedPyramid");}
+        static ClippedPyramid Create(int64_t model, const char* name=NULL) { return ClippedPyramid(Instance::Create(model, "ClippedPyramid", name), "ClippedPyramid");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ClippedPyramid(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "ClippedPyramid")
+        ClippedPyramid(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "ClippedPyramid")
         {}
 
        //
@@ -1710,15 +1708,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Clipping Create(int64_t model, string name=null) { return Clipping(Instance::Create(model, "Clipping", name), "Clipping");}
+        static Clipping Create(int64_t model, const char* name=NULL) { return Clipping(Instance::Create(model, "Clipping", name), "Clipping");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Clipping(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Clipping")
+        Clipping(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Clipping")
         {}
 
        //
@@ -1728,19 +1726,19 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Deviation</summary>
         void set_deviation(const Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", null); }
+        Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
+        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Plane</summary>
         void set_plane(const Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Plane* get_plane() { return GetObjectProperty<Plane>("plane", null); }
+        Plane* get_plane() { return GetObjectProperty<Plane>("plane", NULL); }
         ///<summary>Sets value of type</summary>
         void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
-        ///<summary>Gets value of type, returns null is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", null); }
+        ///<summary>Gets value of type, returns NULL is the property was not set</summary>
+        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
     };
 
     /// <summary>
@@ -1756,15 +1754,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Clothoid Create(int64_t model, string name=null) { return Clothoid(Instance::Create(model, "Clothoid", name), "Clothoid");}
+        static Clothoid Create(int64_t model, const char* name=NULL) { return Clothoid(Instance::Create(model, "Clothoid", name), "Clothoid");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Clothoid(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Clothoid")
+        Clothoid(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Clothoid")
         {}
 
        //
@@ -1773,28 +1771,28 @@ namespace GeometryKernel
 
         ///<summary>Sets value of A</summary>
         void set_A(double value) { SetDatatypeProperty ("A", &value, 1); }
-        ///<summary>Gets value of A, returns null is the property was not set</summary>
-        double* get_A() { return GetDatatypeProperty<double>("A", null); }
+        ///<summary>Gets value of A, returns NULL is the property was not set</summary>
+        double* get_A() { return GetDatatypeProperty<double>("A", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
+        Vector* get_direction() { return GetObjectProperty<Vector>("direction", NULL); }
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets value of orientation</summary>
         void set_orientation(long value) { SetDatatypeProperty ("orientation", &value, 1); }
-        ///<summary>Gets value of orientation, returns null is the property was not set</summary>
-        long* get_orientation() { return GetDatatypeProperty<long>("orientation", null); }
+        ///<summary>Gets value of orientation, returns NULL is the property was not set</summary>
+        long* get_orientation() { return GetDatatypeProperty<long>("orientation", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -1810,15 +1808,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ClothoidCurve Create(int64_t model, string name=null) { return ClothoidCurve(Instance::Create(model, "ClothoidCurve", name), "ClothoidCurve");}
+        static ClothoidCurve Create(int64_t model, const char* name=NULL) { return ClothoidCurve(Instance::Create(model, "ClothoidCurve", name), "ClothoidCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ClothoidCurve(int64_t instance = null, string checkClassName = null)
-            : TransitionalCurve(instance, (checkClassName != null) ? checkClassName : "ClothoidCurve")
+        ClothoidCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : TransitionalCurve(instance, (checkClassName != NULL) ? checkClassName : "ClothoidCurve")
         {}
     };
 
@@ -1835,15 +1833,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Collection Create(int64_t model, string name=null) { return Collection(Instance::Create(model, "Collection", name), "Collection");}
+        static Collection Create(int64_t model, const char* name=NULL) { return Collection(Instance::Create(model, "Collection", name), "Collection");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Collection(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Collection")
+        Collection(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Collection")
         {}
 
        //
@@ -1852,20 +1850,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of consistencyCheck</summary>
         void set_consistencyCheck(long value) { SetDatatypeProperty ("consistencyCheck", &value, 1); }
-        ///<summary>Gets value of consistencyCheck, returns null is the property was not set</summary>
-        long* get_consistencyCheck() { return GetDatatypeProperty<long>("consistencyCheck", null); }
+        ///<summary>Gets value of consistencyCheck, returns NULL is the property was not set</summary>
+        long* get_consistencyCheck() { return GetDatatypeProperty<long>("consistencyCheck", NULL); }
         ///<summary>Sets value of epsilon</summary>
         void set_epsilon(double value) { SetDatatypeProperty ("epsilon", &value, 1); }
-        ///<summary>Gets value of epsilon, returns null is the property was not set</summary>
-        double* get_epsilon() { return GetDatatypeProperty<double>("epsilon", null); }
+        ///<summary>Gets value of epsilon, returns NULL is the property was not set</summary>
+        double* get_epsilon() { return GetDatatypeProperty<double>("epsilon", NULL); }
         ///<summary>Sets value of forceSolid</summary>
         void set_forceSolid(bool value) { SetDatatypeProperty ("forceSolid", &value, 1); }
-        ///<summary>Gets value of forceSolid, returns null is the property was not set</summary>
-        bool* get_forceSolid() { return GetDatatypeProperty<bool>("forceSolid", null); }
+        ///<summary>Gets value of forceSolid, returns NULL is the property was not set</summary>
+        bool* get_forceSolid() { return GetDatatypeProperty<bool>("forceSolid", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets relationships from this instance to an array of GeometricItem. OWL cardinality 0..-1</summary>
         void set_objects(const GeometricItem* instances, int64_t count) { SetObjectProperty<GeometricItem>("objects", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
@@ -1875,12 +1873,12 @@ namespace GeometryKernel
         int64_t* get_objects_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("objects", pCount); }
         ///<summary>Sets value of relativeEpsilon</summary>
         void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", &value, 1); }
-        ///<summary>Gets value of relativeEpsilon, returns null is the property was not set</summary>
-        double* get_relativeEpsilon() { return GetDatatypeProperty<double>("relativeEpsilon", null); }
+        ///<summary>Gets value of relativeEpsilon, returns NULL is the property was not set</summary>
+        double* get_relativeEpsilon() { return GetDatatypeProperty<double>("relativeEpsilon", NULL); }
         ///<summary>Sets value of representsSolid</summary>
         void set_representsSolid(bool value) { SetDatatypeProperty ("representsSolid", &value, 1); }
-        ///<summary>Gets value of representsSolid, returns null is the property was not set</summary>
-        bool* get_representsSolid() { return GetDatatypeProperty<bool>("representsSolid", null); }
+        ///<summary>Gets value of representsSolid, returns NULL is the property was not set</summary>
+        bool* get_representsSolid() { return GetDatatypeProperty<bool>("representsSolid", NULL); }
     };
 
     /// <summary>
@@ -1896,15 +1894,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Color Create(int64_t model, string name=null) { return Color(Instance::Create(model, "Color", name), "Color");}
+        static Color Create(int64_t model, const char* name=NULL) { return Color(Instance::Create(model, "Color", name), "Color");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Color(int64_t instance = null, string checkClassName = null)
-            : Appearance(instance, (checkClassName != null) ? checkClassName : "Color")
+        Color(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Appearance(instance, (checkClassName != NULL) ? checkClassName : "Color")
         {}
 
        //
@@ -1914,27 +1912,27 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
         void set_ambient(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("ambient", &instance, 1); }
         ///<summary>Get related instance</summary>
-        ColorComponent* get_ambient() { return GetObjectProperty<ColorComponent>("ambient", null); }
+        ColorComponent* get_ambient() { return GetObjectProperty<ColorComponent>("ambient", NULL); }
         ///<summary>Sets value of ambientReflectance</summary>
         void set_ambientReflectance(double value) { SetDatatypeProperty ("ambientReflectance", &value, 1); }
-        ///<summary>Gets value of ambientReflectance, returns null is the property was not set</summary>
-        double* get_ambientReflectance() { return GetDatatypeProperty<double>("ambientReflectance", null); }
+        ///<summary>Gets value of ambientReflectance, returns NULL is the property was not set</summary>
+        double* get_ambientReflectance() { return GetDatatypeProperty<double>("ambientReflectance", NULL); }
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
         void set_diffuse(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("diffuse", &instance, 1); }
         ///<summary>Get related instance</summary>
-        ColorComponent* get_diffuse() { return GetObjectProperty<ColorComponent>("diffuse", null); }
+        ColorComponent* get_diffuse() { return GetObjectProperty<ColorComponent>("diffuse", NULL); }
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
         void set_emissive(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("emissive", &instance, 1); }
         ///<summary>Get related instance</summary>
-        ColorComponent* get_emissive() { return GetObjectProperty<ColorComponent>("emissive", null); }
+        ColorComponent* get_emissive() { return GetObjectProperty<ColorComponent>("emissive", NULL); }
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
         void set_specular(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("specular", &instance, 1); }
         ///<summary>Get related instance</summary>
-        ColorComponent* get_specular() { return GetObjectProperty<ColorComponent>("specular", null); }
+        ColorComponent* get_specular() { return GetObjectProperty<ColorComponent>("specular", NULL); }
         ///<summary>Sets value of transparency</summary>
         void set_transparency(double value) { SetDatatypeProperty ("transparency", &value, 1); }
-        ///<summary>Gets value of transparency, returns null is the property was not set</summary>
-        double* get_transparency() { return GetDatatypeProperty<double>("transparency", null); }
+        ///<summary>Gets value of transparency, returns NULL is the property was not set</summary>
+        double* get_transparency() { return GetDatatypeProperty<double>("transparency", NULL); }
     };
 
     /// <summary>
@@ -1950,15 +1948,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ColorComponent Create(int64_t model, string name=null) { return ColorComponent(Instance::Create(model, "ColorComponent", name), "ColorComponent");}
+        static ColorComponent Create(int64_t model, const char* name=NULL) { return ColorComponent(Instance::Create(model, "ColorComponent", name), "ColorComponent");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ColorComponent(int64_t instance = null, string checkClassName = null)
-            : Appearance(instance, (checkClassName != null) ? checkClassName : "ColorComponent")
+        ColorComponent(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Appearance(instance, (checkClassName != NULL) ? checkClassName : "ColorComponent")
         {}
 
        //
@@ -1967,20 +1965,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of B</summary>
         void set_B(double value) { SetDatatypeProperty ("B", &value, 1); }
-        ///<summary>Gets value of B, returns null is the property was not set</summary>
-        double* get_B() { return GetDatatypeProperty<double>("B", null); }
+        ///<summary>Gets value of B, returns NULL is the property was not set</summary>
+        double* get_B() { return GetDatatypeProperty<double>("B", NULL); }
         ///<summary>Sets value of G</summary>
         void set_G(double value) { SetDatatypeProperty ("G", &value, 1); }
-        ///<summary>Gets value of G, returns null is the property was not set</summary>
-        double* get_G() { return GetDatatypeProperty<double>("G", null); }
+        ///<summary>Gets value of G, returns NULL is the property was not set</summary>
+        double* get_G() { return GetDatatypeProperty<double>("G", NULL); }
         ///<summary>Sets value of R</summary>
         void set_R(double value) { SetDatatypeProperty ("R", &value, 1); }
-        ///<summary>Gets value of R, returns null is the property was not set</summary>
-        double* get_R() { return GetDatatypeProperty<double>("R", null); }
+        ///<summary>Gets value of R, returns NULL is the property was not set</summary>
+        double* get_R() { return GetDatatypeProperty<double>("R", NULL); }
         ///<summary>Sets value of W</summary>
         void set_W(double value) { SetDatatypeProperty ("W", &value, 1); }
-        ///<summary>Gets value of W, returns null is the property was not set</summary>
-        double* get_W() { return GetDatatypeProperty<double>("W", null); }
+        ///<summary>Gets value of W, returns NULL is the property was not set</summary>
+        double* get_W() { return GetDatatypeProperty<double>("W", NULL); }
     };
 
     /// <summary>
@@ -1996,15 +1994,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Cone Create(int64_t model, string name=null) { return Cone(Instance::Create(model, "Cone", name), "Cone");}
+        static Cone Create(int64_t model, const char* name=NULL) { return Cone(Instance::Create(model, "Cone", name), "Cone");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Cone(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Cone")
+        Cone(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Cone")
         {}
 
        //
@@ -2013,16 +2011,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2038,15 +2036,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static InfiniteSurface Create(int64_t model, string name=null) { return InfiniteSurface(Instance::Create(model, "InfiniteSurface", name), "InfiniteSurface");}
+        static InfiniteSurface Create(int64_t model, const char* name=NULL) { return InfiniteSurface(Instance::Create(model, "InfiniteSurface", name), "InfiniteSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        InfiniteSurface(int64_t instance = null, string checkClassName = null)
-            : Surface(instance, (checkClassName != null) ? checkClassName : "InfiniteSurface")
+        InfiniteSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Surface(instance, (checkClassName != NULL) ? checkClassName : "InfiniteSurface")
         {}
     };
 
@@ -2063,15 +2061,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ConicalSurface Create(int64_t model, string name=null) { return ConicalSurface(Instance::Create(model, "ConicalSurface", name), "ConicalSurface");}
+        static ConicalSurface Create(int64_t model, const char* name=NULL) { return ConicalSurface(Instance::Create(model, "ConicalSurface", name), "ConicalSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ConicalSurface(int64_t instance = null, string checkClassName = null)
-            : InfiniteSurface(instance, (checkClassName != null) ? checkClassName : "ConicalSurface")
+        ConicalSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : InfiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "ConicalSurface")
         {}
 
        //
@@ -2080,20 +2078,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
         ///<summary>Sets value of semiVerticalAngle</summary>
         void set_semiVerticalAngle(double value) { SetDatatypeProperty ("semiVerticalAngle", &value, 1); }
-        ///<summary>Gets value of semiVerticalAngle, returns null is the property was not set</summary>
-        double* get_semiVerticalAngle() { return GetDatatypeProperty<double>("semiVerticalAngle", null); }
+        ///<summary>Gets value of semiVerticalAngle, returns NULL is the property was not set</summary>
+        double* get_semiVerticalAngle() { return GetDatatypeProperty<double>("semiVerticalAngle", NULL); }
     };
 
     /// <summary>
@@ -2109,15 +2107,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Copy Create(int64_t model, string name=null) { return Copy(Instance::Create(model, "Copy", name), "Copy");}
+        static Copy Create(int64_t model, const char* name=NULL) { return Copy(Instance::Create(model, "Copy", name), "Copy");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Copy(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Copy")
+        Copy(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Copy")
         {}
 
        //
@@ -2126,8 +2124,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of instanceReference</summary>
         void set_instanceReference(long value) { SetDatatypeProperty ("instanceReference", &value, 1); }
-        ///<summary>Gets value of instanceReference, returns null is the property was not set</summary>
-        long* get_instanceReference() { return GetDatatypeProperty<long>("instanceReference", null); }
+        ///<summary>Gets value of instanceReference, returns NULL is the property was not set</summary>
+        long* get_instanceReference() { return GetDatatypeProperty<long>("instanceReference", NULL); }
     };
 
     /// <summary>
@@ -2143,15 +2141,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static CosineCurve Create(int64_t model, string name=null) { return CosineCurve(Instance::Create(model, "CosineCurve", name), "CosineCurve");}
+        static CosineCurve Create(int64_t model, const char* name=NULL) { return CosineCurve(Instance::Create(model, "CosineCurve", name), "CosineCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        CosineCurve(int64_t instance = null, string checkClassName = null)
-            : TransitionalCurve(instance, (checkClassName != null) ? checkClassName : "CosineCurve")
+        CosineCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : TransitionalCurve(instance, (checkClassName != NULL) ? checkClassName : "CosineCurve")
         {}
     };
 
@@ -2168,15 +2166,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Cube Create(int64_t model, string name=null) { return Cube(Instance::Create(model, "Cube", name), "Cube");}
+        static Cube Create(int64_t model, const char* name=NULL) { return Cube(Instance::Create(model, "Cube", name), "Cube");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Cube(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Cube")
+        Cube(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Cube")
         {}
 
        //
@@ -2185,8 +2183,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
     };
 
     /// <summary>
@@ -2202,15 +2200,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static CubicParabola Create(int64_t model, string name=null) { return CubicParabola(Instance::Create(model, "CubicParabola", name), "CubicParabola");}
+        static CubicParabola Create(int64_t model, const char* name=NULL) { return CubicParabola(Instance::Create(model, "CubicParabola", name), "CubicParabola");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        CubicParabola(int64_t instance = null, string checkClassName = null)
-            : TransitionalCurve(instance, (checkClassName != null) ? checkClassName : "CubicParabola")
+        CubicParabola(int64_t instance = NULL, const char* checkClassName = NULL)
+            : TransitionalCurve(instance, (checkClassName != NULL) ? checkClassName : "CubicParabola")
         {}
     };
 
@@ -2227,15 +2225,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Cuboid Create(int64_t model, string name=null) { return Cuboid(Instance::Create(model, "Cuboid", name), "Cuboid");}
+        static Cuboid Create(int64_t model, const char* name=NULL) { return Cuboid(Instance::Create(model, "Cuboid", name), "Cuboid");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Cuboid(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Cuboid")
+        Cuboid(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Cuboid")
         {}
 
        //
@@ -2244,16 +2242,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets value of width</summary>
         void set_width(double value) { SetDatatypeProperty ("width", &value, 1); }
-        ///<summary>Gets value of width, returns null is the property was not set</summary>
-        double* get_width() { return GetDatatypeProperty<double>("width", null); }
+        ///<summary>Gets value of width, returns NULL is the property was not set</summary>
+        double* get_width() { return GetDatatypeProperty<double>("width", NULL); }
     };
 
     /// <summary>
@@ -2269,15 +2267,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static CurvesFromSurface Create(int64_t model, string name=null) { return CurvesFromSurface(Instance::Create(model, "CurvesFromSurface", name), "CurvesFromSurface");}
+        static CurvesFromSurface Create(int64_t model, const char* name=NULL) { return CurvesFromSurface(Instance::Create(model, "CurvesFromSurface", name), "CurvesFromSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        CurvesFromSurface(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "CurvesFromSurface")
+        CurvesFromSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "CurvesFromSurface")
         {}
 
        //
@@ -2306,15 +2304,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Cylinder Create(int64_t model, string name=null) { return Cylinder(Instance::Create(model, "Cylinder", name), "Cylinder");}
+        static Cylinder Create(int64_t model, const char* name=NULL) { return Cylinder(Instance::Create(model, "Cylinder", name), "Cylinder");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Cylinder(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Cylinder")
+        Cylinder(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Cylinder")
         {}
 
        //
@@ -2323,16 +2321,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2348,15 +2346,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static CylindricalSurface Create(int64_t model, string name=null) { return CylindricalSurface(Instance::Create(model, "CylindricalSurface", name), "CylindricalSurface");}
+        static CylindricalSurface Create(int64_t model, const char* name=NULL) { return CylindricalSurface(Instance::Create(model, "CylindricalSurface", name), "CylindricalSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        CylindricalSurface(int64_t instance = null, string checkClassName = null)
-            : InfiniteSurface(instance, (checkClassName != null) ? checkClassName : "CylindricalSurface")
+        CylindricalSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : InfiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "CylindricalSurface")
         {}
 
        //
@@ -2365,12 +2363,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2386,15 +2384,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static DegenerateToroidalSurface Create(int64_t model, string name=null) { return DegenerateToroidalSurface(Instance::Create(model, "DegenerateToroidalSurface", name), "DegenerateToroidalSurface");}
+        static DegenerateToroidalSurface Create(int64_t model, const char* name=NULL) { return DegenerateToroidalSurface(Instance::Create(model, "DegenerateToroidalSurface", name), "DegenerateToroidalSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        DegenerateToroidalSurface(int64_t instance = null, string checkClassName = null)
-            : FiniteSurface(instance, (checkClassName != null) ? checkClassName : "DegenerateToroidalSurface")
+        DegenerateToroidalSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : FiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "DegenerateToroidalSurface")
         {}
 
        //
@@ -2403,16 +2401,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of majorRadius</summary>
         void set_majorRadius(double value) { SetDatatypeProperty ("majorRadius", &value, 1); }
-        ///<summary>Gets value of majorRadius, returns null is the property was not set</summary>
-        double* get_majorRadius() { return GetDatatypeProperty<double>("majorRadius", null); }
+        ///<summary>Gets value of majorRadius, returns NULL is the property was not set</summary>
+        double* get_majorRadius() { return GetDatatypeProperty<double>("majorRadius", NULL); }
         ///<summary>Sets value of minorRadius</summary>
         void set_minorRadius(double value) { SetDatatypeProperty ("minorRadius", &value, 1); }
-        ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
-        double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", null); }
+        ///<summary>Gets value of minorRadius, returns NULL is the property was not set</summary>
+        double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2428,15 +2426,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Deviation Create(int64_t model, string name=null) { return Deviation(Instance::Create(model, "Deviation", name), "Deviation");}
+        static Deviation Create(int64_t model, const char* name=NULL) { return Deviation(Instance::Create(model, "Deviation", name), "Deviation");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Deviation(int64_t instance = null, string checkClassName = null)
-            : Instance(instance, (checkClassName != null) ? checkClassName : "Deviation")
+        Deviation(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Instance(instance, (checkClassName != NULL) ? checkClassName : "Deviation")
         {}
 
        //
@@ -2445,12 +2443,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of absoluteEpsilon</summary>
         void set_absoluteEpsilon(double value) { SetDatatypeProperty ("absoluteEpsilon", &value, 1); }
-        ///<summary>Gets value of absoluteEpsilon, returns null is the property was not set</summary>
-        double* get_absoluteEpsilon() { return GetDatatypeProperty<double>("absoluteEpsilon", null); }
+        ///<summary>Gets value of absoluteEpsilon, returns NULL is the property was not set</summary>
+        double* get_absoluteEpsilon() { return GetDatatypeProperty<double>("absoluteEpsilon", NULL); }
         ///<summary>Sets value of relativeEpsilon</summary>
         void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", &value, 1); }
-        ///<summary>Gets value of relativeEpsilon, returns null is the property was not set</summary>
-        double* get_relativeEpsilon() { return GetDatatypeProperty<double>("relativeEpsilon", null); }
+        ///<summary>Gets value of relativeEpsilon, returns NULL is the property was not set</summary>
+        double* get_relativeEpsilon() { return GetDatatypeProperty<double>("relativeEpsilon", NULL); }
     };
 
     /// <summary>
@@ -2466,15 +2464,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static DirectLight Create(int64_t model, string name=null) { return DirectLight(Instance::Create(model, "DirectLight", name), "DirectLight");}
+        static DirectLight Create(int64_t model, const char* name=NULL) { return DirectLight(Instance::Create(model, "DirectLight", name), "DirectLight");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        DirectLight(int64_t instance = null, string checkClassName = null)
-            : Light(instance, (checkClassName != null) ? checkClassName : "DirectLight")
+        DirectLight(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Light(instance, (checkClassName != NULL) ? checkClassName : "DirectLight")
         {}
 
        //
@@ -2483,12 +2481,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of attenuation</summary>
         void set_attenuation(double value) { SetDatatypeProperty ("attenuation", &value, 1); }
-        ///<summary>Gets value of attenuation, returns null is the property was not set</summary>
-        double* get_attenuation() { return GetDatatypeProperty<double>("attenuation", null); }
+        ///<summary>Gets value of attenuation, returns NULL is the property was not set</summary>
+        double* get_attenuation() { return GetDatatypeProperty<double>("attenuation", NULL); }
         ///<summary>Sets value of range</summary>
         void set_range(double value) { SetDatatypeProperty ("range", &value, 1); }
-        ///<summary>Gets value of range, returns null is the property was not set</summary>
-        double* get_range() { return GetDatatypeProperty<double>("range", null); }
+        ///<summary>Gets value of range, returns NULL is the property was not set</summary>
+        double* get_range() { return GetDatatypeProperty<double>("range", NULL); }
     };
 
     /// <summary>
@@ -2504,15 +2502,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static DirectionalLight Create(int64_t model, string name=null) { return DirectionalLight(Instance::Create(model, "DirectionalLight", name), "DirectionalLight");}
+        static DirectionalLight Create(int64_t model, const char* name=NULL) { return DirectionalLight(Instance::Create(model, "DirectionalLight", name), "DirectionalLight");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        DirectionalLight(int64_t instance = null, string checkClassName = null)
-            : DirectLight(instance, (checkClassName != null) ? checkClassName : "DirectionalLight")
+        DirectionalLight(int64_t instance = NULL, const char* checkClassName = NULL)
+            : DirectLight(instance, (checkClassName != NULL) ? checkClassName : "DirectionalLight")
         {}
 
        //
@@ -2522,7 +2520,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
+        Vector* get_direction() { return GetObjectProperty<Vector>("direction", NULL); }
     };
 
     /// <summary>
@@ -2538,15 +2536,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Dummy Create(int64_t model, string name=null) { return Dummy(Instance::Create(model, "Dummy", name), "Dummy");}
+        static Dummy Create(int64_t model, const char* name=NULL) { return Dummy(Instance::Create(model, "Dummy", name), "Dummy");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Dummy(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Dummy")
+        Dummy(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Dummy")
         {}
     };
 
@@ -2563,15 +2561,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Ellipse Create(int64_t model, string name=null) { return Ellipse(Instance::Create(model, "Ellipse", name), "Ellipse");}
+        static Ellipse Create(int64_t model, const char* name=NULL) { return Ellipse(Instance::Create(model, "Ellipse", name), "Ellipse");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Ellipse(int64_t instance = null, string checkClassName = null)
-            : ConicalCurve(instance, (checkClassName != null) ? checkClassName : "Ellipse")
+        Ellipse(int64_t instance = NULL, const char* checkClassName = NULL)
+            : ConicalCurve(instance, (checkClassName != NULL) ? checkClassName : "Ellipse")
         {}
 
        //
@@ -2580,16 +2578,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of b</summary>
         void set_b(double value) { SetDatatypeProperty ("b", &value, 1); }
-        ///<summary>Gets value of b, returns null is the property was not set</summary>
-        double* get_b() { return GetDatatypeProperty<double>("b", null); }
+        ///<summary>Gets value of b, returns NULL is the property was not set</summary>
+        double* get_b() { return GetDatatypeProperty<double>("b", NULL); }
         ///<summary>Sets value of radiusI</summary>
         void set_radiusI(double value) { SetDatatypeProperty ("radiusI", &value, 1); }
-        ///<summary>Gets value of radiusI, returns null is the property was not set</summary>
-        double* get_radiusI() { return GetDatatypeProperty<double>("radiusI", null); }
+        ///<summary>Gets value of radiusI, returns NULL is the property was not set</summary>
+        double* get_radiusI() { return GetDatatypeProperty<double>("radiusI", NULL); }
         ///<summary>Sets value of radiusII</summary>
         void set_radiusII(double value) { SetDatatypeProperty ("radiusII", &value, 1); }
-        ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
-        double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", null); }
+        ///<summary>Gets value of radiusII, returns NULL is the property was not set</summary>
+        double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", NULL); }
     };
 
     /// <summary>
@@ -2605,15 +2603,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static EllipticCone Create(int64_t model, string name=null) { return EllipticCone(Instance::Create(model, "EllipticCone", name), "EllipticCone");}
+        static EllipticCone Create(int64_t model, const char* name=NULL) { return EllipticCone(Instance::Create(model, "EllipticCone", name), "EllipticCone");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        EllipticCone(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "EllipticCone")
+        EllipticCone(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "EllipticCone")
         {}
 
        //
@@ -2622,20 +2620,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of radiusI</summary>
         void set_radiusI(double value) { SetDatatypeProperty ("radiusI", &value, 1); }
-        ///<summary>Gets value of radiusI, returns null is the property was not set</summary>
-        double* get_radiusI() { return GetDatatypeProperty<double>("radiusI", null); }
+        ///<summary>Gets value of radiusI, returns NULL is the property was not set</summary>
+        double* get_radiusI() { return GetDatatypeProperty<double>("radiusI", NULL); }
         ///<summary>Sets value of radiusII</summary>
         void set_radiusII(double value) { SetDatatypeProperty ("radiusII", &value, 1); }
-        ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
-        double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", null); }
+        ///<summary>Gets value of radiusII, returns NULL is the property was not set</summary>
+        double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2651,15 +2649,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ExtrudedPolygon Create(int64_t model, string name=null) { return ExtrudedPolygon(Instance::Create(model, "ExtrudedPolygon", name), "ExtrudedPolygon");}
+        static ExtrudedPolygon Create(int64_t model, const char* name=NULL) { return ExtrudedPolygon(Instance::Create(model, "ExtrudedPolygon", name), "ExtrudedPolygon");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ExtrudedPolygon(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "ExtrudedPolygon")
+        ExtrudedPolygon(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "ExtrudedPolygon")
         {}
 
        //
@@ -2668,12 +2666,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of extrusionLength</summary>
         void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", &value, 1); }
-        ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", null); }
+        ///<summary>Gets value of extrusionLength, returns NULL is the property was not set</summary>
+        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets values of openingPoints. OWL cardinality 0..-1</summary>
         void set_openingPoints(double* values, int64_t count) { SetDatatypeProperty ("openingPoints", values, count); }
         ///<summary>Gets values of openingPoints. OWL cardinality 0..-1</summary>
@@ -2705,15 +2703,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ExtrudedPolygonTapered Create(int64_t model, string name=null) { return ExtrudedPolygonTapered(Instance::Create(model, "ExtrudedPolygonTapered", name), "ExtrudedPolygonTapered");}
+        static ExtrudedPolygonTapered Create(int64_t model, const char* name=NULL) { return ExtrudedPolygonTapered(Instance::Create(model, "ExtrudedPolygonTapered", name), "ExtrudedPolygonTapered");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ExtrudedPolygonTapered(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "ExtrudedPolygonTapered")
+        ExtrudedPolygonTapered(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "ExtrudedPolygonTapered")
         {}
 
        //
@@ -2722,12 +2720,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of extrusionLength</summary>
         void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", &value, 1); }
-        ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", null); }
+        ///<summary>Gets value of extrusionLength, returns NULL is the property was not set</summary>
+        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets values of openingPoints. OWL cardinality 0..-1</summary>
         void set_openingPoints(double* values, int64_t count) { SetDatatypeProperty ("openingPoints", values, count); }
         ///<summary>Gets values of openingPoints. OWL cardinality 0..-1</summary>
@@ -2771,15 +2769,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ExtrusionAreaSolid Create(int64_t model, string name=null) { return ExtrusionAreaSolid(Instance::Create(model, "ExtrusionAreaSolid", name), "ExtrusionAreaSolid");}
+        static ExtrusionAreaSolid Create(int64_t model, const char* name=NULL) { return ExtrusionAreaSolid(Instance::Create(model, "ExtrusionAreaSolid", name), "ExtrusionAreaSolid");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ExtrusionAreaSolid(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "ExtrusionAreaSolid")
+        ExtrusionAreaSolid(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "ExtrusionAreaSolid")
         {}
 
        //
@@ -2789,7 +2787,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_extrusionArea(const Curve& instance) { SetObjectProperty<Curve>("extrusionArea", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_extrusionArea() { return GetObjectProperty<Curve>("extrusionArea", null); }
+        Curve* get_extrusionArea() { return GetObjectProperty<Curve>("extrusionArea", NULL); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
         void set_extrusionAreaOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("extrusionAreaOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
@@ -2803,12 +2801,12 @@ namespace GeometryKernel
         double* get_extrusionDirection(int64_t* pCount) { return GetDatatypeProperty<double>("extrusionDirection", pCount); }
         ///<summary>Sets value of extrusionLength</summary>
         void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", &value, 1); }
-        ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", null); }
+        ///<summary>Gets value of extrusionLength, returns NULL is the property was not set</summary>
+        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
     };
 
     /// <summary>
@@ -2824,15 +2822,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ExtrusionAreaSolidSet Create(int64_t model, string name=null) { return ExtrusionAreaSolidSet(Instance::Create(model, "ExtrusionAreaSolidSet", name), "ExtrusionAreaSolidSet");}
+        static ExtrusionAreaSolidSet Create(int64_t model, const char* name=NULL) { return ExtrusionAreaSolidSet(Instance::Create(model, "ExtrusionAreaSolidSet", name), "ExtrusionAreaSolidSet");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ExtrusionAreaSolidSet(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "ExtrusionAreaSolidSet")
+        ExtrusionAreaSolidSet(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "ExtrusionAreaSolidSet")
         {}
 
        //
@@ -2852,12 +2850,12 @@ namespace GeometryKernel
         double* get_extrusionDirection(int64_t* pCount) { return GetDatatypeProperty<double>("extrusionDirection", pCount); }
         ///<summary>Sets value of extrusionLength</summary>
         void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", &value, 1); }
-        ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", null); }
+        ///<summary>Gets value of extrusionLength, returns NULL is the property was not set</summary>
+        double* get_extrusionLength() { return GetDatatypeProperty<double>("extrusionLength", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
     };
 
     /// <summary>
@@ -2873,15 +2871,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Face2D Create(int64_t model, string name=null) { return Face2D(Instance::Create(model, "Face2D", name), "Face2D");}
+        static Face2D Create(int64_t model, const char* name=NULL) { return Face2D(Instance::Create(model, "Face2D", name), "Face2D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Face2D(int64_t instance = null, string checkClassName = null)
-            : Face(instance, (checkClassName != null) ? checkClassName : "Face2D")
+        Face2D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Face(instance, (checkClassName != NULL) ? checkClassName : "Face2D")
         {}
 
        //
@@ -2898,11 +2896,11 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_outerPolygon(const Curve& instance) { SetObjectProperty<Curve>("outerPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_outerPolygon() { return GetObjectProperty<Curve>("outerPolygon", null); }
+        Curve* get_outerPolygon() { return GetObjectProperty<Curve>("outerPolygon", NULL); }
         ///<summary>Sets value of setting</summary>
         void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
-        ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", null); }
+        ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
+        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
     };
 
     /// <summary>
@@ -2918,15 +2916,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Face2DSet Create(int64_t model, string name=null) { return Face2DSet(Instance::Create(model, "Face2DSet", name), "Face2DSet");}
+        static Face2DSet Create(int64_t model, const char* name=NULL) { return Face2DSet(Instance::Create(model, "Face2DSet", name), "Face2DSet");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Face2DSet(int64_t instance = null, string checkClassName = null)
-            : Face(instance, (checkClassName != null) ? checkClassName : "Face2DSet")
+        Face2DSet(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Face(instance, (checkClassName != NULL) ? checkClassName : "Face2DSet")
         {}
 
        //
@@ -2942,8 +2940,8 @@ namespace GeometryKernel
         int64_t* get_polygons_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("polygons", pCount); }
         ///<summary>Sets value of setting</summary>
         void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
-        ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", null); }
+        ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
+        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
     };
 
     /// <summary>
@@ -2959,15 +2957,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static FrustumCone Create(int64_t model, string name=null) { return FrustumCone(Instance::Create(model, "FrustumCone", name), "FrustumCone");}
+        static FrustumCone Create(int64_t model, const char* name=NULL) { return FrustumCone(Instance::Create(model, "FrustumCone", name), "FrustumCone");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        FrustumCone(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "FrustumCone")
+        FrustumCone(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "FrustumCone")
         {}
 
        //
@@ -2976,20 +2974,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of factor</summary>
         void set_factor(double value) { SetDatatypeProperty ("factor", &value, 1); }
-        ///<summary>Gets value of factor, returns null is the property was not set</summary>
-        double* get_factor() { return GetDatatypeProperty<double>("factor", null); }
+        ///<summary>Gets value of factor, returns NULL is the property was not set</summary>
+        double* get_factor() { return GetDatatypeProperty<double>("factor", NULL); }
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -3005,15 +3003,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Torus Create(int64_t model, string name=null) { return Torus(Instance::Create(model, "Torus", name), "Torus");}
+        static Torus Create(int64_t model, const char* name=NULL) { return Torus(Instance::Create(model, "Torus", name), "Torus");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Torus(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Torus")
+        Torus(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Torus")
         {}
 
        //
@@ -3022,16 +3020,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of majorRadius</summary>
         void set_majorRadius(double value) { SetDatatypeProperty ("majorRadius", &value, 1); }
-        ///<summary>Gets value of majorRadius, returns null is the property was not set</summary>
-        double* get_majorRadius() { return GetDatatypeProperty<double>("majorRadius", null); }
+        ///<summary>Gets value of majorRadius, returns NULL is the property was not set</summary>
+        double* get_majorRadius() { return GetDatatypeProperty<double>("majorRadius", NULL); }
         ///<summary>Sets value of minorRadius</summary>
         void set_minorRadius(double value) { SetDatatypeProperty ("minorRadius", &value, 1); }
-        ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
-        double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", null); }
+        ///<summary>Gets value of minorRadius, returns NULL is the property was not set</summary>
+        double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -3047,15 +3045,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static HornTorus Create(int64_t model, string name=null) { return HornTorus(Instance::Create(model, "HornTorus", name), "HornTorus");}
+        static HornTorus Create(int64_t model, const char* name=NULL) { return HornTorus(Instance::Create(model, "HornTorus", name), "HornTorus");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        HornTorus(int64_t instance = null, string checkClassName = null)
-            : Torus(instance, (checkClassName != null) ? checkClassName : "HornTorus")
+        HornTorus(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Torus(instance, (checkClassName != NULL) ? checkClassName : "HornTorus")
         {}
     };
 
@@ -3072,15 +3070,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Hyperbola Create(int64_t model, string name=null) { return Hyperbola(Instance::Create(model, "Hyperbola", name), "Hyperbola");}
+        static Hyperbola Create(int64_t model, const char* name=NULL) { return Hyperbola(Instance::Create(model, "Hyperbola", name), "Hyperbola");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Hyperbola(int64_t instance = null, string checkClassName = null)
-            : ConicalCurve(instance, (checkClassName != null) ? checkClassName : "Hyperbola")
+        Hyperbola(int64_t instance = NULL, const char* checkClassName = NULL)
+            : ConicalCurve(instance, (checkClassName != NULL) ? checkClassName : "Hyperbola")
         {}
 
        //
@@ -3089,8 +3087,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of b</summary>
         void set_b(double value) { SetDatatypeProperty ("b", &value, 1); }
-        ///<summary>Gets value of b, returns null is the property was not set</summary>
-        double* get_b() { return GetDatatypeProperty<double>("b", null); }
+        ///<summary>Gets value of b, returns NULL is the property was not set</summary>
+        double* get_b() { return GetDatatypeProperty<double>("b", NULL); }
     };
 
     /// <summary>
@@ -3106,15 +3104,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Mathematics Create(int64_t model, string name=null) { return Mathematics(Instance::Create(model, "Mathematics", name), "Mathematics");}
+        static Mathematics Create(int64_t model, const char* name=NULL) { return Mathematics(Instance::Create(model, "Mathematics", name), "Mathematics");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Mathematics(int64_t instance = null, string checkClassName = null)
-            : Instance(instance, (checkClassName != null) ? checkClassName : "Mathematics")
+        Mathematics(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Instance(instance, (checkClassName != NULL) ? checkClassName : "Mathematics")
         {}
     };
 
@@ -3131,15 +3129,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Matrix Create(int64_t model, string name=null) { return Matrix(Instance::Create(model, "Matrix", name), "Matrix");}
+        static Matrix Create(int64_t model, const char* name=NULL) { return Matrix(Instance::Create(model, "Matrix", name), "Matrix");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Matrix(int64_t instance = null, string checkClassName = null)
-            : Mathematics(instance, (checkClassName != null) ? checkClassName : "Matrix")
+        Matrix(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Mathematics(instance, (checkClassName != NULL) ? checkClassName : "Matrix")
         {}
 
        //
@@ -3148,52 +3146,52 @@ namespace GeometryKernel
 
         ///<summary>Sets value of _11</summary>
         void set__11(double value) { SetDatatypeProperty ("_11", &value, 1); }
-        ///<summary>Gets value of _11, returns null is the property was not set</summary>
-        double* get__11() { return GetDatatypeProperty<double>("_11", null); }
+        ///<summary>Gets value of _11, returns NULL is the property was not set</summary>
+        double* get__11() { return GetDatatypeProperty<double>("_11", NULL); }
         ///<summary>Sets value of _12</summary>
         void set__12(double value) { SetDatatypeProperty ("_12", &value, 1); }
-        ///<summary>Gets value of _12, returns null is the property was not set</summary>
-        double* get__12() { return GetDatatypeProperty<double>("_12", null); }
+        ///<summary>Gets value of _12, returns NULL is the property was not set</summary>
+        double* get__12() { return GetDatatypeProperty<double>("_12", NULL); }
         ///<summary>Sets value of _13</summary>
         void set__13(double value) { SetDatatypeProperty ("_13", &value, 1); }
-        ///<summary>Gets value of _13, returns null is the property was not set</summary>
-        double* get__13() { return GetDatatypeProperty<double>("_13", null); }
+        ///<summary>Gets value of _13, returns NULL is the property was not set</summary>
+        double* get__13() { return GetDatatypeProperty<double>("_13", NULL); }
         ///<summary>Sets value of _21</summary>
         void set__21(double value) { SetDatatypeProperty ("_21", &value, 1); }
-        ///<summary>Gets value of _21, returns null is the property was not set</summary>
-        double* get__21() { return GetDatatypeProperty<double>("_21", null); }
+        ///<summary>Gets value of _21, returns NULL is the property was not set</summary>
+        double* get__21() { return GetDatatypeProperty<double>("_21", NULL); }
         ///<summary>Sets value of _22</summary>
         void set__22(double value) { SetDatatypeProperty ("_22", &value, 1); }
-        ///<summary>Gets value of _22, returns null is the property was not set</summary>
-        double* get__22() { return GetDatatypeProperty<double>("_22", null); }
+        ///<summary>Gets value of _22, returns NULL is the property was not set</summary>
+        double* get__22() { return GetDatatypeProperty<double>("_22", NULL); }
         ///<summary>Sets value of _23</summary>
         void set__23(double value) { SetDatatypeProperty ("_23", &value, 1); }
-        ///<summary>Gets value of _23, returns null is the property was not set</summary>
-        double* get__23() { return GetDatatypeProperty<double>("_23", null); }
+        ///<summary>Gets value of _23, returns NULL is the property was not set</summary>
+        double* get__23() { return GetDatatypeProperty<double>("_23", NULL); }
         ///<summary>Sets value of _31</summary>
         void set__31(double value) { SetDatatypeProperty ("_31", &value, 1); }
-        ///<summary>Gets value of _31, returns null is the property was not set</summary>
-        double* get__31() { return GetDatatypeProperty<double>("_31", null); }
+        ///<summary>Gets value of _31, returns NULL is the property was not set</summary>
+        double* get__31() { return GetDatatypeProperty<double>("_31", NULL); }
         ///<summary>Sets value of _32</summary>
         void set__32(double value) { SetDatatypeProperty ("_32", &value, 1); }
-        ///<summary>Gets value of _32, returns null is the property was not set</summary>
-        double* get__32() { return GetDatatypeProperty<double>("_32", null); }
+        ///<summary>Gets value of _32, returns NULL is the property was not set</summary>
+        double* get__32() { return GetDatatypeProperty<double>("_32", NULL); }
         ///<summary>Sets value of _33</summary>
         void set__33(double value) { SetDatatypeProperty ("_33", &value, 1); }
-        ///<summary>Gets value of _33, returns null is the property was not set</summary>
-        double* get__33() { return GetDatatypeProperty<double>("_33", null); }
+        ///<summary>Gets value of _33, returns NULL is the property was not set</summary>
+        double* get__33() { return GetDatatypeProperty<double>("_33", NULL); }
         ///<summary>Sets value of _41</summary>
         void set__41(double value) { SetDatatypeProperty ("_41", &value, 1); }
-        ///<summary>Gets value of _41, returns null is the property was not set</summary>
-        double* get__41() { return GetDatatypeProperty<double>("_41", null); }
+        ///<summary>Gets value of _41, returns NULL is the property was not set</summary>
+        double* get__41() { return GetDatatypeProperty<double>("_41", NULL); }
         ///<summary>Sets value of _42</summary>
         void set__42(double value) { SetDatatypeProperty ("_42", &value, 1); }
-        ///<summary>Gets value of _42, returns null is the property was not set</summary>
-        double* get__42() { return GetDatatypeProperty<double>("_42", null); }
+        ///<summary>Gets value of _42, returns NULL is the property was not set</summary>
+        double* get__42() { return GetDatatypeProperty<double>("_42", NULL); }
         ///<summary>Sets value of _43</summary>
         void set__43(double value) { SetDatatypeProperty ("_43", &value, 1); }
-        ///<summary>Gets value of _43, returns null is the property was not set</summary>
-        double* get__43() { return GetDatatypeProperty<double>("_43", null); }
+        ///<summary>Gets value of _43, returns NULL is the property was not set</summary>
+        double* get__43() { return GetDatatypeProperty<double>("_43", NULL); }
         ///<summary>Sets values of coordinates. OWL cardinality 0..12</summary>
         void set_coordinates(double* values, int64_t count) { SetDatatypeProperty ("coordinates", values, count); }
         ///<summary>Gets values of coordinates. OWL cardinality 0..12</summary>
@@ -3213,15 +3211,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static InverseMatrix Create(int64_t model, string name=null) { return InverseMatrix(Instance::Create(model, "InverseMatrix", name), "InverseMatrix");}
+        static InverseMatrix Create(int64_t model, const char* name=NULL) { return InverseMatrix(Instance::Create(model, "InverseMatrix", name), "InverseMatrix");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        InverseMatrix(int64_t instance = null, string checkClassName = null)
-            : Matrix(instance, (checkClassName != null) ? checkClassName : "InverseMatrix")
+        InverseMatrix(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Matrix(instance, (checkClassName != NULL) ? checkClassName : "InverseMatrix")
         {}
 
        //
@@ -3231,7 +3229,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
+        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", NULL); }
     };
 
     /// <summary>
@@ -3247,15 +3245,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static InvertedCurve Create(int64_t model, string name=null) { return InvertedCurve(Instance::Create(model, "InvertedCurve", name), "InvertedCurve");}
+        static InvertedCurve Create(int64_t model, const char* name=NULL) { return InvertedCurve(Instance::Create(model, "InvertedCurve", name), "InvertedCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        InvertedCurve(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "InvertedCurve")
+        InvertedCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "InvertedCurve")
         {}
 
        //
@@ -3265,7 +3263,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_curve(const Curve& instance) { SetObjectProperty<Curve>("curve", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_curve() { return GetObjectProperty<Curve>("curve", null); }
+        Curve* get_curve() { return GetObjectProperty<Curve>("curve", NULL); }
     };
 
     /// <summary>
@@ -3281,15 +3279,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static InvertedSurface Create(int64_t model, string name=null) { return InvertedSurface(Instance::Create(model, "InvertedSurface", name), "InvertedSurface");}
+        static InvertedSurface Create(int64_t model, const char* name=NULL) { return InvertedSurface(Instance::Create(model, "InvertedSurface", name), "InvertedSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        InvertedSurface(int64_t instance = null, string checkClassName = null)
-            : Surface(instance, (checkClassName != null) ? checkClassName : "InvertedSurface")
+        InvertedSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Surface(instance, (checkClassName != NULL) ? checkClassName : "InvertedSurface")
         {}
 
        //
@@ -3299,7 +3297,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Surface</summary>
         void set_surface(const Surface& instance) { SetObjectProperty<Surface>("surface", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Surface* get_surface() { return GetObjectProperty<Surface>("surface", null); }
+        Surface* get_surface() { return GetObjectProperty<Surface>("surface", NULL); }
     };
 
     /// <summary>
@@ -3315,15 +3313,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Line3D Create(int64_t model, string name=null) { return Line3D(Instance::Create(model, "Line3D", name), "Line3D");}
+        static Line3D Create(int64_t model, const char* name=NULL) { return Line3D(Instance::Create(model, "Line3D", name), "Line3D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Line3D(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Line3D")
+        Line3D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Line3D")
         {}
 
        //
@@ -3332,8 +3330,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of asOpenGL</summary>
         void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", &value, 1); }
-        ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", null); }
+        ///<summary>Gets value of asOpenGL, returns NULL is the property was not set</summary>
+        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", NULL); }
         ///<summary>Sets values of points. OWL cardinality 6..6</summary>
         void set_points(double* values, int64_t count) { SetDatatypeProperty ("points", values, count); }
         ///<summary>Gets values of points. OWL cardinality 6..6</summary>
@@ -3353,15 +3351,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Line3Dn Create(int64_t model, string name=null) { return Line3Dn(Instance::Create(model, "Line3Dn", name), "Line3Dn");}
+        static Line3Dn Create(int64_t model, const char* name=NULL) { return Line3Dn(Instance::Create(model, "Line3Dn", name), "Line3Dn");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Line3Dn(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Line3Dn")
+        Line3Dn(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Line3Dn")
         {}
 
        //
@@ -3370,8 +3368,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of asOpenGL</summary>
         void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", &value, 1); }
-        ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", null); }
+        ///<summary>Gets value of asOpenGL, returns NULL is the property was not set</summary>
+        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", NULL); }
         ///<summary>Sets values of endDirection. OWL cardinality 0..3</summary>
         void set_endDirection(double* values, int64_t count) { SetDatatypeProperty ("endDirection", values, count); }
         ///<summary>Gets values of endDirection. OWL cardinality 0..3</summary>
@@ -3386,28 +3384,28 @@ namespace GeometryKernel
         double* get_startDirection(int64_t* pCount) { return GetDatatypeProperty<double>("startDirection", pCount); }
         ///<summary>Sets value of x0</summary>
         void set_x0(double value) { SetDatatypeProperty ("x0", &value, 1); }
-        ///<summary>Gets value of x0, returns null is the property was not set</summary>
-        double* get_x0() { return GetDatatypeProperty<double>("x0", null); }
+        ///<summary>Gets value of x0, returns NULL is the property was not set</summary>
+        double* get_x0() { return GetDatatypeProperty<double>("x0", NULL); }
         ///<summary>Sets value of x1</summary>
         void set_x1(double value) { SetDatatypeProperty ("x1", &value, 1); }
-        ///<summary>Gets value of x1, returns null is the property was not set</summary>
-        double* get_x1() { return GetDatatypeProperty<double>("x1", null); }
+        ///<summary>Gets value of x1, returns NULL is the property was not set</summary>
+        double* get_x1() { return GetDatatypeProperty<double>("x1", NULL); }
         ///<summary>Sets value of y0</summary>
         void set_y0(double value) { SetDatatypeProperty ("y0", &value, 1); }
-        ///<summary>Gets value of y0, returns null is the property was not set</summary>
-        double* get_y0() { return GetDatatypeProperty<double>("y0", null); }
+        ///<summary>Gets value of y0, returns NULL is the property was not set</summary>
+        double* get_y0() { return GetDatatypeProperty<double>("y0", NULL); }
         ///<summary>Sets value of y1</summary>
         void set_y1(double value) { SetDatatypeProperty ("y1", &value, 1); }
-        ///<summary>Gets value of y1, returns null is the property was not set</summary>
-        double* get_y1() { return GetDatatypeProperty<double>("y1", null); }
+        ///<summary>Gets value of y1, returns NULL is the property was not set</summary>
+        double* get_y1() { return GetDatatypeProperty<double>("y1", NULL); }
         ///<summary>Sets value of z0</summary>
         void set_z0(double value) { SetDatatypeProperty ("z0", &value, 1); }
-        ///<summary>Gets value of z0, returns null is the property was not set</summary>
-        double* get_z0() { return GetDatatypeProperty<double>("z0", null); }
+        ///<summary>Gets value of z0, returns NULL is the property was not set</summary>
+        double* get_z0() { return GetDatatypeProperty<double>("z0", NULL); }
         ///<summary>Sets value of z1</summary>
         void set_z1(double value) { SetDatatypeProperty ("z1", &value, 1); }
-        ///<summary>Gets value of z1, returns null is the property was not set</summary>
-        double* get_z1() { return GetDatatypeProperty<double>("z1", null); }
+        ///<summary>Gets value of z1, returns NULL is the property was not set</summary>
+        double* get_z1() { return GetDatatypeProperty<double>("z1", NULL); }
     };
 
     /// <summary>
@@ -3423,15 +3421,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Line3DSet Create(int64_t model, string name=null) { return Line3DSet(Instance::Create(model, "Line3DSet", name), "Line3DSet");}
+        static Line3DSet Create(int64_t model, const char* name=NULL) { return Line3DSet(Instance::Create(model, "Line3DSet", name), "Line3DSet");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Line3DSet(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Line3DSet")
+        Line3DSet(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Line3DSet")
         {}
 
        //
@@ -3440,8 +3438,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of asOpenGL</summary>
         void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", &value, 1); }
-        ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", null); }
+        ///<summary>Gets value of asOpenGL, returns NULL is the property was not set</summary>
+        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", NULL); }
         ///<summary>Sets values of points. OWL cardinality 0..-1</summary>
         void set_points(double* values, int64_t count) { SetDatatypeProperty ("points", values, count); }
         ///<summary>Gets values of points. OWL cardinality 0..-1</summary>
@@ -3461,15 +3459,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static LineByFace Create(int64_t model, string name=null) { return LineByFace(Instance::Create(model, "LineByFace", name), "LineByFace");}
+        static LineByFace Create(int64_t model, const char* name=NULL) { return LineByFace(Instance::Create(model, "LineByFace", name), "LineByFace");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        LineByFace(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "LineByFace")
+        LineByFace(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "LineByFace")
         {}
 
        //
@@ -3498,15 +3496,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Material Create(int64_t model, string name=null) { return Material(Instance::Create(model, "Material", name), "Material");}
+        static Material Create(int64_t model, const char* name=NULL) { return Material(Instance::Create(model, "Material", name), "Material");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Material(int64_t instance = null, string checkClassName = null)
-            : Appearance(instance, (checkClassName != null) ? checkClassName : "Material")
+        Material(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Appearance(instance, (checkClassName != NULL) ? checkClassName : "Material")
         {}
 
        //
@@ -3516,7 +3514,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Color</summary>
         void set_color(const Color& instance) { SetObjectProperty<Color>("color", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Color* get_color() { return GetObjectProperty<Color>("color", null); }
+        Color* get_color() { return GetObjectProperty<Color>("color", NULL); }
         ///<summary>Sets relationships from this instance to an array of Texture. OWL cardinality 0..2</summary>
         void set_textures(const Texture* instances, int64_t count) { SetObjectProperty<Texture>("textures", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..2</summary>
@@ -3539,15 +3537,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static MatrixMultiplication Create(int64_t model, string name=null) { return MatrixMultiplication(Instance::Create(model, "MatrixMultiplication", name), "MatrixMultiplication");}
+        static MatrixMultiplication Create(int64_t model, const char* name=NULL) { return MatrixMultiplication(Instance::Create(model, "MatrixMultiplication", name), "MatrixMultiplication");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        MatrixMultiplication(int64_t instance = null, string checkClassName = null)
-            : Matrix(instance, (checkClassName != null) ? checkClassName : "MatrixMultiplication")
+        MatrixMultiplication(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Matrix(instance, (checkClassName != NULL) ? checkClassName : "MatrixMultiplication")
         {}
 
        //
@@ -3557,11 +3555,11 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_firstMatrix(const Matrix& instance) { SetObjectProperty<Matrix>("firstMatrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_firstMatrix() { return GetObjectProperty<Matrix>("firstMatrix", null); }
+        Matrix* get_firstMatrix() { return GetObjectProperty<Matrix>("firstMatrix", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_secondMatrix(const Matrix& instance) { SetObjectProperty<Matrix>("secondMatrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_secondMatrix() { return GetObjectProperty<Matrix>("secondMatrix", null); }
+        Matrix* get_secondMatrix() { return GetObjectProperty<Matrix>("secondMatrix", NULL); }
     };
 
     /// <summary>
@@ -3577,15 +3575,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Mesh Create(int64_t model, string name=null) { return Mesh(Instance::Create(model, "Mesh", name), "Mesh");}
+        static Mesh Create(int64_t model, const char* name=NULL) { return Mesh(Instance::Create(model, "Mesh", name), "Mesh");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Mesh(int64_t instance = null, string checkClassName = null)
-            : Face(instance, (checkClassName != null) ? checkClassName : "Mesh")
+        Mesh(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Face(instance, (checkClassName != NULL) ? checkClassName : "Mesh")
         {}
 
        //
@@ -3595,7 +3593,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Point3DSet</summary>
         void set_pointSet(const Point3DSet& instance) { SetObjectProperty<Point3DSet>("pointSet", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Point3DSet* get_pointSet() { return GetObjectProperty<Point3DSet>("pointSet", null); }
+        Point3DSet* get_pointSet() { return GetObjectProperty<Point3DSet>("pointSet", NULL); }
     };
 
     /// <summary>
@@ -3611,15 +3609,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static NURBSCurve Create(int64_t model, string name=null) { return NURBSCurve(Instance::Create(model, "NURBSCurve", name), "NURBSCurve");}
+        static NURBSCurve Create(int64_t model, const char* name=NULL) { return NURBSCurve(Instance::Create(model, "NURBSCurve", name), "NURBSCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        NURBSCurve(int64_t instance = null, string checkClassName = null)
-            : BSplineCurve(instance, (checkClassName != null) ? checkClassName : "NURBSCurve")
+        NURBSCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : BSplineCurve(instance, (checkClassName != NULL) ? checkClassName : "NURBSCurve")
         {}
 
        //
@@ -3645,15 +3643,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static NURBSSurface Create(int64_t model, string name=null) { return NURBSSurface(Instance::Create(model, "NURBSSurface", name), "NURBSSurface");}
+        static NURBSSurface Create(int64_t model, const char* name=NULL) { return NURBSSurface(Instance::Create(model, "NURBSSurface", name), "NURBSSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        NURBSSurface(int64_t instance = null, string checkClassName = null)
-            : BSplineSurface(instance, (checkClassName != null) ? checkClassName : "NURBSSurface")
+        NURBSSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : BSplineSurface(instance, (checkClassName != NULL) ? checkClassName : "NURBSSurface")
         {}
 
        //
@@ -3679,15 +3677,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Parabola Create(int64_t model, string name=null) { return Parabola(Instance::Create(model, "Parabola", name), "Parabola");}
+        static Parabola Create(int64_t model, const char* name=NULL) { return Parabola(Instance::Create(model, "Parabola", name), "Parabola");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Parabola(int64_t instance = null, string checkClassName = null)
-            : ConicalCurve(instance, (checkClassName != null) ? checkClassName : "Parabola")
+        Parabola(int64_t instance = NULL, const char* checkClassName = NULL)
+            : ConicalCurve(instance, (checkClassName != NULL) ? checkClassName : "Parabola")
         {}
     };
 
@@ -3704,15 +3702,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Plane Create(int64_t model, string name=null) { return Plane(Instance::Create(model, "Plane", name), "Plane");}
+        static Plane Create(int64_t model, const char* name=NULL) { return Plane(Instance::Create(model, "Plane", name), "Plane");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Plane(int64_t instance = null, string checkClassName = null)
-            : Mathematics(instance, (checkClassName != null) ? checkClassName : "Plane")
+        Plane(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Mathematics(instance, (checkClassName != NULL) ? checkClassName : "Plane")
         {}
 
        //
@@ -3721,20 +3719,20 @@ namespace GeometryKernel
 
         ///<summary>Sets value of A</summary>
         void set_A(double value) { SetDatatypeProperty ("A", &value, 1); }
-        ///<summary>Gets value of A, returns null is the property was not set</summary>
-        double* get_A() { return GetDatatypeProperty<double>("A", null); }
+        ///<summary>Gets value of A, returns NULL is the property was not set</summary>
+        double* get_A() { return GetDatatypeProperty<double>("A", NULL); }
         ///<summary>Sets value of B</summary>
         void set_B(double value) { SetDatatypeProperty ("B", &value, 1); }
-        ///<summary>Gets value of B, returns null is the property was not set</summary>
-        double* get_B() { return GetDatatypeProperty<double>("B", null); }
+        ///<summary>Gets value of B, returns NULL is the property was not set</summary>
+        double* get_B() { return GetDatatypeProperty<double>("B", NULL); }
         ///<summary>Sets value of C</summary>
         void set_C(double value) { SetDatatypeProperty ("C", &value, 1); }
-        ///<summary>Gets value of C, returns null is the property was not set</summary>
-        double* get_C() { return GetDatatypeProperty<double>("C", null); }
+        ///<summary>Gets value of C, returns NULL is the property was not set</summary>
+        double* get_C() { return GetDatatypeProperty<double>("C", NULL); }
         ///<summary>Sets value of D</summary>
         void set_D(double value) { SetDatatypeProperty ("D", &value, 1); }
-        ///<summary>Gets value of D, returns null is the property was not set</summary>
-        double* get_D() { return GetDatatypeProperty<double>("D", null); }
+        ///<summary>Gets value of D, returns NULL is the property was not set</summary>
+        double* get_D() { return GetDatatypeProperty<double>("D", NULL); }
     };
 
     /// <summary>
@@ -3750,15 +3748,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static PlaneSurface Create(int64_t model, string name=null) { return PlaneSurface(Instance::Create(model, "PlaneSurface", name), "PlaneSurface");}
+        static PlaneSurface Create(int64_t model, const char* name=NULL) { return PlaneSurface(Instance::Create(model, "PlaneSurface", name), "PlaneSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        PlaneSurface(int64_t instance = null, string checkClassName = null)
-            : InfiniteSurface(instance, (checkClassName != null) ? checkClassName : "PlaneSurface")
+        PlaneSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : InfiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "PlaneSurface")
         {}
 
        //
@@ -3768,7 +3766,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Plane</summary>
         void set_plane(const Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Plane* get_plane() { return GetObjectProperty<Plane>("plane", null); }
+        Plane* get_plane() { return GetObjectProperty<Plane>("plane", NULL); }
     };
 
     /// <summary>
@@ -3784,15 +3782,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Point Create(int64_t model, string name=null) { return Point(Instance::Create(model, "Point", name), "Point");}
+        static Point Create(int64_t model, const char* name=NULL) { return Point(Instance::Create(model, "Point", name), "Point");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Point(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Point")
+        Point(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Point")
         {}
     };
 
@@ -3809,15 +3807,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Point3D Create(int64_t model, string name=null) { return Point3D(Instance::Create(model, "Point3D", name), "Point3D");}
+        static Point3D Create(int64_t model, const char* name=NULL) { return Point3D(Instance::Create(model, "Point3D", name), "Point3D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Point3D(int64_t instance = null, string checkClassName = null)
-            : Point(instance, (checkClassName != null) ? checkClassName : "Point3D")
+        Point3D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Point(instance, (checkClassName != NULL) ? checkClassName : "Point3D")
         {}
 
        //
@@ -3826,8 +3824,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of asOpenGL</summary>
         void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", &value, 1); }
-        ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", null); }
+        ///<summary>Gets value of asOpenGL, returns NULL is the property was not set</summary>
+        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", NULL); }
         ///<summary>Sets values of coordinates. OWL cardinality 0..3</summary>
         void set_coordinates(double* values, int64_t count) { SetDatatypeProperty ("coordinates", values, count); }
         ///<summary>Gets values of coordinates. OWL cardinality 0..3</summary>
@@ -3838,16 +3836,16 @@ namespace GeometryKernel
         double* get_points(int64_t* pCount) { return GetDatatypeProperty<double>("points", pCount); }
         ///<summary>Sets value of x</summary>
         void set_x(double value) { SetDatatypeProperty ("x", &value, 1); }
-        ///<summary>Gets value of x, returns null is the property was not set</summary>
-        double* get_x() { return GetDatatypeProperty<double>("x", null); }
+        ///<summary>Gets value of x, returns NULL is the property was not set</summary>
+        double* get_x() { return GetDatatypeProperty<double>("x", NULL); }
         ///<summary>Sets value of y</summary>
         void set_y(double value) { SetDatatypeProperty ("y", &value, 1); }
-        ///<summary>Gets value of y, returns null is the property was not set</summary>
-        double* get_y() { return GetDatatypeProperty<double>("y", null); }
+        ///<summary>Gets value of y, returns NULL is the property was not set</summary>
+        double* get_y() { return GetDatatypeProperty<double>("y", NULL); }
         ///<summary>Sets value of z</summary>
         void set_z(double value) { SetDatatypeProperty ("z", &value, 1); }
-        ///<summary>Gets value of z, returns null is the property was not set</summary>
-        double* get_z() { return GetDatatypeProperty<double>("z", null); }
+        ///<summary>Gets value of z, returns NULL is the property was not set</summary>
+        double* get_z() { return GetDatatypeProperty<double>("z", NULL); }
     };
 
     /// <summary>
@@ -3863,15 +3861,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Point3DSet Create(int64_t model, string name=null) { return Point3DSet(Instance::Create(model, "Point3DSet", name), "Point3DSet");}
+        static Point3DSet Create(int64_t model, const char* name=NULL) { return Point3DSet(Instance::Create(model, "Point3DSet", name), "Point3DSet");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Point3DSet(int64_t instance = null, string checkClassName = null)
-            : Point(instance, (checkClassName != null) ? checkClassName : "Point3DSet")
+        Point3DSet(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Point(instance, (checkClassName != NULL) ? checkClassName : "Point3DSet")
         {}
 
        //
@@ -3880,8 +3878,8 @@ namespace GeometryKernel
 
         ///<summary>Sets value of asOpenGL</summary>
         void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", &value, 1); }
-        ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", null); }
+        ///<summary>Gets value of asOpenGL, returns NULL is the property was not set</summary>
+        bool* get_asOpenGL() { return GetDatatypeProperty<bool>("asOpenGL", NULL); }
         ///<summary>Sets values of coordinates. OWL cardinality 0..-1</summary>
         void set_coordinates(double* values, int64_t count) { SetDatatypeProperty ("coordinates", values, count); }
         ///<summary>Gets values of coordinates. OWL cardinality 0..-1</summary>
@@ -3905,15 +3903,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Point3DSetByGeometricItem Create(int64_t model, string name=null) { return Point3DSetByGeometricItem(Instance::Create(model, "Point3DSetByGeometricItem", name), "Point3DSetByGeometricItem");}
+        static Point3DSetByGeometricItem Create(int64_t model, const char* name=NULL) { return Point3DSetByGeometricItem(Instance::Create(model, "Point3DSetByGeometricItem", name), "Point3DSetByGeometricItem");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Point3DSetByGeometricItem(int64_t instance = null, string checkClassName = null)
-            : Point3DSet(instance, (checkClassName != null) ? checkClassName : "Point3DSetByGeometricItem")
+        Point3DSetByGeometricItem(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Point3DSet(instance, (checkClassName != NULL) ? checkClassName : "Point3DSetByGeometricItem")
         {}
 
        //
@@ -3923,7 +3921,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
+        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", NULL); }
     };
 
     /// <summary>
@@ -3939,15 +3937,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static PointLight Create(int64_t model, string name=null) { return PointLight(Instance::Create(model, "PointLight", name), "PointLight");}
+        static PointLight Create(int64_t model, const char* name=NULL) { return PointLight(Instance::Create(model, "PointLight", name), "PointLight");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        PointLight(int64_t instance = null, string checkClassName = null)
-            : DirectLight(instance, (checkClassName != null) ? checkClassName : "PointLight")
+        PointLight(int64_t instance = NULL, const char* checkClassName = NULL)
+            : DirectLight(instance, (checkClassName != NULL) ? checkClassName : "PointLight")
         {}
 
        //
@@ -3957,7 +3955,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Point3D</summary>
         void set_position(const Point3D& instance) { SetObjectProperty<Point3D>("position", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Point3D* get_position() { return GetObjectProperty<Point3D>("position", null); }
+        Point3D* get_position() { return GetObjectProperty<Point3D>("position", NULL); }
     };
 
     /// <summary>
@@ -3973,15 +3971,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static PointLoop Create(int64_t model, string name=null) { return PointLoop(Instance::Create(model, "PointLoop", name), "PointLoop");}
+        static PointLoop Create(int64_t model, const char* name=NULL) { return PointLoop(Instance::Create(model, "PointLoop", name), "PointLoop");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        PointLoop(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "PointLoop")
+        PointLoop(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "PointLoop")
         {}
 
        //
@@ -3994,16 +3992,16 @@ namespace GeometryKernel
         double* get_coordinates(int64_t* pCount) { return GetDatatypeProperty<double>("coordinates", pCount); }
         ///<summary>Sets value of x</summary>
         void set_x(double value) { SetDatatypeProperty ("x", &value, 1); }
-        ///<summary>Gets value of x, returns null is the property was not set</summary>
-        double* get_x() { return GetDatatypeProperty<double>("x", null); }
+        ///<summary>Gets value of x, returns NULL is the property was not set</summary>
+        double* get_x() { return GetDatatypeProperty<double>("x", NULL); }
         ///<summary>Sets value of y</summary>
         void set_y(double value) { SetDatatypeProperty ("y", &value, 1); }
-        ///<summary>Gets value of y, returns null is the property was not set</summary>
-        double* get_y() { return GetDatatypeProperty<double>("y", null); }
+        ///<summary>Gets value of y, returns NULL is the property was not set</summary>
+        double* get_y() { return GetDatatypeProperty<double>("y", NULL); }
         ///<summary>Sets value of z</summary>
         void set_z(double value) { SetDatatypeProperty ("z", &value, 1); }
-        ///<summary>Gets value of z, returns null is the property was not set</summary>
-        double* get_z() { return GetDatatypeProperty<double>("z", null); }
+        ///<summary>Gets value of z, returns NULL is the property was not set</summary>
+        double* get_z() { return GetDatatypeProperty<double>("z", NULL); }
     };
 
     /// <summary>
@@ -4019,15 +4017,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Polygon2D Create(int64_t model, string name=null) { return Polygon2D(Instance::Create(model, "Polygon2D", name), "Polygon2D");}
+        static Polygon2D Create(int64_t model, const char* name=NULL) { return Polygon2D(Instance::Create(model, "Polygon2D", name), "Polygon2D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Polygon2D(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Polygon2D")
+        Polygon2D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Polygon2D")
         {}
 
        //
@@ -4056,15 +4054,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Polygon3D Create(int64_t model, string name=null) { return Polygon3D(Instance::Create(model, "Polygon3D", name), "Polygon3D");}
+        static Polygon3D Create(int64_t model, const char* name=NULL) { return Polygon3D(Instance::Create(model, "Polygon3D", name), "Polygon3D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Polygon3D(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Polygon3D")
+        Polygon3D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Polygon3D")
         {}
 
        //
@@ -4093,15 +4091,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static PolyLine3D Create(int64_t model, string name=null) { return PolyLine3D(Instance::Create(model, "PolyLine3D", name), "PolyLine3D");}
+        static PolyLine3D Create(int64_t model, const char* name=NULL) { return PolyLine3D(Instance::Create(model, "PolyLine3D", name), "PolyLine3D");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        PolyLine3D(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "PolyLine3D")
+        PolyLine3D(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "PolyLine3D")
         {}
 
        //
@@ -4142,15 +4140,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Prism Create(int64_t model, string name=null) { return Prism(Instance::Create(model, "Prism", name), "Prism");}
+        static Prism Create(int64_t model, const char* name=NULL) { return Prism(Instance::Create(model, "Prism", name), "Prism");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Prism(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Prism")
+        Prism(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Prism")
         {}
 
        //
@@ -4159,12 +4157,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
     };
 
     /// <summary>
@@ -4180,15 +4178,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Profile Create(int64_t model, string name=null) { return Profile(Instance::Create(model, "Profile", name), "Profile");}
+        static Profile Create(int64_t model, const char* name=NULL) { return Profile(Instance::Create(model, "Profile", name), "Profile");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Profile(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Profile")
+        Profile(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Profile")
         {}
 
        //
@@ -4205,7 +4203,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_outerPolygon(const Curve& instance) { SetObjectProperty<Curve>("outerPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_outerPolygon() { return GetObjectProperty<Curve>("outerPolygon", null); }
+        Curve* get_outerPolygon() { return GetObjectProperty<Curve>("outerPolygon", NULL); }
     };
 
     /// <summary>
@@ -4221,15 +4219,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Projection Create(int64_t model, string name=null) { return Projection(Instance::Create(model, "Projection", name), "Projection");}
+        static Projection Create(int64_t model, const char* name=NULL) { return Projection(Instance::Create(model, "Projection", name), "Projection");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Projection(int64_t instance = null, string checkClassName = null)
-            : Environment(instance, (checkClassName != null) ? checkClassName : "Projection")
+        Projection(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Environment(instance, (checkClassName != NULL) ? checkClassName : "Projection")
         {}
 
        //
@@ -4239,7 +4237,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
+        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", NULL); }
     };
 
     /// <summary>
@@ -4255,15 +4253,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Pyramid Create(int64_t model, string name=null) { return Pyramid(Instance::Create(model, "Pyramid", name), "Pyramid");}
+        static Pyramid Create(int64_t model, const char* name=NULL) { return Pyramid(Instance::Create(model, "Pyramid", name), "Pyramid");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Pyramid(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Pyramid")
+        Pyramid(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Pyramid")
         {}
 
        //
@@ -4272,16 +4270,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of length</summary>
         void set_length(double value) { SetDatatypeProperty ("length", &value, 1); }
-        ///<summary>Gets value of length, returns null is the property was not set</summary>
-        double* get_length() { return GetDatatypeProperty<double>("length", null); }
+        ///<summary>Gets value of length, returns NULL is the property was not set</summary>
+        double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets value of width</summary>
         void set_width(double value) { SetDatatypeProperty ("width", &value, 1); }
-        ///<summary>Gets value of width, returns null is the property was not set</summary>
-        double* get_width() { return GetDatatypeProperty<double>("width", null); }
+        ///<summary>Gets value of width, returns NULL is the property was not set</summary>
+        double* get_width() { return GetDatatypeProperty<double>("width", NULL); }
     };
 
     /// <summary>
@@ -4297,15 +4295,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static RationalBezierCurve Create(int64_t model, string name=null) { return RationalBezierCurve(Instance::Create(model, "RationalBezierCurve", name), "RationalBezierCurve");}
+        static RationalBezierCurve Create(int64_t model, const char* name=NULL) { return RationalBezierCurve(Instance::Create(model, "RationalBezierCurve", name), "RationalBezierCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        RationalBezierCurve(int64_t instance = null, string checkClassName = null)
-            : BezierCurve(instance, (checkClassName != null) ? checkClassName : "RationalBezierCurve")
+        RationalBezierCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : BezierCurve(instance, (checkClassName != NULL) ? checkClassName : "RationalBezierCurve")
         {}
 
        //
@@ -4331,15 +4329,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static RationalBezierSurface Create(int64_t model, string name=null) { return RationalBezierSurface(Instance::Create(model, "RationalBezierSurface", name), "RationalBezierSurface");}
+        static RationalBezierSurface Create(int64_t model, const char* name=NULL) { return RationalBezierSurface(Instance::Create(model, "RationalBezierSurface", name), "RationalBezierSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        RationalBezierSurface(int64_t instance = null, string checkClassName = null)
-            : BezierSurface(instance, (checkClassName != null) ? checkClassName : "RationalBezierSurface")
+        RationalBezierSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : BezierSurface(instance, (checkClassName != NULL) ? checkClassName : "RationalBezierSurface")
         {}
 
        //
@@ -4365,15 +4363,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static RectangleCurve Create(int64_t model, string name=null) { return RectangleCurve(Instance::Create(model, "RectangleCurve", name), "RectangleCurve");}
+        static RectangleCurve Create(int64_t model, const char* name=NULL) { return RectangleCurve(Instance::Create(model, "RectangleCurve", name), "RectangleCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        RectangleCurve(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "RectangleCurve")
+        RectangleCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "RectangleCurve")
         {}
 
        //
@@ -4382,24 +4380,24 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
-        ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", null); }
+        ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
+        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of offsetY</summary>
         void set_offsetY(double value) { SetDatatypeProperty ("offsetY", &value, 1); }
-        ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", null); }
+        ///<summary>Gets value of offsetY, returns NULL is the property was not set</summary>
+        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", NULL); }
         ///<summary>Sets value of offsetZ</summary>
         void set_offsetZ(double value) { SetDatatypeProperty ("offsetZ", &value, 1); }
-        ///<summary>Gets value of offsetZ, returns null is the property was not set</summary>
-        double* get_offsetZ() { return GetDatatypeProperty<double>("offsetZ", null); }
+        ///<summary>Gets value of offsetZ, returns NULL is the property was not set</summary>
+        double* get_offsetZ() { return GetDatatypeProperty<double>("offsetZ", NULL); }
         ///<summary>Sets value of width</summary>
         void set_width(double value) { SetDatatypeProperty ("width", &value, 1); }
-        ///<summary>Gets value of width, returns null is the property was not set</summary>
-        double* get_width() { return GetDatatypeProperty<double>("width", null); }
+        ///<summary>Gets value of width, returns NULL is the property was not set</summary>
+        double* get_width() { return GetDatatypeProperty<double>("width", NULL); }
     };
 
     /// <summary>
@@ -4415,15 +4413,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Repetition Create(int64_t model, string name=null) { return Repetition(Instance::Create(model, "Repetition", name), "Repetition");}
+        static Repetition Create(int64_t model, const char* name=NULL) { return Repetition(Instance::Create(model, "Repetition", name), "Repetition");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Repetition(int64_t instance = null, string checkClassName = null)
-            : GeometricItem(instance, (checkClassName != null) ? checkClassName : "Repetition")
+        Repetition(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Repetition")
         {}
 
        //
@@ -4432,16 +4430,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of count</summary>
         void set_count(long value) { SetDatatypeProperty ("count", &value, 1); }
-        ///<summary>Gets value of count, returns null is the property was not set</summary>
-        long* get_count() { return GetDatatypeProperty<long>("count", null); }
+        ///<summary>Gets value of count, returns NULL is the property was not set</summary>
+        long* get_count() { return GetDatatypeProperty<long>("count", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
+        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
+        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", NULL); }
     };
 
     /// <summary>
@@ -4457,15 +4455,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static RingTorus Create(int64_t model, string name=null) { return RingTorus(Instance::Create(model, "RingTorus", name), "RingTorus");}
+        static RingTorus Create(int64_t model, const char* name=NULL) { return RingTorus(Instance::Create(model, "RingTorus", name), "RingTorus");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        RingTorus(int64_t instance = null, string checkClassName = null)
-            : Torus(instance, (checkClassName != null) ? checkClassName : "RingTorus")
+        RingTorus(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Torus(instance, (checkClassName != NULL) ? checkClassName : "RingTorus")
         {}
     };
 
@@ -4482,15 +4480,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Shadow Create(int64_t model, string name=null) { return Shadow(Instance::Create(model, "Shadow", name), "Shadow");}
+        static Shadow Create(int64_t model, const char* name=NULL) { return Shadow(Instance::Create(model, "Shadow", name), "Shadow");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Shadow(int64_t instance = null, string checkClassName = null)
-            : Face(instance, (checkClassName != null) ? checkClassName : "Shadow")
+        Shadow(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Face(instance, (checkClassName != NULL) ? checkClassName : "Shadow")
         {}
 
        //
@@ -4500,27 +4498,27 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Vector3</summary>
         void set_lightDirection(const Vector3& instance) { SetObjectProperty<Vector3>("lightDirection", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector3* get_lightDirection() { return GetObjectProperty<Vector3>("lightDirection", null); }
+        Vector3* get_lightDirection() { return GetObjectProperty<Vector3>("lightDirection", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Point3D</summary>
         void set_lightPoint(const Point3D& instance) { SetObjectProperty<Point3D>("lightPoint", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Point3D* get_lightPoint() { return GetObjectProperty<Point3D>("lightPoint", null); }
+        Point3D* get_lightPoint() { return GetObjectProperty<Point3D>("lightPoint", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
+        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Plane</summary>
         void set_plane(const Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Plane* get_plane() { return GetObjectProperty<Plane>("plane", null); }
+        Plane* get_plane() { return GetObjectProperty<Plane>("plane", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Vector3</summary>
         void set_planeRefDirection(const Vector3& instance) { SetObjectProperty<Vector3>("planeRefDirection", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector3* get_planeRefDirection() { return GetObjectProperty<Vector3>("planeRefDirection", null); }
+        Vector3* get_planeRefDirection() { return GetObjectProperty<Vector3>("planeRefDirection", NULL); }
         ///<summary>Sets value of type</summary>
         void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
-        ///<summary>Gets value of type, returns null is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", null); }
+        ///<summary>Gets value of type, returns NULL is the property was not set</summary>
+        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
     };
 
     /// <summary>
@@ -4536,15 +4534,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SineCurve Create(int64_t model, string name=null) { return SineCurve(Instance::Create(model, "SineCurve", name), "SineCurve");}
+        static SineCurve Create(int64_t model, const char* name=NULL) { return SineCurve(Instance::Create(model, "SineCurve", name), "SineCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SineCurve(int64_t instance = null, string checkClassName = null)
-            : TransitionalCurve(instance, (checkClassName != null) ? checkClassName : "SineCurve")
+        SineCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : TransitionalCurve(instance, (checkClassName != NULL) ? checkClassName : "SineCurve")
         {}
     };
 
@@ -4561,15 +4559,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SkewedCone Create(int64_t model, string name=null) { return SkewedCone(Instance::Create(model, "SkewedCone", name), "SkewedCone");}
+        static SkewedCone Create(int64_t model, const char* name=NULL) { return SkewedCone(Instance::Create(model, "SkewedCone", name), "SkewedCone");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SkewedCone(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SkewedCone")
+        SkewedCone(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SkewedCone")
         {}
 
        //
@@ -4578,24 +4576,24 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
-        ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", null); }
+        ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
+        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of offsetY</summary>
         void set_offsetY(double value) { SetDatatypeProperty ("offsetY", &value, 1); }
-        ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", null); }
+        ///<summary>Gets value of offsetY, returns NULL is the property was not set</summary>
+        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4611,15 +4609,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SkewedFrustumCone Create(int64_t model, string name=null) { return SkewedFrustumCone(Instance::Create(model, "SkewedFrustumCone", name), "SkewedFrustumCone");}
+        static SkewedFrustumCone Create(int64_t model, const char* name=NULL) { return SkewedFrustumCone(Instance::Create(model, "SkewedFrustumCone", name), "SkewedFrustumCone");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SkewedFrustumCone(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SkewedFrustumCone")
+        SkewedFrustumCone(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SkewedFrustumCone")
         {}
 
        //
@@ -4628,28 +4626,28 @@ namespace GeometryKernel
 
         ///<summary>Sets value of factor</summary>
         void set_factor(double value) { SetDatatypeProperty ("factor", &value, 1); }
-        ///<summary>Gets value of factor, returns null is the property was not set</summary>
-        double* get_factor() { return GetDatatypeProperty<double>("factor", null); }
+        ///<summary>Gets value of factor, returns NULL is the property was not set</summary>
+        double* get_factor() { return GetDatatypeProperty<double>("factor", NULL); }
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
-        ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", null); }
+        ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
+        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of offsetY</summary>
         void set_offsetY(double value) { SetDatatypeProperty ("offsetY", &value, 1); }
-        ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", null); }
+        ///<summary>Gets value of offsetY, returns NULL is the property was not set</summary>
+        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4665,15 +4663,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SolidBySurface Create(int64_t model, string name=null) { return SolidBySurface(Instance::Create(model, "SolidBySurface", name), "SolidBySurface");}
+        static SolidBySurface Create(int64_t model, const char* name=NULL) { return SolidBySurface(Instance::Create(model, "SolidBySurface", name), "SolidBySurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SolidBySurface(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SolidBySurface")
+        SolidBySurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SolidBySurface")
         {}
 
        //
@@ -4702,15 +4700,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SolidLine Create(int64_t model, string name=null) { return SolidLine(Instance::Create(model, "SolidLine", name), "SolidLine");}
+        static SolidLine Create(int64_t model, const char* name=NULL) { return SolidLine(Instance::Create(model, "SolidLine", name), "SolidLine");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SolidLine(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SolidLine")
+        SolidLine(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SolidLine")
         {}
 
        //
@@ -4723,12 +4721,12 @@ namespace GeometryKernel
         double* get_coordinates(int64_t* pCount) { return GetDatatypeProperty<double>("coordinates", pCount); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
         ///<summary>Sets value of thickness</summary>
         void set_thickness(double value) { SetDatatypeProperty ("thickness", &value, 1); }
-        ///<summary>Gets value of thickness, returns null is the property was not set</summary>
-        double* get_thickness() { return GetDatatypeProperty<double>("thickness", null); }
+        ///<summary>Gets value of thickness, returns NULL is the property was not set</summary>
+        double* get_thickness() { return GetDatatypeProperty<double>("thickness", NULL); }
     };
 
     /// <summary>
@@ -4744,15 +4742,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Sphere Create(int64_t model, string name=null) { return Sphere(Instance::Create(model, "Sphere", name), "Sphere");}
+        static Sphere Create(int64_t model, const char* name=NULL) { return Sphere(Instance::Create(model, "Sphere", name), "Sphere");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Sphere(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "Sphere")
+        Sphere(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "Sphere")
         {}
 
        //
@@ -4761,12 +4759,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4782,15 +4780,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SphericalSurface Create(int64_t model, string name=null) { return SphericalSurface(Instance::Create(model, "SphericalSurface", name), "SphericalSurface");}
+        static SphericalSurface Create(int64_t model, const char* name=NULL) { return SphericalSurface(Instance::Create(model, "SphericalSurface", name), "SphericalSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SphericalSurface(int64_t instance = null, string checkClassName = null)
-            : FiniteSurface(instance, (checkClassName != null) ? checkClassName : "SphericalSurface")
+        SphericalSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : FiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "SphericalSurface")
         {}
 
        //
@@ -4799,12 +4797,12 @@ namespace GeometryKernel
 
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4820,15 +4818,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SpindleTorus Create(int64_t model, string name=null) { return SpindleTorus(Instance::Create(model, "SpindleTorus", name), "SpindleTorus");}
+        static SpindleTorus Create(int64_t model, const char* name=NULL) { return SpindleTorus(Instance::Create(model, "SpindleTorus", name), "SpindleTorus");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SpindleTorus(int64_t instance = null, string checkClassName = null)
-            : Torus(instance, (checkClassName != null) ? checkClassName : "SpindleTorus")
+        SpindleTorus(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Torus(instance, (checkClassName != NULL) ? checkClassName : "SpindleTorus")
         {}
     };
 
@@ -4845,15 +4843,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Spiral Create(int64_t model, string name=null) { return Spiral(Instance::Create(model, "Spiral", name), "Spiral");}
+        static Spiral Create(int64_t model, const char* name=NULL) { return Spiral(Instance::Create(model, "Spiral", name), "Spiral");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Spiral(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Spiral")
+        Spiral(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Spiral")
         {}
 
        //
@@ -4862,28 +4860,28 @@ namespace GeometryKernel
 
         ///<summary>Sets value of height</summary>
         void set_height(double value) { SetDatatypeProperty ("height", &value, 1); }
-        ///<summary>Gets value of height, returns null is the property was not set</summary>
-        double* get_height() { return GetDatatypeProperty<double>("height", null); }
+        ///<summary>Gets value of height, returns NULL is the property was not set</summary>
+        double* get_height() { return GetDatatypeProperty<double>("height", NULL); }
         ///<summary>Sets value of offsetZ</summary>
         void set_offsetZ(double value) { SetDatatypeProperty ("offsetZ", &value, 1); }
-        ///<summary>Gets value of offsetZ, returns null is the property was not set</summary>
-        double* get_offsetZ() { return GetDatatypeProperty<double>("offsetZ", null); }
+        ///<summary>Gets value of offsetZ, returns NULL is the property was not set</summary>
+        double* get_offsetZ() { return GetDatatypeProperty<double>("offsetZ", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
-        ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        double* get_radius() { return GetDatatypeProperty<double>("radius", null); }
+        ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
+        double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
         ///<summary>Sets value of size</summary>
         void set_size(double value) { SetDatatypeProperty ("size", &value, 1); }
-        ///<summary>Gets value of size, returns null is the property was not set</summary>
-        double* get_size() { return GetDatatypeProperty<double>("size", null); }
+        ///<summary>Gets value of size, returns NULL is the property was not set</summary>
+        double* get_size() { return GetDatatypeProperty<double>("size", NULL); }
         ///<summary>Sets value of start</summary>
         void set_start(double value) { SetDatatypeProperty ("start", &value, 1); }
-        ///<summary>Gets value of start, returns null is the property was not set</summary>
-        double* get_start() { return GetDatatypeProperty<double>("start", null); }
+        ///<summary>Gets value of start, returns NULL is the property was not set</summary>
+        double* get_start() { return GetDatatypeProperty<double>("start", NULL); }
     };
 
     /// <summary>
@@ -4899,15 +4897,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SpotLight Create(int64_t model, string name=null) { return SpotLight(Instance::Create(model, "SpotLight", name), "SpotLight");}
+        static SpotLight Create(int64_t model, const char* name=NULL) { return SpotLight(Instance::Create(model, "SpotLight", name), "SpotLight");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SpotLight(int64_t instance = null, string checkClassName = null)
-            : DirectLight(instance, (checkClassName != null) ? checkClassName : "SpotLight")
+        SpotLight(int64_t instance = NULL, const char* checkClassName = NULL)
+            : DirectLight(instance, (checkClassName != NULL) ? checkClassName : "SpotLight")
         {}
     };
 
@@ -4924,15 +4922,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SurfaceBySweptCurve Create(int64_t model, string name=null) { return SurfaceBySweptCurve(Instance::Create(model, "SurfaceBySweptCurve", name), "SurfaceBySweptCurve");}
+        static SurfaceBySweptCurve Create(int64_t model, const char* name=NULL) { return SurfaceBySweptCurve(Instance::Create(model, "SurfaceBySweptCurve", name), "SurfaceBySweptCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SurfaceBySweptCurve(int64_t instance = null, string checkClassName = null)
-            : FiniteSurface(instance, (checkClassName != null) ? checkClassName : "SurfaceBySweptCurve")
+        SurfaceBySweptCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : FiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "SurfaceBySweptCurve")
         {}
 
        //
@@ -4942,11 +4940,11 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
+        Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_sweptArea(const Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", null); }
+        Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", NULL); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
         void set_sweptAreaOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
@@ -4969,15 +4967,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SurfaceOfLinearExtrusion Create(int64_t model, string name=null) { return SurfaceOfLinearExtrusion(Instance::Create(model, "SurfaceOfLinearExtrusion", name), "SurfaceOfLinearExtrusion");}
+        static SurfaceOfLinearExtrusion Create(int64_t model, const char* name=NULL) { return SurfaceOfLinearExtrusion(Instance::Create(model, "SurfaceOfLinearExtrusion", name), "SurfaceOfLinearExtrusion");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SurfaceOfLinearExtrusion(int64_t instance = null, string checkClassName = null)
-            : FiniteSurface(instance, (checkClassName != null) ? checkClassName : "SurfaceOfLinearExtrusion")
+        SurfaceOfLinearExtrusion(int64_t instance = NULL, const char* checkClassName = NULL)
+            : FiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "SurfaceOfLinearExtrusion")
         {}
 
        //
@@ -4987,11 +4985,11 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         void set_extrusion(const Vector& instance) { SetObjectProperty<Vector>("extrusion", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector* get_extrusion() { return GetObjectProperty<Vector>("extrusion", null); }
+        Vector* get_extrusion() { return GetObjectProperty<Vector>("extrusion", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_polygon(const Curve& instance) { SetObjectProperty<Curve>("polygon", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_polygon() { return GetObjectProperty<Curve>("polygon", null); }
+        Curve* get_polygon() { return GetObjectProperty<Curve>("polygon", NULL); }
     };
 
     /// <summary>
@@ -5007,15 +5005,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SurfaceOfRevolution Create(int64_t model, string name=null) { return SurfaceOfRevolution(Instance::Create(model, "SurfaceOfRevolution", name), "SurfaceOfRevolution");}
+        static SurfaceOfRevolution Create(int64_t model, const char* name=NULL) { return SurfaceOfRevolution(Instance::Create(model, "SurfaceOfRevolution", name), "SurfaceOfRevolution");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SurfaceOfRevolution(int64_t instance = null, string checkClassName = null)
-            : Surface(instance, (checkClassName != null) ? checkClassName : "SurfaceOfRevolution")
+        SurfaceOfRevolution(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Surface(instance, (checkClassName != NULL) ? checkClassName : "SurfaceOfRevolution")
         {}
 
        //
@@ -5025,11 +5023,11 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
+        Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -5045,15 +5043,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SweptAreaSolid Create(int64_t model, string name=null) { return SweptAreaSolid(Instance::Create(model, "SweptAreaSolid", name), "SweptAreaSolid");}
+        static SweptAreaSolid Create(int64_t model, const char* name=NULL) { return SweptAreaSolid(Instance::Create(model, "SweptAreaSolid", name), "SweptAreaSolid");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SweptAreaSolid(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SweptAreaSolid")
+        SweptAreaSolid(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SweptAreaSolid")
         {}
 
        //
@@ -5063,19 +5061,19 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
+        Vector* get_direction() { return GetObjectProperty<Vector>("direction", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
+        Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_sweptArea(const Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", null); }
+        Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", NULL); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
         void set_sweptAreaOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
@@ -5098,15 +5096,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SweptAreaSolidSet Create(int64_t model, string name=null) { return SweptAreaSolidSet(Instance::Create(model, "SweptAreaSolidSet", name), "SweptAreaSolidSet");}
+        static SweptAreaSolidSet Create(int64_t model, const char* name=NULL) { return SweptAreaSolidSet(Instance::Create(model, "SweptAreaSolidSet", name), "SweptAreaSolidSet");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SweptAreaSolidSet(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SweptAreaSolidSet")
+        SweptAreaSolidSet(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SweptAreaSolidSet")
         {}
 
        //
@@ -5116,15 +5114,15 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
+        Vector* get_direction() { return GetObjectProperty<Vector>("direction", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
+        Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 1..-1</summary>
         void set_sweptAreaSet(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaSet", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
@@ -5147,15 +5145,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SweptAreaSolidTapered Create(int64_t model, string name=null) { return SweptAreaSolidTapered(Instance::Create(model, "SweptAreaSolidTapered", name), "SweptAreaSolidTapered");}
+        static SweptAreaSolidTapered Create(int64_t model, const char* name=NULL) { return SweptAreaSolidTapered(Instance::Create(model, "SweptAreaSolidTapered", name), "SweptAreaSolidTapered");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SweptAreaSolidTapered(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SweptAreaSolidTapered")
+        SweptAreaSolidTapered(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SweptAreaSolidTapered")
         {}
 
        //
@@ -5165,23 +5163,23 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
+        Vector* get_direction() { return GetObjectProperty<Vector>("direction", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
+        Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_sweptArea(const Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", null); }
+        Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_sweptAreaEnd(const Curve& instance) { SetObjectProperty<Curve>("sweptAreaEnd", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_sweptAreaEnd() { return GetObjectProperty<Curve>("sweptAreaEnd", null); }
+        Curve* get_sweptAreaEnd() { return GetObjectProperty<Curve>("sweptAreaEnd", NULL); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
         void set_sweptAreaEndOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaEndOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
@@ -5211,15 +5209,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static SweptBlend Create(int64_t model, string name=null) { return SweptBlend(Instance::Create(model, "SweptBlend", name), "SweptBlend");}
+        static SweptBlend Create(int64_t model, const char* name=NULL) { return SweptBlend(Instance::Create(model, "SweptBlend", name), "SweptBlend");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        SweptBlend(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "SweptBlend")
+        SweptBlend(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "SweptBlend")
         {}
 
        //
@@ -5229,7 +5227,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_bottomPolygon(const Curve& instance) { SetObjectProperty<Curve>("bottomPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_bottomPolygon() { return GetObjectProperty<Curve>("bottomPolygon", null); }
+        Curve* get_bottomPolygon() { return GetObjectProperty<Curve>("bottomPolygon", NULL); }
         ///<summary>Sets values of connectionMap. OWL cardinality 0..-1</summary>
         void set_connectionMap(long* values, int64_t count) { SetDatatypeProperty ("connectionMap", values, count); }
         ///<summary>Gets values of connectionMap. OWL cardinality 0..-1</summary>
@@ -5240,32 +5238,32 @@ namespace GeometryKernel
         double* get_forcedStaticDirection(int64_t* pCount) { return GetDatatypeProperty<double>("forcedStaticDirection", pCount); }
         ///<summary>Sets value of forceSolid</summary>
         void set_forceSolid(bool value) { SetDatatypeProperty ("forceSolid", &value, 1); }
-        ///<summary>Gets value of forceSolid, returns null is the property was not set</summary>
-        bool* get_forceSolid() { return GetDatatypeProperty<bool>("forceSolid", null); }
+        ///<summary>Gets value of forceSolid, returns NULL is the property was not set</summary>
+        bool* get_forceSolid() { return GetDatatypeProperty<bool>("forceSolid", NULL); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
-        ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
+        ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
+        double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets value of hasBottom</summary>
         void set_hasBottom(bool value) { SetDatatypeProperty ("hasBottom", &value, 1); }
-        ///<summary>Gets value of hasBottom, returns null is the property was not set</summary>
-        bool* get_hasBottom() { return GetDatatypeProperty<bool>("hasBottom", null); }
+        ///<summary>Gets value of hasBottom, returns NULL is the property was not set</summary>
+        bool* get_hasBottom() { return GetDatatypeProperty<bool>("hasBottom", NULL); }
         ///<summary>Sets value of hasTop</summary>
         void set_hasTop(bool value) { SetDatatypeProperty ("hasTop", &value, 1); }
-        ///<summary>Gets value of hasTop, returns null is the property was not set</summary>
-        bool* get_hasTop() { return GetDatatypeProperty<bool>("hasTop", null); }
+        ///<summary>Gets value of hasTop, returns NULL is the property was not set</summary>
+        bool* get_hasTop() { return GetDatatypeProperty<bool>("hasTop", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
+        Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         void set_topPolygon(const Curve& instance) { SetObjectProperty<Curve>("topPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Curve* get_topPolygon() { return GetObjectProperty<Curve>("topPolygon", null); }
+        Curve* get_topPolygon() { return GetObjectProperty<Curve>("topPolygon", NULL); }
         ///<summary>Sets value of usesAbsolutePlacement</summary>
         void set_usesAbsolutePlacement(bool value) { SetDatatypeProperty ("usesAbsolutePlacement", &value, 1); }
-        ///<summary>Gets value of usesAbsolutePlacement, returns null is the property was not set</summary>
-        bool* get_usesAbsolutePlacement() { return GetDatatypeProperty<bool>("usesAbsolutePlacement", null); }
+        ///<summary>Gets value of usesAbsolutePlacement, returns NULL is the property was not set</summary>
+        bool* get_usesAbsolutePlacement() { return GetDatatypeProperty<bool>("usesAbsolutePlacement", NULL); }
     };
 
     /// <summary>
@@ -5281,15 +5279,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Texture Create(int64_t model, string name=null) { return Texture(Instance::Create(model, "Texture", name), "Texture");}
+        static Texture Create(int64_t model, const char* name=NULL) { return Texture(Instance::Create(model, "Texture", name), "Texture");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Texture(int64_t instance = null, string checkClassName = null)
-            : Appearance(instance, (checkClassName != null) ? checkClassName : "Texture")
+        Texture(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Appearance(instance, (checkClassName != NULL) ? checkClassName : "Texture")
         {}
 
        //
@@ -5297,37 +5295,37 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets value of name</summary>
-        void set_name(string value) { SetDatatypeProperty ("name", &value, 1); }
-        ///<summary>Gets value of name, returns null is the property was not set</summary>
-        string* get_name() { return GetDatatypeProperty<string>("name", null); }
+        void set_name(const char* value) { SetDatatypeProperty ("name", &value, 1); }
+        ///<summary>Gets value of name, returns NULL is the property was not set</summary>
+        const char** get_name() { return GetDatatypeProperty<const char*>("name", NULL); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
-        ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", null); }
+        ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
+        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of offsetY</summary>
         void set_offsetY(double value) { SetDatatypeProperty ("offsetY", &value, 1); }
-        ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", null); }
+        ///<summary>Gets value of offsetY, returns NULL is the property was not set</summary>
+        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", NULL); }
         ///<summary>Sets values of origin. OWL cardinality 0..3</summary>
         void set_origin(double* values, int64_t count) { SetDatatypeProperty ("origin", values, count); }
         ///<summary>Gets values of origin. OWL cardinality 0..3</summary>
         double* get_origin(int64_t* pCount) { return GetDatatypeProperty<double>("origin", pCount); }
         ///<summary>Sets value of rotation</summary>
         void set_rotation(double value) { SetDatatypeProperty ("rotation", &value, 1); }
-        ///<summary>Gets value of rotation, returns null is the property was not set</summary>
-        double* get_rotation() { return GetDatatypeProperty<double>("rotation", null); }
+        ///<summary>Gets value of rotation, returns NULL is the property was not set</summary>
+        double* get_rotation() { return GetDatatypeProperty<double>("rotation", NULL); }
         ///<summary>Sets value of scalingX</summary>
         void set_scalingX(double value) { SetDatatypeProperty ("scalingX", &value, 1); }
-        ///<summary>Gets value of scalingX, returns null is the property was not set</summary>
-        double* get_scalingX() { return GetDatatypeProperty<double>("scalingX", null); }
+        ///<summary>Gets value of scalingX, returns NULL is the property was not set</summary>
+        double* get_scalingX() { return GetDatatypeProperty<double>("scalingX", NULL); }
         ///<summary>Sets value of scalingY</summary>
         void set_scalingY(double value) { SetDatatypeProperty ("scalingY", &value, 1); }
-        ///<summary>Gets value of scalingY, returns null is the property was not set</summary>
-        double* get_scalingY() { return GetDatatypeProperty<double>("scalingY", null); }
+        ///<summary>Gets value of scalingY, returns NULL is the property was not set</summary>
+        double* get_scalingY() { return GetDatatypeProperty<double>("scalingY", NULL); }
         ///<summary>Sets value of type</summary>
         void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
-        ///<summary>Gets value of type, returns null is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", null); }
+        ///<summary>Gets value of type, returns NULL is the property was not set</summary>
+        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
     };
 
     /// <summary>
@@ -5343,15 +5341,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static ToroidalSurface Create(int64_t model, string name=null) { return ToroidalSurface(Instance::Create(model, "ToroidalSurface", name), "ToroidalSurface");}
+        static ToroidalSurface Create(int64_t model, const char* name=NULL) { return ToroidalSurface(Instance::Create(model, "ToroidalSurface", name), "ToroidalSurface");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ToroidalSurface(int64_t instance = null, string checkClassName = null)
-            : FiniteSurface(instance, (checkClassName != null) ? checkClassName : "ToroidalSurface")
+        ToroidalSurface(int64_t instance = NULL, const char* checkClassName = NULL)
+            : FiniteSurface(instance, (checkClassName != NULL) ? checkClassName : "ToroidalSurface")
         {}
 
        //
@@ -5360,16 +5358,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of majorRadius</summary>
         void set_majorRadius(double value) { SetDatatypeProperty ("majorRadius", &value, 1); }
-        ///<summary>Gets value of majorRadius, returns null is the property was not set</summary>
-        double* get_majorRadius() { return GetDatatypeProperty<double>("majorRadius", null); }
+        ///<summary>Gets value of majorRadius, returns NULL is the property was not set</summary>
+        double* get_majorRadius() { return GetDatatypeProperty<double>("majorRadius", NULL); }
         ///<summary>Sets value of minorRadius</summary>
         void set_minorRadius(double value) { SetDatatypeProperty ("minorRadius", &value, 1); }
-        ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
-        double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", null); }
+        ///<summary>Gets value of minorRadius, returns NULL is the property was not set</summary>
+        double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
         void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
-        ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", null); }
+        ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
+        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -5385,15 +5383,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Transformation Create(int64_t model, string name=null) { return Transformation(Instance::Create(model, "Transformation", name), "Transformation");}
+        static Transformation Create(int64_t model, const char* name=NULL) { return Transformation(Instance::Create(model, "Transformation", name), "Transformation");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Transformation(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "Transformation")
+        Transformation(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "Transformation")
         {}
 
        //
@@ -5403,11 +5401,11 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
+        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
+        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", NULL); }
     };
 
     /// <summary>
@@ -5423,15 +5421,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static TriangleCurve Create(int64_t model, string name=null) { return TriangleCurve(Instance::Create(model, "TriangleCurve", name), "TriangleCurve");}
+        static TriangleCurve Create(int64_t model, const char* name=NULL) { return TriangleCurve(Instance::Create(model, "TriangleCurve", name), "TriangleCurve");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        TriangleCurve(int64_t instance = null, string checkClassName = null)
-            : Curve(instance, (checkClassName != null) ? checkClassName : "TriangleCurve")
+        TriangleCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Curve(instance, (checkClassName != NULL) ? checkClassName : "TriangleCurve")
         {}
 
        //
@@ -5444,16 +5442,16 @@ namespace GeometryKernel
         double* get_coordinates(int64_t* pCount) { return GetDatatypeProperty<double>("coordinates", pCount); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
-        ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", null); }
+        ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
+        double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of offsetY</summary>
         void set_offsetY(double value) { SetDatatypeProperty ("offsetY", &value, 1); }
-        ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", null); }
+        ///<summary>Gets value of offsetY, returns NULL is the property was not set</summary>
+        double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", NULL); }
         ///<summary>Sets value of offsetZ</summary>
         void set_offsetZ(double value) { SetDatatypeProperty ("offsetZ", &value, 1); }
-        ///<summary>Gets value of offsetZ, returns null is the property was not set</summary>
-        double* get_offsetZ() { return GetDatatypeProperty<double>("offsetZ", null); }
+        ///<summary>Gets value of offsetZ, returns NULL is the property was not set</summary>
+        double* get_offsetZ() { return GetDatatypeProperty<double>("offsetZ", NULL); }
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 0..3</summary>
         void set_pointReferences(const Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("pointReferences", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..3</summary>
@@ -5476,15 +5474,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static TriangleReduction Create(int64_t model, string name=null) { return TriangleReduction(Instance::Create(model, "TriangleReduction", name), "TriangleReduction");}
+        static TriangleReduction Create(int64_t model, const char* name=NULL) { return TriangleReduction(Instance::Create(model, "TriangleReduction", name), "TriangleReduction");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        TriangleReduction(int64_t instance = null, string checkClassName = null)
-            : Solid(instance, (checkClassName != null) ? checkClassName : "TriangleReduction")
+        TriangleReduction(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Solid(instance, (checkClassName != NULL) ? checkClassName : "TriangleReduction")
         {}
 
        //
@@ -5493,16 +5491,16 @@ namespace GeometryKernel
 
         ///<summary>Sets value of innerFraction</summary>
         void set_innerFraction(double value) { SetDatatypeProperty ("innerFraction", &value, 1); }
-        ///<summary>Gets value of innerFraction, returns null is the property was not set</summary>
-        double* get_innerFraction() { return GetDatatypeProperty<double>("innerFraction", null); }
+        ///<summary>Gets value of innerFraction, returns NULL is the property was not set</summary>
+        double* get_innerFraction() { return GetDatatypeProperty<double>("innerFraction", NULL); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
-        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
+        GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", NULL); }
         ///<summary>Sets value of outerFraction</summary>
         void set_outerFraction(double value) { SetDatatypeProperty ("outerFraction", &value, 1); }
-        ///<summary>Gets value of outerFraction, returns null is the property was not set</summary>
-        double* get_outerFraction() { return GetDatatypeProperty<double>("outerFraction", null); }
+        ///<summary>Gets value of outerFraction, returns NULL is the property was not set</summary>
+        double* get_outerFraction() { return GetDatatypeProperty<double>("outerFraction", NULL); }
     };
 
     /// <summary>
@@ -5518,15 +5516,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static TriangleSet Create(int64_t model, string name=null) { return TriangleSet(Instance::Create(model, "TriangleSet", name), "TriangleSet");}
+        static TriangleSet Create(int64_t model, const char* name=NULL) { return TriangleSet(Instance::Create(model, "TriangleSet", name), "TriangleSet");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        TriangleSet(int64_t instance = null, string checkClassName = null)
-            : Surface(instance, (checkClassName != null) ? checkClassName : "TriangleSet")
+        TriangleSet(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Surface(instance, (checkClassName != NULL) ? checkClassName : "TriangleSet")
         {}
 
        //
@@ -5556,15 +5554,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Vector Create(int64_t model, string name=null) { return Vector(Instance::Create(model, "Vector", name), "Vector");}
+        static Vector Create(int64_t model, const char* name=NULL) { return Vector(Instance::Create(model, "Vector", name), "Vector");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Vector(int64_t instance = null, string checkClassName = null)
-            : Mathematics(instance, (checkClassName != null) ? checkClassName : "Vector")
+        Vector(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Mathematics(instance, (checkClassName != NULL) ? checkClassName : "Vector")
         {}
     };
 
@@ -5581,15 +5579,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static Vector3 Create(int64_t model, string name=null) { return Vector3(Instance::Create(model, "Vector3", name), "Vector3");}
+        static Vector3 Create(int64_t model, const char* name=NULL) { return Vector3(Instance::Create(model, "Vector3", name), "Vector3");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Vector3(int64_t instance = null, string checkClassName = null)
-            : Vector(instance, (checkClassName != null) ? checkClassName : "Vector3")
+        Vector3(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Vector(instance, (checkClassName != NULL) ? checkClassName : "Vector3")
         {}
 
        //
@@ -5602,16 +5600,16 @@ namespace GeometryKernel
         double* get_coordinates(int64_t* pCount) { return GetDatatypeProperty<double>("coordinates", pCount); }
         ///<summary>Sets value of x</summary>
         void set_x(double value) { SetDatatypeProperty ("x", &value, 1); }
-        ///<summary>Gets value of x, returns null is the property was not set</summary>
-        double* get_x() { return GetDatatypeProperty<double>("x", null); }
+        ///<summary>Gets value of x, returns NULL is the property was not set</summary>
+        double* get_x() { return GetDatatypeProperty<double>("x", NULL); }
         ///<summary>Sets value of y</summary>
         void set_y(double value) { SetDatatypeProperty ("y", &value, 1); }
-        ///<summary>Gets value of y, returns null is the property was not set</summary>
-        double* get_y() { return GetDatatypeProperty<double>("y", null); }
+        ///<summary>Gets value of y, returns NULL is the property was not set</summary>
+        double* get_y() { return GetDatatypeProperty<double>("y", NULL); }
         ///<summary>Sets value of z</summary>
         void set_z(double value) { SetDatatypeProperty ("z", &value, 1); }
-        ///<summary>Gets value of z, returns null is the property was not set</summary>
-        double* get_z() { return GetDatatypeProperty<double>("z", null); }
+        ///<summary>Gets value of z, returns NULL is the property was not set</summary>
+        double* get_z() { return GetDatatypeProperty<double>("z", NULL); }
     };
 
     /// <summary>
@@ -5627,15 +5625,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static View Create(int64_t model, string name=null) { return View(Instance::Create(model, "View", name), "View");}
+        static View Create(int64_t model, const char* name=NULL) { return View(Instance::Create(model, "View", name), "View");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        View(int64_t instance = null, string checkClassName = null)
-            : Environment(instance, (checkClassName != null) ? checkClassName : "View")
+        View(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Environment(instance, (checkClassName != NULL) ? checkClassName : "View")
         {}
 
        //
@@ -5645,7 +5643,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
+        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", NULL); }
     };
 
     /// <summary>
@@ -5661,15 +5659,15 @@ namespace GeometryKernel
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static World Create(int64_t model, string name=null) { return World(Instance::Create(model, "World", name), "World");}
+        static World Create(int64_t model, const char* name=NULL) { return World(Instance::Create(model, "World", name), "World");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        World(int64_t instance = null, string checkClassName = null)
-            : Environment(instance, (checkClassName != null) ? checkClassName : "World")
+        World(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Environment(instance, (checkClassName != NULL) ? checkClassName : "World")
         {}
 
        //
@@ -5679,7 +5677,7 @@ namespace GeometryKernel
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
-        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
+        Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", NULL); }
     };
 }
 

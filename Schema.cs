@@ -14,13 +14,13 @@ namespace RDFWrappers
             public Int64 type;
             public List<Int64> resrtictions = new List<Int64>();
 
-            public string DataType()
+            public string DataType(bool cs)
             {
                 switch (type)
                 {
                     case Engine.x86_64.OBJECTPROPERTY_TYPE:             return "Instance";
                     case Engine.x86_64.DATATYPEPROPERTY_TYPE_BOOLEAN:   return "bool";
-                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_CHAR:      return "string";
+                    case Engine.x86_64.DATATYPEPROPERTY_TYPE_CHAR:      return cs ? "string" : "const char*";
                     case Engine.x86_64.DATATYPEPROPERTY_TYPE_INTEGER:   return "long";
                     case Engine.x86_64.DATATYPEPROPERTY_TYPE_DOUBLE:    return "double";
                 }
@@ -114,8 +114,8 @@ namespace RDFWrappers
                     clsprop.max = max;
 
                     //looking for examples of bool and sring properties with cardinality > 1
-                    System.Diagnostics.Debug.Assert(prop.Value.DataType() != "bool" || clsprop.max == 1);
-                    System.Diagnostics.Debug.Assert(prop.Value.DataType() != "string" || clsprop.max == 1);
+                    System.Diagnostics.Debug.Assert(prop.Value.DataType(true) != "bool" || clsprop.max == 1);
+                    System.Diagnostics.Debug.Assert(prop.Value.DataType(true) != "string" || clsprop.max == 1);
 
                     cls.properties.Add(clsprop);
                 }
@@ -171,7 +171,7 @@ namespace RDFWrappers
                 {
                     var prop = m_properties[clsprop.name];
 
-                    Console.Write("    {0}: {1}", clsprop.name, prop.DataType());
+                    Console.Write("    {0}: {1}", clsprop.name, prop.DataType(true));
                     if (prop.resrtictions.Count > 0)
                     {
                         Console.Write("[");
