@@ -255,7 +255,7 @@ namespace GeometryKernel
         /// <summary>
         /// 
         /// </summary>
-        template<class TInstance> void SetObjectProperty(string name, TInstance* instances, int64_t count)
+        template<class TInstance> void SetObjectProperty(string name, const TInstance* instances, int64_t count)
         {
             auto propId = GetPropertyId(name);
             auto res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
@@ -317,7 +317,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Material</summary>
-        void set_material(Material& instance) { SetObjectProperty<Material>("material", &instance, 1); }
+        void set_material(const Material& instance) { SetObjectProperty<Material>("material", &instance, 1); }
         ///<summary>Get related instance</summary>
         Material* get_material() { return GetObjectProperty<Material>("material", null); }
     };
@@ -351,14 +351,14 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_bounds(Curve* instances, int64_t count) { SetObjectProperty<Curve>("bounds", instances, count); }
+        void set_bounds(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("bounds", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_bounds(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("bounds", instances, count); }
+        void set_bounds(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("bounds", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_bounds(int64_t* pCount) { return GetObjectProperty<Curve>("bounds", pCount); }
         int64_t* get_bounds_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("bounds", pCount); }
         ///<summary>Sets relationship from this instance to an instance of Surface</summary>
-        void set_surface(Surface& instance) { SetObjectProperty<Surface>("surface", &instance, 1); }
+        void set_surface(const Surface& instance) { SetObjectProperty<Surface>("surface", &instance, 1); }
         ///<summary>Get related instance</summary>
         Surface* get_surface() { return GetObjectProperty<Surface>("surface", null); }
     };
@@ -559,7 +559,7 @@ namespace GeometryKernel
         ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
         double* get_offsetY() { return GetDatatypeProperty<double>("offsetY", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_segment(Curve& instance) { SetObjectProperty<Curve>("segment", &instance, 1); }
+        void set_segment(const Curve& instance) { SetObjectProperty<Curve>("segment", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_segment() { return GetObjectProperty<Curve>("segment", null); }
         ///<summary>Sets values of tangentDirectionStart. OWL cardinality 3..3</summary>
@@ -597,9 +597,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of AlignedSegment. OWL cardinality 0..-1</summary>
-        void set_segments(AlignedSegment* instances, int64_t count) { SetObjectProperty<AlignedSegment>("segments", instances, count); }
+        void set_segments(const AlignedSegment* instances, int64_t count) { SetObjectProperty<AlignedSegment>("segments", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_segments(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("segments", instances, count); }
+        void set_segments(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("segments", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         AlignedSegment* get_segments(int64_t* pCount) { return GetObjectProperty<AlignedSegment>("segments", pCount); }
         int64_t* get_segments_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("segments", pCount); }
@@ -634,7 +634,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of AlignedSegments</summary>
-        void set_horizontal(AlignedSegments& instance) { SetObjectProperty<AlignedSegments>("horizontal", &instance, 1); }
+        void set_horizontal(const AlignedSegments& instance) { SetObjectProperty<AlignedSegments>("horizontal", &instance, 1); }
         ///<summary>Get related instance</summary>
         AlignedSegments* get_horizontal() { return GetObjectProperty<AlignedSegments>("horizontal", null); }
         ///<summary>Sets value of offsetX</summary>
@@ -646,7 +646,7 @@ namespace GeometryKernel
         ///<summary>Gets value of type, returns null is the property was not set</summary>
         long* get_type() { return GetDatatypeProperty<long>("type", null); }
         ///<summary>Sets relationship from this instance to an instance of AlignedSegments</summary>
-        void set_vertical(AlignedSegments& instance) { SetObjectProperty<AlignedSegments>("vertical", &instance, 1); }
+        void set_vertical(const AlignedSegments& instance) { SetObjectProperty<AlignedSegments>("vertical", &instance, 1); }
         ///<summary>Get related instance</summary>
         AlignedSegments* get_vertical() { return GetObjectProperty<AlignedSegments>("vertical", null); }
     };
@@ -705,7 +705,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Color</summary>
-        void set_color(Color& instance) { SetObjectProperty<Color>("color", &instance, 1); }
+        void set_color(const Color& instance) { SetObjectProperty<Color>("color", &instance, 1); }
         ///<summary>Get related instance</summary>
         Color* get_color() { return GetObjectProperty<Color>("color", null); }
     };
@@ -843,9 +843,9 @@ namespace GeometryKernel
         ///<summary>Gets value of closed, returns null is the property was not set</summary>
         bool* get_closed() { return GetDatatypeProperty<bool>("closed", null); }
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 2..-1</summary>
-        void set_controlPoints(Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("controlPoints", instances, count); }
+        void set_controlPoints(const Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("controlPoints", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 2..-1</summary>
-        void set_controlPoints(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("controlPoints", instances, count); }
+        void set_controlPoints(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("controlPoints", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 2..-1</summary>
         Point3D* get_controlPoints(int64_t* pCount) { return GetObjectProperty<Point3D>("controlPoints", pCount); }
         int64_t* get_controlPoints_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("controlPoints", pCount); }
@@ -971,9 +971,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 4..-1</summary>
-        void set_controlPoints(Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("controlPoints", instances, count); }
+        void set_controlPoints(const Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("controlPoints", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 4..-1</summary>
-        void set_controlPoints(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("controlPoints", instances, count); }
+        void set_controlPoints(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("controlPoints", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 4..-1</summary>
         Point3D* get_controlPoints(int64_t* pCount) { return GetObjectProperty<Point3D>("controlPoints", pCount); }
         int64_t* get_controlPoints_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("controlPoints", pCount); }
@@ -1082,7 +1082,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
-        void set_direction(Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
+        void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
         ///<summary>Sets value of length</summary>
@@ -1090,7 +1090,7 @@ namespace GeometryKernel
         ///<summary>Gets value of length, returns null is the property was not set</summary>
         double* get_length() { return GetDatatypeProperty<double>("length", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_path(Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
+        void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
         ///<summary>Sets value of radiusI</summary>
@@ -1186,7 +1186,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_bottomPolygon(Curve& instance) { SetObjectProperty<Curve>("bottomPolygon", &instance, 1); }
+        void set_bottomPolygon(const Curve& instance) { SetObjectProperty<Curve>("bottomPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_bottomPolygon() { return GetObjectProperty<Curve>("bottomPolygon", null); }
         ///<summary>Sets value of forceSolid</summary>
@@ -1210,7 +1210,7 @@ namespace GeometryKernel
         ///<summary>Gets value of height, returns null is the property was not set</summary>
         double* get_height() { return GetDatatypeProperty<double>("height", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_topPolygon(Curve& instance) { SetObjectProperty<Curve>("topPolygon", &instance, 1); }
+        void set_topPolygon(const Curve& instance) { SetObjectProperty<Curve>("topPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_topPolygon() { return GetObjectProperty<Curve>("topPolygon", null); }
     };
@@ -1269,15 +1269,15 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Deviation</summary>
-        void set_deviation(Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
+        void set_deviation(const Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
         ///<summary>Get related instance</summary>
         Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_firstObject(GeometricItem& instance) { SetObjectProperty<GeometricItem>("firstObject", &instance, 1); }
+        void set_firstObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("firstObject", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_firstObject() { return GetObjectProperty<GeometricItem>("firstObject", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_secondObject(GeometricItem& instance) { SetObjectProperty<GeometricItem>("secondObject", &instance, 1); }
+        void set_secondObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("secondObject", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", null); }
         ///<summary>Sets value of setting</summary>
@@ -1319,15 +1319,15 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Deviation</summary>
-        void set_deviation(Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
+        void set_deviation(const Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
         ///<summary>Get related instance</summary>
         Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_firstObject(GeometricItem& instance) { SetObjectProperty<GeometricItem>("firstObject", &instance, 1); }
+        void set_firstObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("firstObject", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_firstObject() { return GetObjectProperty<GeometricItem>("firstObject", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_secondObject(GeometricItem& instance) { SetObjectProperty<GeometricItem>("secondObject", &instance, 1); }
+        void set_secondObject(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("secondObject", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", null); }
         ///<summary>Sets value of type</summary>
@@ -1373,9 +1373,9 @@ namespace GeometryKernel
         ///<summary>Gets value of epsilon, returns null is the property was not set</summary>
         double* get_epsilon() { return GetDatatypeProperty<double>("epsilon", null); }
         ///<summary>Sets relationships from this instance to an array of Face. OWL cardinality 0..-1</summary>
-        void set_faces(Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
+        void set_faces(const Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_faces(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
+        void set_faces(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Face* get_faces(int64_t* pCount) { return GetObjectProperty<Face>("faces", pCount); }
         int64_t* get_faces_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("faces", pCount); }
@@ -1651,9 +1651,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 3..3</summary>
-        void set_pointReferences(Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("pointReferences", instances, count); }
+        void set_pointReferences(const Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("pointReferences", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 3..3</summary>
-        void set_pointReferences(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("pointReferences", instances, count); }
+        void set_pointReferences(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("pointReferences", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 3..3</summary>
         Point3D* get_pointReferences(int64_t* pCount) { return GetObjectProperty<Point3D>("pointReferences", pCount); }
         int64_t* get_pointReferences_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("pointReferences", pCount); }
@@ -1726,15 +1726,15 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Deviation</summary>
-        void set_deviation(Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
+        void set_deviation(const Deviation& instance) { SetObjectProperty<Deviation>("deviation", &instance, 1); }
         ///<summary>Get related instance</summary>
         Deviation* get_deviation() { return GetObjectProperty<Deviation>("deviation", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_object(GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
+        void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
         ///<summary>Sets relationship from this instance to an instance of Plane</summary>
-        void set_plane(Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
+        void set_plane(const Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
         ///<summary>Get related instance</summary>
         Plane* get_plane() { return GetObjectProperty<Plane>("plane", null); }
         ///<summary>Sets value of type</summary>
@@ -1776,7 +1776,7 @@ namespace GeometryKernel
         ///<summary>Gets value of A, returns null is the property was not set</summary>
         double* get_A() { return GetDatatypeProperty<double>("A", null); }
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
-        void set_direction(Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
+        void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
         ///<summary>Sets value of length</summary>
@@ -1867,9 +1867,9 @@ namespace GeometryKernel
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
         double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
         ///<summary>Sets relationships from this instance to an array of GeometricItem. OWL cardinality 0..-1</summary>
-        void set_objects(GeometricItem* instances, int64_t count) { SetObjectProperty<GeometricItem>("objects", instances, count); }
+        void set_objects(const GeometricItem* instances, int64_t count) { SetObjectProperty<GeometricItem>("objects", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_objects(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("objects", instances, count); }
+        void set_objects(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("objects", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         GeometricItem* get_objects(int64_t* pCount) { return GetObjectProperty<GeometricItem>("objects", pCount); }
         int64_t* get_objects_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("objects", pCount); }
@@ -1912,7 +1912,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
-        void set_ambient(ColorComponent& instance) { SetObjectProperty<ColorComponent>("ambient", &instance, 1); }
+        void set_ambient(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("ambient", &instance, 1); }
         ///<summary>Get related instance</summary>
         ColorComponent* get_ambient() { return GetObjectProperty<ColorComponent>("ambient", null); }
         ///<summary>Sets value of ambientReflectance</summary>
@@ -1920,15 +1920,15 @@ namespace GeometryKernel
         ///<summary>Gets value of ambientReflectance, returns null is the property was not set</summary>
         double* get_ambientReflectance() { return GetDatatypeProperty<double>("ambientReflectance", null); }
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
-        void set_diffuse(ColorComponent& instance) { SetObjectProperty<ColorComponent>("diffuse", &instance, 1); }
+        void set_diffuse(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("diffuse", &instance, 1); }
         ///<summary>Get related instance</summary>
         ColorComponent* get_diffuse() { return GetObjectProperty<ColorComponent>("diffuse", null); }
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
-        void set_emissive(ColorComponent& instance) { SetObjectProperty<ColorComponent>("emissive", &instance, 1); }
+        void set_emissive(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("emissive", &instance, 1); }
         ///<summary>Get related instance</summary>
         ColorComponent* get_emissive() { return GetObjectProperty<ColorComponent>("emissive", null); }
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
-        void set_specular(ColorComponent& instance) { SetObjectProperty<ColorComponent>("specular", &instance, 1); }
+        void set_specular(const ColorComponent& instance) { SetObjectProperty<ColorComponent>("specular", &instance, 1); }
         ///<summary>Get related instance</summary>
         ColorComponent* get_specular() { return GetObjectProperty<ColorComponent>("specular", null); }
         ///<summary>Sets value of transparency</summary>
@@ -2285,9 +2285,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Face. OWL cardinality 1..-1</summary>
-        void set_faces(Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
+        void set_faces(const Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
-        void set_faces(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
+        void set_faces(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 1..-1</summary>
         Face* get_faces(int64_t* pCount) { return GetObjectProperty<Face>("faces", pCount); }
         int64_t* get_faces_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("faces", pCount); }
@@ -2520,7 +2520,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
-        void set_direction(Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
+        void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
     };
@@ -2787,13 +2787,13 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_extrusionArea(Curve& instance) { SetObjectProperty<Curve>("extrusionArea", &instance, 1); }
+        void set_extrusionArea(const Curve& instance) { SetObjectProperty<Curve>("extrusionArea", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_extrusionArea() { return GetObjectProperty<Curve>("extrusionArea", null); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_extrusionAreaOpenings(Curve* instances, int64_t count) { SetObjectProperty<Curve>("extrusionAreaOpenings", instances, count); }
+        void set_extrusionAreaOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("extrusionAreaOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_extrusionAreaOpenings(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("extrusionAreaOpenings", instances, count); }
+        void set_extrusionAreaOpenings(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("extrusionAreaOpenings", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_extrusionAreaOpenings(int64_t* pCount) { return GetObjectProperty<Curve>("extrusionAreaOpenings", pCount); }
         int64_t* get_extrusionAreaOpenings_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("extrusionAreaOpenings", pCount); }
@@ -2840,9 +2840,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 1..-1</summary>
-        void set_extrusionAreaSet(Curve* instances, int64_t count) { SetObjectProperty<Curve>("extrusionAreaSet", instances, count); }
+        void set_extrusionAreaSet(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("extrusionAreaSet", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
-        void set_extrusionAreaSet(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("extrusionAreaSet", instances, count); }
+        void set_extrusionAreaSet(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("extrusionAreaSet", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 1..-1</summary>
         Curve* get_extrusionAreaSet(int64_t* pCount) { return GetObjectProperty<Curve>("extrusionAreaSet", pCount); }
         int64_t* get_extrusionAreaSet_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("extrusionAreaSet", pCount); }
@@ -2889,14 +2889,14 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_innerPolygons(Curve* instances, int64_t count) { SetObjectProperty<Curve>("innerPolygons", instances, count); }
+        void set_innerPolygons(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("innerPolygons", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_innerPolygons(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("innerPolygons", instances, count); }
+        void set_innerPolygons(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("innerPolygons", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_innerPolygons(int64_t* pCount) { return GetObjectProperty<Curve>("innerPolygons", pCount); }
         int64_t* get_innerPolygons_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("innerPolygons", pCount); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_outerPolygon(Curve& instance) { SetObjectProperty<Curve>("outerPolygon", &instance, 1); }
+        void set_outerPolygon(const Curve& instance) { SetObjectProperty<Curve>("outerPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_outerPolygon() { return GetObjectProperty<Curve>("outerPolygon", null); }
         ///<summary>Sets value of setting</summary>
@@ -2934,9 +2934,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_polygons(Curve* instances, int64_t count) { SetObjectProperty<Curve>("polygons", instances, count); }
+        void set_polygons(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("polygons", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_polygons(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("polygons", instances, count); }
+        void set_polygons(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("polygons", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_polygons(int64_t* pCount) { return GetObjectProperty<Curve>("polygons", pCount); }
         int64_t* get_polygons_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("polygons", pCount); }
@@ -3229,7 +3229,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_matrix(Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
+        void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
     };
@@ -3263,7 +3263,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_curve(Curve& instance) { SetObjectProperty<Curve>("curve", &instance, 1); }
+        void set_curve(const Curve& instance) { SetObjectProperty<Curve>("curve", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_curve() { return GetObjectProperty<Curve>("curve", null); }
     };
@@ -3297,7 +3297,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Surface</summary>
-        void set_surface(Surface& instance) { SetObjectProperty<Surface>("surface", &instance, 1); }
+        void set_surface(const Surface& instance) { SetObjectProperty<Surface>("surface", &instance, 1); }
         ///<summary>Get related instance</summary>
         Surface* get_surface() { return GetObjectProperty<Surface>("surface", null); }
     };
@@ -3477,9 +3477,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Face. OWL cardinality 1..-1</summary>
-        void set_faces(Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
+        void set_faces(const Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
-        void set_faces(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
+        void set_faces(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 1..-1</summary>
         Face* get_faces(int64_t* pCount) { return GetObjectProperty<Face>("faces", pCount); }
         int64_t* get_faces_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("faces", pCount); }
@@ -3514,13 +3514,13 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Color</summary>
-        void set_color(Color& instance) { SetObjectProperty<Color>("color", &instance, 1); }
+        void set_color(const Color& instance) { SetObjectProperty<Color>("color", &instance, 1); }
         ///<summary>Get related instance</summary>
         Color* get_color() { return GetObjectProperty<Color>("color", null); }
         ///<summary>Sets relationships from this instance to an array of Texture. OWL cardinality 0..2</summary>
-        void set_textures(Texture* instances, int64_t count) { SetObjectProperty<Texture>("textures", instances, count); }
+        void set_textures(const Texture* instances, int64_t count) { SetObjectProperty<Texture>("textures", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..2</summary>
-        void set_textures(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("textures", instances, count); }
+        void set_textures(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("textures", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..2</summary>
         Texture* get_textures(int64_t* pCount) { return GetObjectProperty<Texture>("textures", pCount); }
         int64_t* get_textures_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("textures", pCount); }
@@ -3555,11 +3555,11 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_firstMatrix(Matrix& instance) { SetObjectProperty<Matrix>("firstMatrix", &instance, 1); }
+        void set_firstMatrix(const Matrix& instance) { SetObjectProperty<Matrix>("firstMatrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_firstMatrix() { return GetObjectProperty<Matrix>("firstMatrix", null); }
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_secondMatrix(Matrix& instance) { SetObjectProperty<Matrix>("secondMatrix", &instance, 1); }
+        void set_secondMatrix(const Matrix& instance) { SetObjectProperty<Matrix>("secondMatrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_secondMatrix() { return GetObjectProperty<Matrix>("secondMatrix", null); }
     };
@@ -3593,7 +3593,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Point3DSet</summary>
-        void set_pointSet(Point3DSet& instance) { SetObjectProperty<Point3DSet>("pointSet", &instance, 1); }
+        void set_pointSet(const Point3DSet& instance) { SetObjectProperty<Point3DSet>("pointSet", &instance, 1); }
         ///<summary>Get related instance</summary>
         Point3DSet* get_pointSet() { return GetObjectProperty<Point3DSet>("pointSet", null); }
     };
@@ -3766,7 +3766,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Plane</summary>
-        void set_plane(Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
+        void set_plane(const Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
         ///<summary>Get related instance</summary>
         Plane* get_plane() { return GetObjectProperty<Plane>("plane", null); }
     };
@@ -3921,7 +3921,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_object(GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
+        void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
     };
@@ -3955,7 +3955,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Point3D</summary>
-        void set_position(Point3D& instance) { SetObjectProperty<Point3D>("position", &instance, 1); }
+        void set_position(const Point3D& instance) { SetObjectProperty<Point3D>("position", &instance, 1); }
         ///<summary>Get related instance</summary>
         Point3D* get_position() { return GetObjectProperty<Point3D>("position", null); }
     };
@@ -4035,9 +4035,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 1..-1</summary>
-        void set_lineParts(Curve* instances, int64_t count) { SetObjectProperty<Curve>("lineParts", instances, count); }
+        void set_lineParts(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("lineParts", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
-        void set_lineParts(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("lineParts", instances, count); }
+        void set_lineParts(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("lineParts", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 1..-1</summary>
         Curve* get_lineParts(int64_t* pCount) { return GetObjectProperty<Curve>("lineParts", pCount); }
         int64_t* get_lineParts_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("lineParts", pCount); }
@@ -4072,9 +4072,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 1..-1</summary>
-        void set_lineParts(Curve* instances, int64_t count) { SetObjectProperty<Curve>("lineParts", instances, count); }
+        void set_lineParts(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("lineParts", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
-        void set_lineParts(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("lineParts", instances, count); }
+        void set_lineParts(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("lineParts", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 1..-1</summary>
         Curve* get_lineParts(int64_t* pCount) { return GetObjectProperty<Curve>("lineParts", pCount); }
         int64_t* get_lineParts_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("lineParts", pCount); }
@@ -4113,9 +4113,9 @@ namespace GeometryKernel
         ///<summary>Gets values of coordinates. OWL cardinality 0..-1</summary>
         double* get_coordinates(int64_t* pCount) { return GetDatatypeProperty<double>("coordinates", pCount); }
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 0..-1</summary>
-        void set_pointReferences(Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("pointReferences", instances, count); }
+        void set_pointReferences(const Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("pointReferences", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_pointReferences(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("pointReferences", instances, count); }
+        void set_pointReferences(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("pointReferences", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Point3D* get_pointReferences(int64_t* pCount) { return GetObjectProperty<Point3D>("pointReferences", pCount); }
         int64_t* get_pointReferences_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("pointReferences", pCount); }
@@ -4196,14 +4196,14 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_innerPolygons(Curve* instances, int64_t count) { SetObjectProperty<Curve>("innerPolygons", instances, count); }
+        void set_innerPolygons(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("innerPolygons", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_innerPolygons(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("innerPolygons", instances, count); }
+        void set_innerPolygons(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("innerPolygons", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_innerPolygons(int64_t* pCount) { return GetObjectProperty<Curve>("innerPolygons", pCount); }
         int64_t* get_innerPolygons_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("innerPolygons", pCount); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_outerPolygon(Curve& instance) { SetObjectProperty<Curve>("outerPolygon", &instance, 1); }
+        void set_outerPolygon(const Curve& instance) { SetObjectProperty<Curve>("outerPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_outerPolygon() { return GetObjectProperty<Curve>("outerPolygon", null); }
     };
@@ -4237,7 +4237,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_matrix(Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
+        void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
     };
@@ -4435,11 +4435,11 @@ namespace GeometryKernel
         ///<summary>Gets value of count, returns null is the property was not set</summary>
         long* get_count() { return GetDatatypeProperty<long>("count", null); }
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_matrix(Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
+        void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_object(GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
+        void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
     };
@@ -4498,23 +4498,23 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Vector3</summary>
-        void set_lightDirection(Vector3& instance) { SetObjectProperty<Vector3>("lightDirection", &instance, 1); }
+        void set_lightDirection(const Vector3& instance) { SetObjectProperty<Vector3>("lightDirection", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector3* get_lightDirection() { return GetObjectProperty<Vector3>("lightDirection", null); }
         ///<summary>Sets relationship from this instance to an instance of Point3D</summary>
-        void set_lightPoint(Point3D& instance) { SetObjectProperty<Point3D>("lightPoint", &instance, 1); }
+        void set_lightPoint(const Point3D& instance) { SetObjectProperty<Point3D>("lightPoint", &instance, 1); }
         ///<summary>Get related instance</summary>
         Point3D* get_lightPoint() { return GetObjectProperty<Point3D>("lightPoint", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_object(GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
+        void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
         ///<summary>Sets relationship from this instance to an instance of Plane</summary>
-        void set_plane(Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
+        void set_plane(const Plane& instance) { SetObjectProperty<Plane>("plane", &instance, 1); }
         ///<summary>Get related instance</summary>
         Plane* get_plane() { return GetObjectProperty<Plane>("plane", null); }
         ///<summary>Sets relationship from this instance to an instance of Vector3</summary>
-        void set_planeRefDirection(Vector3& instance) { SetObjectProperty<Vector3>("planeRefDirection", &instance, 1); }
+        void set_planeRefDirection(const Vector3& instance) { SetObjectProperty<Vector3>("planeRefDirection", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector3* get_planeRefDirection() { return GetObjectProperty<Vector3>("planeRefDirection", null); }
         ///<summary>Sets value of type</summary>
@@ -4681,9 +4681,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationships from this instance to an array of Face. OWL cardinality 1..-1</summary>
-        void set_faces(Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
+        void set_faces(const Face* instances, int64_t count) { SetObjectProperty<Face>("faces", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
-        void set_faces(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
+        void set_faces(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("faces", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 1..-1</summary>
         Face* get_faces(int64_t* pCount) { return GetObjectProperty<Face>("faces", pCount); }
         int64_t* get_faces_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("faces", pCount); }
@@ -4940,17 +4940,17 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_path(Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
+        void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_sweptArea(Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
+        void set_sweptArea(const Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", null); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_sweptAreaOpenings(Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
+        void set_sweptAreaOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_sweptAreaOpenings(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaOpenings", instances, count); }
+        void set_sweptAreaOpenings(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaOpenings", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_sweptAreaOpenings(int64_t* pCount) { return GetObjectProperty<Curve>("sweptAreaOpenings", pCount); }
         int64_t* get_sweptAreaOpenings_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("sweptAreaOpenings", pCount); }
@@ -4985,11 +4985,11 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
-        void set_extrusion(Vector& instance) { SetObjectProperty<Vector>("extrusion", &instance, 1); }
+        void set_extrusion(const Vector& instance) { SetObjectProperty<Vector>("extrusion", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector* get_extrusion() { return GetObjectProperty<Vector>("extrusion", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_polygon(Curve& instance) { SetObjectProperty<Curve>("polygon", &instance, 1); }
+        void set_polygon(const Curve& instance) { SetObjectProperty<Curve>("polygon", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_polygon() { return GetObjectProperty<Curve>("polygon", null); }
     };
@@ -5023,7 +5023,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_path(Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
+        void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
         ///<summary>Sets value of segmentationParts</summary>
@@ -5061,7 +5061,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
-        void set_direction(Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
+        void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
         ///<summary>Sets value of fraction</summary>
@@ -5069,17 +5069,17 @@ namespace GeometryKernel
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
         double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_path(Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
+        void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_sweptArea(Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
+        void set_sweptArea(const Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", null); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_sweptAreaOpenings(Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
+        void set_sweptAreaOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_sweptAreaOpenings(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaOpenings", instances, count); }
+        void set_sweptAreaOpenings(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaOpenings", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_sweptAreaOpenings(int64_t* pCount) { return GetObjectProperty<Curve>("sweptAreaOpenings", pCount); }
         int64_t* get_sweptAreaOpenings_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("sweptAreaOpenings", pCount); }
@@ -5114,7 +5114,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
-        void set_direction(Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
+        void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
         ///<summary>Sets value of fraction</summary>
@@ -5122,13 +5122,13 @@ namespace GeometryKernel
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
         double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_path(Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
+        void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 1..-1</summary>
-        void set_sweptAreaSet(Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaSet", instances, count); }
+        void set_sweptAreaSet(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaSet", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 1..-1</summary>
-        void set_sweptAreaSet(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaSet", instances, count); }
+        void set_sweptAreaSet(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaSet", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 1..-1</summary>
         Curve* get_sweptAreaSet(int64_t* pCount) { return GetObjectProperty<Curve>("sweptAreaSet", pCount); }
         int64_t* get_sweptAreaSet_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("sweptAreaSet", pCount); }
@@ -5163,7 +5163,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
-        void set_direction(Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
+        void set_direction(const Vector& instance) { SetObjectProperty<Vector>("direction", &instance, 1); }
         ///<summary>Get related instance</summary>
         Vector* get_direction() { return GetObjectProperty<Vector>("direction", null); }
         ///<summary>Sets value of fraction</summary>
@@ -5171,28 +5171,28 @@ namespace GeometryKernel
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
         double* get_fraction() { return GetDatatypeProperty<double>("fraction", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_path(Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
+        void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_sweptArea(Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
+        void set_sweptArea(const Curve& instance) { SetObjectProperty<Curve>("sweptArea", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_sweptArea() { return GetObjectProperty<Curve>("sweptArea", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_sweptAreaEnd(Curve& instance) { SetObjectProperty<Curve>("sweptAreaEnd", &instance, 1); }
+        void set_sweptAreaEnd(const Curve& instance) { SetObjectProperty<Curve>("sweptAreaEnd", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_sweptAreaEnd() { return GetObjectProperty<Curve>("sweptAreaEnd", null); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_sweptAreaEndOpenings(Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaEndOpenings", instances, count); }
+        void set_sweptAreaEndOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaEndOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_sweptAreaEndOpenings(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaEndOpenings", instances, count); }
+        void set_sweptAreaEndOpenings(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaEndOpenings", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_sweptAreaEndOpenings(int64_t* pCount) { return GetObjectProperty<Curve>("sweptAreaEndOpenings", pCount); }
         int64_t* get_sweptAreaEndOpenings_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("sweptAreaEndOpenings", pCount); }
         ///<summary>Sets relationships from this instance to an array of Curve. OWL cardinality 0..-1</summary>
-        void set_sweptAreaOpenings(Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
+        void set_sweptAreaOpenings(const Curve* instances, int64_t count) { SetObjectProperty<Curve>("sweptAreaOpenings", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..-1</summary>
-        void set_sweptAreaOpenings(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaOpenings", instances, count); }
+        void set_sweptAreaOpenings(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("sweptAreaOpenings", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..-1</summary>
         Curve* get_sweptAreaOpenings(int64_t* pCount) { return GetObjectProperty<Curve>("sweptAreaOpenings", pCount); }
         int64_t* get_sweptAreaOpenings_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("sweptAreaOpenings", pCount); }
@@ -5227,7 +5227,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_bottomPolygon(Curve& instance) { SetObjectProperty<Curve>("bottomPolygon", &instance, 1); }
+        void set_bottomPolygon(const Curve& instance) { SetObjectProperty<Curve>("bottomPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_bottomPolygon() { return GetObjectProperty<Curve>("bottomPolygon", null); }
         ///<summary>Sets values of connectionMap. OWL cardinality 0..-1</summary>
@@ -5255,11 +5255,11 @@ namespace GeometryKernel
         ///<summary>Gets value of hasTop, returns null is the property was not set</summary>
         bool* get_hasTop() { return GetDatatypeProperty<bool>("hasTop", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_path(Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
+        void set_path(const Curve& instance) { SetObjectProperty<Curve>("path", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", null); }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
-        void set_topPolygon(Curve& instance) { SetObjectProperty<Curve>("topPolygon", &instance, 1); }
+        void set_topPolygon(const Curve& instance) { SetObjectProperty<Curve>("topPolygon", &instance, 1); }
         ///<summary>Get related instance</summary>
         Curve* get_topPolygon() { return GetObjectProperty<Curve>("topPolygon", null); }
         ///<summary>Sets value of usesAbsolutePlacement</summary>
@@ -5401,11 +5401,11 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_matrix(Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
+        void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_object(GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
+        void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
     };
@@ -5455,9 +5455,9 @@ namespace GeometryKernel
         ///<summary>Gets value of offsetZ, returns null is the property was not set</summary>
         double* get_offsetZ() { return GetDatatypeProperty<double>("offsetZ", null); }
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 0..3</summary>
-        void set_pointReferences(Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("pointReferences", instances, count); }
+        void set_pointReferences(const Point3D* instances, int64_t count) { SetObjectProperty<Point3D>("pointReferences", instances, count); }
         ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 0..3</summary>
-        void set_pointReferences(int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("pointReferences", instances, count); }
+        void set_pointReferences(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("pointReferences", instances, count); }
         ///<summary>Get an array of related instances. OWL cardinality 0..3</summary>
         Point3D* get_pointReferences(int64_t* pCount) { return GetObjectProperty<Point3D>("pointReferences", pCount); }
         int64_t* get_pointReferences_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("pointReferences", pCount); }
@@ -5496,7 +5496,7 @@ namespace GeometryKernel
         ///<summary>Gets value of innerFraction, returns null is the property was not set</summary>
         double* get_innerFraction() { return GetDatatypeProperty<double>("innerFraction", null); }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
-        void set_object(GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
+        void set_object(const GeometricItem& instance) { SetObjectProperty<GeometricItem>("object", &instance, 1); }
         ///<summary>Get related instance</summary>
         GeometricItem* get_object() { return GetObjectProperty<GeometricItem>("object", null); }
         ///<summary>Sets value of outerFraction</summary>
@@ -5643,7 +5643,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_matrix(Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
+        void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
     };
@@ -5677,7 +5677,7 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
-        void set_matrix(Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
+        void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
         Matrix* get_matrix() { return GetObjectProperty<Matrix>("matrix", null); }
     };

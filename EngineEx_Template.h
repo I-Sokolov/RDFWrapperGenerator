@@ -125,7 +125,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// 
         /// </summary>
-        template<class TInstance> void SetObjectProperty(string name, TInstance* instances, int64_t count)
+        template<class TInstance> void SetObjectProperty(string name, const TInstance* instances, int64_t count)
         {
             auto propId = GetPropertyId(name);
             auto res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
@@ -202,10 +202,10 @@ namespace NAMESPACE_NAME
         double* get_PROPERTY_NAMEasType(int64_t* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: SetObjectProperty
         ///<summary>Sets relationship from this instance to an instance of Instance</summary>
-        void set_PROPERTY_NAME(Instance& instance) { SetObjectProperty<Instance>("PROPERTY_NAME", &instance, 1); }
+        void set_PROPERTY_NAME(const Instance& instance) { SetObjectProperty<Instance>("PROPERTY_NAME", &instance, 1); }
 //## TEMPLATE SetObjectArrayProperty
         ///<summary>Sets relationships from this instance to an array of Instance. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        void set_PROPERTY_NAME(Instance* instances, int64_t count) { SetObjectProperty<Instance>("PROPERTY_NAME", instances, count); }
+        void set_PROPERTY_NAME(const Instance* instances, int64_t count) { SetObjectProperty<Instance>("PROPERTY_NAME", instances, count); }
 //## TEMPLATE GetObjectProperty
         ///<summary>Get related instance</summary>
         Instance* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Instance>("PROPERTY_NAME", null); }
