@@ -472,7 +472,29 @@ namespace RDFWrappers
                 
                 if (!codeProvider.IsValidIdentifier(name))
                 {
-                    var id = codeProvider.CreateValidIdentifier(name);
+                    //does not work as expected, var id = codeProvider.CreateValidIdentifier(name);
+                    bool first = true;
+                    var builder = new System.Text.StringBuilder();
+                    foreach (var ch in name)
+                    {
+                        if (first && char.IsLetter(ch) || !first && char.IsLetterOrDigit(ch))
+                        {
+                            //fits
+                            builder.Append(ch);
+                        }
+                        else
+                        {
+                            //replace
+                            builder.Append("_R");
+                            builder.Append(((byte)ch).ToString());
+                            builder.Append("R_");
+                        }
+
+                        first = false;
+                    }
+
+                    var id = builder.ToString();
+
                     Console.Write("!!!  {0} is not a valid identifier, changed to {1}", name, id);
                     return id;
                 }
