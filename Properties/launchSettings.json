@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "RDFWrappers": {
+      "commandName": "Project",
+      "commandLineArgs": "--cs ..\\..\\..\\Examples\\GeometryKernel.cs --h ..\\..\\..\\Examples\\GeometryKernel.h",
+      "nativeDebugging": true
+    }
+  }
+}
