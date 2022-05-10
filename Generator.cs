@@ -154,8 +154,6 @@ namespace RDFWrappers
             m_addedProperties = new HashSet<string>();
             m_replacements = new Dictionary<string, string>();
 
-            m_replacements.Add("string?", "string");
-
             //
             //
             m_replacements.Add(KWD_CLASS_NAME, clsName);
@@ -232,6 +230,11 @@ namespace RDFWrappers
                 {
                     code = code.Replace(r.Key, r.Value);
                 }
+            }
+
+            if (m_cs)
+            {
+                code = code.Replace("string?", "string"); //warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
             }
 
             writer.Write(code);

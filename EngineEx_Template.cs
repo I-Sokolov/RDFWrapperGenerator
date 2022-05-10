@@ -2,7 +2,7 @@
 // Helper classes (C# wrappers)
 //
 using System;
-using System.Runtime.InteropServices;
+using Engine;
 
 namespace NAMESPACE_NAME
 {
