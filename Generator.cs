@@ -149,7 +149,7 @@ namespace RDFWrappers
                 }
             }
 
-            AssertIdentifier(clsName);
+            clsName = ValidateIdentifier(clsName);
 
             m_addedProperties = new HashSet<string>();
             m_replacements = new Dictionary<string, string>();
@@ -170,7 +170,7 @@ namespace RDFWrappers
             {
                 var parentId = itParent.Current;
                 baseClass = m_schema.GetNameOfClass(parentId);
-                AssertIdentifier(baseClass);
+                baseClass = ValidateIdentifier(baseClass);
 
                 //gather base classes properties to avoid override here
                 CollectParentProperties(parentId);
@@ -462,15 +462,21 @@ namespace RDFWrappers
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        private void AssertIdentifier (string name)
+        public static string ValidateIdentifier (string name)
         {
             using (var codeProvider = System.CodeDom.Compiler.CodeDomProvider.CreateProvider("C#"))
             {
-                Verify(codeProvider.IsValidIdentifier(name), name + " is invalid identifier");
+                
+                if (!codeProvider.IsValidIdentifier(name))
+                {
+                    var id = codeProvider.CreateValidIdentifier(name);
+                    Console.Write("!!!  {0} is not a valid identifier, changed to {1}", name, id);
+                    return id;
+                }
+                else
+                {
+                    return name;
+                }
             }
         }
     }

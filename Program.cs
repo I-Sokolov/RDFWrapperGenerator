@@ -7,16 +7,16 @@ namespace RDFWrappers
     {
         public class Options
         {
-            [CommandLine.Option("model", Default = "", HelpText = "Pathname of the model containing the ontology to generate wrapper classes for. If no model is given, it will generate wrapper classes for geometry kernel.")]
+            [CommandLine.Option("model", HelpText = "Pathname of the model containing the ontology to generate wrapper classes for. If no model is given, it will generate classes for GeometryKernel.")]
             public string modelFile { get; set; }
 
-            [CommandLine.Option("cs", Default="EngineEx.cs", HelpText = "Pathnamte of c# file to be generated.")]
+            [CommandLine.Option("cs", HelpText = "Pathnamte of c# file to be generated. Default is model name.")]
             public string csFile { get; set; }
 
-            [CommandLine.Option('h', Default = "EngineEx.h", HelpText = "Pathname of c++ header file to be generated.")]
+            [CommandLine.Option('h', HelpText = "Pathname of c++ header file to be generated. Default is model name.")]
             public string hFile { get; set; }
 
-            [CommandLine.Option("namespace", Default = "engine", HelpText = "Namespcase, default is model name or Engine if no model file was specified.")]
+            [CommandLine.Option("namespace", HelpText = "Namespase. Default is model name.")]
             public string Namespace { get; set; }
 
             [CommandLine.Option("printClasses", Default = false, HelpText = "Print model classes with properties.")]
@@ -40,13 +40,33 @@ namespace RDFWrappers
                 Console.WriteLine("");
 
                 //
+                // Update and validate options
                 //
                 if (string.IsNullOrWhiteSpace (options.modelFile))
                 {
                     options.modelFile = null;
                 }
 
-                Console.WriteLine("Generating classes for " + (options.modelFile == null ? "Geometry Kernel" : options.modelFile));
+                string baseName = (options.modelFile == null ? "GeometryKernel" : options.modelFile);
+
+                if (string.IsNullOrWhiteSpace (options.csFile))
+                {
+                    options.csFile = baseName + ".cs";
+                }
+                if (string.IsNullOrWhiteSpace (options.hFile))
+                {
+                    options.hFile = baseName + ".h";
+                }
+                if (string.IsNullOrWhiteSpace (options.Namespace))
+                {
+                    options.Namespace = baseName;
+                }
+                options.Namespace = Generator.ValidateIdentifier(options.Namespace);
+
+                //
+                // Main course
+                //
+                Console.WriteLine("Generating classes for " + baseName);
                 var model = Engine.x86_64.OpenModel(options.modelFile);
                 Console.WriteLine();
 
