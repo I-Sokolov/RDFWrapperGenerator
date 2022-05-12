@@ -571,9 +571,9 @@ namespace GEOM
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
         public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of type</summary>
-        public void set_type(long value) { SetDatatypeProperty ("type", value); }
+        public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public long? get_type() { var arr = GetDatatypeProperty_long("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of AlignedSegments</summary>
         public void set_vertical(AlignedSegments instance) { SetObjectProperty("vertical", instance); }
         ///<summary>Get related instance</summary>
@@ -690,9 +690,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of size</summary>
         public void set_size(double value) { SetDatatypeProperty ("size", value); }
         ///<summary>Gets value of size, returns null is the property was not set</summary>
@@ -759,9 +759,9 @@ namespace GEOM
        //
 
         ///<summary>Sets value of setting</summary>
-        public void set_setting(long value) { SetDatatypeProperty ("setting", value); }
+        public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public long? get_setting() { var arr = GetDatatypeProperty_long("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -1017,13 +1017,13 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of setting</summary>
-        public void set_setting(long value) { SetDatatypeProperty ("setting", value); }
+        public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public long? get_setting() { var arr = GetDatatypeProperty_long("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of type</summary>
-        public void set_type(long value) { SetDatatypeProperty ("type", value); }
+        public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public long? get_type() { var arr = GetDatatypeProperty_long("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -1128,9 +1128,9 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of type</summary>
-        public void set_type(long value) { SetDatatypeProperty ("type", value); }
+        public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public long? get_type() { var arr = GetDatatypeProperty_long("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -1163,9 +1163,9 @@ namespace GEOM
        //
 
         ///<summary>Sets value of consistencyCheck</summary>
-        public void set_consistencyCheck(long value) { SetDatatypeProperty ("consistencyCheck", value); }
+        public void set_consistencyCheck(Int64 value) { SetDatatypeProperty ("consistencyCheck", value); }
         ///<summary>Gets value of consistencyCheck, returns null is the property was not set</summary>
-        public long? get_consistencyCheck() { var arr = GetDatatypeProperty_long("consistencyCheck"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_consistencyCheck() { var arr = GetDatatypeProperty_Int64("consistencyCheck"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of epsilon</summary>
         public void set_epsilon(double value) { SetDatatypeProperty ("epsilon", value); }
         ///<summary>Gets value of epsilon, returns null is the property was not set</summary>
@@ -1225,25 +1225,25 @@ namespace GEOM
             }
         }
         ///<summary>Sets values of flags. OWL cardinality 0..-1</summary>
-        public void set_flags(long[] values) { SetDatatypeProperty ("flags", values); }
+        public void set_flags(Int64[] values) { SetDatatypeProperty ("flags", values); }
         ///<summary>Gets values of flags. OWL cardinality 0..-1</summary>
-        public long[] get_flags() { return GetDatatypeProperty_long("flags"); }
+        public Int64[] get_flags() { return GetDatatypeProperty_Int64("flags"); }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
         public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets values of indices. OWL cardinality 0..-1</summary>
-        public void set_indices(long[] values) { SetDatatypeProperty ("indices", values); }
+        public void set_indices(Int64[] values) { SetDatatypeProperty ("indices", values); }
         ///<summary>Gets values of indices. OWL cardinality 0..-1</summary>
-        public long[] get_indices() { return GetDatatypeProperty_long("indices"); }
+        public Int64[] get_indices() { return GetDatatypeProperty_Int64("indices"); }
         ///<summary>Sets values of normalCoordinates. OWL cardinality 0..-1</summary>
         public void set_normalCoordinates(double[] values) { SetDatatypeProperty ("normalCoordinates", values); }
         ///<summary>Gets values of normalCoordinates. OWL cardinality 0..-1</summary>
         public double[] get_normalCoordinates() { return GetDatatypeProperty_double("normalCoordinates"); }
         ///<summary>Sets values of normalIndices. OWL cardinality 0..-1</summary>
-        public void set_normalIndices(long[] values) { SetDatatypeProperty ("normalIndices", values); }
+        public void set_normalIndices(Int64[] values) { SetDatatypeProperty ("normalIndices", values); }
         ///<summary>Gets values of normalIndices. OWL cardinality 0..-1</summary>
-        public long[] get_normalIndices() { return GetDatatypeProperty_long("normalIndices"); }
+        public Int64[] get_normalIndices() { return GetDatatypeProperty_Int64("normalIndices"); }
         ///<summary>Sets value of relativeEpsilon</summary>
         public void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", value); }
         ///<summary>Gets value of relativeEpsilon, returns null is the property was not set</summary>
@@ -1253,9 +1253,9 @@ namespace GEOM
         ///<summary>Gets values of textureCoordinates. OWL cardinality 0..-1</summary>
         public double[] get_textureCoordinates() { return GetDatatypeProperty_double("textureCoordinates"); }
         ///<summary>Sets values of textureIndices. OWL cardinality 0..-1</summary>
-        public void set_textureIndices(long[] values) { SetDatatypeProperty ("textureIndices", values); }
+        public void set_textureIndices(Int64[] values) { SetDatatypeProperty ("textureIndices", values); }
         ///<summary>Gets values of textureIndices. OWL cardinality 0..-1</summary>
-        public long[] get_textureIndices() { return GetDatatypeProperty_long("textureIndices"); }
+        public Int64[] get_textureIndices() { return GetDatatypeProperty_Int64("textureIndices"); }
         ///<summary>Sets values of vertices. OWL cardinality 0..-1</summary>
         public void set_vertices(double[] values) { SetDatatypeProperty ("vertices", values); }
         ///<summary>Gets values of vertices. OWL cardinality 0..-1</summary>
@@ -1335,17 +1335,17 @@ namespace GEOM
        //
 
         ///<summary>Sets values of knotMultiplicities. OWL cardinality 0..-1</summary>
-        public void set_knotMultiplicities(long[] values) { SetDatatypeProperty ("knotMultiplicities", values); }
+        public void set_knotMultiplicities(Int64[] values) { SetDatatypeProperty ("knotMultiplicities", values); }
         ///<summary>Gets values of knotMultiplicities. OWL cardinality 0..-1</summary>
-        public long[] get_knotMultiplicities() { return GetDatatypeProperty_long("knotMultiplicities"); }
+        public Int64[] get_knotMultiplicities() { return GetDatatypeProperty_Int64("knotMultiplicities"); }
         ///<summary>Sets values of knots. OWL cardinality 2..-1</summary>
         public void set_knots(double[] values) { SetDatatypeProperty ("knots", values); }
         ///<summary>Gets values of knots. OWL cardinality 2..-1</summary>
         public double[] get_knots() { return GetDatatypeProperty_double("knots"); }
         ///<summary>Sets value of setting</summary>
-        public void set_setting(long value) { SetDatatypeProperty ("setting", value); }
+        public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public long? get_setting() { var arr = GetDatatypeProperty_long("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -1378,21 +1378,21 @@ namespace GEOM
        //
 
         ///<summary>Sets value of setting</summary>
-        public void set_setting(long value) { SetDatatypeProperty ("setting", value); }
+        public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public long? get_setting() { var arr = GetDatatypeProperty_long("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
-        public void set_uKnotMultiplicities(long[] values) { SetDatatypeProperty ("uKnotMultiplicities", values); }
+        public void set_uKnotMultiplicities(Int64[] values) { SetDatatypeProperty ("uKnotMultiplicities", values); }
         ///<summary>Gets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
-        public long[] get_uKnotMultiplicities() { return GetDatatypeProperty_long("uKnotMultiplicities"); }
+        public Int64[] get_uKnotMultiplicities() { return GetDatatypeProperty_Int64("uKnotMultiplicities"); }
         ///<summary>Sets values of uKnots. OWL cardinality 2..-1</summary>
         public void set_uKnots(double[] values) { SetDatatypeProperty ("uKnots", values); }
         ///<summary>Gets values of uKnots. OWL cardinality 2..-1</summary>
         public double[] get_uKnots() { return GetDatatypeProperty_double("uKnots"); }
         ///<summary>Sets values of vKnotMultiplicities. OWL cardinality 0..-1</summary>
-        public void set_vKnotMultiplicities(long[] values) { SetDatatypeProperty ("vKnotMultiplicities", values); }
+        public void set_vKnotMultiplicities(Int64[] values) { SetDatatypeProperty ("vKnotMultiplicities", values); }
         ///<summary>Gets values of vKnotMultiplicities. OWL cardinality 0..-1</summary>
-        public long[] get_vKnotMultiplicities() { return GetDatatypeProperty_long("vKnotMultiplicities"); }
+        public Int64[] get_vKnotMultiplicities() { return GetDatatypeProperty_Int64("vKnotMultiplicities"); }
         ///<summary>Sets values of vKnots. OWL cardinality 2..-1</summary>
         public void set_vKnots(double[] values) { SetDatatypeProperty ("vKnots", values); }
         ///<summary>Gets values of vKnots. OWL cardinality 2..-1</summary>
@@ -1651,9 +1651,9 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of type</summary>
-        public void set_type(long value) { SetDatatypeProperty ("type", value); }
+        public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public long? get_type() { var arr = GetDatatypeProperty_long("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -1718,17 +1718,17 @@ namespace GEOM
         ///<summary>Gets value of length, returns null is the property was not set</summary>
         public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of orientation</summary>
-        public void set_orientation(long value) { SetDatatypeProperty ("orientation", value); }
+        public void set_orientation(Int64 value) { SetDatatypeProperty ("orientation", value); }
         ///<summary>Gets value of orientation, returns null is the property was not set</summary>
-        public long? get_orientation() { var arr = GetDatatypeProperty_long("orientation"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_orientation() { var arr = GetDatatypeProperty_Int64("orientation"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -1787,9 +1787,9 @@ namespace GEOM
        //
 
         ///<summary>Sets value of consistencyCheck</summary>
-        public void set_consistencyCheck(long value) { SetDatatypeProperty ("consistencyCheck", value); }
+        public void set_consistencyCheck(Int64 value) { SetDatatypeProperty ("consistencyCheck", value); }
         ///<summary>Gets value of consistencyCheck, returns null is the property was not set</summary>
-        public long? get_consistencyCheck() { var arr = GetDatatypeProperty_long("consistencyCheck"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_consistencyCheck() { var arr = GetDatatypeProperty_Int64("consistencyCheck"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of epsilon</summary>
         public void set_epsilon(double value) { SetDatatypeProperty ("epsilon", value); }
         ///<summary>Gets value of epsilon, returns null is the property was not set</summary>
@@ -2086,9 +2086,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -2125,9 +2125,9 @@ namespace GEOM
         ///<summary>Gets value of a, returns null is the property was not set</summary>
         public double? get_a() { var arr = GetDatatypeProperty_double("a"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of size</summary>
         public void set_size(double value) { SetDatatypeProperty ("size", value); }
         ///<summary>Gets value of size, returns null is the property was not set</summary>
@@ -2176,9 +2176,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of semiVerticalAngle</summary>
         public void set_semiVerticalAngle(double value) { SetDatatypeProperty ("semiVerticalAngle", value); }
         ///<summary>Gets value of semiVerticalAngle, returns null is the property was not set</summary>
@@ -2215,9 +2215,9 @@ namespace GEOM
        //
 
         ///<summary>Sets value of instanceReference</summary>
-        public void set_instanceReference(long value) { SetDatatypeProperty ("instanceReference", value); }
+        public void set_instanceReference(Int64 value) { SetDatatypeProperty ("instanceReference", value); }
         ///<summary>Gets value of instanceReference, returns null is the property was not set</summary>
-        public long? get_instanceReference() { var arr = GetDatatypeProperty_long("instanceReference"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_instanceReference() { var arr = GetDatatypeProperty_Int64("instanceReference"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -2499,9 +2499,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -2538,9 +2538,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -2581,9 +2581,9 @@ namespace GEOM
         ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
         public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -2830,9 +2830,9 @@ namespace GEOM
         ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
         public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -2903,9 +2903,9 @@ namespace GEOM
         ///<summary>Gets values of openingPoints. OWL cardinality 0..-1</summary>
         public double[] get_openingPoints() { return GetDatatypeProperty_double("openingPoints"); }
         ///<summary>Sets values of openingSizes. OWL cardinality 0..-1</summary>
-        public void set_openingSizes(long[] values) { SetDatatypeProperty ("openingSizes", values); }
+        public void set_openingSizes(Int64[] values) { SetDatatypeProperty ("openingSizes", values); }
         ///<summary>Gets values of openingSizes. OWL cardinality 0..-1</summary>
-        public long[] get_openingSizes() { return GetDatatypeProperty_long("openingSizes"); }
+        public Int64[] get_openingSizes() { return GetDatatypeProperty_Int64("openingSizes"); }
         ///<summary>Sets values of points. OWL cardinality 6..-1</summary>
         public void set_points(double[] values) { SetDatatypeProperty ("points", values); }
         ///<summary>Gets values of points. OWL cardinality 6..-1</summary>
@@ -2962,13 +2962,13 @@ namespace GEOM
         ///<summary>Gets values of openingPointsEnd. OWL cardinality 0..-1</summary>
         public double[] get_openingPointsEnd() { return GetDatatypeProperty_double("openingPointsEnd"); }
         ///<summary>Sets values of openingSizes. OWL cardinality 0..-1</summary>
-        public void set_openingSizes(long[] values) { SetDatatypeProperty ("openingSizes", values); }
+        public void set_openingSizes(Int64[] values) { SetDatatypeProperty ("openingSizes", values); }
         ///<summary>Gets values of openingSizes. OWL cardinality 0..-1</summary>
-        public long[] get_openingSizes() { return GetDatatypeProperty_long("openingSizes"); }
+        public Int64[] get_openingSizes() { return GetDatatypeProperty_Int64("openingSizes"); }
         ///<summary>Sets values of openingSizesEnd. OWL cardinality 0..-1</summary>
-        public void set_openingSizesEnd(long[] values) { SetDatatypeProperty ("openingSizesEnd", values); }
+        public void set_openingSizesEnd(Int64[] values) { SetDatatypeProperty ("openingSizesEnd", values); }
         ///<summary>Gets values of openingSizesEnd. OWL cardinality 0..-1</summary>
-        public long[] get_openingSizesEnd() { return GetDatatypeProperty_long("openingSizesEnd"); }
+        public Int64[] get_openingSizesEnd() { return GetDatatypeProperty_Int64("openingSizesEnd"); }
         ///<summary>Sets values of points. OWL cardinality 6..-1</summary>
         public void set_points(double[] values) { SetDatatypeProperty ("points", values); }
         ///<summary>Gets values of points. OWL cardinality 6..-1</summary>
@@ -3335,9 +3335,9 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of setting</summary>
-        public void set_setting(long value) { SetDatatypeProperty ("setting", value); }
+        public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public long? get_setting() { var arr = GetDatatypeProperty_long("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -3424,9 +3424,9 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of setting</summary>
-        public void set_setting(long value) { SetDatatypeProperty ("setting", value); }
+        public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public long? get_setting() { var arr = GetDatatypeProperty_long("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -3497,9 +3497,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -5593,9 +5593,9 @@ namespace GEOM
        //
 
         ///<summary>Sets value of count</summary>
-        public void set_count(long value) { SetDatatypeProperty ("count", value); }
+        public void set_count(Int64 value) { SetDatatypeProperty ("count", value); }
         ///<summary>Gets value of count, returns null is the property was not set</summary>
-        public long? get_count() { var arr = GetDatatypeProperty_long("count"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_count() { var arr = GetDatatypeProperty_Int64("count"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         public void set_matrix(Matrix instance) { SetObjectProperty("matrix", instance); }
         ///<summary>Get related instance</summary>
@@ -5822,9 +5822,9 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of type</summary>
-        public void set_type(long value) { SetDatatypeProperty ("type", value); }
+        public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public long? get_type() { var arr = GetDatatypeProperty_long("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -5899,9 +5899,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -5954,9 +5954,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -6104,9 +6104,9 @@ namespace GEOM
         ///<summary>Gets values of coordinates. OWL cardinality 0..6</summary>
         public double[] get_coordinates() { return GetDatatypeProperty_double("coordinates"); }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of thickness</summary>
         public void set_thickness(double value) { SetDatatypeProperty ("thickness", value); }
         ///<summary>Gets value of thickness, returns null is the property was not set</summary>
@@ -6147,9 +6147,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -6186,9 +6186,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -6259,9 +6259,9 @@ namespace GEOM
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
         public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of size</summary>
         public void set_size(double value) { SetDatatypeProperty ("size", value); }
         ///<summary>Gets value of size, returns null is the property was not set</summary>
@@ -6360,21 +6360,21 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of count</summary>
-        public void set_count(long value) { SetDatatypeProperty ("count", value); }
+        public void set_count(Int64 value) { SetDatatypeProperty ("count", value); }
         ///<summary>Gets value of count, returns null is the property was not set</summary>
-        public long? get_count() { var arr = GetDatatypeProperty_long("count"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_count() { var arr = GetDatatypeProperty_Int64("count"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of degree</summary>
-        public void set_degree(long value) { SetDatatypeProperty ("degree", value); }
+        public void set_degree(Int64 value) { SetDatatypeProperty ("degree", value); }
         ///<summary>Gets value of degree, returns null is the property was not set</summary>
-        public long? get_degree() { var arr = GetDatatypeProperty_long("degree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_degree() { var arr = GetDatatypeProperty_Int64("degree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationLength</summary>
         public void set_segmentationLength(double value) { SetDatatypeProperty ("segmentationLength", value); }
         ///<summary>Gets value of segmentationLength, returns null is the property was not set</summary>
         public double? get_segmentationLength() { var arr = GetDatatypeProperty_double("segmentationLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -6465,41 +6465,41 @@ namespace GEOM
         ///<summary>Gets value of segmentationLength, returns null is the property was not set</summary>
         public double? get_segmentationLength() { var arr = GetDatatypeProperty_double("segmentationLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of uClosed</summary>
         public void set_uClosed(bool value) { SetDatatypeProperty ("uClosed", value); }
         ///<summary>Gets value of uClosed, returns null is the property was not set</summary>
         public bool? get_uClosed() { var arr = GetDatatypeProperty_bool("uClosed"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of uCount</summary>
-        public void set_uCount(long value) { SetDatatypeProperty ("uCount", value); }
+        public void set_uCount(Int64 value) { SetDatatypeProperty ("uCount", value); }
         ///<summary>Gets value of uCount, returns null is the property was not set</summary>
-        public long? get_uCount() { var arr = GetDatatypeProperty_long("uCount"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_uCount() { var arr = GetDatatypeProperty_Int64("uCount"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of uDegree</summary>
-        public void set_uDegree(long value) { SetDatatypeProperty ("uDegree", value); }
+        public void set_uDegree(Int64 value) { SetDatatypeProperty ("uDegree", value); }
         ///<summary>Gets value of uDegree, returns null is the property was not set</summary>
-        public long? get_uDegree() { var arr = GetDatatypeProperty_long("uDegree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_uDegree() { var arr = GetDatatypeProperty_Int64("uDegree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of uSegmentationParts</summary>
-        public void set_uSegmentationParts(long value) { SetDatatypeProperty ("uSegmentationParts", value); }
+        public void set_uSegmentationParts(Int64 value) { SetDatatypeProperty ("uSegmentationParts", value); }
         ///<summary>Gets value of uSegmentationParts, returns null is the property was not set</summary>
-        public long? get_uSegmentationParts() { var arr = GetDatatypeProperty_long("uSegmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_uSegmentationParts() { var arr = GetDatatypeProperty_Int64("uSegmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of vClosed</summary>
         public void set_vClosed(bool value) { SetDatatypeProperty ("vClosed", value); }
         ///<summary>Gets value of vClosed, returns null is the property was not set</summary>
         public bool? get_vClosed() { var arr = GetDatatypeProperty_bool("vClosed"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of vCount</summary>
-        public void set_vCount(long value) { SetDatatypeProperty ("vCount", value); }
+        public void set_vCount(Int64 value) { SetDatatypeProperty ("vCount", value); }
         ///<summary>Gets value of vCount, returns null is the property was not set</summary>
-        public long? get_vCount() { var arr = GetDatatypeProperty_long("vCount"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_vCount() { var arr = GetDatatypeProperty_Int64("vCount"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of vDegree</summary>
-        public void set_vDegree(long value) { SetDatatypeProperty ("vDegree", value); }
+        public void set_vDegree(Int64 value) { SetDatatypeProperty ("vDegree", value); }
         ///<summary>Gets value of vDegree, returns null is the property was not set</summary>
-        public long? get_vDegree() { var arr = GetDatatypeProperty_long("vDegree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_vDegree() { var arr = GetDatatypeProperty_Int64("vDegree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of vSegmentationParts</summary>
-        public void set_vSegmentationParts(long value) { SetDatatypeProperty ("vSegmentationParts", value); }
+        public void set_vSegmentationParts(Int64 value) { SetDatatypeProperty ("vSegmentationParts", value); }
         ///<summary>Gets value of vSegmentationParts, returns null is the property was not set</summary>
-        public long? get_vSegmentationParts() { var arr = GetDatatypeProperty_long("vSegmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_vSegmentationParts() { var arr = GetDatatypeProperty_Int64("vSegmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -6820,9 +6820,9 @@ namespace GEOM
             }
         }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -7416,9 +7416,9 @@ namespace GEOM
             }
         }
         ///<summary>Sets values of connectionMap. OWL cardinality 0..-1</summary>
-        public void set_connectionMap(long[] values) { SetDatatypeProperty ("connectionMap", values); }
+        public void set_connectionMap(Int64[] values) { SetDatatypeProperty ("connectionMap", values); }
         ///<summary>Gets values of connectionMap. OWL cardinality 0..-1</summary>
-        public long[] get_connectionMap() { return GetDatatypeProperty_long("connectionMap"); }
+        public Int64[] get_connectionMap() { return GetDatatypeProperty_Int64("connectionMap"); }
         ///<summary>Sets values of forcedStaticDirection. OWL cardinality 0..3</summary>
         public void set_forcedStaticDirection(double[] values) { SetDatatypeProperty ("forcedStaticDirection", values); }
         ///<summary>Gets values of forcedStaticDirection. OWL cardinality 0..3</summary>
@@ -7551,9 +7551,9 @@ namespace GEOM
         ///<summary>Gets value of scalingY, returns null is the property was not set</summary>
         public double? get_scalingY() { var arr = GetDatatypeProperty_double("scalingY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of type</summary>
-        public void set_type(long value) { SetDatatypeProperty ("type", value); }
+        public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public long? get_type() { var arr = GetDatatypeProperty_long("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -7594,9 +7594,9 @@ namespace GEOM
         ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
         public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -7637,9 +7637,9 @@ namespace GEOM
         ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
         public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -7811,9 +7811,9 @@ namespace GEOM
         ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
         public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
-        public void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", value); }
+        public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public long? get_segmentationParts() { var arr = GetDatatypeProperty_long("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
     }
 
 
@@ -8010,9 +8010,9 @@ namespace GEOM
        //
 
         ///<summary>Sets values of indices. OWL cardinality 0..-1</summary>
-        public void set_indices(long[] values) { SetDatatypeProperty ("indices", values); }
+        public void set_indices(Int64[] values) { SetDatatypeProperty ("indices", values); }
         ///<summary>Gets values of indices. OWL cardinality 0..-1</summary>
-        public long[] get_indices() { return GetDatatypeProperty_long("indices"); }
+        public Int64[] get_indices() { return GetDatatypeProperty_Int64("indices"); }
         ///<summary>Sets values of vertices. OWL cardinality 3..-1</summary>
         public void set_vertices(double[] values) { SetDatatypeProperty ("vertices", values); }
         ///<summary>Gets values of vertices. OWL cardinality 3..-1</summary>
@@ -8295,7 +8295,7 @@ namespace GEOM
         /// <summary>
         /// 
         /// </summary>
-        public void SetDatatypeProperty(string name, long value)
+        public void SetDatatypeProperty(string name, Int64 value)
         {
             var propId = GetPropertyId(name);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
@@ -8305,7 +8305,7 @@ namespace GEOM
         /// <summary>
         /// 
         /// </summary>
-        public void SetDatatypeProperty(string name, long[] values)
+        public void SetDatatypeProperty(string name, Int64[] values)
         {
             var propId = GetPropertyId(name);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
@@ -8385,7 +8385,7 @@ namespace GEOM
         /// <summary>
         /// 
         /// </summary>
-        public long[] GetDatatypeProperty_long(string name)
+        public Int64[] GetDatatypeProperty_Int64(string name)
         {
             var propId = GetPropertyId(name);
 
@@ -8396,7 +8396,7 @@ namespace GEOM
 
             if (card > 0)
             {
-                var values = new long[card];
+                var values = new Int64[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
                 return values;
@@ -8421,7 +8421,7 @@ namespace GEOM
 
             if (card > 0)
             {
-                var values = new long[card];
+                var values = new Int64[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
                 var bools = new bool[card];

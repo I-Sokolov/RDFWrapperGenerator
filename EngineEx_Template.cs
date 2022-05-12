@@ -231,7 +231,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// 
         /// </summary>
-        public void SetDatatypeProperty(string name, long value)
+        public void SetDatatypeProperty(string name, Int64 value)
         {
             var propId = GetPropertyId(name);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
@@ -241,7 +241,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// 
         /// </summary>
-        public void SetDatatypeProperty(string name, long[] values)
+        public void SetDatatypeProperty(string name, Int64[] values)
         {
             var propId = GetPropertyId(name);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
@@ -321,7 +321,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// 
         /// </summary>
-        public long[] GetDatatypeProperty_long(string name)
+        public Int64[] GetDatatypeProperty_Int64(string name)
         {
             var propId = GetPropertyId(name);
 
@@ -332,7 +332,7 @@ namespace NAMESPACE_NAME
 
             if (card > 0)
             {
-                var values = new long[card];
+                var values = new Int64[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
                 return values;
@@ -357,7 +357,7 @@ namespace NAMESPACE_NAME
 
             if (card > 0)
             {
-                var values = new long[card];
+                var values = new Int64[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
                 var bools = new bool[card];
