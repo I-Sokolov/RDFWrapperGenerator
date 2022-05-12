@@ -1320,7 +1320,7 @@ void		DECL STDC	SetClassParentEx(
 								);
 
 //
-//		GetParentsByIterator                        (http://rdf.bg/gkdoc/CP64/GetParentsByIterator.html)
+//		GetClassParentsByIterator                   (http://rdf.bg/gkdoc/CP64/GetClassParentsByIterator.html)
 //				int64_t				owlClass							IN
 //				int64_t				parentOwlClass						IN
 //
@@ -1330,7 +1330,7 @@ void		DECL STDC	SetClassParentEx(
 //	If input parent is zero, the handle will point to the first relevant parent.
 //	If all parent are past (or no relevant parent are found), the function will return 0.
 //
-int64_t		DECL STDC	GetParentsByIterator(
+int64_t		DECL STDC	GetClassParentsByIterator(
 									int64_t				owlClass,
 									int64_t				parentOwlClass
 								);
@@ -1788,6 +1788,22 @@ int64_t		DECL STDC	GetRangeRestrictionsByIteratorEx(
 									int64_t				model,
 									int64_t				rdfProperty,
 									int64_t				owlClass
+								);
+
+//
+//		GetPropertyParentsByIterator                (http://rdf.bg/gkdoc/CP64/GetPropertyParentsByIterator.html)
+//				int64_t				rdfProperty							IN
+//				int64_t				parentRdfProperty					IN
+//
+//				int64_t				returns								OUT
+//
+//	Returns the next parent of the property.
+//	If input parent is zero, the handle will point to the first relevant parent.
+//	If all parent are past (or no relevant parent are found), the function will return 0.
+//
+int64_t		DECL STDC	GetPropertyParentsByIterator(
+									int64_t				rdfProperty,
+									int64_t				parentRdfProperty
 								);
 
 //
@@ -3716,7 +3732,7 @@ double		DECL STDC	GetVolume(
 //				const void			* indexBuffer						IN
 //				double				* center							IN / OUT
 //
-//				void				returns
+//				double				* returns							OUT
 //
 //	This function calculates the center of an instance.
 //	For perfomance reasons it is benefitial to call it with vertex and index buffer when
@@ -3737,7 +3753,7 @@ double		DECL STDC	GetVolume(
 //	Note: in case precision is important and vertex array is 32 bit it is advised to
 //		  set vertexBuffer and indexBuffer to 0 even if arrays are existing.
 //
-void		DECL STDC	GetCenter(
+double		DECL * STDC	GetCenter(
 									int64_t				owlInstance,
 									const void			* vertexBuffer,
 									const void			* indexBuffer,
@@ -4089,6 +4105,22 @@ int64_t		DECL STDC	GetPropertyByNameAndType(
 									int64_t				model,
 									const char			* name,
 									int64_t				rdfPropertyType
+								);
+
+//
+//		GetParentsByIterator                        (http://rdf.bg/gkdoc/CP64/GetParentsByIterator___.html)
+//				int64_t				owlClassOrRdfProperty				IN
+//				int64_t				parentOwlClassOrRdfProperty			IN
+//
+//				int64_t				returns								OUT
+//
+//	Returns the next parent of the class or property.
+//	If input parent is zero, the handle will point to the first relevant parent.
+//	If all parent are past (or no relevant parent are found), the function will return 0.
+//
+int64_t		DECL STDC	GetParentsByIterator(
+									int64_t				owlClassOrRdfProperty,
+									int64_t				parentOwlClassOrRdfProperty
 								);
 
 

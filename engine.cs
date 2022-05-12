@@ -1030,7 +1030,7 @@ namespace RDF
 		///	If input parent is zero, the handle will point to the first relevant parent.
 		///	If all parent are past (or no relevant parent are found), the function will return 0.
 		/// </summary>
-		[DllImport(enginedll, EntryPoint = "GetParentsByIterator")]
+		[DllImport(enginedll, EntryPoint = "GetClassParentsByIterator")]
 		public static extern Int64 GetClassParentsByIterator(Int64 owlClass, Int64 parentOwlClass);
 
 		/// <summary>
