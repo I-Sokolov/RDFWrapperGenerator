@@ -1,13 +1,13 @@
 //
 // Helper classes (C++ wrappers)
 //
+#ifndef __RDF_LTD__GEOM_H
+#define __RDF_LTD__GEOM_H
 
-#ifndef ASSERT
-#define ASSERT assert
-#endif
+#include    <assert.h>
+#include	"engine.h"
 
-
-namespace GeometryKernel
+namespace GEOM
 {
     class AdvancedFace;
     class AdvancedFace2D;
@@ -163,10 +163,10 @@ namespace GeometryKernel
         static int64_t Create(int64_t model, const char* className, const char* instanseName)
         {
             int64_t clsid = GetClassByName(model, className);
-            ASSERT(clsid != 0);
+            assert(clsid != 0);
 
             int64_t instance = CreateInstance(clsid, instanseName);
-            ASSERT(instance != 0);
+            assert(instance != 0);
 
             return instance;
         }
@@ -189,7 +189,7 @@ namespace GeometryKernel
                 int64_t clsid1 = GetInstanceClass(m_instance);
                 int64_t model = GetModel(m_instance);
                 int64_t clsid2 = GetClassByName(model, cls);
-                ASSERT(clsid1 == clsid2);
+                assert(clsid1 == clsid2);
             }
 #endif
         }
@@ -206,10 +206,10 @@ namespace GeometryKernel
         int64_t GetPropertyId(const char* name)
         {
             int64_t model = GetModel(m_instance);
-            ASSERT(model != 0);
+            assert(model != 0);
 
             int64_t propId = GetPropertyByName(model, name);
-            ASSERT(propId != 0);
+            assert(propId != 0);
 
             return propId;
         }
@@ -221,7 +221,7 @@ namespace GeometryKernel
         {
             int64_t propId = GetPropertyId(name);
             int64_t res = ::SetDatatypeProperty(m_instance, propId, values, count);
-            ASSERT(res == 0);
+            assert(res == 0);
         }
 
 
@@ -235,7 +235,7 @@ namespace GeometryKernel
             TElem* values = NULL;
             int64_t count = 0;
             int64_t res = ::GetDatatypeProperty(m_instance, propId, (void**)&values, &count);
-            ASSERT(res == 0);
+            assert(res == 0);
 
             if (pCount) {
                 *pCount = count;
@@ -257,7 +257,7 @@ namespace GeometryKernel
         {
             int64_t propId = GetPropertyId(name);
             int64_t res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
-            ASSERT(res == 0);
+            assert(res == 0);
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace GeometryKernel
             int64_t* values = NULL;
             int64_t count = 0;
             int64_t res = ::GetObjectProperty(m_instance, propId, &values, &count);
-            ASSERT(res == 0);
+            assert(res == 0);
 
             if (pCount) {
                 *pCount = count;
@@ -640,9 +640,9 @@ namespace GeometryKernel
         ///<summary>Gets value of offsetX, returns NULL is the property was not set</summary>
         double* get_offsetX() { return GetDatatypeProperty<double>("offsetX", NULL); }
         ///<summary>Sets value of type</summary>
-        void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
+        void set_type(int64_t value) { SetDatatypeProperty ("type", &value, 1); }
         ///<summary>Gets value of type, returns NULL is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
+        int64_t* get_type() { return GetDatatypeProperty<int64_t>("type", NULL); }
         ///<summary>Sets relationship from this instance to an instance of AlignedSegments</summary>
         void set_vertical(const AlignedSegments& instance) { SetObjectProperty<AlignedSegments>("vertical", &instance, 1); }
         ///<summary>Get related instance</summary>
@@ -795,9 +795,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
         ///<summary>Sets value of size</summary>
         void set_size(double value) { SetDatatypeProperty ("size", &value, 1); }
         ///<summary>Gets value of size, returns NULL is the property was not set</summary>
@@ -848,21 +848,21 @@ namespace GeometryKernel
         Point3D* get_controlPoints(int64_t* pCount) { return GetObjectProperty<Point3D>("controlPoints", pCount); }
         int64_t* get_controlPoints_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("controlPoints", pCount); }
         ///<summary>Sets value of count</summary>
-        void set_count(long value) { SetDatatypeProperty ("count", &value, 1); }
+        void set_count(int64_t value) { SetDatatypeProperty ("count", &value, 1); }
         ///<summary>Gets value of count, returns NULL is the property was not set</summary>
-        long* get_count() { return GetDatatypeProperty<long>("count", NULL); }
+        int64_t* get_count() { return GetDatatypeProperty<int64_t>("count", NULL); }
         ///<summary>Sets value of degree</summary>
-        void set_degree(long value) { SetDatatypeProperty ("degree", &value, 1); }
+        void set_degree(int64_t value) { SetDatatypeProperty ("degree", &value, 1); }
         ///<summary>Gets value of degree, returns NULL is the property was not set</summary>
-        long* get_degree() { return GetDatatypeProperty<long>("degree", NULL); }
+        int64_t* get_degree() { return GetDatatypeProperty<int64_t>("degree", NULL); }
         ///<summary>Sets value of segmentationLength</summary>
         void set_segmentationLength(double value) { SetDatatypeProperty ("segmentationLength", &value, 1); }
         ///<summary>Gets value of segmentationLength, returns NULL is the property was not set</summary>
         double* get_segmentationLength() { return GetDatatypeProperty<double>("segmentationLength", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -980,41 +980,41 @@ namespace GeometryKernel
         ///<summary>Gets value of segmentationLength, returns NULL is the property was not set</summary>
         double* get_segmentationLength() { return GetDatatypeProperty<double>("segmentationLength", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
         ///<summary>Sets value of uClosed</summary>
         void set_uClosed(bool value) { SetDatatypeProperty ("uClosed", &value, 1); }
         ///<summary>Gets value of uClosed, returns NULL is the property was not set</summary>
         bool* get_uClosed() { return GetDatatypeProperty<bool>("uClosed", NULL); }
         ///<summary>Sets value of uCount</summary>
-        void set_uCount(long value) { SetDatatypeProperty ("uCount", &value, 1); }
+        void set_uCount(int64_t value) { SetDatatypeProperty ("uCount", &value, 1); }
         ///<summary>Gets value of uCount, returns NULL is the property was not set</summary>
-        long* get_uCount() { return GetDatatypeProperty<long>("uCount", NULL); }
+        int64_t* get_uCount() { return GetDatatypeProperty<int64_t>("uCount", NULL); }
         ///<summary>Sets value of uDegree</summary>
-        void set_uDegree(long value) { SetDatatypeProperty ("uDegree", &value, 1); }
+        void set_uDegree(int64_t value) { SetDatatypeProperty ("uDegree", &value, 1); }
         ///<summary>Gets value of uDegree, returns NULL is the property was not set</summary>
-        long* get_uDegree() { return GetDatatypeProperty<long>("uDegree", NULL); }
+        int64_t* get_uDegree() { return GetDatatypeProperty<int64_t>("uDegree", NULL); }
         ///<summary>Sets value of uSegmentationParts</summary>
-        void set_uSegmentationParts(long value) { SetDatatypeProperty ("uSegmentationParts", &value, 1); }
+        void set_uSegmentationParts(int64_t value) { SetDatatypeProperty ("uSegmentationParts", &value, 1); }
         ///<summary>Gets value of uSegmentationParts, returns NULL is the property was not set</summary>
-        long* get_uSegmentationParts() { return GetDatatypeProperty<long>("uSegmentationParts", NULL); }
+        int64_t* get_uSegmentationParts() { return GetDatatypeProperty<int64_t>("uSegmentationParts", NULL); }
         ///<summary>Sets value of vClosed</summary>
         void set_vClosed(bool value) { SetDatatypeProperty ("vClosed", &value, 1); }
         ///<summary>Gets value of vClosed, returns NULL is the property was not set</summary>
         bool* get_vClosed() { return GetDatatypeProperty<bool>("vClosed", NULL); }
         ///<summary>Sets value of vCount</summary>
-        void set_vCount(long value) { SetDatatypeProperty ("vCount", &value, 1); }
+        void set_vCount(int64_t value) { SetDatatypeProperty ("vCount", &value, 1); }
         ///<summary>Gets value of vCount, returns NULL is the property was not set</summary>
-        long* get_vCount() { return GetDatatypeProperty<long>("vCount", NULL); }
+        int64_t* get_vCount() { return GetDatatypeProperty<int64_t>("vCount", NULL); }
         ///<summary>Sets value of vDegree</summary>
-        void set_vDegree(long value) { SetDatatypeProperty ("vDegree", &value, 1); }
+        void set_vDegree(int64_t value) { SetDatatypeProperty ("vDegree", &value, 1); }
         ///<summary>Gets value of vDegree, returns NULL is the property was not set</summary>
-        long* get_vDegree() { return GetDatatypeProperty<long>("vDegree", NULL); }
+        int64_t* get_vDegree() { return GetDatatypeProperty<int64_t>("vDegree", NULL); }
         ///<summary>Sets value of vSegmentationParts</summary>
-        void set_vSegmentationParts(long value) { SetDatatypeProperty ("vSegmentationParts", &value, 1); }
+        void set_vSegmentationParts(int64_t value) { SetDatatypeProperty ("vSegmentationParts", &value, 1); }
         ///<summary>Gets value of vSegmentationParts, returns NULL is the property was not set</summary>
-        long* get_vSegmentationParts() { return GetDatatypeProperty<long>("vSegmentationParts", NULL); }
+        int64_t* get_vSegmentationParts() { return GetDatatypeProperty<int64_t>("vSegmentationParts", NULL); }
     };
 
     /// <summary>
@@ -1046,9 +1046,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets value of setting</summary>
-        void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
+        void set_setting(int64_t value) { SetDatatypeProperty ("setting", &value, 1); }
         ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
+        int64_t* get_setting() { return GetDatatypeProperty<int64_t>("setting", NULL); }
     };
 
     /// <summary>
@@ -1100,9 +1100,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radiusII, returns NULL is the property was not set</summary>
         double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -1279,13 +1279,13 @@ namespace GeometryKernel
         ///<summary>Get related instance</summary>
         GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", NULL); }
         ///<summary>Sets value of setting</summary>
-        void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
+        void set_setting(int64_t value) { SetDatatypeProperty ("setting", &value, 1); }
         ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
+        int64_t* get_setting() { return GetDatatypeProperty<int64_t>("setting", NULL); }
         ///<summary>Sets value of type</summary>
-        void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
+        void set_type(int64_t value) { SetDatatypeProperty ("type", &value, 1); }
         ///<summary>Gets value of type, returns NULL is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
+        int64_t* get_type() { return GetDatatypeProperty<int64_t>("type", NULL); }
     };
 
     /// <summary>
@@ -1329,9 +1329,9 @@ namespace GeometryKernel
         ///<summary>Get related instance</summary>
         GeometricItem* get_secondObject() { return GetObjectProperty<GeometricItem>("secondObject", NULL); }
         ///<summary>Sets value of type</summary>
-        void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
+        void set_type(int64_t value) { SetDatatypeProperty ("type", &value, 1); }
         ///<summary>Gets value of type, returns NULL is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
+        int64_t* get_type() { return GetDatatypeProperty<int64_t>("type", NULL); }
     };
 
     /// <summary>
@@ -1363,9 +1363,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets value of consistencyCheck</summary>
-        void set_consistencyCheck(long value) { SetDatatypeProperty ("consistencyCheck", &value, 1); }
+        void set_consistencyCheck(int64_t value) { SetDatatypeProperty ("consistencyCheck", &value, 1); }
         ///<summary>Gets value of consistencyCheck, returns NULL is the property was not set</summary>
-        long* get_consistencyCheck() { return GetDatatypeProperty<long>("consistencyCheck", NULL); }
+        int64_t* get_consistencyCheck() { return GetDatatypeProperty<int64_t>("consistencyCheck", NULL); }
         ///<summary>Sets value of epsilon</summary>
         void set_epsilon(double value) { SetDatatypeProperty ("epsilon", &value, 1); }
         ///<summary>Gets value of epsilon, returns NULL is the property was not set</summary>
@@ -1378,25 +1378,25 @@ namespace GeometryKernel
         Face* get_faces(int64_t* pCount) { return GetObjectProperty<Face>("faces", pCount); }
         int64_t* get_faces_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("faces", pCount); }
         ///<summary>Sets values of flags. OWL cardinality 0..-1</summary>
-        void set_flags(long* values, int64_t count) { SetDatatypeProperty ("flags", values, count); }
+        void set_flags(int64_t* values, int64_t count) { SetDatatypeProperty ("flags", values, count); }
         ///<summary>Gets values of flags. OWL cardinality 0..-1</summary>
-        long* get_flags(int64_t* pCount) { return GetDatatypeProperty<long>("flags", pCount); }
+        int64_t* get_flags(int64_t* pCount) { return GetDatatypeProperty<int64_t>("flags", pCount); }
         ///<summary>Sets value of fraction</summary>
         void set_fraction(double value) { SetDatatypeProperty ("fraction", &value, 1); }
         ///<summary>Gets value of fraction, returns NULL is the property was not set</summary>
         double* get_fraction() { return GetDatatypeProperty<double>("fraction", NULL); }
         ///<summary>Sets values of indices. OWL cardinality 0..-1</summary>
-        void set_indices(long* values, int64_t count) { SetDatatypeProperty ("indices", values, count); }
+        void set_indices(int64_t* values, int64_t count) { SetDatatypeProperty ("indices", values, count); }
         ///<summary>Gets values of indices. OWL cardinality 0..-1</summary>
-        long* get_indices(int64_t* pCount) { return GetDatatypeProperty<long>("indices", pCount); }
+        int64_t* get_indices(int64_t* pCount) { return GetDatatypeProperty<int64_t>("indices", pCount); }
         ///<summary>Sets values of normalCoordinates. OWL cardinality 0..-1</summary>
         void set_normalCoordinates(double* values, int64_t count) { SetDatatypeProperty ("normalCoordinates", values, count); }
         ///<summary>Gets values of normalCoordinates. OWL cardinality 0..-1</summary>
         double* get_normalCoordinates(int64_t* pCount) { return GetDatatypeProperty<double>("normalCoordinates", pCount); }
         ///<summary>Sets values of normalIndices. OWL cardinality 0..-1</summary>
-        void set_normalIndices(long* values, int64_t count) { SetDatatypeProperty ("normalIndices", values, count); }
+        void set_normalIndices(int64_t* values, int64_t count) { SetDatatypeProperty ("normalIndices", values, count); }
         ///<summary>Gets values of normalIndices. OWL cardinality 0..-1</summary>
-        long* get_normalIndices(int64_t* pCount) { return GetDatatypeProperty<long>("normalIndices", pCount); }
+        int64_t* get_normalIndices(int64_t* pCount) { return GetDatatypeProperty<int64_t>("normalIndices", pCount); }
         ///<summary>Sets value of relativeEpsilon</summary>
         void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", &value, 1); }
         ///<summary>Gets value of relativeEpsilon, returns NULL is the property was not set</summary>
@@ -1406,9 +1406,9 @@ namespace GeometryKernel
         ///<summary>Gets values of textureCoordinates. OWL cardinality 0..-1</summary>
         double* get_textureCoordinates(int64_t* pCount) { return GetDatatypeProperty<double>("textureCoordinates", pCount); }
         ///<summary>Sets values of textureIndices. OWL cardinality 0..-1</summary>
-        void set_textureIndices(long* values, int64_t count) { SetDatatypeProperty ("textureIndices", values, count); }
+        void set_textureIndices(int64_t* values, int64_t count) { SetDatatypeProperty ("textureIndices", values, count); }
         ///<summary>Gets values of textureIndices. OWL cardinality 0..-1</summary>
-        long* get_textureIndices(int64_t* pCount) { return GetDatatypeProperty<long>("textureIndices", pCount); }
+        int64_t* get_textureIndices(int64_t* pCount) { return GetDatatypeProperty<int64_t>("textureIndices", pCount); }
         ///<summary>Sets values of vertices. OWL cardinality 0..-1</summary>
         void set_vertices(double* values, int64_t count) { SetDatatypeProperty ("vertices", values, count); }
         ///<summary>Gets values of vertices. OWL cardinality 0..-1</summary>
@@ -1486,17 +1486,17 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets values of knotMultiplicities. OWL cardinality 0..-1</summary>
-        void set_knotMultiplicities(long* values, int64_t count) { SetDatatypeProperty ("knotMultiplicities", values, count); }
+        void set_knotMultiplicities(int64_t* values, int64_t count) { SetDatatypeProperty ("knotMultiplicities", values, count); }
         ///<summary>Gets values of knotMultiplicities. OWL cardinality 0..-1</summary>
-        long* get_knotMultiplicities(int64_t* pCount) { return GetDatatypeProperty<long>("knotMultiplicities", pCount); }
+        int64_t* get_knotMultiplicities(int64_t* pCount) { return GetDatatypeProperty<int64_t>("knotMultiplicities", pCount); }
         ///<summary>Sets values of knots. OWL cardinality 2..-1</summary>
         void set_knots(double* values, int64_t count) { SetDatatypeProperty ("knots", values, count); }
         ///<summary>Gets values of knots. OWL cardinality 2..-1</summary>
         double* get_knots(int64_t* pCount) { return GetDatatypeProperty<double>("knots", pCount); }
         ///<summary>Sets value of setting</summary>
-        void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
+        void set_setting(int64_t value) { SetDatatypeProperty ("setting", &value, 1); }
         ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
+        int64_t* get_setting() { return GetDatatypeProperty<int64_t>("setting", NULL); }
     };
 
     /// <summary>
@@ -1528,21 +1528,21 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets value of setting</summary>
-        void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
+        void set_setting(int64_t value) { SetDatatypeProperty ("setting", &value, 1); }
         ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
+        int64_t* get_setting() { return GetDatatypeProperty<int64_t>("setting", NULL); }
         ///<summary>Sets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
-        void set_uKnotMultiplicities(long* values, int64_t count) { SetDatatypeProperty ("uKnotMultiplicities", values, count); }
+        void set_uKnotMultiplicities(int64_t* values, int64_t count) { SetDatatypeProperty ("uKnotMultiplicities", values, count); }
         ///<summary>Gets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
-        long* get_uKnotMultiplicities(int64_t* pCount) { return GetDatatypeProperty<long>("uKnotMultiplicities", pCount); }
+        int64_t* get_uKnotMultiplicities(int64_t* pCount) { return GetDatatypeProperty<int64_t>("uKnotMultiplicities", pCount); }
         ///<summary>Sets values of uKnots. OWL cardinality 2..-1</summary>
         void set_uKnots(double* values, int64_t count) { SetDatatypeProperty ("uKnots", values, count); }
         ///<summary>Gets values of uKnots. OWL cardinality 2..-1</summary>
         double* get_uKnots(int64_t* pCount) { return GetDatatypeProperty<double>("uKnots", pCount); }
         ///<summary>Sets values of vKnotMultiplicities. OWL cardinality 0..-1</summary>
-        void set_vKnotMultiplicities(long* values, int64_t count) { SetDatatypeProperty ("vKnotMultiplicities", values, count); }
+        void set_vKnotMultiplicities(int64_t* values, int64_t count) { SetDatatypeProperty ("vKnotMultiplicities", values, count); }
         ///<summary>Gets values of vKnotMultiplicities. OWL cardinality 0..-1</summary>
-        long* get_vKnotMultiplicities(int64_t* pCount) { return GetDatatypeProperty<long>("vKnotMultiplicities", pCount); }
+        int64_t* get_vKnotMultiplicities(int64_t* pCount) { return GetDatatypeProperty<int64_t>("vKnotMultiplicities", pCount); }
         ///<summary>Sets values of vKnots. OWL cardinality 2..-1</summary>
         void set_vKnots(double* values, int64_t count) { SetDatatypeProperty ("vKnots", values, count); }
         ///<summary>Gets values of vKnots. OWL cardinality 2..-1</summary>
@@ -1582,9 +1582,9 @@ namespace GeometryKernel
         ///<summary>Gets value of a, returns NULL is the property was not set</summary>
         double* get_a() { return GetDatatypeProperty<double>("a", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
         ///<summary>Sets value of size</summary>
         void set_size(double value) { SetDatatypeProperty ("size", &value, 1); }
         ///<summary>Gets value of size, returns NULL is the property was not set</summary>
@@ -1736,9 +1736,9 @@ namespace GeometryKernel
         ///<summary>Get related instance</summary>
         Plane* get_plane() { return GetObjectProperty<Plane>("plane", NULL); }
         ///<summary>Sets value of type</summary>
-        void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
+        void set_type(int64_t value) { SetDatatypeProperty ("type", &value, 1); }
         ///<summary>Gets value of type, returns NULL is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
+        int64_t* get_type() { return GetDatatypeProperty<int64_t>("type", NULL); }
     };
 
     /// <summary>
@@ -1782,17 +1782,17 @@ namespace GeometryKernel
         ///<summary>Gets value of length, returns NULL is the property was not set</summary>
         double* get_length() { return GetDatatypeProperty<double>("length", NULL); }
         ///<summary>Sets value of orientation</summary>
-        void set_orientation(long value) { SetDatatypeProperty ("orientation", &value, 1); }
+        void set_orientation(int64_t value) { SetDatatypeProperty ("orientation", &value, 1); }
         ///<summary>Gets value of orientation, returns NULL is the property was not set</summary>
-        long* get_orientation() { return GetDatatypeProperty<long>("orientation", NULL); }
+        int64_t* get_orientation() { return GetDatatypeProperty<int64_t>("orientation", NULL); }
         ///<summary>Sets value of radius</summary>
         void set_radius(double value) { SetDatatypeProperty ("radius", &value, 1); }
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -1849,9 +1849,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets value of consistencyCheck</summary>
-        void set_consistencyCheck(long value) { SetDatatypeProperty ("consistencyCheck", &value, 1); }
+        void set_consistencyCheck(int64_t value) { SetDatatypeProperty ("consistencyCheck", &value, 1); }
         ///<summary>Gets value of consistencyCheck, returns NULL is the property was not set</summary>
-        long* get_consistencyCheck() { return GetDatatypeProperty<long>("consistencyCheck", NULL); }
+        int64_t* get_consistencyCheck() { return GetDatatypeProperty<int64_t>("consistencyCheck", NULL); }
         ///<summary>Sets value of epsilon</summary>
         void set_epsilon(double value) { SetDatatypeProperty ("epsilon", &value, 1); }
         ///<summary>Gets value of epsilon, returns NULL is the property was not set</summary>
@@ -2018,9 +2018,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2085,9 +2085,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
         ///<summary>Sets value of semiVerticalAngle</summary>
         void set_semiVerticalAngle(double value) { SetDatatypeProperty ("semiVerticalAngle", &value, 1); }
         ///<summary>Gets value of semiVerticalAngle, returns NULL is the property was not set</summary>
@@ -2123,9 +2123,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets value of instanceReference</summary>
-        void set_instanceReference(long value) { SetDatatypeProperty ("instanceReference", &value, 1); }
+        void set_instanceReference(int64_t value) { SetDatatypeProperty ("instanceReference", &value, 1); }
         ///<summary>Gets value of instanceReference, returns NULL is the property was not set</summary>
-        long* get_instanceReference() { return GetDatatypeProperty<long>("instanceReference", NULL); }
+        int64_t* get_instanceReference() { return GetDatatypeProperty<int64_t>("instanceReference", NULL); }
     };
 
     /// <summary>
@@ -2328,9 +2328,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2366,9 +2366,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2408,9 +2408,9 @@ namespace GeometryKernel
         ///<summary>Gets value of minorRadius, returns NULL is the property was not set</summary>
         double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2631,9 +2631,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radiusII, returns NULL is the property was not set</summary>
         double* get_radiusII() { return GetDatatypeProperty<double>("radiusII", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -2677,9 +2677,9 @@ namespace GeometryKernel
         ///<summary>Gets values of openingPoints. OWL cardinality 0..-1</summary>
         double* get_openingPoints(int64_t* pCount) { return GetDatatypeProperty<double>("openingPoints", pCount); }
         ///<summary>Sets values of openingSizes. OWL cardinality 0..-1</summary>
-        void set_openingSizes(long* values, int64_t count) { SetDatatypeProperty ("openingSizes", values, count); }
+        void set_openingSizes(int64_t* values, int64_t count) { SetDatatypeProperty ("openingSizes", values, count); }
         ///<summary>Gets values of openingSizes. OWL cardinality 0..-1</summary>
-        long* get_openingSizes(int64_t* pCount) { return GetDatatypeProperty<long>("openingSizes", pCount); }
+        int64_t* get_openingSizes(int64_t* pCount) { return GetDatatypeProperty<int64_t>("openingSizes", pCount); }
         ///<summary>Sets values of points. OWL cardinality 6..-1</summary>
         void set_points(double* values, int64_t count) { SetDatatypeProperty ("points", values, count); }
         ///<summary>Gets values of points. OWL cardinality 6..-1</summary>
@@ -2735,13 +2735,13 @@ namespace GeometryKernel
         ///<summary>Gets values of openingPointsEnd. OWL cardinality 0..-1</summary>
         double* get_openingPointsEnd(int64_t* pCount) { return GetDatatypeProperty<double>("openingPointsEnd", pCount); }
         ///<summary>Sets values of openingSizes. OWL cardinality 0..-1</summary>
-        void set_openingSizes(long* values, int64_t count) { SetDatatypeProperty ("openingSizes", values, count); }
+        void set_openingSizes(int64_t* values, int64_t count) { SetDatatypeProperty ("openingSizes", values, count); }
         ///<summary>Gets values of openingSizes. OWL cardinality 0..-1</summary>
-        long* get_openingSizes(int64_t* pCount) { return GetDatatypeProperty<long>("openingSizes", pCount); }
+        int64_t* get_openingSizes(int64_t* pCount) { return GetDatatypeProperty<int64_t>("openingSizes", pCount); }
         ///<summary>Sets values of openingSizesEnd. OWL cardinality 0..-1</summary>
-        void set_openingSizesEnd(long* values, int64_t count) { SetDatatypeProperty ("openingSizesEnd", values, count); }
+        void set_openingSizesEnd(int64_t* values, int64_t count) { SetDatatypeProperty ("openingSizesEnd", values, count); }
         ///<summary>Gets values of openingSizesEnd. OWL cardinality 0..-1</summary>
-        long* get_openingSizesEnd(int64_t* pCount) { return GetDatatypeProperty<long>("openingSizesEnd", pCount); }
+        int64_t* get_openingSizesEnd(int64_t* pCount) { return GetDatatypeProperty<int64_t>("openingSizesEnd", pCount); }
         ///<summary>Sets values of points. OWL cardinality 6..-1</summary>
         void set_points(double* values, int64_t count) { SetDatatypeProperty ("points", values, count); }
         ///<summary>Gets values of points. OWL cardinality 6..-1</summary>
@@ -2898,9 +2898,9 @@ namespace GeometryKernel
         ///<summary>Get related instance</summary>
         Curve* get_outerPolygon() { return GetObjectProperty<Curve>("outerPolygon", NULL); }
         ///<summary>Sets value of setting</summary>
-        void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
+        void set_setting(int64_t value) { SetDatatypeProperty ("setting", &value, 1); }
         ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
+        int64_t* get_setting() { return GetDatatypeProperty<int64_t>("setting", NULL); }
     };
 
     /// <summary>
@@ -2939,9 +2939,9 @@ namespace GeometryKernel
         Curve* get_polygons(int64_t* pCount) { return GetObjectProperty<Curve>("polygons", pCount); }
         int64_t* get_polygons_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("polygons", pCount); }
         ///<summary>Sets value of setting</summary>
-        void set_setting(long value) { SetDatatypeProperty ("setting", &value, 1); }
+        void set_setting(int64_t value) { SetDatatypeProperty ("setting", &value, 1); }
         ///<summary>Gets value of setting, returns NULL is the property was not set</summary>
-        long* get_setting() { return GetDatatypeProperty<long>("setting", NULL); }
+        int64_t* get_setting() { return GetDatatypeProperty<int64_t>("setting", NULL); }
     };
 
     /// <summary>
@@ -2985,9 +2985,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -3027,9 +3027,9 @@ namespace GeometryKernel
         ///<summary>Gets value of minorRadius, returns NULL is the property was not set</summary>
         double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4429,9 +4429,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets value of count</summary>
-        void set_count(long value) { SetDatatypeProperty ("count", &value, 1); }
+        void set_count(int64_t value) { SetDatatypeProperty ("count", &value, 1); }
         ///<summary>Gets value of count, returns NULL is the property was not set</summary>
-        long* get_count() { return GetDatatypeProperty<long>("count", NULL); }
+        int64_t* get_count() { return GetDatatypeProperty<int64_t>("count", NULL); }
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         void set_matrix(const Matrix& instance) { SetObjectProperty<Matrix>("matrix", &instance, 1); }
         ///<summary>Get related instance</summary>
@@ -4516,9 +4516,9 @@ namespace GeometryKernel
         ///<summary>Get related instance</summary>
         Vector3* get_planeRefDirection() { return GetObjectProperty<Vector3>("planeRefDirection", NULL); }
         ///<summary>Sets value of type</summary>
-        void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
+        void set_type(int64_t value) { SetDatatypeProperty ("type", &value, 1); }
         ///<summary>Gets value of type, returns NULL is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
+        int64_t* get_type() { return GetDatatypeProperty<int64_t>("type", NULL); }
     };
 
     /// <summary>
@@ -4591,9 +4591,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4645,9 +4645,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4720,9 +4720,9 @@ namespace GeometryKernel
         ///<summary>Gets values of coordinates. OWL cardinality 0..6</summary>
         double* get_coordinates(int64_t* pCount) { return GetDatatypeProperty<double>("coordinates", pCount); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
         ///<summary>Sets value of thickness</summary>
         void set_thickness(double value) { SetDatatypeProperty ("thickness", &value, 1); }
         ///<summary>Gets value of thickness, returns NULL is the property was not set</summary>
@@ -4762,9 +4762,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4800,9 +4800,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -4871,9 +4871,9 @@ namespace GeometryKernel
         ///<summary>Gets value of radius, returns NULL is the property was not set</summary>
         double* get_radius() { return GetDatatypeProperty<double>("radius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
         ///<summary>Sets value of size</summary>
         void set_size(double value) { SetDatatypeProperty ("size", &value, 1); }
         ///<summary>Gets value of size, returns NULL is the property was not set</summary>
@@ -5025,9 +5025,9 @@ namespace GeometryKernel
         ///<summary>Get related instance</summary>
         Curve* get_path() { return GetObjectProperty<Curve>("path", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -5229,9 +5229,9 @@ namespace GeometryKernel
         ///<summary>Get related instance</summary>
         Curve* get_bottomPolygon() { return GetObjectProperty<Curve>("bottomPolygon", NULL); }
         ///<summary>Sets values of connectionMap. OWL cardinality 0..-1</summary>
-        void set_connectionMap(long* values, int64_t count) { SetDatatypeProperty ("connectionMap", values, count); }
+        void set_connectionMap(int64_t* values, int64_t count) { SetDatatypeProperty ("connectionMap", values, count); }
         ///<summary>Gets values of connectionMap. OWL cardinality 0..-1</summary>
-        long* get_connectionMap(int64_t* pCount) { return GetDatatypeProperty<long>("connectionMap", pCount); }
+        int64_t* get_connectionMap(int64_t* pCount) { return GetDatatypeProperty<int64_t>("connectionMap", pCount); }
         ///<summary>Sets values of forcedStaticDirection. OWL cardinality 0..3</summary>
         void set_forcedStaticDirection(double* values, int64_t count) { SetDatatypeProperty ("forcedStaticDirection", values, count); }
         ///<summary>Gets values of forcedStaticDirection. OWL cardinality 0..3</summary>
@@ -5323,9 +5323,9 @@ namespace GeometryKernel
         ///<summary>Gets value of scalingY, returns NULL is the property was not set</summary>
         double* get_scalingY() { return GetDatatypeProperty<double>("scalingY", NULL); }
         ///<summary>Sets value of type</summary>
-        void set_type(long value) { SetDatatypeProperty ("type", &value, 1); }
+        void set_type(int64_t value) { SetDatatypeProperty ("type", &value, 1); }
         ///<summary>Gets value of type, returns NULL is the property was not set</summary>
-        long* get_type() { return GetDatatypeProperty<long>("type", NULL); }
+        int64_t* get_type() { return GetDatatypeProperty<int64_t>("type", NULL); }
     };
 
     /// <summary>
@@ -5365,9 +5365,9 @@ namespace GeometryKernel
         ///<summary>Gets value of minorRadius, returns NULL is the property was not set</summary>
         double* get_minorRadius() { return GetDatatypeProperty<double>("minorRadius", NULL); }
         ///<summary>Sets value of segmentationParts</summary>
-        void set_segmentationParts(long value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
+        void set_segmentationParts(int64_t value) { SetDatatypeProperty ("segmentationParts", &value, 1); }
         ///<summary>Gets value of segmentationParts, returns NULL is the property was not set</summary>
-        long* get_segmentationParts() { return GetDatatypeProperty<long>("segmentationParts", NULL); }
+        int64_t* get_segmentationParts() { return GetDatatypeProperty<int64_t>("segmentationParts", NULL); }
     };
 
     /// <summary>
@@ -5532,9 +5532,9 @@ namespace GeometryKernel
        //
 
         ///<summary>Sets values of indices. OWL cardinality 0..-1</summary>
-        void set_indices(long* values, int64_t count) { SetDatatypeProperty ("indices", values, count); }
+        void set_indices(int64_t* values, int64_t count) { SetDatatypeProperty ("indices", values, count); }
         ///<summary>Gets values of indices. OWL cardinality 0..-1</summary>
-        long* get_indices(int64_t* pCount) { return GetDatatypeProperty<long>("indices", pCount); }
+        int64_t* get_indices(int64_t* pCount) { return GetDatatypeProperty<int64_t>("indices", pCount); }
         ///<summary>Sets values of vertices. OWL cardinality 3..-1</summary>
         void set_vertices(double* values, int64_t count) { SetDatatypeProperty ("vertices", values, count); }
         ///<summary>Gets values of vertices. OWL cardinality 3..-1</summary>
@@ -5681,3 +5681,4 @@ namespace GeometryKernel
     };
 }
 
+#endif

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Compile Include="..\..\engine.cs" />
-    <Compile Include="..\GeometryKernel.cs" />
+    <Compile Include="..\geom.cs" />
   </ItemGroup>
 
 </Project>

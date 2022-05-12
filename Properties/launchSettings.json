@@ -2,7 +2,6 @@
   "profiles": {
     "RDFWrappers": {
       "commandName": "Project",
-      "commandLineArgs": "--model \"CustomModel.bin\" --printClasses",
       "nativeDebugging": true
     }
   }

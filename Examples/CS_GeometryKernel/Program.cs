@@ -1,6 +1,6 @@
 ﻿using System;
 using RDF;
-using GeometryKernel;
+using GEOM;
 using System.Diagnostics;
 
 namespace CS_GeometryKernel

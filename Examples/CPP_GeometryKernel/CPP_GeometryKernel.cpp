@@ -7,12 +7,15 @@
 #include <assert.h>
 
 
-#include "Engine\engine.h"
-#include "..\GeometryKernel.h"
-using namespace GeometryKernel;
+#include "engine.h"
+#include "..\geom.h"
+using namespace GEOM;
+
+#define ASSERT assert
 
 static int64_t CreateRedBox(int64_t model);
 static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model);
+
 
 /// <summary>
 /// 
@@ -108,17 +111,17 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	ASSERT(cnt == 3);
 	ASSERT_ARR_EQ(org, orgset, cnt);
 
-	//long
-	long* setting = curve.get_setting();
+	//int64_t
+	int64_t* setting = curve.get_setting();
 	ASSERT(setting == NULL);
 	curve.set_setting(13);
 	setting = curve.get_setting();
 	ASSERT(*setting == 13);
 
-	//long[]
-	long* km = curve.get_knotMultiplicities(&cnt);
+	//int64_t[]
+	int64_t* km = curve.get_knotMultiplicities(&cnt);
 	ASSERT(km == NULL);
-	long kmset[] = {3, 5, 6};
+	int64_t kmset[] = {3, 5, 6};
 	curve.set_knotMultiplicities(kmset, 3);
 	km = curve.get_knotMultiplicities(&cnt);
 	ASSERT(cnt == 3);

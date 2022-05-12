@@ -8,7 +8,7 @@ namespace RDFWrappers
     {
         public class Options
         {
-            [CommandLine.Option("model", HelpText = "Pathname of the model containing the ontology to generate wrapper classes for. If no model is given, it will generate classes for GeometryKernel.")]
+            [CommandLine.Option("model", HelpText = "Pathname of the model containing the ontology to generate wrapper classes for. If no model is given, it will generate classes for GeometryKernel (GEOM).")]
             public string modelFile { get; set; }
 
             [CommandLine.Option("cs", HelpText = "Pathnamte of c# file to be generated. Default is model name.")]
@@ -52,26 +52,27 @@ namespace RDFWrappers
                     Generator.Verify(System.IO.File.Exists(options.modelFile), "File does not exist: " + options.modelFile);
                 }
 
-                string baseName = (options.modelFile == null ? "GeometryKernel" : System.IO.Path.GetFileNameWithoutExtension (options.modelFile));
+                string baseNameSmall = (options.modelFile == null ? "geom" : System.IO.Path.GetFileNameWithoutExtension (options.modelFile));
+                string baseNameCapital = (options.modelFile == null ? "GEOM" : System.IO.Path.GetFileNameWithoutExtension(options.modelFile));
 
                 if (string.IsNullOrWhiteSpace (options.csFile))
                 {
-                    options.csFile = baseName + ".cs";
+                    options.csFile = baseNameSmall + ".cs";
                 }
                 if (string.IsNullOrWhiteSpace (options.hFile))
                 {
-                    options.hFile = baseName + ".h";
+                    options.hFile = baseNameSmall + ".h";
                 }
                 if (string.IsNullOrWhiteSpace (options.Namespace))
                 {
-                    options.Namespace = baseName;
+                    options.Namespace = baseNameCapital;
                 }
                 options.Namespace = Generator.ValidateIdentifier(options.Namespace);
 
                 //
                 // Main course
                 //
-                Console.WriteLine("Generating classes for " + baseName);
+                Console.WriteLine("Generating classes for " + baseNameCapital);
                 var model = RDF.engine.OpenModel(options.modelFile);
                 Console.WriteLine();
 

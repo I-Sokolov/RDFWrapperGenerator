@@ -1,11 +1,11 @@
 //
 // Helper classes (C++ wrappers)
 //
+#ifndef __RDF_LTD__NAMESPACE_NAME_H
+#define __RDF_LTD__NAMESPACE_NAME_H
 
-#ifndef ASSERT
-#define ASSERT assert
-#endif
-
+#include    <assert.h>
+#include	"engine.h"
 
 namespace NAMESPACE_NAME
 {
@@ -33,10 +33,10 @@ namespace NAMESPACE_NAME
         static int64_t Create(int64_t model, const char* className, const char* instanseName)
         {
             int64_t clsid = GetClassByName(model, className);
-            ASSERT(clsid != 0);
+            assert(clsid != 0);
 
             int64_t instance = CreateInstance(clsid, instanseName);
-            ASSERT(instance != 0);
+            assert(instance != 0);
 
             return instance;
         }
@@ -59,7 +59,7 @@ namespace NAMESPACE_NAME
                 int64_t clsid1 = GetInstanceClass(m_instance);
                 int64_t model = GetModel(m_instance);
                 int64_t clsid2 = GetClassByName(model, cls);
-                ASSERT(clsid1 == clsid2);
+                assert(clsid1 == clsid2);
             }
 #endif
         }
@@ -76,10 +76,10 @@ namespace NAMESPACE_NAME
         int64_t GetPropertyId(const char* name)
         {
             int64_t model = GetModel(m_instance);
-            ASSERT(model != 0);
+            assert(model != 0);
 
             int64_t propId = GetPropertyByName(model, name);
-            ASSERT(propId != 0);
+            assert(propId != 0);
 
             return propId;
         }
@@ -91,7 +91,7 @@ namespace NAMESPACE_NAME
         {
             int64_t propId = GetPropertyId(name);
             int64_t res = ::SetDatatypeProperty(m_instance, propId, values, count);
-            ASSERT(res == 0);
+            assert(res == 0);
         }
 
 
@@ -105,7 +105,7 @@ namespace NAMESPACE_NAME
             TElem* values = NULL;
             int64_t count = 0;
             int64_t res = ::GetDatatypeProperty(m_instance, propId, (void**)&values, &count);
-            ASSERT(res == 0);
+            assert(res == 0);
 
             if (pCount) {
                 *pCount = count;
@@ -127,7 +127,7 @@ namespace NAMESPACE_NAME
         {
             int64_t propId = GetPropertyId(name);
             int64_t res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
-            ASSERT(res == 0);
+            assert(res == 0);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace NAMESPACE_NAME
             int64_t* values = NULL;
             int64_t count = 0;
             int64_t res = ::GetObjectProperty(m_instance, propId, &values, &count);
-            ASSERT(res == 0);
+            assert(res == 0);
 
             if (pCount) {
                 *pCount = count;
@@ -217,3 +217,4 @@ namespace NAMESPACE_NAME
 //## TEMPLATE: EndFile template part
 }
 
+#endif

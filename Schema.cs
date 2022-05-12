@@ -21,7 +21,7 @@ namespace RDFWrappers
                     case RDF.engine.OBJECTPROPERTY_TYPE:             return "Instance";
                     case RDF.engine.DATATYPEPROPERTY_TYPE_BOOLEAN:   return "bool";
                     case RDF.engine.DATATYPEPROPERTY_TYPE_CHAR:      return cs ? "string" : "const char*";
-                    case RDF.engine.DATATYPEPROPERTY_TYPE_INTEGER:   return "long";
+                    case RDF.engine.DATATYPEPROPERTY_TYPE_INTEGER:   return cs ? "long" : "int64_t";
                     case RDF.engine.DATATYPEPROPERTY_TYPE_DOUBLE:    return "double";
                 }
                 throw new ApplicationException("Unknown property type");
