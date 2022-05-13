@@ -11,10 +11,10 @@ namespace RDF
 	public class FORMAT
 	{
 		//	control precision / data size
-		///	<summary></summary>
-		public const Int64 SIZE_VERTEX_DOUBLE = (1<<2);      //	Vertex items returned as double (8 byte/64 bit) else - as float (4 byte/32 bit)
-		///	<summary></summary>
-		public const Int64 SIZE_INDEX_INT64 = (1<<3);        //	Index items returned as int64_t (8 byte/64 bit) (only available in 64 bit mode) - else as int32_t (4 byte/32 bit)
+		///	<summary>Vertex items returned as double (8 byte/64 bit) else - as float (4 byte/32 bit)</summary>
+		public const Int64 SIZE_VERTEX_DOUBLE = (1<<2);
+		///	<summary>Index items returned as int64_t (8 byte/64 bit) (only available in 64 bit mode) - else as int32_t (4 byte/32 bit)</summary>
+		public const Int64 SIZE_INDEX_INT64 = (1<<3);     
 
 		//	control vertex data
 		///	<summary>Vertex contains 3D point info</summary>
