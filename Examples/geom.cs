@@ -8421,7 +8421,7 @@ namespace GEOM
 
             if (card > 0)
             {
-                var values = new Int64[card];
+                var values = new byte[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
                 var bools = new bool[card];

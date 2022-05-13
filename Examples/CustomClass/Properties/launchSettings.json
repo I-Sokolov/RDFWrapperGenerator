@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CustomClass": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
