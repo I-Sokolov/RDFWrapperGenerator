@@ -20,7 +20,7 @@ namespace RDFWrappers
                 {
                     case RDF.engine.OBJECTPROPERTY_TYPE:             return "Instance";
                     case RDF.engine.DATATYPEPROPERTY_TYPE_BOOLEAN:   return "bool";
-                    case RDF.engine.DATATYPEPROPERTY_TYPE_CHAR:      return cs ? "string" : "const char*";
+                    case RDF.engine.DATATYPEPROPERTY_TYPE_CHAR:      return cs ? "string" : "const char* const";
                     case RDF.engine.DATATYPEPROPERTY_TYPE_INTEGER:   return cs ? "Int64" : "int64_t";
                     case RDF.engine.DATATYPEPROPERTY_TYPE_DOUBLE:    return "double";
                 }

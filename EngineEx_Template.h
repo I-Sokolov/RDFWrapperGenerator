@@ -68,7 +68,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// Conversion to instance handle, so the object of the class can be used anywhere where a handle required
         /// </summary>
-        operator int64_t() { return m_instance; }
+        operator int64_t() const { return m_instance; }
 
         /// <summary>
         /// Get property id from property name

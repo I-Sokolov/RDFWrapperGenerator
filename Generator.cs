@@ -236,6 +236,10 @@ namespace RDFWrappers
             {
                 code = code.Replace("string?", "string"); //warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
             }
+            else
+            {
+                code = code.Replace("const const", "const");
+            }
 
             writer.Write(code);
         }

@@ -198,7 +198,7 @@ namespace GEOM
         /// <summary>
         /// Conversion to instance handle, so the object of the class can be used anywhere where a handle required
         /// </summary>
-        operator int64_t() { return m_instance; }
+        operator int64_t() const { return m_instance; }
 
         /// <summary>
         /// Get property id from property name
@@ -5323,9 +5323,9 @@ namespace GEOM
        //
 
         ///<summary>Sets value of name</summary>
-        void set_name(const char* value) { SetDatatypeProperty ("name", &value, 1); }
+        void set_name(const char* const value) { SetDatatypeProperty ("name", &value, 1); }
         ///<summary>Gets a value of name, returns NULL is the property was not set. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        const const char** get_name() { return GetDatatypeProperty<const char*>("name", NULL); }
+        const char* const* get_name() { return GetDatatypeProperty<const char* const>("name", NULL); }
         ///<summary>Sets value of offsetX</summary>
         void set_offsetX(double value) { SetDatatypeProperty ("offsetX", &value, 1); }
         ///<summary>Gets a value of offsetX, returns NULL is the property was not set. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>

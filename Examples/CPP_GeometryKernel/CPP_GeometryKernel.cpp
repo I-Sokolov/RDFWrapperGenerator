@@ -143,7 +143,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	ASSERT_ARR_EQ(km, kmset, cnt);
 
 	//string 
-	const char** tname = texture.get_name();
+	const char* const* tname = texture.get_name();
 	ASSERT(tname == NULL);
 	texture.set_name("test");
 	tname = texture.get_name();
@@ -153,7 +153,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	//no example in Geometry Kernel
 
 	//bool
-	bool* closed = curve.get_closed();
+	const bool* closed = curve.get_closed();
 	ASSERT(closed == NULL);
 	curve.set_closed(true);
 	closed = curve.get_closed();
@@ -163,19 +163,19 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	//no example in Geometry Kernel
 
 	//object
-	Material* material = curve.get_material();
+	const Material* material = curve.get_material();
 	ASSERT(material == NULL);
 	int64_t mat = Material::Create(model);
 	curve.set_material(Material(mat));
 	material = curve.get_material();
 	ASSERT(*material == mat);
-	Material* m2 = curve.get_material();
+	const Material* m2 = curve.get_material();
 	ASSERT(*m2 == *material);
 
 	//object []
-	Point3D* ptg = curve.get_controlPoints(&cnt);
+	const Point3D* ptg = curve.get_controlPoints(&cnt);
 	ASSERT(ptg == NULL);
-	int64_t* ptg64 = curve.get_controlPoints_int64(&cnt);
+	const int64_t* ptg64 = curve.get_controlPoints_int64(&cnt);
 	ASSERT(ptg64 == NULL);
 
 	Point3D pts[] = {Point3D::Create(model), Point3D::Create(model)};
