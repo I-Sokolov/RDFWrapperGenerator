@@ -73,13 +73,25 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// Get property id from property name
         /// </summary>
-        int64_t GetPropertyId(const char* name)
+        int64_t GetPropertyId(const char* name, int64_t checkCardinality = -1)
         {
             int64_t model = GetModel(m_instance);
             assert(model != 0);
 
             int64_t propId = GetPropertyByName(model, name);
             assert(propId != 0);
+
+#ifdef _DEBUG
+            if (propId) {
+                int64_t clsId = GetInstanceClass(m_instance);
+                int64_t minCard = 0, maxCard = 0;
+                GetPropertyRestrictionsConsolidated(clsId, propId, &minCard, &maxCard);
+                assert(minCard >= 0); //property assigned to the class
+                if (checkCardinality > 0) { //chek cardinatity when set property
+                    assert(checkCardinality >= minCard && (checkCardinality <= maxCard || maxCard < 0)); //cardinality is in range
+                }
+            }
+#endif
 
             return propId;
         }
@@ -89,7 +101,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         template<typename TElem> void SetDatatypeProperty(const char* name, TElem* values, int64_t count)
         {
-            int64_t propId = GetPropertyId(name);
+            int64_t propId = GetPropertyId(name, count);
             int64_t res = ::SetDatatypeProperty(m_instance, propId, values, count);
             assert(res == 0);
         }
@@ -125,7 +137,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         template<class TInstance> void SetObjectProperty(const char* name, const TInstance* instances, int64_t count)
         {
-            int64_t propId = GetPropertyId(name);
+            int64_t propId = GetPropertyId(name, count);
             int64_t res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
             assert(res == 0);
         }

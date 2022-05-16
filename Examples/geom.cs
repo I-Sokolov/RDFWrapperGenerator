@@ -8261,13 +8261,27 @@ namespace GEOM
         /// <summary>
         /// Get property id from property name
         /// </summary>
-        public Int64 GetPropertyId(string name)
+        public Int64 GetPropertyId(string name, Int64 checkCardinality = -1)
         {
             var model = engine.GetModel(m_instance);
             System.Diagnostics.Debug.Assert(model != 0);
 
             var propId = engine.GetPropertyByName(model, name);
             System.Diagnostics.Debug.Assert(propId != 0);
+
+#if DEBUG
+            if (propId != 0)
+            {
+                var clsId = engine.GetInstanceClass(m_instance);
+                Int64 minCard = 0, maxCard = 0;
+                engine.GetPropertyRestrictionsConsolidated(clsId, propId, out minCard, out maxCard);
+                System.Diagnostics.Debug.Assert(minCard >= 0); //property assigned to the class
+                if (checkCardinality > 0)
+                { //chek cardinatity when set property
+                    System.Diagnostics.Debug.Assert(checkCardinality >= minCard && (checkCardinality <= maxCard || maxCard < 0)); //cardinality is in range
+                }
+            }
+#endif
 
             return propId;
         }
@@ -8277,7 +8291,7 @@ namespace GEOM
         /// </summary>
         public void SetDatatypeProperty(string name, double value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8287,7 +8301,7 @@ namespace GEOM
         /// </summary>
         public void SetDatatypeProperty(string name, double[] values)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8297,7 +8311,7 @@ namespace GEOM
         /// </summary>
         public void SetDatatypeProperty(string name, Int64 value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8307,7 +8321,7 @@ namespace GEOM
         /// </summary>
         public void SetDatatypeProperty(string name, Int64[] values)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8317,7 +8331,7 @@ namespace GEOM
         /// </summary>
         public void SetDatatypeProperty(string name, bool value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             byte v = (byte)(value ? 1 : 0);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref v, 1);
             System.Diagnostics.Debug.Assert(res == 0);
@@ -8332,7 +8346,7 @@ namespace GEOM
             for (int i = 0; i < values.Length; i++)
                 bytes[i] = values[i] ? (byte)1 : (byte)0;
 
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, bytes, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8342,7 +8356,7 @@ namespace GEOM
         /// </summary>
         public void SetDatatypeProperty(string name, string value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8352,7 +8366,7 @@ namespace GEOM
         /// </summary>
         public void SetDatatypeProperty(string name, string[] values)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }

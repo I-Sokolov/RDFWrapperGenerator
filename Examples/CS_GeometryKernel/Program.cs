@@ -91,6 +91,20 @@ namespace CS_GeometryKernel
 			double[] ret_org = texture.get_origin();
 			ASSERT_ARR_EQ(org, ret_org);
 
+			//there is ability to identity property by name
+			org[1] = 10;
+			texture.SetDatatypeProperty("origin", org);
+			ret_org = texture.GetDatatypeProperty_double("origin");
+			ASSERT_ARR_EQ(org, ret_org);
+
+			//expected debug assert here because of cardinality restriction violation
+			var tooLong = new double[] { 1, 2, 3, 4 };
+			texture.set_origin(tooLong);
+
+			//expected debug assertion here because of wrong property name
+			texture.SetDatatypeProperty("length", org);
+			ret_org = texture.GetDatatypeProperty_double("originnn");
+
 			//long
 			long? setting = curve.get_setting();
 			Trace.Assert(setting == null);

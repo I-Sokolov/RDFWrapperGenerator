@@ -111,6 +111,21 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	ASSERT(cnt == 3);
 	ASSERT_ARR_EQ(org, orgset, cnt);
 
+	//there is ability to identity property by name
+	orgset[1] = 10;
+	texture.SetDatatypeProperty<double>("origin", orgset, 3);
+	org = texture.GetDatatypeProperty<double>("origin", &cnt);
+	ASSERT_ARR_EQ(org, orgset, cnt);
+
+	//expected debug assert here because of cardinality restriction violation
+	//double tooLong[] = { 1, 2, 3, 4 };
+	//texture.set_origin(tooLong, 4);
+
+	//expected debug assertion here because of wrong property name
+	//texture.SetDatatypeProperty<double>("length", org, 3);
+	//org = texture.GetDatatypeProperty<double>("originnn", &cnt);
+
+
 	//int64_t
 	int64_t* setting = curve.get_setting();
 	ASSERT(setting == NULL);
