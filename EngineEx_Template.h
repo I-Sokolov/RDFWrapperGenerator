@@ -96,9 +96,7 @@ namespace NAMESPACE_NAME
             return propId;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        ///<summary></summary>
         template<typename TElem> void SetDatatypeProperty(const char* name, TElem* values, int64_t count)
         {
             int64_t propId = GetPropertyId(name, count);
@@ -107,10 +105,8 @@ namespace NAMESPACE_NAME
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        template<typename TElem> TElem* GetDatatypeProperty(const char* name, int64_t* pCount)
+        ///<summary>The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        template<typename TElem> const TElem*  GetDatatypeProperty(const char* name, int64_t* pCount)
         {
             int64_t propId = GetPropertyId(name);
 
@@ -132,9 +128,7 @@ namespace NAMESPACE_NAME
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
+        ///<summary></summary>
         template<class TInstance> void SetObjectProperty(const char* name, const TInstance* instances, int64_t count)
         {
             int64_t propId = GetPropertyId(name, count);
@@ -142,10 +136,8 @@ namespace NAMESPACE_NAME
             assert(res == 0);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        template<class TInstance> TInstance* GetObjectProperty(const char* name, int64_t* pCount)
+        ///<summary>The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        template<class TInstance> const TInstance* GetObjectProperty(const char* name, int64_t* pCount)
         {
             int64_t propId = GetPropertyId(name);
 
@@ -205,11 +197,11 @@ namespace NAMESPACE_NAME
         ///<summary>Sets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         void set_PROPERTY_NAME(double* values, int64_t count) { SetDatatypeProperty ("PROPERTY_NAME", values, count); }
 //## TEMPLATE GetDataProperty
-        ///<summary>Gets value of PROPERTY_NAME, returns NULL is the property was not set</summary>
-        double* get_PROPERTY_NAME() { return GetDatatypeProperty<double>("PROPERTY_NAME", NULL); }
+        ///<summary>Gets a value of PROPERTY_NAME, returns NULL is the property was not set. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        const double* get_PROPERTY_NAME() { return GetDatatypeProperty<double>("PROPERTY_NAME", NULL); }
 //## TEMPLATE GetDataArrayProperty
-        ///<summary>Gets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        double* get_PROPERTY_NAMEasType(int64_t* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
+        ///<summary>Gets values array of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        const double* get_PROPERTY_NAMEasType(int64_t* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: SetObjectProperty
         ///<summary>Sets relationship from this instance to an instance of Instance</summary>
         void set_PROPERTY_NAME(const Instance& instance) { SetObjectProperty<Instance>("PROPERTY_NAME", &instance, 1); }
@@ -217,13 +209,14 @@ namespace NAMESPACE_NAME
         ///<summary>Sets relationships from this instance to an array of Instance. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         void set_PROPERTY_NAME(const Instance* instances, int64_t count) { SetObjectProperty<Instance>("PROPERTY_NAME", instances, count); }
 //## TEMPLATE GetObjectProperty
-        ///<summary>Get related instance</summary>
-        Instance* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Instance>("PROPERTY_NAME", NULL); }
+        ///<summary>Get related instance. The method returns pointer to inernal buffer, a caller should not free or change it</summary>
+        const Instance* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Instance>("PROPERTY_NAME", NULL); }
 //## TEMPLATE GetObjectArrayProperty
-        ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        Instance* get_PROPERTY_NAMEasTYPE(int64_t* pCount) { return GetObjectProperty<Instance>("PROPERTY_NAME", pCount); }
+        ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        const Instance* get_PROPERTY_NAMEasTYPE(int64_t* pCount) { return GetObjectProperty<Instance>("PROPERTY_NAME", pCount); }
 //## TEMPLATE GetObjectArrayPropertyInt64
-        int64_t* get_PROPERTY_NAME_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("PROPERTY_NAME", pCount); }
+        ///<summary>Get an array of related instance handles. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        const int64_t* get_PROPERTY_NAME_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: EndWrapperClass
     };
 //## TEMPLATE: EndFile template part

@@ -95,7 +95,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	NURBSCurve curve = NURBSCurve::Create(model);
 
 	//double
-	double* lseg = curve.get_segmentationLength();
+	const double* lseg = curve.get_segmentationLength();
 	ASSERT(lseg == NULL);
 	curve.set_segmentationLength(0.5);
 	lseg = curve.get_segmentationLength();
@@ -103,7 +103,7 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 
 	//double []
 	int64_t cnt;
-	double* org = texture.get_origin(&cnt);
+	const double* org = texture.get_origin(&cnt);
 	ASSERT(org == NULL);
 	double orgset[] = {1, 2, 3};
 	texture.set_origin(orgset, 3);
@@ -127,14 +127,14 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 
 
 	//int64_t
-	int64_t* setting = curve.get_setting();
+	const int64_t* setting = curve.get_setting();
 	ASSERT(setting == NULL);
 	curve.set_setting(13);
 	setting = curve.get_setting();
 	ASSERT(*setting == 13);
 
 	//int64_t[]
-	int64_t* km = curve.get_knotMultiplicities(&cnt);
+	const int64_t* km = curve.get_knotMultiplicities(&cnt);
 	ASSERT(km == NULL);
 	int64_t kmset[] = {3, 5, 6};
 	curve.set_knotMultiplicities(kmset, 3);

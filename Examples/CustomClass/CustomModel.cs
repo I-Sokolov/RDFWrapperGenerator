@@ -282,15 +282,15 @@ namespace CustomModel
         ///<summary>Sets value of clipped</summary>
         public void set_clipped(bool value) { SetDatatypeProperty ("clipped", value); }
         ///<summary>Gets value of clipped, returns null is the property was not set</summary>
-        public bool? get_clipped() { var arr = GetDatatypeProperty_bool("clipped"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_clipped() { var arr = GetDatatypeProperty_bool("clipped"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of scalingX</summary>
         public void set_scalingX(double value) { SetDatatypeProperty ("scalingX", value); }
         ///<summary>Gets value of scalingX, returns null is the property was not set</summary>
-        public double? get_scalingX() { var arr = GetDatatypeProperty_double("scalingX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_scalingX() { var arr = GetDatatypeProperty_double("scalingX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of scalingY</summary>
         public void set_scalingY(double value) { SetDatatypeProperty ("scalingY", value); }
         ///<summary>Gets value of scalingY, returns null is the property was not set</summary>
-        public double? get_scalingY() { var arr = GetDatatypeProperty_double("scalingY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_scalingY() { var arr = GetDatatypeProperty_double("scalingY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -351,11 +351,11 @@ namespace CustomModel
         ///<summary>Sets value of scalingX</summary>
         public void set_scalingX(double value) { SetDatatypeProperty ("scalingX", value); }
         ///<summary>Gets value of scalingX, returns null is the property was not set</summary>
-        public double? get_scalingX() { var arr = GetDatatypeProperty_double("scalingX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_scalingX() { var arr = GetDatatypeProperty_double("scalingX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of scalingY</summary>
         public void set_scalingY(double value) { SetDatatypeProperty ("scalingY", value); }
         ///<summary>Gets value of scalingY, returns null is the property was not set</summary>
-        public double? get_scalingY() { var arr = GetDatatypeProperty_double("scalingY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_scalingY() { var arr = GetDatatypeProperty_double("scalingY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -390,15 +390,15 @@ namespace CustomModel
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetX</summary>
         public void set_offsetX(double value) { SetDatatypeProperty ("offsetX", value); }
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetY</summary>
         public void set_offsetY(double value) { SetDatatypeProperty ("offsetY", value); }
         ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         public void set_segment(Curve instance) { SetObjectProperty("segment", instance); }
         ///<summary>Get related instance</summary>
@@ -570,11 +570,11 @@ namespace CustomModel
         ///<summary>Sets value of offsetX</summary>
         public void set_offsetX(double value) { SetDatatypeProperty ("offsetX", value); }
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of type</summary>
         public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of AlignedSegments</summary>
         public void set_vertical(AlignedSegments instance) { SetObjectProperty("vertical", instance); }
         ///<summary>Get related instance</summary>
@@ -685,23 +685,23 @@ namespace CustomModel
         ///<summary>Sets value of hasNormals</summary>
         public void set_hasNormals(bool value) { SetDatatypeProperty ("hasNormals", value); }
         ///<summary>Gets value of hasNormals, returns null is the property was not set</summary>
-        public bool? get_hasNormals() { var arr = GetDatatypeProperty_bool("hasNormals"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_hasNormals() { var arr = GetDatatypeProperty_bool("hasNormals"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of size</summary>
         public void set_size(double value) { SetDatatypeProperty ("size", value); }
         ///<summary>Gets value of size, returns null is the property was not set</summary>
-        public double? get_size() { var arr = GetDatatypeProperty_double("size"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_size() { var arr = GetDatatypeProperty_double("size"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of start</summary>
         public void set_start(double value) { SetDatatypeProperty ("start", value); }
         ///<summary>Gets value of start, returns null is the property was not set</summary>
-        public double? get_start() { var arr = GetDatatypeProperty_double("start"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_start() { var arr = GetDatatypeProperty_double("start"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -762,7 +762,7 @@ namespace CustomModel
         ///<summary>Sets value of setting</summary>
         public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -847,23 +847,23 @@ namespace CustomModel
         ///<summary>Sets value of forceSolid</summary>
         public void set_forceSolid(bool value) { SetDatatypeProperty ("forceSolid", value); }
         ///<summary>Gets value of forceSolid, returns null is the property was not set</summary>
-        public bool? get_forceSolid() { var arr = GetDatatypeProperty_bool("forceSolid"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_forceSolid() { var arr = GetDatatypeProperty_bool("forceSolid"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of hasBottom</summary>
         public void set_hasBottom(bool value) { SetDatatypeProperty ("hasBottom", value); }
         ///<summary>Gets value of hasBottom, returns null is the property was not set</summary>
-        public bool? get_hasBottom() { var arr = GetDatatypeProperty_bool("hasBottom"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_hasBottom() { var arr = GetDatatypeProperty_bool("hasBottom"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of hasTop</summary>
         public void set_hasTop(bool value) { SetDatatypeProperty ("hasTop", value); }
         ///<summary>Gets value of hasTop, returns null is the property was not set</summary>
-        public bool? get_hasTop() { var arr = GetDatatypeProperty_bool("hasTop"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_hasTop() { var arr = GetDatatypeProperty_bool("hasTop"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         public void set_topPolygon(Curve instance) { SetObjectProperty("topPolygon", instance); }
         ///<summary>Get related instance</summary>
@@ -1020,11 +1020,11 @@ namespace CustomModel
         ///<summary>Sets value of setting</summary>
         public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of type</summary>
         public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -1131,7 +1131,7 @@ namespace CustomModel
         ///<summary>Sets value of type</summary>
         public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -1166,11 +1166,11 @@ namespace CustomModel
         ///<summary>Sets value of consistencyCheck</summary>
         public void set_consistencyCheck(Int64 value) { SetDatatypeProperty ("consistencyCheck", value); }
         ///<summary>Gets value of consistencyCheck, returns null is the property was not set</summary>
-        public Int64? get_consistencyCheck() { var arr = GetDatatypeProperty_Int64("consistencyCheck"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_consistencyCheck() { var arr = GetDatatypeProperty_Int64("consistencyCheck"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of epsilon</summary>
         public void set_epsilon(double value) { SetDatatypeProperty ("epsilon", value); }
         ///<summary>Gets value of epsilon, returns null is the property was not set</summary>
-        public double? get_epsilon() { var arr = GetDatatypeProperty_double("epsilon"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_epsilon() { var arr = GetDatatypeProperty_double("epsilon"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationships from this instance to an array of Face. OWL cardinality 0..-1</summary>
         public void set_faces(Face[] instances) { SetObjectProperty("faces", instances); }
         ///<summary>Sets relationships from this instance to an array of Int64. OWL cardinality 0..-1</summary>
@@ -1232,7 +1232,7 @@ namespace CustomModel
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets values of indices. OWL cardinality 0..-1</summary>
         public void set_indices(Int64[] values) { SetDatatypeProperty ("indices", values); }
         ///<summary>Gets values of indices. OWL cardinality 0..-1</summary>
@@ -1248,7 +1248,7 @@ namespace CustomModel
         ///<summary>Sets value of relativeEpsilon</summary>
         public void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", value); }
         ///<summary>Gets value of relativeEpsilon, returns null is the property was not set</summary>
-        public double? get_relativeEpsilon() { var arr = GetDatatypeProperty_double("relativeEpsilon"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_relativeEpsilon() { var arr = GetDatatypeProperty_double("relativeEpsilon"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets values of textureCoordinates. OWL cardinality 0..-1</summary>
         public void set_textureCoordinates(double[] values) { SetDatatypeProperty ("textureCoordinates", values); }
         ///<summary>Gets values of textureCoordinates. OWL cardinality 0..-1</summary>
@@ -1295,15 +1295,15 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of width</summary>
         public void set_width(double value) { SetDatatypeProperty ("width", value); }
         ///<summary>Gets value of width, returns null is the property was not set</summary>
-        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -1346,7 +1346,7 @@ namespace CustomModel
         ///<summary>Sets value of setting</summary>
         public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -1381,7 +1381,7 @@ namespace CustomModel
         ///<summary>Sets value of setting</summary>
         public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
         public void set_uKnotMultiplicities(Int64[] values) { SetDatatypeProperty ("uKnotMultiplicities", values); }
         ///<summary>Gets values of uKnotMultiplicities. OWL cardinality 0..-1</summary>
@@ -1654,7 +1654,7 @@ namespace CustomModel
         ///<summary>Sets value of type</summary>
         public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -1689,7 +1689,7 @@ namespace CustomModel
         ///<summary>Sets value of A</summary>
         public void set_A(double value) { SetDatatypeProperty ("A", value); }
         ///<summary>Gets value of A, returns null is the property was not set</summary>
-        public double? get_A() { var arr = GetDatatypeProperty_double("A"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_A() { var arr = GetDatatypeProperty_double("A"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Vector</summary>
         public void set_direction(Vector instance) { SetObjectProperty("direction", instance); }
         ///<summary>Get related instance</summary>
@@ -1717,19 +1717,19 @@ namespace CustomModel
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of orientation</summary>
         public void set_orientation(Int64 value) { SetDatatypeProperty ("orientation", value); }
         ///<summary>Gets value of orientation, returns null is the property was not set</summary>
-        public Int64? get_orientation() { var arr = GetDatatypeProperty_Int64("orientation"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_orientation() { var arr = GetDatatypeProperty_Int64("orientation"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -1790,19 +1790,19 @@ namespace CustomModel
         ///<summary>Sets value of consistencyCheck</summary>
         public void set_consistencyCheck(Int64 value) { SetDatatypeProperty ("consistencyCheck", value); }
         ///<summary>Gets value of consistencyCheck, returns null is the property was not set</summary>
-        public Int64? get_consistencyCheck() { var arr = GetDatatypeProperty_Int64("consistencyCheck"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_consistencyCheck() { var arr = GetDatatypeProperty_Int64("consistencyCheck"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of epsilon</summary>
         public void set_epsilon(double value) { SetDatatypeProperty ("epsilon", value); }
         ///<summary>Gets value of epsilon, returns null is the property was not set</summary>
-        public double? get_epsilon() { var arr = GetDatatypeProperty_double("epsilon"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_epsilon() { var arr = GetDatatypeProperty_double("epsilon"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of forceSolid</summary>
         public void set_forceSolid(bool value) { SetDatatypeProperty ("forceSolid", value); }
         ///<summary>Gets value of forceSolid, returns null is the property was not set</summary>
-        public bool? get_forceSolid() { var arr = GetDatatypeProperty_bool("forceSolid"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_forceSolid() { var arr = GetDatatypeProperty_bool("forceSolid"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationships from this instance to an array of GeometricItem. OWL cardinality 0..-1</summary>
         public void set_objects(GeometricItem[] instances) { SetObjectProperty("objects", instances); }
         ///<summary>Sets relationships from this instance to an array of Int64. OWL cardinality 0..-1</summary>
@@ -1860,11 +1860,11 @@ namespace CustomModel
         ///<summary>Sets value of relativeEpsilon</summary>
         public void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", value); }
         ///<summary>Gets value of relativeEpsilon, returns null is the property was not set</summary>
-        public double? get_relativeEpsilon() { var arr = GetDatatypeProperty_double("relativeEpsilon"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_relativeEpsilon() { var arr = GetDatatypeProperty_double("relativeEpsilon"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of representsSolid</summary>
         public void set_representsSolid(bool value) { SetDatatypeProperty ("representsSolid", value); }
         ///<summary>Gets value of representsSolid, returns null is the property was not set</summary>
-        public bool? get_representsSolid() { var arr = GetDatatypeProperty_bool("representsSolid"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_representsSolid() { var arr = GetDatatypeProperty_bool("representsSolid"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
     }
 
 
@@ -1923,7 +1923,7 @@ namespace CustomModel
         ///<summary>Sets value of ambientReflectance</summary>
         public void set_ambientReflectance(double value) { SetDatatypeProperty ("ambientReflectance", value); }
         ///<summary>Gets value of ambientReflectance, returns null is the property was not set</summary>
-        public double? get_ambientReflectance() { var arr = GetDatatypeProperty_double("ambientReflectance"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_ambientReflectance() { var arr = GetDatatypeProperty_double("ambientReflectance"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of ColorComponent</summary>
         public void set_diffuse(ColorComponent instance) { SetObjectProperty("diffuse", instance); }
         ///<summary>Get related instance</summary>
@@ -1999,7 +1999,7 @@ namespace CustomModel
         ///<summary>Sets value of transparency</summary>
         public void set_transparency(double value) { SetDatatypeProperty ("transparency", value); }
         ///<summary>Gets value of transparency, returns null is the property was not set</summary>
-        public double? get_transparency() { var arr = GetDatatypeProperty_double("transparency"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_transparency() { var arr = GetDatatypeProperty_double("transparency"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2034,19 +2034,19 @@ namespace CustomModel
         ///<summary>Sets value of B</summary>
         public void set_B(double value) { SetDatatypeProperty ("B", value); }
         ///<summary>Gets value of B, returns null is the property was not set</summary>
-        public double? get_B() { var arr = GetDatatypeProperty_double("B"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_B() { var arr = GetDatatypeProperty_double("B"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of G</summary>
         public void set_G(double value) { SetDatatypeProperty ("G", value); }
         ///<summary>Gets value of G, returns null is the property was not set</summary>
-        public double? get_G() { var arr = GetDatatypeProperty_double("G"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_G() { var arr = GetDatatypeProperty_double("G"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of R</summary>
         public void set_R(double value) { SetDatatypeProperty ("R", value); }
         ///<summary>Gets value of R, returns null is the property was not set</summary>
-        public double? get_R() { var arr = GetDatatypeProperty_double("R"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_R() { var arr = GetDatatypeProperty_double("R"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of W</summary>
         public void set_W(double value) { SetDatatypeProperty ("W", value); }
         ///<summary>Gets value of W, returns null is the property was not set</summary>
-        public double? get_W() { var arr = GetDatatypeProperty_double("W"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_W() { var arr = GetDatatypeProperty_double("W"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2081,15 +2081,15 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -2124,19 +2124,19 @@ namespace CustomModel
         ///<summary>Sets value of a</summary>
         public void set_a(double value) { SetDatatypeProperty ("a", value); }
         ///<summary>Gets value of a, returns null is the property was not set</summary>
-        public double? get_a() { var arr = GetDatatypeProperty_double("a"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_a() { var arr = GetDatatypeProperty_double("a"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of size</summary>
         public void set_size(double value) { SetDatatypeProperty ("size", value); }
         ///<summary>Gets value of size, returns null is the property was not set</summary>
-        public double? get_size() { var arr = GetDatatypeProperty_double("size"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_size() { var arr = GetDatatypeProperty_double("size"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of start</summary>
         public void set_start(double value) { SetDatatypeProperty ("start", value); }
         ///<summary>Gets value of start, returns null is the property was not set</summary>
-        public double? get_start() { var arr = GetDatatypeProperty_double("start"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_start() { var arr = GetDatatypeProperty_double("start"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2171,19 +2171,19 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of semiVerticalAngle</summary>
         public void set_semiVerticalAngle(double value) { SetDatatypeProperty ("semiVerticalAngle", value); }
         ///<summary>Gets value of semiVerticalAngle, returns null is the property was not set</summary>
-        public double? get_semiVerticalAngle() { var arr = GetDatatypeProperty_double("semiVerticalAngle"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_semiVerticalAngle() { var arr = GetDatatypeProperty_double("semiVerticalAngle"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2218,7 +2218,7 @@ namespace CustomModel
         ///<summary>Sets value of instanceReference</summary>
         public void set_instanceReference(Int64 value) { SetDatatypeProperty ("instanceReference", value); }
         ///<summary>Gets value of instanceReference, returns null is the property was not set</summary>
-        public Int64? get_instanceReference() { var arr = GetDatatypeProperty_Int64("instanceReference"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_instanceReference() { var arr = GetDatatypeProperty_Int64("instanceReference"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -2279,7 +2279,7 @@ namespace CustomModel
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2340,15 +2340,15 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of width</summary>
         public void set_width(double value) { SetDatatypeProperty ("width", value); }
         ///<summary>Gets value of width, returns null is the property was not set</summary>
-        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2494,15 +2494,15 @@ namespace CustomModel
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -2537,11 +2537,11 @@ namespace CustomModel
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -2576,15 +2576,15 @@ namespace CustomModel
         ///<summary>Sets value of majorRadius</summary>
         public void set_majorRadius(double value) { SetDatatypeProperty ("majorRadius", value); }
         ///<summary>Gets value of majorRadius, returns null is the property was not set</summary>
-        public double? get_majorRadius() { var arr = GetDatatypeProperty_double("majorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_majorRadius() { var arr = GetDatatypeProperty_double("majorRadius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of minorRadius</summary>
         public void set_minorRadius(double value) { SetDatatypeProperty ("minorRadius", value); }
         ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
-        public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -2619,11 +2619,11 @@ namespace CustomModel
         ///<summary>Sets value of absoluteEpsilon</summary>
         public void set_absoluteEpsilon(double value) { SetDatatypeProperty ("absoluteEpsilon", value); }
         ///<summary>Gets value of absoluteEpsilon, returns null is the property was not set</summary>
-        public double? get_absoluteEpsilon() { var arr = GetDatatypeProperty_double("absoluteEpsilon"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_absoluteEpsilon() { var arr = GetDatatypeProperty_double("absoluteEpsilon"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of relativeEpsilon</summary>
         public void set_relativeEpsilon(double value) { SetDatatypeProperty ("relativeEpsilon", value); }
         ///<summary>Gets value of relativeEpsilon, returns null is the property was not set</summary>
-        public double? get_relativeEpsilon() { var arr = GetDatatypeProperty_double("relativeEpsilon"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_relativeEpsilon() { var arr = GetDatatypeProperty_double("relativeEpsilon"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2713,11 +2713,11 @@ namespace CustomModel
         ///<summary>Sets value of attenuation</summary>
         public void set_attenuation(double value) { SetDatatypeProperty ("attenuation", value); }
         ///<summary>Gets value of attenuation, returns null is the property was not set</summary>
-        public double? get_attenuation() { var arr = GetDatatypeProperty_double("attenuation"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_attenuation() { var arr = GetDatatypeProperty_double("attenuation"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of range</summary>
         public void set_range(double value) { SetDatatypeProperty ("range", value); }
         ///<summary>Gets value of range, returns null is the property was not set</summary>
-        public double? get_range() { var arr = GetDatatypeProperty_double("range"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_range() { var arr = GetDatatypeProperty_double("range"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2778,15 +2778,15 @@ namespace CustomModel
         ///<summary>Sets value of b</summary>
         public void set_b(double value) { SetDatatypeProperty ("b", value); }
         ///<summary>Gets value of b, returns null is the property was not set</summary>
-        public double? get_b() { var arr = GetDatatypeProperty_double("b"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_b() { var arr = GetDatatypeProperty_double("b"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radiusI</summary>
         public void set_radiusI(double value) { SetDatatypeProperty ("radiusI", value); }
         ///<summary>Gets value of radiusI, returns null is the property was not set</summary>
-        public double? get_radiusI() { var arr = GetDatatypeProperty_double("radiusI"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radiusI() { var arr = GetDatatypeProperty_double("radiusI"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radiusII</summary>
         public void set_radiusII(double value) { SetDatatypeProperty ("radiusII", value); }
         ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
-        public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -2821,19 +2821,19 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radiusI</summary>
         public void set_radiusI(double value) { SetDatatypeProperty ("radiusI", value); }
         ///<summary>Gets value of radiusI, returns null is the property was not set</summary>
-        public double? get_radiusI() { var arr = GetDatatypeProperty_double("radiusI"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radiusI() { var arr = GetDatatypeProperty_double("radiusI"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radiusII</summary>
         public void set_radiusII(double value) { SetDatatypeProperty ("radiusII", value); }
         ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
-        public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -2894,11 +2894,11 @@ namespace CustomModel
         ///<summary>Sets value of extrusionLength</summary>
         public void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", value); }
         ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets values of openingPoints. OWL cardinality 0..-1</summary>
         public void set_openingPoints(double[] values) { SetDatatypeProperty ("openingPoints", values); }
         ///<summary>Gets values of openingPoints. OWL cardinality 0..-1</summary>
@@ -2949,11 +2949,11 @@ namespace CustomModel
         ///<summary>Sets value of extrusionLength</summary>
         public void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", value); }
         ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets values of openingPoints. OWL cardinality 0..-1</summary>
         public void set_openingPoints(double[] values) { SetDatatypeProperty ("openingPoints", values); }
         ///<summary>Gets values of openingPoints. OWL cardinality 0..-1</summary>
@@ -3098,11 +3098,11 @@ namespace CustomModel
         ///<summary>Sets value of extrusionLength</summary>
         public void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", value); }
         ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -3195,11 +3195,11 @@ namespace CustomModel
         ///<summary>Sets value of extrusionLength</summary>
         public void set_extrusionLength(double value) { SetDatatypeProperty ("extrusionLength", value); }
         ///<summary>Gets value of extrusionLength, returns null is the property was not set</summary>
-        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_extrusionLength() { var arr = GetDatatypeProperty_double("extrusionLength"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -3338,7 +3338,7 @@ namespace CustomModel
         ///<summary>Sets value of setting</summary>
         public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -3427,7 +3427,7 @@ namespace CustomModel
         ///<summary>Sets value of setting</summary>
         public void set_setting(Int64 value) { SetDatatypeProperty ("setting", value); }
         ///<summary>Gets value of setting, returns null is the property was not set</summary>
-        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_setting() { var arr = GetDatatypeProperty_Int64("setting"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -3488,19 +3488,19 @@ namespace CustomModel
         ///<summary>Sets value of factor</summary>
         public void set_factor(double value) { SetDatatypeProperty ("factor", value); }
         ///<summary>Gets value of factor, returns null is the property was not set</summary>
-        public double? get_factor() { var arr = GetDatatypeProperty_double("factor"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_factor() { var arr = GetDatatypeProperty_double("factor"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -3616,7 +3616,7 @@ namespace CustomModel
         ///<summary>Sets value of b</summary>
         public void set_b(double value) { SetDatatypeProperty ("b", value); }
         ///<summary>Gets value of b, returns null is the property was not set</summary>
-        public double? get_b() { var arr = GetDatatypeProperty_double("b"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_b() { var arr = GetDatatypeProperty_double("b"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -3897,7 +3897,7 @@ namespace CustomModel
         ///<summary>Sets value of asOpenGL</summary>
         public void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", value); }
         ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets values of points. OWL cardinality 6..6</summary>
         public void set_points(double[] values) { SetDatatypeProperty ("points", values); }
         ///<summary>Gets values of points. OWL cardinality 6..6</summary>
@@ -3936,7 +3936,7 @@ namespace CustomModel
         ///<summary>Sets value of asOpenGL</summary>
         public void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", value); }
         ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets values of endDirection. OWL cardinality 0..3</summary>
         public void set_endDirection(double[] values) { SetDatatypeProperty ("endDirection", values); }
         ///<summary>Gets values of endDirection. OWL cardinality 0..3</summary>
@@ -3952,27 +3952,27 @@ namespace CustomModel
         ///<summary>Sets value of x0</summary>
         public void set_x0(double value) { SetDatatypeProperty ("x0", value); }
         ///<summary>Gets value of x0, returns null is the property was not set</summary>
-        public double? get_x0() { var arr = GetDatatypeProperty_double("x0"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_x0() { var arr = GetDatatypeProperty_double("x0"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of x1</summary>
         public void set_x1(double value) { SetDatatypeProperty ("x1", value); }
         ///<summary>Gets value of x1, returns null is the property was not set</summary>
-        public double? get_x1() { var arr = GetDatatypeProperty_double("x1"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_x1() { var arr = GetDatatypeProperty_double("x1"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of y0</summary>
         public void set_y0(double value) { SetDatatypeProperty ("y0", value); }
         ///<summary>Gets value of y0, returns null is the property was not set</summary>
-        public double? get_y0() { var arr = GetDatatypeProperty_double("y0"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_y0() { var arr = GetDatatypeProperty_double("y0"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of y1</summary>
         public void set_y1(double value) { SetDatatypeProperty ("y1", value); }
         ///<summary>Gets value of y1, returns null is the property was not set</summary>
-        public double? get_y1() { var arr = GetDatatypeProperty_double("y1"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_y1() { var arr = GetDatatypeProperty_double("y1"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of z0</summary>
         public void set_z0(double value) { SetDatatypeProperty ("z0", value); }
         ///<summary>Gets value of z0, returns null is the property was not set</summary>
-        public double? get_z0() { var arr = GetDatatypeProperty_double("z0"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_z0() { var arr = GetDatatypeProperty_double("z0"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of z1</summary>
         public void set_z1(double value) { SetDatatypeProperty ("z1", value); }
         ///<summary>Gets value of z1, returns null is the property was not set</summary>
-        public double? get_z1() { var arr = GetDatatypeProperty_double("z1"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_z1() { var arr = GetDatatypeProperty_double("z1"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -4007,7 +4007,7 @@ namespace CustomModel
         ///<summary>Sets value of asOpenGL</summary>
         public void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", value); }
         ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets values of points. OWL cardinality 0..-1</summary>
         public void set_points(double[] values) { SetDatatypeProperty ("points", values); }
         ///<summary>Gets values of points. OWL cardinality 0..-1</summary>
@@ -4266,51 +4266,51 @@ namespace CustomModel
         ///<summary>Sets value of _11</summary>
         public void set__11(double value) { SetDatatypeProperty ("_11", value); }
         ///<summary>Gets value of _11, returns null is the property was not set</summary>
-        public double? get__11() { var arr = GetDatatypeProperty_double("_11"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__11() { var arr = GetDatatypeProperty_double("_11"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _12</summary>
         public void set__12(double value) { SetDatatypeProperty ("_12", value); }
         ///<summary>Gets value of _12, returns null is the property was not set</summary>
-        public double? get__12() { var arr = GetDatatypeProperty_double("_12"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__12() { var arr = GetDatatypeProperty_double("_12"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _13</summary>
         public void set__13(double value) { SetDatatypeProperty ("_13", value); }
         ///<summary>Gets value of _13, returns null is the property was not set</summary>
-        public double? get__13() { var arr = GetDatatypeProperty_double("_13"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__13() { var arr = GetDatatypeProperty_double("_13"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _21</summary>
         public void set__21(double value) { SetDatatypeProperty ("_21", value); }
         ///<summary>Gets value of _21, returns null is the property was not set</summary>
-        public double? get__21() { var arr = GetDatatypeProperty_double("_21"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__21() { var arr = GetDatatypeProperty_double("_21"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _22</summary>
         public void set__22(double value) { SetDatatypeProperty ("_22", value); }
         ///<summary>Gets value of _22, returns null is the property was not set</summary>
-        public double? get__22() { var arr = GetDatatypeProperty_double("_22"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__22() { var arr = GetDatatypeProperty_double("_22"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _23</summary>
         public void set__23(double value) { SetDatatypeProperty ("_23", value); }
         ///<summary>Gets value of _23, returns null is the property was not set</summary>
-        public double? get__23() { var arr = GetDatatypeProperty_double("_23"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__23() { var arr = GetDatatypeProperty_double("_23"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _31</summary>
         public void set__31(double value) { SetDatatypeProperty ("_31", value); }
         ///<summary>Gets value of _31, returns null is the property was not set</summary>
-        public double? get__31() { var arr = GetDatatypeProperty_double("_31"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__31() { var arr = GetDatatypeProperty_double("_31"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _32</summary>
         public void set__32(double value) { SetDatatypeProperty ("_32", value); }
         ///<summary>Gets value of _32, returns null is the property was not set</summary>
-        public double? get__32() { var arr = GetDatatypeProperty_double("_32"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__32() { var arr = GetDatatypeProperty_double("_32"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _33</summary>
         public void set__33(double value) { SetDatatypeProperty ("_33", value); }
         ///<summary>Gets value of _33, returns null is the property was not set</summary>
-        public double? get__33() { var arr = GetDatatypeProperty_double("_33"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__33() { var arr = GetDatatypeProperty_double("_33"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _41</summary>
         public void set__41(double value) { SetDatatypeProperty ("_41", value); }
         ///<summary>Gets value of _41, returns null is the property was not set</summary>
-        public double? get__41() { var arr = GetDatatypeProperty_double("_41"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__41() { var arr = GetDatatypeProperty_double("_41"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _42</summary>
         public void set__42(double value) { SetDatatypeProperty ("_42", value); }
         ///<summary>Gets value of _42, returns null is the property was not set</summary>
-        public double? get__42() { var arr = GetDatatypeProperty_double("_42"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__42() { var arr = GetDatatypeProperty_double("_42"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of _43</summary>
         public void set__43(double value) { SetDatatypeProperty ("_43", value); }
         ///<summary>Gets value of _43, returns null is the property was not set</summary>
-        public double? get__43() { var arr = GetDatatypeProperty_double("_43"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get__43() { var arr = GetDatatypeProperty_double("_43"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets values of coordinates. OWL cardinality 0..12</summary>
         public void set_coordinates(double[] values) { SetDatatypeProperty ("coordinates", values); }
         ///<summary>Gets values of coordinates. OWL cardinality 0..12</summary>
@@ -4618,19 +4618,19 @@ namespace CustomModel
         ///<summary>Sets value of A</summary>
         public void set_A(double value) { SetDatatypeProperty ("A", value); }
         ///<summary>Gets value of A, returns null is the property was not set</summary>
-        public double? get_A() { var arr = GetDatatypeProperty_double("A"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_A() { var arr = GetDatatypeProperty_double("A"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of B</summary>
         public void set_B(double value) { SetDatatypeProperty ("B", value); }
         ///<summary>Gets value of B, returns null is the property was not set</summary>
-        public double? get_B() { var arr = GetDatatypeProperty_double("B"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_B() { var arr = GetDatatypeProperty_double("B"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of C</summary>
         public void set_C(double value) { SetDatatypeProperty ("C", value); }
         ///<summary>Gets value of C, returns null is the property was not set</summary>
-        public double? get_C() { var arr = GetDatatypeProperty_double("C"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_C() { var arr = GetDatatypeProperty_double("C"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of D</summary>
         public void set_D(double value) { SetDatatypeProperty ("D", value); }
         ///<summary>Gets value of D, returns null is the property was not set</summary>
-        public double? get_D() { var arr = GetDatatypeProperty_double("D"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_D() { var arr = GetDatatypeProperty_double("D"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -4746,7 +4746,7 @@ namespace CustomModel
         ///<summary>Sets value of asOpenGL</summary>
         public void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", value); }
         ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets values of coordinates. OWL cardinality 0..3</summary>
         public void set_coordinates(double[] values) { SetDatatypeProperty ("coordinates", values); }
         ///<summary>Gets values of coordinates. OWL cardinality 0..3</summary>
@@ -4758,15 +4758,15 @@ namespace CustomModel
         ///<summary>Sets value of x</summary>
         public void set_x(double value) { SetDatatypeProperty ("x", value); }
         ///<summary>Gets value of x, returns null is the property was not set</summary>
-        public double? get_x() { var arr = GetDatatypeProperty_double("x"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_x() { var arr = GetDatatypeProperty_double("x"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of y</summary>
         public void set_y(double value) { SetDatatypeProperty ("y", value); }
         ///<summary>Gets value of y, returns null is the property was not set</summary>
-        public double? get_y() { var arr = GetDatatypeProperty_double("y"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_y() { var arr = GetDatatypeProperty_double("y"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of z</summary>
         public void set_z(double value) { SetDatatypeProperty ("z", value); }
         ///<summary>Gets value of z, returns null is the property was not set</summary>
-        public double? get_z() { var arr = GetDatatypeProperty_double("z"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_z() { var arr = GetDatatypeProperty_double("z"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -4801,7 +4801,7 @@ namespace CustomModel
         ///<summary>Sets value of asOpenGL</summary>
         public void set_asOpenGL(bool value) { SetDatatypeProperty ("asOpenGL", value); }
         ///<summary>Gets value of asOpenGL, returns null is the property was not set</summary>
-        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_asOpenGL() { var arr = GetDatatypeProperty_bool("asOpenGL"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets values of coordinates. OWL cardinality 0..-1</summary>
         public void set_coordinates(double[] values) { SetDatatypeProperty ("coordinates", values); }
         ///<summary>Gets values of coordinates. OWL cardinality 0..-1</summary>
@@ -4958,15 +4958,15 @@ namespace CustomModel
         ///<summary>Sets value of x</summary>
         public void set_x(double value) { SetDatatypeProperty ("x", value); }
         ///<summary>Gets value of x, returns null is the property was not set</summary>
-        public double? get_x() { var arr = GetDatatypeProperty_double("x"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_x() { var arr = GetDatatypeProperty_double("x"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of y</summary>
         public void set_y(double value) { SetDatatypeProperty ("y", value); }
         ///<summary>Gets value of y, returns null is the property was not set</summary>
-        public double? get_y() { var arr = GetDatatypeProperty_double("y"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_y() { var arr = GetDatatypeProperty_double("y"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of z</summary>
         public void set_z(double value) { SetDatatypeProperty ("z", value); }
         ///<summary>Gets value of z, returns null is the property was not set</summary>
-        public double? get_z() { var arr = GetDatatypeProperty_double("z"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_z() { var arr = GetDatatypeProperty_double("z"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -5268,11 +5268,11 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -5471,15 +5471,15 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of width</summary>
         public void set_width(double value) { SetDatatypeProperty ("width", value); }
         ///<summary>Gets value of width, returns null is the property was not set</summary>
-        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -5584,23 +5584,23 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetX</summary>
         public void set_offsetX(double value) { SetDatatypeProperty ("offsetX", value); }
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetY</summary>
         public void set_offsetY(double value) { SetDatatypeProperty ("offsetY", value); }
         ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetZ</summary>
         public void set_offsetZ(double value) { SetDatatypeProperty ("offsetZ", value); }
         ///<summary>Gets value of offsetZ, returns null is the property was not set</summary>
-        public double? get_offsetZ() { var arr = GetDatatypeProperty_double("offsetZ"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetZ() { var arr = GetDatatypeProperty_double("offsetZ"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of width</summary>
         public void set_width(double value) { SetDatatypeProperty ("width", value); }
         ///<summary>Gets value of width, returns null is the property was not set</summary>
-        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_width() { var arr = GetDatatypeProperty_double("width"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -5635,7 +5635,7 @@ namespace CustomModel
         ///<summary>Sets value of count</summary>
         public void set_count(Int64 value) { SetDatatypeProperty ("count", value); }
         ///<summary>Gets value of count, returns null is the property was not set</summary>
-        public Int64? get_count() { var arr = GetDatatypeProperty_Int64("count"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_count() { var arr = GetDatatypeProperty_Int64("count"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Matrix</summary>
         public void set_matrix(Matrix instance) { SetObjectProperty("matrix", instance); }
         ///<summary>Get related instance</summary>
@@ -5864,7 +5864,7 @@ namespace CustomModel
         ///<summary>Sets value of type</summary>
         public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -5925,23 +5925,23 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetX</summary>
         public void set_offsetX(double value) { SetDatatypeProperty ("offsetX", value); }
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetY</summary>
         public void set_offsetY(double value) { SetDatatypeProperty ("offsetY", value); }
         ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -5976,27 +5976,27 @@ namespace CustomModel
         ///<summary>Sets value of factor</summary>
         public void set_factor(double value) { SetDatatypeProperty ("factor", value); }
         ///<summary>Gets value of factor, returns null is the property was not set</summary>
-        public double? get_factor() { var arr = GetDatatypeProperty_double("factor"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_factor() { var arr = GetDatatypeProperty_double("factor"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetX</summary>
         public void set_offsetX(double value) { SetDatatypeProperty ("offsetX", value); }
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetY</summary>
         public void set_offsetY(double value) { SetDatatypeProperty ("offsetY", value); }
         ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -6146,11 +6146,11 @@ namespace CustomModel
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of thickness</summary>
         public void set_thickness(double value) { SetDatatypeProperty ("thickness", value); }
         ///<summary>Gets value of thickness, returns null is the property was not set</summary>
-        public double? get_thickness() { var arr = GetDatatypeProperty_double("thickness"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_thickness() { var arr = GetDatatypeProperty_double("thickness"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -6185,11 +6185,11 @@ namespace CustomModel
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -6224,11 +6224,11 @@ namespace CustomModel
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -6289,27 +6289,27 @@ namespace CustomModel
         ///<summary>Sets value of height</summary>
         public void set_height(double value) { SetDatatypeProperty ("height", value); }
         ///<summary>Gets value of height, returns null is the property was not set</summary>
-        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_height() { var arr = GetDatatypeProperty_double("height"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetZ</summary>
         public void set_offsetZ(double value) { SetDatatypeProperty ("offsetZ", value); }
         ///<summary>Gets value of offsetZ, returns null is the property was not set</summary>
-        public double? get_offsetZ() { var arr = GetDatatypeProperty_double("offsetZ"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetZ() { var arr = GetDatatypeProperty_double("offsetZ"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radius</summary>
         public void set_radius(double value) { SetDatatypeProperty ("radius", value); }
         ///<summary>Gets value of radius, returns null is the property was not set</summary>
-        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radius() { var arr = GetDatatypeProperty_double("radius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of size</summary>
         public void set_size(double value) { SetDatatypeProperty ("size", value); }
         ///<summary>Gets value of size, returns null is the property was not set</summary>
-        public double? get_size() { var arr = GetDatatypeProperty_double("size"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_size() { var arr = GetDatatypeProperty_double("size"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of start</summary>
         public void set_start(double value) { SetDatatypeProperty ("start", value); }
         ///<summary>Gets value of start, returns null is the property was not set</summary>
-        public double? get_start() { var arr = GetDatatypeProperty_double("start"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_start() { var arr = GetDatatypeProperty_double("start"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -6344,7 +6344,7 @@ namespace CustomModel
         ///<summary>Sets value of closed</summary>
         public void set_closed(bool value) { SetDatatypeProperty ("closed", value); }
         ///<summary>Gets value of closed, returns null is the property was not set</summary>
-        public bool? get_closed() { var arr = GetDatatypeProperty_bool("closed"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_closed() { var arr = GetDatatypeProperty_bool("closed"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 2..-1</summary>
         public void set_controlPoints(Point3D[] instances) { SetObjectProperty("controlPoints", instances); }
         ///<summary>Sets relationships from this instance to an array of Int64. OWL cardinality 2..-1</summary>
@@ -6402,19 +6402,19 @@ namespace CustomModel
         ///<summary>Sets value of count</summary>
         public void set_count(Int64 value) { SetDatatypeProperty ("count", value); }
         ///<summary>Gets value of count, returns null is the property was not set</summary>
-        public Int64? get_count() { var arr = GetDatatypeProperty_Int64("count"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_count() { var arr = GetDatatypeProperty_Int64("count"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of degree</summary>
         public void set_degree(Int64 value) { SetDatatypeProperty ("degree", value); }
         ///<summary>Gets value of degree, returns null is the property was not set</summary>
-        public Int64? get_degree() { var arr = GetDatatypeProperty_Int64("degree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_degree() { var arr = GetDatatypeProperty_Int64("degree"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of segmentationLength</summary>
         public void set_segmentationLength(double value) { SetDatatypeProperty ("segmentationLength", value); }
         ///<summary>Gets value of segmentationLength, returns null is the property was not set</summary>
-        public double? get_segmentationLength() { var arr = GetDatatypeProperty_double("segmentationLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_segmentationLength() { var arr = GetDatatypeProperty_double("segmentationLength"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -6503,43 +6503,43 @@ namespace CustomModel
         ///<summary>Sets value of segmentationLength</summary>
         public void set_segmentationLength(double value) { SetDatatypeProperty ("segmentationLength", value); }
         ///<summary>Gets value of segmentationLength, returns null is the property was not set</summary>
-        public double? get_segmentationLength() { var arr = GetDatatypeProperty_double("segmentationLength"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_segmentationLength() { var arr = GetDatatypeProperty_double("segmentationLength"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of uClosed</summary>
         public void set_uClosed(bool value) { SetDatatypeProperty ("uClosed", value); }
         ///<summary>Gets value of uClosed, returns null is the property was not set</summary>
-        public bool? get_uClosed() { var arr = GetDatatypeProperty_bool("uClosed"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_uClosed() { var arr = GetDatatypeProperty_bool("uClosed"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of uCount</summary>
         public void set_uCount(Int64 value) { SetDatatypeProperty ("uCount", value); }
         ///<summary>Gets value of uCount, returns null is the property was not set</summary>
-        public Int64? get_uCount() { var arr = GetDatatypeProperty_Int64("uCount"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_uCount() { var arr = GetDatatypeProperty_Int64("uCount"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of uDegree</summary>
         public void set_uDegree(Int64 value) { SetDatatypeProperty ("uDegree", value); }
         ///<summary>Gets value of uDegree, returns null is the property was not set</summary>
-        public Int64? get_uDegree() { var arr = GetDatatypeProperty_Int64("uDegree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_uDegree() { var arr = GetDatatypeProperty_Int64("uDegree"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of uSegmentationParts</summary>
         public void set_uSegmentationParts(Int64 value) { SetDatatypeProperty ("uSegmentationParts", value); }
         ///<summary>Gets value of uSegmentationParts, returns null is the property was not set</summary>
-        public Int64? get_uSegmentationParts() { var arr = GetDatatypeProperty_Int64("uSegmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_uSegmentationParts() { var arr = GetDatatypeProperty_Int64("uSegmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of vClosed</summary>
         public void set_vClosed(bool value) { SetDatatypeProperty ("vClosed", value); }
         ///<summary>Gets value of vClosed, returns null is the property was not set</summary>
-        public bool? get_vClosed() { var arr = GetDatatypeProperty_bool("vClosed"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_vClosed() { var arr = GetDatatypeProperty_bool("vClosed"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of vCount</summary>
         public void set_vCount(Int64 value) { SetDatatypeProperty ("vCount", value); }
         ///<summary>Gets value of vCount, returns null is the property was not set</summary>
-        public Int64? get_vCount() { var arr = GetDatatypeProperty_Int64("vCount"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_vCount() { var arr = GetDatatypeProperty_Int64("vCount"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of vDegree</summary>
         public void set_vDegree(Int64 value) { SetDatatypeProperty ("vDegree", value); }
         ///<summary>Gets value of vDegree, returns null is the property was not set</summary>
-        public Int64? get_vDegree() { var arr = GetDatatypeProperty_Int64("vDegree"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_vDegree() { var arr = GetDatatypeProperty_Int64("vDegree"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
         ///<summary>Sets value of vSegmentationParts</summary>
         public void set_vSegmentationParts(Int64 value) { SetDatatypeProperty ("vSegmentationParts", value); }
         ///<summary>Gets value of vSegmentationParts, returns null is the property was not set</summary>
-        public Int64? get_vSegmentationParts() { var arr = GetDatatypeProperty_Int64("vSegmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_vSegmentationParts() { var arr = GetDatatypeProperty_Int64("vSegmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -6862,7 +6862,7 @@ namespace CustomModel
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -6921,7 +6921,7 @@ namespace CustomModel
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         public void set_path(Curve instance) { SetObjectProperty("path", instance); }
         ///<summary>Get related instance</summary>
@@ -7082,7 +7082,7 @@ namespace CustomModel
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         public void set_path(Curve instance) { SetObjectProperty("path", instance); }
         ///<summary>Get related instance</summary>
@@ -7219,7 +7219,7 @@ namespace CustomModel
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         public void set_path(Curve instance) { SetObjectProperty("path", instance); }
         ///<summary>Get related instance</summary>
@@ -7466,19 +7466,19 @@ namespace CustomModel
         ///<summary>Sets value of forceSolid</summary>
         public void set_forceSolid(bool value) { SetDatatypeProperty ("forceSolid", value); }
         ///<summary>Gets value of forceSolid, returns null is the property was not set</summary>
-        public bool? get_forceSolid() { var arr = GetDatatypeProperty_bool("forceSolid"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_forceSolid() { var arr = GetDatatypeProperty_bool("forceSolid"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of fraction</summary>
         public void set_fraction(double value) { SetDatatypeProperty ("fraction", value); }
         ///<summary>Gets value of fraction, returns null is the property was not set</summary>
-        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_fraction() { var arr = GetDatatypeProperty_double("fraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of hasBottom</summary>
         public void set_hasBottom(bool value) { SetDatatypeProperty ("hasBottom", value); }
         ///<summary>Gets value of hasBottom, returns null is the property was not set</summary>
-        public bool? get_hasBottom() { var arr = GetDatatypeProperty_bool("hasBottom"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_hasBottom() { var arr = GetDatatypeProperty_bool("hasBottom"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets value of hasTop</summary>
         public void set_hasTop(bool value) { SetDatatypeProperty ("hasTop", value); }
         ///<summary>Gets value of hasTop, returns null is the property was not set</summary>
-        public bool? get_hasTop() { var arr = GetDatatypeProperty_bool("hasTop"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_hasTop() { var arr = GetDatatypeProperty_bool("hasTop"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         public void set_path(Curve instance) { SetObjectProperty("path", instance); }
         ///<summary>Get related instance</summary>
@@ -7530,7 +7530,7 @@ namespace CustomModel
         ///<summary>Sets value of usesAbsolutePlacement</summary>
         public void set_usesAbsolutePlacement(bool value) { SetDatatypeProperty ("usesAbsolutePlacement", value); }
         ///<summary>Gets value of usesAbsolutePlacement, returns null is the property was not set</summary>
-        public bool? get_usesAbsolutePlacement() { var arr = GetDatatypeProperty_bool("usesAbsolutePlacement"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public bool? get_usesAbsolutePlacement() { var arr = GetDatatypeProperty_bool("usesAbsolutePlacement"); return (arr != null && arr.Length > 0) ? (bool?)arr[0] : null; }
     }
 
 
@@ -7565,15 +7565,15 @@ namespace CustomModel
         ///<summary>Sets value of name</summary>
         public void set_name(string value) { SetDatatypeProperty ("name", value); }
         ///<summary>Gets value of name, returns null is the property was not set</summary>
-        public string get_name() { var arr = GetDatatypeProperty_string("name"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public string get_name() { var arr = GetDatatypeProperty_string("name"); return (arr != null && arr.Length > 0) ? (string)arr[0] : null; }
         ///<summary>Sets value of offsetX</summary>
         public void set_offsetX(double value) { SetDatatypeProperty ("offsetX", value); }
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetY</summary>
         public void set_offsetY(double value) { SetDatatypeProperty ("offsetY", value); }
         ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets values of origin. OWL cardinality 0..3</summary>
         public void set_origin(double[] values) { SetDatatypeProperty ("origin", values); }
         ///<summary>Gets values of origin. OWL cardinality 0..3</summary>
@@ -7581,19 +7581,19 @@ namespace CustomModel
         ///<summary>Sets value of rotation</summary>
         public void set_rotation(double value) { SetDatatypeProperty ("rotation", value); }
         ///<summary>Gets value of rotation, returns null is the property was not set</summary>
-        public double? get_rotation() { var arr = GetDatatypeProperty_double("rotation"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_rotation() { var arr = GetDatatypeProperty_double("rotation"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of scalingX</summary>
         public void set_scalingX(double value) { SetDatatypeProperty ("scalingX", value); }
         ///<summary>Gets value of scalingX, returns null is the property was not set</summary>
-        public double? get_scalingX() { var arr = GetDatatypeProperty_double("scalingX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_scalingX() { var arr = GetDatatypeProperty_double("scalingX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of scalingY</summary>
         public void set_scalingY(double value) { SetDatatypeProperty ("scalingY", value); }
         ///<summary>Gets value of scalingY, returns null is the property was not set</summary>
-        public double? get_scalingY() { var arr = GetDatatypeProperty_double("scalingY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_scalingY() { var arr = GetDatatypeProperty_double("scalingY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of type</summary>
         public void set_type(Int64 value) { SetDatatypeProperty ("type", value); }
         ///<summary>Gets value of type, returns null is the property was not set</summary>
-        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_type() { var arr = GetDatatypeProperty_Int64("type"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -7628,15 +7628,15 @@ namespace CustomModel
         ///<summary>Sets value of majorRadius</summary>
         public void set_majorRadius(double value) { SetDatatypeProperty ("majorRadius", value); }
         ///<summary>Gets value of majorRadius, returns null is the property was not set</summary>
-        public double? get_majorRadius() { var arr = GetDatatypeProperty_double("majorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_majorRadius() { var arr = GetDatatypeProperty_double("majorRadius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of minorRadius</summary>
         public void set_minorRadius(double value) { SetDatatypeProperty ("minorRadius", value); }
         ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
-        public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -7671,15 +7671,15 @@ namespace CustomModel
         ///<summary>Sets value of majorRadius</summary>
         public void set_majorRadius(double value) { SetDatatypeProperty ("majorRadius", value); }
         ///<summary>Gets value of majorRadius, returns null is the property was not set</summary>
-        public double? get_majorRadius() { var arr = GetDatatypeProperty_double("majorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_majorRadius() { var arr = GetDatatypeProperty_double("majorRadius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of minorRadius</summary>
         public void set_minorRadius(double value) { SetDatatypeProperty ("minorRadius", value); }
         ///<summary>Gets value of minorRadius, returns null is the property was not set</summary>
-        public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_minorRadius() { var arr = GetDatatypeProperty_double("minorRadius"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -7817,7 +7817,7 @@ namespace CustomModel
         ///<summary>Sets value of length</summary>
         public void set_length(double value) { SetDatatypeProperty ("length", value); }
         ///<summary>Gets value of length, returns null is the property was not set</summary>
-        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_length() { var arr = GetDatatypeProperty_double("length"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of Curve</summary>
         public void set_path(Curve instance) { SetObjectProperty("path", instance); }
         ///<summary>Get related instance</summary>
@@ -7845,15 +7845,15 @@ namespace CustomModel
         ///<summary>Sets value of radiusI</summary>
         public void set_radiusI(double value) { SetDatatypeProperty ("radiusI", value); }
         ///<summary>Gets value of radiusI, returns null is the property was not set</summary>
-        public double? get_radiusI() { var arr = GetDatatypeProperty_double("radiusI"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radiusI() { var arr = GetDatatypeProperty_double("radiusI"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of radiusII</summary>
         public void set_radiusII(double value) { SetDatatypeProperty ("radiusII", value); }
         ///<summary>Gets value of radiusII, returns null is the property was not set</summary>
-        public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_radiusII() { var arr = GetDatatypeProperty_double("radiusII"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of segmentationParts</summary>
         public void set_segmentationParts(Int64 value) { SetDatatypeProperty ("segmentationParts", value); }
         ///<summary>Gets value of segmentationParts, returns null is the property was not set</summary>
-        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public Int64? get_segmentationParts() { var arr = GetDatatypeProperty_Int64("segmentationParts"); return (arr != null && arr.Length > 0) ? (Int64?)arr[0] : null; }
     }
 
 
@@ -7892,15 +7892,15 @@ namespace CustomModel
         ///<summary>Sets value of offsetX</summary>
         public void set_offsetX(double value) { SetDatatypeProperty ("offsetX", value); }
         ///<summary>Gets value of offsetX, returns null is the property was not set</summary>
-        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetX() { var arr = GetDatatypeProperty_double("offsetX"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetY</summary>
         public void set_offsetY(double value) { SetDatatypeProperty ("offsetY", value); }
         ///<summary>Gets value of offsetY, returns null is the property was not set</summary>
-        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetY() { var arr = GetDatatypeProperty_double("offsetY"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of offsetZ</summary>
         public void set_offsetZ(double value) { SetDatatypeProperty ("offsetZ", value); }
         ///<summary>Gets value of offsetZ, returns null is the property was not set</summary>
-        public double? get_offsetZ() { var arr = GetDatatypeProperty_double("offsetZ"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_offsetZ() { var arr = GetDatatypeProperty_double("offsetZ"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationships from this instance to an array of Point3D. OWL cardinality 0..3</summary>
         public void set_pointReferences(Point3D[] instances) { SetObjectProperty("pointReferences", instances); }
         ///<summary>Sets relationships from this instance to an array of Int64. OWL cardinality 0..3</summary>
@@ -7989,7 +7989,7 @@ namespace CustomModel
         ///<summary>Sets value of innerFraction</summary>
         public void set_innerFraction(double value) { SetDatatypeProperty ("innerFraction", value); }
         ///<summary>Gets value of innerFraction, returns null is the property was not set</summary>
-        public double? get_innerFraction() { var arr = GetDatatypeProperty_double("innerFraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_innerFraction() { var arr = GetDatatypeProperty_double("innerFraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets relationship from this instance to an instance of GeometricItem</summary>
         public void set_object(GeometricItem instance) { SetObjectProperty("object", instance); }
         ///<summary>Get related instance</summary>
@@ -8017,7 +8017,7 @@ namespace CustomModel
         ///<summary>Sets value of outerFraction</summary>
         public void set_outerFraction(double value) { SetDatatypeProperty ("outerFraction", value); }
         ///<summary>Gets value of outerFraction, returns null is the property was not set</summary>
-        public double? get_outerFraction() { var arr = GetDatatypeProperty_double("outerFraction"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_outerFraction() { var arr = GetDatatypeProperty_double("outerFraction"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -8121,15 +8121,15 @@ namespace CustomModel
         ///<summary>Sets value of x</summary>
         public void set_x(double value) { SetDatatypeProperty ("x", value); }
         ///<summary>Gets value of x, returns null is the property was not set</summary>
-        public double? get_x() { var arr = GetDatatypeProperty_double("x"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_x() { var arr = GetDatatypeProperty_double("x"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of y</summary>
         public void set_y(double value) { SetDatatypeProperty ("y", value); }
         ///<summary>Gets value of y, returns null is the property was not set</summary>
-        public double? get_y() { var arr = GetDatatypeProperty_double("y"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_y() { var arr = GetDatatypeProperty_double("y"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
         ///<summary>Sets value of z</summary>
         public void set_z(double value) { SetDatatypeProperty ("z", value); }
         ///<summary>Gets value of z, returns null is the property was not set</summary>
-        public double? get_z() { var arr = GetDatatypeProperty_double("z"); return (arr != null && arr.Length > 0) ? arr[0] : null; }
+        public double? get_z() { var arr = GetDatatypeProperty_double("z"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
     }
 
 
@@ -8301,13 +8301,27 @@ namespace CustomModel
         /// <summary>
         /// Get property id from property name
         /// </summary>
-        public Int64 GetPropertyId(string name)
+        public Int64 GetPropertyId(string name, Int64 checkCardinality = -1)
         {
             var model = engine.GetModel(m_instance);
             System.Diagnostics.Debug.Assert(model != 0);
 
             var propId = engine.GetPropertyByName(model, name);
             System.Diagnostics.Debug.Assert(propId != 0);
+
+#if DEBUG
+            if (propId != 0)
+            {
+                var clsId = engine.GetInstanceClass(m_instance);
+                Int64 minCard = 0, maxCard = 0;
+                engine.GetPropertyRestrictionsConsolidated(clsId, propId, out minCard, out maxCard);
+                System.Diagnostics.Debug.Assert(minCard >= 0); //property assigned to the class
+                if (checkCardinality > 0)
+                { //chek cardinatity when set property
+                    System.Diagnostics.Debug.Assert(checkCardinality >= minCard && (checkCardinality <= maxCard || maxCard < 0)); //cardinality is in range
+                }
+            }
+#endif
 
             return propId;
         }
@@ -8317,7 +8331,7 @@ namespace CustomModel
         /// </summary>
         public void SetDatatypeProperty(string name, double value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8327,7 +8341,7 @@ namespace CustomModel
         /// </summary>
         public void SetDatatypeProperty(string name, double[] values)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8337,7 +8351,7 @@ namespace CustomModel
         /// </summary>
         public void SetDatatypeProperty(string name, Int64 value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8347,7 +8361,7 @@ namespace CustomModel
         /// </summary>
         public void SetDatatypeProperty(string name, Int64[] values)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8357,7 +8371,7 @@ namespace CustomModel
         /// </summary>
         public void SetDatatypeProperty(string name, bool value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             byte v = (byte)(value ? 1 : 0);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref v, 1);
             System.Diagnostics.Debug.Assert(res == 0);
@@ -8372,7 +8386,7 @@ namespace CustomModel
             for (int i = 0; i < values.Length; i++)
                 bytes[i] = values[i] ? (byte)1 : (byte)0;
 
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, bytes, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8382,7 +8396,7 @@ namespace CustomModel
         /// </summary>
         public void SetDatatypeProperty(string name, string value)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, 1);
             var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
             System.Diagnostics.Debug.Assert(res == 0);
         }
@@ -8392,7 +8406,7 @@ namespace CustomModel
         /// </summary>
         public void SetDatatypeProperty(string name, string[] values)
         {
-            var propId = GetPropertyId(name);
+            var propId = GetPropertyId(name, values.Length);
             var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
             System.Diagnostics.Debug.Assert(res == 0);
         }
