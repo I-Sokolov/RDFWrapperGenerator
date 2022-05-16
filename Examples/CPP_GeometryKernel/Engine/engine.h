@@ -3022,6 +3022,7 @@ int64_t		DECL STDC	GetConceptualFaceMaterial(
 									int64_t				conceptualFace
 								);
 
+
 //
 //		GetConceptualFaceOriginCnt                  (http://rdf.bg/gkdoc/CP64/GetConceptualFaceOriginCnt.html)
 //				int64_t				conceptualFace						IN
@@ -3066,6 +3067,8 @@ void		DECL STDC	GetConceptualFaceOriginEx(
 									int64_t				* originatingOwlInstance,
 									int64_t				* originatingConceptualFace
 								);
+
+
 
 //
 //		GetFaceCnt                                  (http://rdf.bg/gkdoc/CP64/GetFaceCnt.html)
@@ -3513,22 +3516,28 @@ void		DECL STDC	GetDefaultColor(
 //				int64_t				model								IN
 //				const void			* vertexBuffer						IN
 //				int64_t				vertexIndex							IN
-//				int64_t				requiredColor						IN
 //				int64_t				setting								IN
+//				int32_t				* ambient							IN / OUT
+//				int32_t				* diffuse							IN / OUT
+//				int32_t				* emissive							IN / OUT
+//				int32_t				* specular							IN / OUT
 //
-//				int32_t				returns								OUT
+//				void				returns								OUT
 //
-//	Returns vertex color
-//	requiredColor is one of the control vertex data bits applied to colors (FORMAT_VERTEX_COLOR...) 
+//	Returns vertex color.
 //	If vertex format does provide required color, the model default color will be used
 //
-int32_t		DECL STDC	GetVertexColor(
+void		DECL STDC	GetVertexColor(
 									int64_t				model,
 									const void			* vertexBuffer,
 									int64_t				vertexIndex,
-									int64_t				requiredColor,
-									int64_t				setting
+									int64_t				setting,
+									int32_t				* ambient,
+									int32_t				* diffuse,
+									int32_t				* emissive,
+									int32_t				* specular
 								);
+
 
 //
 //		CheckConsistency                            (http://rdf.bg/gkdoc/CP64/CheckConsistency.html)
