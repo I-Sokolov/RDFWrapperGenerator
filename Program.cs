@@ -28,6 +28,9 @@ namespace RDFWrappers
         {
             try
             {
+                var sdai = new SdaiSchema("IFC4");
+                sdai.ToConsole();
+
                 Options options = null;
                 Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => { options = o; });
                 if (options == null)
@@ -76,7 +79,7 @@ namespace RDFWrappers
                 var model = RDF.engine.OpenModel(options.modelFile);
                 Console.WriteLine();
 
-                var schema = new Schema(model);
+                var schema = new RdfSchema(model);
                 if (options.printClasses)
                 {
                     schema.ToConsole();

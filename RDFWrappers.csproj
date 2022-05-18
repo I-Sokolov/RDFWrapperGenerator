@@ -7,7 +7,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath></OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;_WIN64</DefineConstants>
     <NoWarn>1701;1702;CA1416</NoWarn>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
   </PropertyGroup>
@@ -24,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Program.cs~RF2092e90c.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="EngineEx_Template.cs" />
     <EmbeddedResource Include="EngineEx_Template.h" />
   </ItemGroup>
@@ -41,7 +37,10 @@
     <None Update="engine.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Engine\engine.dll">
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="O:\DevArea\RDF\a.out\x64\Debug\ifcengine.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
