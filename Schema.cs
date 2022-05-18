@@ -5,59 +5,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ClsId = System.Int64;
+
 namespace RDFWrappers
 {
-    class Schema
+    abstract class Schema
     {
-        public class Property
+        public interface ClassProperty
         {
-            public Int64 id;
-            public Int64 type;
-            public List<Int64> resrtictions = new List<Int64>();
-
-            public string DataType(bool cs)
-            {
-                switch (type)
-                {
-                    case RDF.engine.OBJECTPROPERTY_TYPE: return "Instance";
-                    case RDF.engine.DATATYPEPROPERTY_TYPE_BOOLEAN: return "bool";
-                    case RDF.engine.DATATYPEPROPERTY_TYPE_CHAR: return cs ? "string" : "const char* const";
-                    case RDF.engine.DATATYPEPROPERTY_TYPE_INTEGER: return cs ? "Int64" : "int64_t";
-                    case RDF.engine.DATATYPEPROPERTY_TYPE_DOUBLE: return "double";
-                }
-                throw new ApplicationException("Unknown property type");
-            }
-
-            public bool IsObject() { return type == RDF.engine.OBJECTPROPERTY_TYPE; }
-        }
-
-        public class ClassProperty
-        {
-            public string name;
-            public Int64 min;
-            public Int64 max;
+            public abstract string Name();
+            public abstract string CSDataType();
+            public abstract bool IsObject();
+            public abstract Int64 CardinalityMin();
+            public abstract Int64 CardinalityMax();
+            public abstract List<ClsId> Restrictions();
         }
 
         public class Class
         {
-            public Int64 id;
-            public List<Int64> parents = new List<Int64>();
+            public ClsId id;
+            public List<ClsId> parents = new List<ClsId>();
             public List<ClassProperty> properties = new List<ClassProperty>();
         }
 
         public SortedList<string, Class> m_classes = new SortedList<string, Class>();
-        public SortedList<string, Property> m_properties = new SortedList<string, Property>();
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="clsid"></param>
         /// <returns></returns>
-        virtual public string GetNameOfClass(Int64 clsid)
-        {
-            throw new ApplicationException ("Override " + System.Reflection.MethodBase.GetCurrentMethod().Name);            
-        }
-
+        abstract public string GetNameOfClass(Int64 clsid);
 
         /// <summary>
         /// 
@@ -74,22 +52,20 @@ namespace RDFWrappers
                 }
                 Console.WriteLine();
 
-                foreach (var clsprop in cls.Value.properties)
+                foreach (var prop in cls.Value.properties)
                 {
-                    var prop = m_properties[clsprop.name];
-
-                    Console.Write("    {0}: {1}", clsprop.name, prop.DataType(true));
-                    if (prop.resrtictions.Count > 0)
+                    Console.Write("    {0}: {1}", prop.Name(), prop.CSDataType()!=null ? prop.CSDataType() : "<not supported>");
+                    if (prop.Restrictions().Count > 0)
                     {
                         Console.Write("[");
-                        foreach (var r in prop.resrtictions)
+                        foreach (var r in prop.Restrictions())
                         {
                             string n = GetNameOfClass(r);
                             Console.Write("{0} ", n);
                         }
                         Console.Write("]");
                     }
-                    Console.WriteLine(" ({0}-{1})", clsprop.min, clsprop.max);
+                    Console.WriteLine(" ({0}-{1})", prop.CardinalityMin(), prop.CardinalityMax());
                 }
             }
             Console.WriteLine();

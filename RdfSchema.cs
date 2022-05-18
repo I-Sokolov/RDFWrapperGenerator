@@ -4,11 +4,72 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ClsId = System.Int64;
+
 namespace RDFWrappers
 {
     class RdfSchema : Schema
     {
+        public class PropertyDefinition
+        {
+            public Int64 id;
+            public Int64 type;
+            public List<ClsId> resrtictions = new List<ClsId>();
+
+            public string DataType()
+            {
+                switch (type)
+                {
+                    case RDF.engine.OBJECTPROPERTY_TYPE: return "Instance";
+                    case RDF.engine.DATATYPEPROPERTY_TYPE_BOOLEAN: return "bool";
+                    case RDF.engine.DATATYPEPROPERTY_TYPE_CHAR: return "string";
+                    case RDF.engine.DATATYPEPROPERTY_TYPE_INTEGER: return "Int64";
+                    case RDF.engine.DATATYPEPROPERTY_TYPE_DOUBLE: return "double";
+                }
+                throw new ApplicationException("Unknown property type");
+            }
+
+            public bool IsObject() { return type == RDF.engine.OBJECTPROPERTY_TYPE; }
+
+            public List<ClsId> Restrictions() { return resrtictions; }
+        }
+
+        public class RdfClassProperty : Schema.ClassProperty
+        {
+            RdfSchema schema;
+            string name;
+            Int64 cardinalityMin;
+            Int64 cardinalityMax;
+
+            public RdfClassProperty (RdfSchema schema, string name, Int64 cardMin, Int64 cardMax)
+            {
+                this.schema = schema;
+                this.name = name;
+                cardinalityMin = cardMin;
+                cardinalityMax = cardMax;
+            }
+
+            public string Name() { return name; }
+            public string CSDataType() { return Definition().DataType(); }
+            public bool IsObject() { return Definition().IsObject(); }
+            public Int64 CardinalityMin() { return cardinalityMin; }
+            public Int64 CardinalityMax() { return cardinalityMax; }
+            public List<ClsId> Restrictions() { return Definition().Restrictions(); }
+
+            private PropertyDefinition Definition()
+            {
+                return schema.m_properties[name];
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
         private Int64 m_model = 0;
+
+        public SortedList<string, PropertyDefinition> m_properties = new SortedList<string, PropertyDefinition>();
+
 
         /// <summary>
         /// 
@@ -68,12 +129,7 @@ namespace RDFWrappers
 
                 if (min >= 0)
                 {
-                    var clsprop = new ClassProperty();
-
-                    clsprop.name = prop.Key;
-                    clsprop.min = min;
-                    clsprop.max = max;
-
+                    var clsprop = new RdfClassProperty(this, prop.Key, min, max);
                     cls.properties.Add(clsprop);
                 }
             }
@@ -89,7 +145,7 @@ namespace RDFWrappers
 
                 string name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(namePtr);
 
-                Property prop = new Property();
+                PropertyDefinition prop = new PropertyDefinition();
                 prop.id = propid;
                 prop.type = RDF.engine.GetPropertyType(prop.id);
 

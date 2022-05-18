@@ -207,7 +207,7 @@ namespace RDFWrappers
 
             foreach (var cp in parentClass.properties)
             {
-                m_addedProperties.Add(cp.name);
+                m_addedProperties.Add(cp.Name());
             }
 
             foreach (var nextParent in parentClass.parents)
@@ -238,7 +238,9 @@ namespace RDFWrappers
             }
             else
             {
+                code = code.Replace("string", "const char* const");
                 code = code.Replace("const const", "const");
+                code = code.Replace("Int64", "int64_t");
             }
 
             writer.Write(code);
@@ -273,7 +275,7 @@ namespace RDFWrappers
             bool first = true;
             foreach (var prop in properties)
             {
-                if (m_addedProperties.Add (prop.name))
+                if (m_addedProperties.Add (prop.Name()))
                 {
                     if (first)
                     {
@@ -293,17 +295,20 @@ namespace RDFWrappers
         /// <param name="classProp"></param>
         private void WritePropertyMethods (StreamWriter writer, Schema.ClassProperty classProp)
         {
-            var prop = m_schema.m_properties[classProp.name];
+            if (classProp.CSDataType() == null)
+            {
+                return;
+            }
 
-            m_replacements[KWD_PROPERTY_NAME] = classProp.name;
-            m_replacements[KWD_DATA_TYPE] = prop.DataType(m_cs);
-            m_replacements[KWD_CARDINALITY_MIN] = classProp.min.ToString();
-            m_replacements[KWD_CARDINALITY_MAX] = classProp.max.ToString();
+            m_replacements[KWD_PROPERTY_NAME] = classProp.Name();
+            m_replacements[KWD_DATA_TYPE] = classProp.CSDataType();
+            m_replacements[KWD_CARDINALITY_MIN] = classProp.CardinalityMin().ToString();
+            m_replacements[KWD_CARDINALITY_MAX] = classProp.CardinalityMax().ToString();
             m_replacements[KWD_asType] = "";
 
-            if (!prop.IsObject())
+            if (!classProp.IsObject())
             {
-                if (classProp.max == 1)
+                if (classProp.CardinalityMax() == 1)
                 {
                     WriteByTemplate(writer, Template.SetDataProperty);
                     WriteByTemplate(writer, Template.GetDataProperty);
@@ -317,18 +322,18 @@ namespace RDFWrappers
             }
             else
             {
-                if (classProp.max == 1)
+                if (classProp.CardinalityMax() == 1)
                 {
-                    WriteSetObjectProperty(writer, prop, Template.SetObjectProperty);
+                    WriteSetObjectProperty(writer, classProp, Template.SetObjectProperty);
                     //do we need this? we lose restrictions control! WriteAccessObjectProperty(writer, classProp.name, TInt64, "", Template.SetObjectProperty);
-                    WriteGetObjectProperty(writer, prop, Template.GetObjectProperty);
+                    WriteGetObjectProperty(writer, classProp, Template.GetObjectProperty);
                 }
                 else
                 {
-                    WriteSetObjectProperty(writer, prop, Template.SetObjectArrayProperty);
+                    WriteSetObjectProperty(writer, classProp, Template.SetObjectArrayProperty);
                     WriteAccessObjectProperty(writer, m_TInt64, "", Template.SetObjectArrayProperty);
 
-                    WriteGetObjectProperty(writer, prop, Template.GetObjectArrayProperty);
+                    WriteGetObjectProperty(writer, classProp, Template.GetObjectArrayProperty);
                     WriteAccessObjectProperty(writer, m_TInt64, "", Template.GetObjectArrayPropertyInt64);
                 }
 
@@ -341,11 +346,11 @@ namespace RDFWrappers
         /// <param name="writer"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteSetObjectProperty(StreamWriter writer, Schema.Property prop, Template template)
+        private void WriteSetObjectProperty(StreamWriter writer, Schema.ClassProperty prop, Template template)
         {
-            if (prop.resrtictions.Count > 0)
+            if (prop.Restrictions().Count > 0)
             {
-                foreach (var restr in prop.resrtictions)
+                foreach (var restr in prop.Restrictions())
                 {
                     string instClass = m_schema.GetNameOfClass(restr);
                     WriteAccessObjectProperty(writer, instClass, "", template);
@@ -353,7 +358,6 @@ namespace RDFWrappers
             }
             else
             {
-                Verify(false, "This case was not tested yet: no restriction");
                 WriteAccessObjectProperty(writer, "Instance", "", template);
             }
         }
@@ -364,12 +368,12 @@ namespace RDFWrappers
         /// <param name="writer"></param>
         /// <param name="prop"></param>
         /// <param name="template"></param>
-        private void WriteGetObjectProperty(StreamWriter writer, Schema.Property prop, Template template)
+        private void WriteGetObjectProperty(StreamWriter writer, Schema.ClassProperty prop, Template template)
         {
-            if (prop.resrtictions.Count > 0)
+            if (prop.Restrictions().Count > 0)
             {
                 bool first = true;
-                foreach (var restr in prop.resrtictions)
+                foreach (var restr in prop.Restrictions())
                 {
                     Verify(first, "This case was not tested yet: more then one restriction");
 
@@ -382,7 +386,6 @@ namespace RDFWrappers
             }
             else
             {
-                Verify(false, "This case was not tested yet: no restriction");
                 WriteAccessObjectProperty(writer, "Instance", "", template);
             }
         }

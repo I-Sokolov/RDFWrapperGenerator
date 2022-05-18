@@ -30,6 +30,12 @@ namespace RDFWrappers
             {
                 var sdai = new SdaiSchema("IFC4");
                 sdai.ToConsole();
+                Console.WriteLine("Generate C# file IFC4.cs");
+                var gen = new Generator(sdai, true, "IFC4");
+                gen.WriteWrapper("IFC4.cs");
+                Console.WriteLine("Generate C++ file IFC4.h");
+                gen = new Generator(sdai, false, "IFC4");
+                gen.WriteWrapper("IFC4.h");
 
                 Options options = null;
                 Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => { options = o; });

@@ -5,11 +5,69 @@ using System.Text;
 using System.Threading.Tasks;
 using RDF;
 
+using ClsId = System.Int64;
+
 namespace RDFWrappers
 {
     class SdaiSchema : Schema
     {
         private Int64 m_model = 0;
+
+        public class SdaiClassProperty : Schema.ClassProperty
+        {
+            string name;
+            Int64 attrType;
+            List<ClsId> restrictions = new List<ClsId>();
+
+            public SdaiClassProperty (string name, Int64 attrType)
+            {
+                this.name = name;
+                this.attrType = attrType;
+            }
+
+            public string Name() { return name; }
+
+            public string CSDataType()
+            {
+                switch (attrType)
+                {
+                    case ifcengine.sdaiADB:
+                        return null;
+                    case ifcengine.sdaiAGGR:
+                        return null;
+                    case ifcengine.sdaiBINARY:
+                        return null;
+                    case ifcengine.sdaiBOOLEAN:
+                        return "bool";
+                    case ifcengine.sdaiENUM:
+                        return null;
+                    case ifcengine.sdaiINSTANCE:
+                        return "Instance";
+                    case ifcengine.sdaiINTEGER:
+                        return "Int64";
+                    case ifcengine.sdaiLOGICAL:
+                        return "Int64";
+                    case ifcengine.sdaiREAL:
+                        return "double";
+                    case ifcengine.sdaiSTRING:
+                        return "string";
+                    case ifcengine.sdaiUNICODE:
+                        return null;
+                    case ifcengine.sdaiEXPRESSSTRING:
+                        return null;
+                    case ifcengine.engiGLOBALID:
+                        return "string";
+                    default:
+                        //System.Diagnostics.Debug.Assert(false);
+                        return null; //usupporrted type
+                }
+            }
+            
+            public bool IsObject() { return attrType == ifcengine.sdaiINSTANCE; }
+            public Int64 CardinalityMin() { return 1; }
+            public Int64 CardinalityMax() { return 1; }
+            public List<ClsId> Restrictions() { return restrictions; }
+        }
 
         /// <summary>
         /// 
@@ -52,7 +110,7 @@ namespace RDFWrappers
 
                 CollectClassParents(cls);
 
-                //CollectClassProperties(cls);
+                CollectClassProperties(cls);
 
                 m_classes.Add(name, cls);
             }
@@ -68,6 +126,27 @@ namespace RDFWrappers
             if (parentId != 0)
             {
                 cls.parents.Add(parentId);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cls"></param>
+        private void CollectClassProperties(Class cls)
+        {
+            var nattr = ifcengine.engiGetEntityNoArguments(cls.id);
+            for (int i = 0; i<nattr; i++)
+            {
+                IntPtr attributeNamePtr = IntPtr.Zero;
+                ifcengine.engiGetEntityArgumentName(cls.id, i, ifcengine.sdaiSTRING, out attributeNamePtr);
+                string attributeName = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(attributeNamePtr);
+
+                Int64 attributeType = 0;
+                ifcengine.engiGetEntityArgumentType(cls.id, i, out attributeType);
+
+                var prop = new SdaiClassProperty(attributeName, attributeType);
+                cls.properties.Add(prop);
             }
         }
     }
