@@ -90,6 +90,12 @@ namespace RDFWrappers
             var ptrName = IntPtr.Zero;
             ifcengine.engiGetEntityName(clsid, ifcengine.sdaiSTRING, out ptrName);
             var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName);
+
+            //ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
+            //name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
+            //ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
+            //name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
+
             return name;
         }
 
@@ -105,14 +111,17 @@ namespace RDFWrappers
 
                 var name = GetNameOfClass(entityId);
 
-                var cls = new Class();
-                cls.id = entityId;
+                if (name.Equals ("B_Spline_Function", StringComparison.OrdinalIgnoreCase))
+                {
+                    var cls = new Class();
+                    cls.id = entityId;
 
-                CollectClassParents(cls);
+                    CollectClassParents(cls);
 
-                CollectClassProperties(cls);
+                    CollectClassProperties(cls);
 
-                m_classes.Add(name, cls);
+                    m_classes.Add(name, cls);
+                }
             }
         }
 
@@ -120,11 +129,15 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="cls"></param>
-        private void CollectClassParents (Class cls)
+        private void CollectClassParents(Class cls)
         {
-            var parentId = ifcengine.engiGetEntityParent(cls.id);
-            if (parentId != 0)
+            int ind = 0;
+
+            while (true)
             {
+                var parentId = ifcengine.engiGetEntityParentEx(cls.id, ind++);
+                if (parentId == 0)
+                    break;
                 cls.parents.Add(parentId);
             }
         }
