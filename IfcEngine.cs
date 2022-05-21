@@ -535,6 +535,15 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityParent")]
 		public static extern int_t engiGetEntityParent(int_t entity);
 
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityParentEx")]
+		public static extern int_t engiGetEntityParentEx(int_t entity, int_t index);
+
+		/// <summary>
+		///		engiGetEntityNoParents                         
+		/// </summary>
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityNoParents")]
+		public static extern int_t engiGetEntityNoParents(int_t entity);
+
 		/// <summary>
 		///		engiGetAttrOptional                         (http://rdf.bg/ifcdoc/CS64/engiGetAttrOptional.html)
 		///
