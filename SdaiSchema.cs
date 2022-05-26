@@ -5,78 +5,54 @@ using System.Text;
 using System.Threading.Tasks;
 using RDF;
 
-using ClsId = System.Int64;
+using SdaiInstance = System.Int64;
 
 namespace RDFWrappers
 {
-    class SdaiSchema : Schema
+    class SdaiSchema
     {
-        private Int64 m_model = 0;
-
-        public class SdaiClassProperty : Schema.ClassProperty
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clsid"></param>
+        /// <returns></returns>
+        static public string GetNameOfEntity(Int64 clsid)
         {
-            public string propertyName;
-            public ClsId definingEntity;
-            public bool inverse;
-            public ifcengine.enum_express_attr_type attrType;
-            public ClsId domainEntity;
-            public ifcengine.enum_express_aggr aggrType;
-            public bool nestedAggr;
-            public Int64 cardinalityMin;
-            public Int64 cardinalityMax;
-            public bool optional;
-            public bool unique;
+            var ptrName = IntPtr.Zero;
+            ifcengine.engiGetEntityName(clsid, ifcengine.sdaiSTRING, out ptrName);
+            var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName);
 
-            public SdaiClassProperty ()
-            {
-            }
-
-            public string Name() { return propertyName; }
-
-            public string CSDataType()
-            {
-                /*
-                switch (attrType)
-                {
-                    case ifcengine.sdaiADB:
-                        return null;
-                    case ifcengine.sdaiAGGR:
-                        return null;
-                    case ifcengine.sdaiBINARY:
-                        return null;
-                    case ifcengine.sdaiBOOLEAN:
-                        return "bool";
-                    case ifcengine.sdaiENUM:
-                        return null;
-                    case ifcengine.sdaiINSTANCE:
-                        return "Instance";
-                    case ifcengine.sdaiINTEGER:
-                        return "Int64";
-                    case ifcengine.sdaiLOGICAL:
-                        return "Int64";
-                    case ifcengine.sdaiREAL:
-                        return "double";
-                    case ifcengine.sdaiSTRING:
-                        return "string";
-                    case ifcengine.sdaiUNICODE:
-                        return null;
-                    case ifcengine.sdaiEXPRESSSTRING:
-                        return null;
-                    case ifcengine.engiGLOBALID:
-                        return "string";
-                    default:
-                        //System.Diagnostics.Debug.Assert(false);
-                        return null; //usupporrted type
-                }
-                */
-                return null;
-            }
-            
-            public bool IsObject() { return false; }
-            public Int64 CardinalityMin() { return 1; }
-            public Int64 CardinalityMax() { return 1; }
-            public List<ClsId> Restrictions() { return null; }
+            return name;
         }
+
+        public class DefinedType
+        {
+            public SdaiInstance id;
+        };
+
+        public class Enumeration
+        {
+            public SdaiInstance id;
+        }
+
+        public class Select
+        {
+            public SdaiInstance id;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public class Entity
+        {
+            public SdaiInstance id;
+            public List<SdaiInstance> supertypes = new List<SdaiInstance>();
+            public List<SdaiAttribute> attributes = new List<SdaiAttribute>();
+        }
+
+        public SortedList<string, Entity> m_entities = new SortedList<string, Entity>();
+
+        private Int64 m_model = 0;
 
         /// <summary>
         /// 
@@ -86,50 +62,34 @@ namespace RDFWrappers
         {
             m_model = ifcengine.sdaiCreateModelBN(1, "", schemaName);
 
-            CollectClasses();
+            CollectEntities();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="clsid"></param>
-        /// <returns></returns>
-        override public string GetNameOfClass(Int64 clsid)
+        private void CollectEntities()
         {
-            var ptrName = IntPtr.Zero;
-            ifcengine.engiGetEntityName(clsid, ifcengine.sdaiSTRING, out ptrName);
-            var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName);
-
-            ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
-            name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
-            ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
-            name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
-
-            return name;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void CollectClasses()
-        {
-            var cnt = ifcengine.engiGetEntityCount(m_model);
-            for (int i = 0; i < cnt; i++)
+            //var cnt = ifcengine.engiGetEntityCount(m_model);
+            //for (int i = 0; i < cnt; i++)
+            Int64 it = 0;
+            while (0!=(it = ifcengine.engiNextDefinitionIterator (m_model, it)))
             {
-                Int64 entityId = ifcengine.engiGetEntityElement(m_model, i);
+                //Int64 entityId = ifcengine.engiGetEntityElement(m_model, i);
+                Int64 entityId = ifcengine.engiGetDefinitionFromIterator(m_model, it);
 
-                var name = GetNameOfClass(entityId);
+                var name = GetNameOfEntity(entityId);
 
-                if (name.Equals ("B_Spline_Function", StringComparison.OrdinalIgnoreCase))
+                //if (name.Equals ("B_Spline_Function", StringComparison.OrdinalIgnoreCase))
                 {
-                    var cls = new Class();
-                    cls.id = entityId;
+                    var entity = new Entity();
+                    entity.id = entityId;
 
-                    CollectClassParents(cls);
+                    CollectSupertypes(entity);
 
-                    CollectClassProperties(cls);
+                    CollectAttributes(entity);
 
-                    m_classes.Add(name, cls);
+                    m_entities.Add(name, entity);
                 }
             }
         }
@@ -137,17 +97,17 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="cls"></param>
-        private void CollectClassParents(Class cls)
+        /// <param name="entity"></param>
+        private void CollectSupertypes(Entity entity)
         {
             int ind = 0;
 
             while (true)
             {
-                var parentId = ifcengine.engiGetEntityParentEx(cls.id, ind++);
+                var parentId = ifcengine.engiGetEntityParentEx(entity.id, ind++);
                 if (parentId == 0)
                     break;
-                cls.parents.Add(parentId);
+                entity.supertypes.Add(parentId);
             }
         }
 
@@ -155,20 +115,20 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="cls"></param>
-        private void CollectClassProperties(Class cls)
+        private void CollectAttributes(Entity entity)
         {
-            var nattr = ifcengine.engiGetEntityNoArguments(cls.id);
+            var nattr = ifcengine.engiGetEntityNoArguments(entity.id);
             for (int i = 0; i<nattr; i++)
             {
                 IntPtr ptrName = IntPtr.Zero;
-                ClsId definingEntity, domainEntity;
+                Int64 definingEntity, domainEntity;
                 ifcengine.enum_express_attr_type attrType;
                 ifcengine.enum_express_aggr aggrType;
                 byte inverse, nestedAggr, optional, unique;
                 Int64 cardinalityMin, cardinalityMax;
 
                 byte ok = ifcengine.engiGetEntityProperty
-                                (cls.id, i,
+                                (entity.id, i,
                                 out ptrName,
                                 out definingEntity, out inverse,
                                 out attrType, out domainEntity,
@@ -180,9 +140,9 @@ namespace RDFWrappers
 
                 if (ok != 0)
                 {
-                    var prop = new SdaiClassProperty
+                    var prop = new SdaiAttribute
                     {
-                        propertyName = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName),
+                        name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName),
                         definingEntity = definingEntity,
                         inverse = inverse != 0 ? true : false,
                         attrType = attrType,
@@ -195,9 +155,35 @@ namespace RDFWrappers
                         unique = unique != 0 ? true : false
                     };
 
-                    cls.properties.Add(prop);
+                    entity.attributes.Add(prop);
                 }
             }
         }
+
+        public void ToConsole()
+        {
+            Console.WriteLine("-------- Extracted shcema ----------------");
+            foreach (var entity in m_entities)
+            {
+                //if (entity.Key == "IfcRoot")
+                {
+                    var definition = ifcengine.engiGetDefinitionType(entity.Value.id);
+                    
+                    Console.Write("{0} {1}:", entity.Key, definition.ToString());
+                    foreach (var parent in entity.Value.supertypes)
+                    {
+                        Console.Write(" {0}", GetNameOfEntity(parent));
+                    }
+                    Console.WriteLine();
+
+                    foreach (var attr in entity.Value.attributes)
+                    {
+                        Console.WriteLine("    {0}", attr.ToString());
+                    }
+                }
+            }
+            Console.WriteLine();
+        }
+
     }
 }

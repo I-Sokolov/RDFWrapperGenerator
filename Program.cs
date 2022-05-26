@@ -28,15 +28,20 @@ namespace RDFWrappers
         {
             try
             {
-                var sdai = new SdaiSchema("ap242ed2_mim_lf_v1.101.exp");
+                //var sdai = new SdaiSchema("ap242ed2_mim_lf_v1.101.exp");
                 //var sdai = new SdaiSchema("AP242");
+                var sdai = new SdaiSchema("IFC2x3");
                 sdai.ToConsole();
+
+                return 0;
+                /*
                 Console.WriteLine("Generate C# file IFC4.cs");
                 var gen = new Generator(sdai, true, "IFC4");
                 gen.WriteWrapper("IFC4.cs");
                 Console.WriteLine("Generate C++ file IFC4.h");
                 gen = new Generator(sdai, false, "IFC4");
                 gen.WriteWrapper("IFC4.h");
+                */
 
                 Options options = null;
                 Parser.Default.ParseArguments<Options>(args).WithParsed<Options>(o => { options = o; });

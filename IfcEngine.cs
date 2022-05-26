@@ -139,7 +139,7 @@ namespace RDF
 		}
 	}//COLOR
 
-    class ifcengine
+    public class ifcengine
     {
         public const int_t flagbit0 = 1;           // 2^^0    0000.0000..0000.0001
         public const int_t flagbit1 = 2;           // 2^^1    0000.0000..0000.0010
@@ -627,6 +627,24 @@ namespace RDF
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEnumerationValue")]
 		public static extern void engiGetEnumerationValue(int_t attribute, int_t index, int_t valueType, out IntPtr enumerationValue);
+
+		[DllImport(IFCEngineDLL, EntryPoint = "engiNextDefinitionIterator")]
+		public static extern int_t engiNextDefinitionIterator(int_t model, int_t iterator);
+
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinitionFromIterator")]
+		public static extern int_t engiGetDefinitionFromIterator(int_t model, int_t iterator);
+
+		public enum enum_express_definition : byte
+		{
+			__UNDEF = 0,
+			__ENTITY,
+			__ENUM,
+			__SELECT,
+			__DEFINED_TYPE
+		};
+
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinitionType")]
+		public static extern enum_express_definition engiGetDefinitionType(int_t definition);
 
 
 		public enum enum_express_attr_type : byte
