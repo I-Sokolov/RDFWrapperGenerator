@@ -646,6 +646,9 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinitionType")]
 		public static extern enum_express_definition engiGetDefinitionType(int_t definition);
 
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEnumDefinitionValue")]
+		public static extern byte engiGetEnumDefinitionValue(int_t definition, int_t index, out IntPtr value);
+
 
 		public enum enum_express_attr_type : byte
 		{
