@@ -628,17 +628,57 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEnumerationValue")]
 		public static extern void engiGetEnumerationValue(int_t attribute, int_t index, int_t valueType, out IntPtr enumerationValue);
 
+
+		public enum enum_express_attr_type : byte
+		{
+			__NONE = 0, //attribute type is defined by reference domain entity
+			__BINARY,
+			__BINARY_32,
+			__BOOLEAN,
+			__ENUMERATION,
+			__INTEGER,
+			__LOGICAL,
+			__NUMBER,
+			__REAL,
+			__SELECT,
+			__STRING
+		};
+
+		public enum enum_express_aggr : byte
+		{
+			__NONE = 0,
+			__ARRAY,
+			__BAG,
+			__LIST,
+			__SET
+		};
+
+
 		/// <summary>
 		///		engiGetEntityProperty                       (http://rdf.bg/ifcdoc/CS64/engiGetEntityProperty.html)
 		///
 		///	...
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityProperty")]
-		public static extern void engiGetEntityProperty(int_t entity, int_t index, out IntPtr propertyName, out int_t optional, out int_t type, out int_t _array, out int_t set, out int_t list, out int_t bag, out int_t min, out int_t max, out int_t referenceEntity, out int_t inverse);
+		public static extern byte engiGetEntityProperty
+									(int_t entity,
+									int_t index,
+									out IntPtr propertyName,
+									out int_t definingEntity,
+									out byte inevrse,
+									out enum_express_attr_type attrType,
+									out int_t domainEntity,
+									out enum_express_aggr aggrType,
+									out byte nestedAggr,
+									out int_t cardinalityMin,
+									out int_t cardinalityMax,
+									out byte optional,
+									out byte unique
+								);
 
-        //
-        //  Instance Header API Calls
-        //
+		//
+		//  Instance Header API Calls
+		//
 
 		/// <summary>
 		///		SetSPFFHeader                               (http://rdf.bg/ifcdoc/CS64/SetSPFFHeader.html)

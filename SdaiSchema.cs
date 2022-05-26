@@ -15,20 +15,27 @@ namespace RDFWrappers
 
         public class SdaiClassProperty : Schema.ClassProperty
         {
-            string name;
-            Int64 attrType;
-            List<ClsId> restrictions = new List<ClsId>();
+            public string propertyName;
+            public ClsId definingEntity;
+            public bool inverse;
+            public ifcengine.enum_express_attr_type attrType;
+            public ClsId domainEntity;
+            public ifcengine.enum_express_aggr aggrType;
+            public bool nestedAggr;
+            public Int64 cardinalityMin;
+            public Int64 cardinalityMax;
+            public bool optional;
+            public bool unique;
 
-            public SdaiClassProperty (string name, Int64 attrType)
+            public SdaiClassProperty ()
             {
-                this.name = name;
-                this.attrType = attrType;
             }
 
-            public string Name() { return name; }
+            public string Name() { return propertyName; }
 
             public string CSDataType()
             {
+                /*
                 switch (attrType)
                 {
                     case ifcengine.sdaiADB:
@@ -61,12 +68,14 @@ namespace RDFWrappers
                         //System.Diagnostics.Debug.Assert(false);
                         return null; //usupporrted type
                 }
+                */
+                return null;
             }
             
-            public bool IsObject() { return attrType == ifcengine.sdaiINSTANCE; }
+            public bool IsObject() { return false; }
             public Int64 CardinalityMin() { return 1; }
             public Int64 CardinalityMax() { return 1; }
-            public List<ClsId> Restrictions() { return restrictions; }
+            public List<ClsId> Restrictions() { return null; }
         }
 
         /// <summary>
@@ -91,10 +100,10 @@ namespace RDFWrappers
             ifcengine.engiGetEntityName(clsid, ifcengine.sdaiSTRING, out ptrName);
             var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName);
 
-            //ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
-            //name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
-            //ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
-            //name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
+            ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
+            name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
+            ifcengine.engiGetEntityName(clsid, ifcengine.sdaiUNICODE, out ptrName);
+            name = System.Runtime.InteropServices.Marshal.PtrToStringUni(ptrName);
 
             return name;
         }
@@ -151,15 +160,43 @@ namespace RDFWrappers
             var nattr = ifcengine.engiGetEntityNoArguments(cls.id);
             for (int i = 0; i<nattr; i++)
             {
-                IntPtr attributeNamePtr = IntPtr.Zero;
-                ifcengine.engiGetEntityArgumentName(cls.id, i, ifcengine.sdaiSTRING, out attributeNamePtr);
-                string attributeName = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(attributeNamePtr);
+                IntPtr ptrName = IntPtr.Zero;
+                ClsId definingEntity, domainEntity;
+                ifcengine.enum_express_attr_type attrType;
+                ifcengine.enum_express_aggr aggrType;
+                byte inverse, nestedAggr, optional, unique;
+                Int64 cardinalityMin, cardinalityMax;
 
-                Int64 attributeType = 0;
-                ifcengine.engiGetEntityArgumentType(cls.id, i, out attributeType);
+                byte ok = ifcengine.engiGetEntityProperty
+                                (cls.id, i,
+                                out ptrName,
+                                out definingEntity, out inverse,
+                                out attrType, out domainEntity,
+                                out aggrType, out nestedAggr,
+                                out cardinalityMin, out cardinalityMax,
+                                out optional, out unique
+                                );
+                System.Diagnostics.Debug.Assert(ok!=0);
 
-                var prop = new SdaiClassProperty(attributeName, attributeType);
-                cls.properties.Add(prop);
+                if (ok != 0)
+                {
+                    var prop = new SdaiClassProperty
+                    {
+                        propertyName = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName),
+                        definingEntity = definingEntity,
+                        inverse = inverse != 0 ? true : false,
+                        attrType = attrType,
+                        domainEntity = domainEntity,
+                        aggrType = aggrType,
+                        nestedAggr = nestedAggr != 0 ? true : false,
+                        cardinalityMin = cardinalityMin,
+                        cardinalityMax = cardinalityMax,
+                        optional = optional != 0 ? true : false,
+                        unique = unique != 0 ? true : false
+                    };
+
+                    cls.properties.Add(prop);
+                }
             }
         }
     }

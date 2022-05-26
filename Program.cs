@@ -29,6 +29,7 @@ namespace RDFWrappers
             try
             {
                 var sdai = new SdaiSchema("ap242ed2_mim_lf_v1.101.exp");
+                //var sdai = new SdaiSchema("AP242");
                 sdai.ToConsole();
                 Console.WriteLine("Generate C# file IFC4.cs");
                 var gen = new Generator(sdai, true, "IFC4");
