@@ -139,7 +139,40 @@ namespace RDF
 		}
 	}//COLOR
 
-    public class ifcengine
+	public enum enum_express_declaration : byte
+	{
+		__UNDEF = 0,
+		__ENTITY,
+		__ENUM,
+		__SELECT,
+		__DEFINED_TYPE
+	};
+
+	public enum enum_express_attr_type : byte
+	{
+		__NONE = 0, //attribute type is defined by reference domain entity
+		__BINARY,
+		__BINARY_32,
+		__BOOLEAN,
+		__ENUMERATION,
+		__INTEGER,
+		__LOGICAL,
+		__NUMBER,
+		__REAL,
+		__SELECT,
+		__STRING
+	};
+
+	public enum enum_express_aggr : byte
+	{
+		__NONE = 0,
+		__ARRAY,
+		__BAG,
+		__LIST,
+		__SET
+	};
+
+	public class ifcengine
     {
         public const int_t flagbit0 = 1;           // 2^^0    0000.0000..0000.0001
         public const int_t flagbit1 = 2;           // 2^^1    0000.0000..0000.0010
@@ -628,57 +661,23 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEnumerationValue")]
 		public static extern void engiGetEnumerationValue(int_t attribute, int_t index, int_t valueType, out IntPtr enumerationValue);
 
-		[DllImport(IFCEngineDLL, EntryPoint = "engiNextDefinitionIterator")]
-		public static extern int_t engiNextDefinitionIterator(int_t model, int_t iterator);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetNextDeclarationIterator")]
+		public static extern int_t engiGetNextDeclarationIterator(int_t model, int_t iterator);
 
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinitionFromIterator")]
-		public static extern int_t engiGetDefinitionFromIterator(int_t model, int_t iterator);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDeclarationFromIterator")]
+		public static extern int_t engiGetDeclarationFromIterator(int_t model, int_t iterator);
 
-		public enum enum_express_definition : byte
-		{
-			__UNDEF = 0,
-			__ENTITY,
-			__ENUM,
-			__SELECT,
-			__DEFINED_TYPE
-		};
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDeclarationType")]
+		public static extern enum_express_declaration engiGetDeclarationType(int_t declaration);
 
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinitionType")]
-		public static extern enum_express_definition engiGetDefinitionType(int_t definition);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEnumerationElement")]
+		public static extern IntPtr engiGetEnumerationElement(int_t enumeration, int_t index);
 
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEnumDefinitionValue")]
-		public static extern byte engiGetEnumDefinitionValue(int_t definition, int_t index, out IntPtr value);
-
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetSelectDefinitionVariant")]
-		public static extern byte engiGetSelectDefinitionVariant(int_t definition, int_t index, out int_t variantDefinition);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetSelectElement")]
+		public static extern int_t engiGetSelectElement(int_t select, int_t index);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinedType")]
-		public static extern enum_express_attr_type engiGetDefinedType(int_t definedTypeDeclaration, out int_t referencedDeclaration);
-
-		public enum enum_express_attr_type : byte
-		{
-			__NONE = 0, //attribute type is defined by reference domain entity
-			__BINARY,
-			__BINARY_32,
-			__BOOLEAN,
-			__ENUMERATION,
-			__INTEGER,
-			__LOGICAL,
-			__NUMBER,
-			__REAL,
-			__SELECT,
-			__STRING
-		};
-
-		public enum enum_express_aggr : byte
-		{
-			__NONE = 0,
-			__ARRAY,
-			__BAG,
-			__LIST,
-			__SET
-		};
-
+		public static extern enum_express_attr_type engiGetDefinedType(int_t definedType, out int_t referencedDeclaration);
 
 		/// <summary>
 		///		engiGetEntityProperty                       (http://rdf.bg/ifcdoc/CS64/engiGetEntityProperty.html)

@@ -34,7 +34,7 @@ namespace RDFWrappers
 
         public class DefinitionsList : SortedList<string, SdaiInstance> { }
 
-        public class Definitions : Dictionary <ifcengine.enum_express_definition, DefinitionsList> { }
+        public class Definitions : Dictionary <enum_express_declaration, DefinitionsList> { }
 
         /// <summary>
         /// 
@@ -51,10 +51,10 @@ namespace RDFWrappers
         {
             m_model = ifcengine.sdaiCreateModelBN(1, "", schemaName);
 
-            m_definitions.Add(ifcengine.enum_express_definition.__DEFINED_TYPE, new DefinitionsList());
-            m_definitions.Add(ifcengine.enum_express_definition.__ENUM, new DefinitionsList());
-            m_definitions.Add(ifcengine.enum_express_definition.__SELECT, new DefinitionsList());
-            m_definitions.Add(ifcengine.enum_express_definition.__ENTITY, new DefinitionsList());
+            m_definitions.Add(enum_express_declaration.__DEFINED_TYPE, new DefinitionsList());
+            m_definitions.Add(enum_express_declaration.__ENUM, new DefinitionsList());
+            m_definitions.Add(enum_express_declaration.__SELECT, new DefinitionsList());
+            m_definitions.Add(enum_express_declaration.__ENTITY, new DefinitionsList());
 
             CollectDefinitions();
         }
@@ -65,12 +65,12 @@ namespace RDFWrappers
         private void CollectDefinitions()
         {
             Int64 it = 0;
-            while (0 != (it = ifcengine.engiNextDefinitionIterator(m_model, it)))
+            while (0 != (it = ifcengine.engiGetNextDeclarationIterator(m_model, it)))
             {
-                SdaiInstance defenition = ifcengine.engiGetDefinitionFromIterator(m_model, it);
+                SdaiInstance defenition = ifcengine.engiGetDeclarationFromIterator(m_model, it);
 
                 var name = GetNameOfEntity(defenition);
-                var type = ifcengine.engiGetDefinitionType(defenition);
+                var type = ifcengine.engiGetDeclarationType(defenition);
 
                 var defs = m_definitions[type];
                 defs.Add(name, defenition);
@@ -82,7 +82,7 @@ namespace RDFWrappers
             Console.WriteLine("-------- Extracted shcema ----------------");
 
             Console.WriteLine("============= Defined Types ====================");
-            var definedTypes = m_definitions[ifcengine.enum_express_definition.__DEFINED_TYPE];
+            var definedTypes = m_definitions[enum_express_declaration.__DEFINED_TYPE];
             if (definedTypes != null)
                 foreach (var def in definedTypes)
                 {
@@ -91,7 +91,7 @@ namespace RDFWrappers
                 }
 
             Console.WriteLine("============= Enumerations ====================");
-            var enums = m_definitions[ifcengine.enum_express_definition.__ENUM];
+            var enums = m_definitions[enum_express_declaration.__ENUM];
             if (enums != null)
                 foreach (var enm in enums)
                 {
@@ -100,7 +100,7 @@ namespace RDFWrappers
                 }
 
             Console.WriteLine("============= Selects ====================");
-            var sels = m_definitions[ifcengine.enum_express_definition.__SELECT];
+            var sels = m_definitions[enum_express_declaration.__SELECT];
             if (sels != null)
                 foreach (var sel in sels)
                 {
@@ -109,7 +109,7 @@ namespace RDFWrappers
                 }
 
             Console.WriteLine("============= Entities ====================");
-            var entities = m_definitions[ifcengine.enum_express_definition.__ENTITY];
+            var entities = m_definitions[enum_express_declaration.__ENTITY];
             if (entities != null)
                 foreach (var entity in entities)
                 {

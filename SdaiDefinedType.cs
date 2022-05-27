@@ -13,7 +13,7 @@ namespace RDFWrappers
     {
         string                            name;
         SdaiInstance                      inst;
-        ifcengine.enum_express_attr_type  type;
+        enum_express_attr_type            type;
         SdaiInstance                      referenced;
 
         public SdaiDefinedType (string name, SdaiInstance inst)

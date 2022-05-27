@@ -26,7 +26,7 @@ namespace RDFWrappers
 
             int i = 0;
             SdaiInstance variant;
-            while (0 != ifcengine.engiGetSelectDefinitionVariant(inst, i++, out variant))
+            while (0 != (variant = ifcengine.engiGetSelectElement(inst, i++)))
             {
                 ret.Add(variant);
             }
@@ -44,7 +44,7 @@ namespace RDFWrappers
             foreach (var variant in GetVariants())
             {
                 var name = SdaiSchema.GetNameOfEntity(variant);
-                var type = ifcengine.engiGetDefinitionType(variant);
+                var type = ifcengine.engiGetDeclarationType(variant);
 
                 str.AppendLine(string.Format("        {0} {1}", name, type.ToString()));
             }

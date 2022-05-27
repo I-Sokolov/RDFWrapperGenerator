@@ -14,9 +14,9 @@ namespace RDFWrappers
         public string name;
         public SdaiInstance definingEntity;
         public bool inverse;
-        public ifcengine.enum_express_attr_type attrType;
+        public enum_express_attr_type attrType;
         public SdaiInstance domainEntity;
-        public ifcengine.enum_express_aggr aggrType;
+        public enum_express_aggr aggrType;
         public bool nestedAggr;
         public Int64 cardinalityMin;
         public Int64 cardinalityMax;
@@ -37,20 +37,20 @@ namespace RDFWrappers
 
             if (nestedAggr)
             {
-                System.Diagnostics.Debug.Assert(aggrType != ifcengine.enum_express_aggr.__NONE);
+                System.Diagnostics.Debug.Assert(aggrType != enum_express_aggr.__NONE);
                 csType += "NESTED";
             }
 
             switch (aggrType)
             {
-                case ifcengine.enum_express_aggr.__NONE:
+                case enum_express_aggr.__NONE:
                     //scalar
                     break;
 
-                case ifcengine.enum_express_aggr.__ARRAY:
-                case ifcengine.enum_express_aggr.__BAG:
-                case ifcengine.enum_express_aggr.__LIST:
-                case ifcengine.enum_express_aggr.__SET:
+                case enum_express_aggr.__ARRAY:
+                case enum_express_aggr.__BAG:
+                case enum_express_aggr.__LIST:
+                case enum_express_aggr.__SET:
                     csType += aggrType.ToString() + "[" + cardinalityMin.ToString() + ".." + cardinalityMax.ToString() + "] OF ";
                     break;
 
@@ -61,7 +61,7 @@ namespace RDFWrappers
 
             switch (attrType)
             {
-                case ifcengine.enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
+                case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
                     if (domainEntity != 0)
                     {
                         csType += SdaiSchema.GetNameOfEntity(domainEntity);
@@ -72,7 +72,7 @@ namespace RDFWrappers
                     }
                     break;
 
-                case ifcengine.enum_express_attr_type.__ENUMERATION:
+                case enum_express_attr_type.__ENUMERATION:
                     if (domainEntity != 0)
                     {
                         csType += "ENUM " + SdaiSchema.GetNameOfEntity(domainEntity);
@@ -83,7 +83,7 @@ namespace RDFWrappers
                     }
                     break;
 
-                case ifcengine.enum_express_attr_type.__SELECT:
+                case enum_express_attr_type.__SELECT:
                     if (domainEntity != 0)
                     {
                         csType += "SELECT " + SdaiSchema.GetNameOfEntity(domainEntity);
@@ -94,14 +94,14 @@ namespace RDFWrappers
                     }
                     break;
 
-                case ifcengine.enum_express_attr_type.__BINARY:
-                case ifcengine.enum_express_attr_type.__BINARY_32:
-                case ifcengine.enum_express_attr_type.__BOOLEAN:
-                case ifcengine.enum_express_attr_type.__INTEGER:
-                case ifcengine.enum_express_attr_type.__LOGICAL:
-                case ifcengine.enum_express_attr_type.__NUMBER:
-                case ifcengine.enum_express_attr_type.__REAL:
-                case ifcengine.enum_express_attr_type.__STRING:
+                case enum_express_attr_type.__BINARY:
+                case enum_express_attr_type.__BINARY_32:
+                case enum_express_attr_type.__BOOLEAN:
+                case enum_express_attr_type.__INTEGER:
+                case enum_express_attr_type.__LOGICAL:
+                case enum_express_attr_type.__NUMBER:
+                case enum_express_attr_type.__REAL:
+                case enum_express_attr_type.__STRING:
                     csType += attrType.ToString();
                     System.Diagnostics.Debug.Assert(domainEntity == 0);
                     break;

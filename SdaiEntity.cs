@@ -34,8 +34,8 @@ namespace RDFWrappers
             {
                 IntPtr ptrName = IntPtr.Zero;
                 Int64 definingEntity, domainEntity;
-                ifcengine.enum_express_attr_type attrType;
-                ifcengine.enum_express_aggr aggrType;
+                enum_express_attr_type attrType;
+                enum_express_aggr aggrType;
                 byte inverse, nestedAggr, optional, unique;
                 Int64 cardinalityMin, cardinalityMax;
 
