@@ -38,13 +38,13 @@ namespace RDFWrappers
         {
             var str = new StringBuilder();
 
-            str.Append(string.Format("{0}:", name));
+            str.AppendLine(string.Format("{0}:", name));
 
             var vals = GetValues();
             foreach (var v in vals)
             {
-                str.Append(v);
-                str.Append(' ');
+                str.Append("        ");
+                str.AppendLine(v);
             }
 
             return str.ToString();

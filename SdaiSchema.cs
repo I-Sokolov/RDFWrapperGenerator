@@ -18,11 +18,18 @@ namespace RDFWrappers
         /// <returns></returns>
         static public string GetNameOfEntity(SdaiInstance clsid)
         {
-            var ptrName = IntPtr.Zero;
-            ifcengine.engiGetEntityName(clsid, ifcengine.sdaiSTRING, out ptrName);
-            var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName);
+            if (clsid!=0)
+            {
+                var ptrName = IntPtr.Zero;
+                ifcengine.engiGetEntityName(clsid, ifcengine.sdaiSTRING, out ptrName);
+                var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName);
 
-            return name;
+                return name;
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public class DefinitionsList : SortedList<string, SdaiInstance> { }
