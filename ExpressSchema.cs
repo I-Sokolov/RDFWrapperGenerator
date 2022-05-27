@@ -9,7 +9,7 @@ using SdaiInstance = System.Int64;
 
 namespace RDFWrappers
 {
-    class SdaiSchema
+    class ExpressSchema
     {
         /// <summary>
         /// 
@@ -47,7 +47,7 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="schemaName"></param>
-        public SdaiSchema (string schemaName)
+        public ExpressSchema (string schemaName)
         {
             m_model = ifcengine.sdaiCreateModelBN(1, "", schemaName);
 
@@ -86,7 +86,7 @@ namespace RDFWrappers
             if (definedTypes != null)
                 foreach (var def in definedTypes)
                 {
-                    var type = new SdaiDefinedType(def.Key, def.Value);
+                    var type = new ExpressDefinedType(def.Key, def.Value);
                     Console.WriteLine (type.ToString());
                 }
 
@@ -95,7 +95,7 @@ namespace RDFWrappers
             if (enums != null)
                 foreach (var enm in enums)
                 {
-                    var e = new SdaiEnum(enm.Key, enm.Value);
+                    var e = new ExpressEnumeraion(enm.Key, enm.Value);
                     Console.WriteLine (e.ToString());
                 }
 
@@ -104,7 +104,7 @@ namespace RDFWrappers
             if (sels != null)
                 foreach (var sel in sels)
                 {
-                    var s = new SdaiSelect(sel.Key, sel.Value); ;
+                    var s = new ExpressSelect(sel.Key, sel.Value); ;
                     Console.WriteLine(s.ToString());
                 }
 
@@ -113,7 +113,7 @@ namespace RDFWrappers
             if (entities != null)
                 foreach (var entity in entities)
                 {
-                    var e = new SdaiEntity(entity.Key, entity.Value); ;
+                    var e = new ExpressEntity(entity.Key, entity.Value); ;
                     Console.WriteLine(e.ToString());
                 }
         }

@@ -9,12 +9,12 @@ using SdaiInstance = System.Int64;
 
 namespace RDFWrappers
 {
-    class SdaiEntity
+    class ExpressEntity
     {
         string name;
         SdaiInstance inst;
 
-        public SdaiEntity(string name, SdaiInstance inst)
+        public ExpressEntity(string name, SdaiInstance inst)
         {
             this.name = name;
             this.inst = inst;
@@ -25,9 +25,9 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<SdaiAttribute> GetAttributes()
+        public List<ExpressAttribute> GetAttributes()
         {
-            var ret = new List<SdaiAttribute>();
+            var ret = new List<ExpressAttribute>();
 
             var nattr = ifcengine.engiGetEntityNoArguments(inst);
             for (int i = 0; i < nattr; i++)
@@ -52,7 +52,7 @@ namespace RDFWrappers
 
                 if (ok != 0)
                 {
-                    var prop = new SdaiAttribute
+                    var prop = new ExpressAttribute
                     {
                         name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName),
                         definingEntity = definingEntity,
@@ -98,7 +98,7 @@ namespace RDFWrappers
 
             foreach (var parent in GetSupertypes())
             {
-                str.Append (string.Format(" {0}", SdaiSchema.GetNameOfEntity(parent)));
+                str.Append (string.Format(" {0}", ExpressSchema.GetNameOfEntity(parent)));
             }
             str.AppendLine() ;
 

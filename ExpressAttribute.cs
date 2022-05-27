@@ -9,7 +9,7 @@ using SdaiInstance = System.Int64;
 
 namespace RDFWrappers
 {
-    public class SdaiAttribute
+    public class ExpressAttribute
     {
         public string name;
         public SdaiInstance definingEntity;
@@ -23,8 +23,8 @@ namespace RDFWrappers
         public bool optional;
         public bool unique;
 
-        public string DefiningEntity { get { return SdaiSchema.GetNameOfEntity(definingEntity); } }
-        public string DomainEntity { get { return SdaiSchema.GetNameOfEntity(domainEntity); } }
+        public string DefiningEntity { get { return ExpressSchema.GetNameOfEntity(definingEntity); } }
+        public string DomainEntity { get { return ExpressSchema.GetNameOfEntity(domainEntity); } }
 
         override public string ToString()
         {
@@ -64,7 +64,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
                     if (domainEntity != 0)
                     {
-                        csType += SdaiSchema.GetNameOfEntity(domainEntity);
+                        csType += ExpressSchema.GetNameOfEntity(domainEntity);
                     }
                     else
                     {
@@ -75,7 +75,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__ENUMERATION:
                     if (domainEntity != 0)
                     {
-                        csType += "ENUM " + SdaiSchema.GetNameOfEntity(domainEntity);
+                        csType += "ENUM " + ExpressSchema.GetNameOfEntity(domainEntity);
                     }
                     else
                     {
@@ -86,7 +86,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__SELECT:
                     if (domainEntity != 0)
                     {
-                        csType += "SELECT " + SdaiSchema.GetNameOfEntity(domainEntity);
+                        csType += "SELECT " + ExpressSchema.GetNameOfEntity(domainEntity);
                     }
                     else
                     {

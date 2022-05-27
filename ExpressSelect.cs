@@ -9,30 +9,31 @@ using SdaiInstance = System.Int64;
 
 namespace RDFWrappers
 {
-    class SdaiEnum
+    class ExpressSelect
     {
         string name;
         SdaiInstance inst;
-        public SdaiEnum(string name, SdaiInstance inst)
+
+        public ExpressSelect(string name, SdaiInstance inst)
         {
             this.name = name;
             this.inst = inst;
         }
 
-        public List<string> GetValues ()
+        public List<SdaiInstance> GetVariants()
         {
-            var ret = new List<string>();
+            var ret = new List<SdaiInstance>();
 
             int i = 0;
-            var ptrValue = IntPtr.Zero;
-            while (IntPtr.Zero!=(ptrValue = ifcengine.engiGetEnumerationElement(inst, i++)))
+            SdaiInstance variant;
+            while (0 != (variant = ifcengine.engiGetSelectElement(inst, i++)))
             {
-                string value = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrValue);
-                ret.Add(value);
+                ret.Add(variant);
             }
 
             return ret;
         }
+
 
         public override string ToString()
         {
@@ -40,14 +41,17 @@ namespace RDFWrappers
 
             str.AppendLine(string.Format("{0}:", name));
 
-            var vals = GetValues();
-            foreach (var v in vals)
+            foreach (var variant in GetVariants())
             {
-                str.Append("        ");
-                str.AppendLine(v);
+                var name = ExpressSchema.GetNameOfEntity(variant);
+                var type = ifcengine.engiGetDeclarationType(variant);
+
+                str.AppendLine(string.Format("        {0} {1}", name, type.ToString()));
             }
 
             return str.ToString();
+
         }
+
     }
 }

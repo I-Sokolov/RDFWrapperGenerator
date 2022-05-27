@@ -30,7 +30,7 @@ namespace RDFWrappers
             {
                 //var sdai = new SdaiSchema("ap242ed2_mim_lf_v1.101.exp");
                 //var sdai = new SdaiSchema("AP242");
-                var sdai = new SdaiSchema("IFC2x3");
+                var sdai = new ExpressSchema("IFC2x3");
                 sdai.ToConsole();
 
                 return 0;
