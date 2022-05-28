@@ -21,6 +21,20 @@ namespace NAMESPACE_NAME
     // 
 //## TEMPLATE: DefinedType
     typedef double DEFINED_TYPE_NAME;
+//## TEMPLATE: BeginEnumerations
+
+    //
+    // Enumerations
+    //
+//## BeginEnumeration
+
+    enum ENUMERATION_NAME
+    {
+//## EnumerationElement
+        ENUMERATION_ELEMENT=1234,
+//## EndEnumeration
+        ENUMERATION_NULL = -1
+    };
 //## TEMPLATE: BeginAllClasses
 #if 0
 

@@ -21,6 +21,9 @@ namespace RDFWrappers
         const string KWD_BASE_CLASS = "/*PARENT_ENTITY NAME*/Entity";
         const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
         const string KWD_DATA_TYPE = "double";
+        const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
+        const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
+        const string KWD_NUMBER = "1234";
 
         const string KWD_PROPERTIES_OF = "PROPERTIES_OF_CLASS";
         const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
@@ -39,6 +42,10 @@ namespace RDFWrappers
             ClassForwardDeclaration,
             BeginDefinedTypes,
             DefinedType,
+            BeginEnumerations,
+            BeginEnumeration,
+            EnumerationElement,
+            EndEnumeration,
             BeginAllClasses,
             BeginWrapperClass,
             StartPropertiesBlock,
@@ -66,7 +73,7 @@ namespace RDFWrappers
 
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
-        HashSet<ExpressHandle> m_wroteDeclarations = new HashSet<ExpressHandle>();
+        HashSet<ExpressHandle> m_wroteDefinedTyes = new HashSet<ExpressHandle>();
 
         Dictionary<string, string> m_replacements = new Dictionary<string, string>();
 
@@ -106,6 +113,8 @@ namespace RDFWrappers
                 WriteForwardDeclarations(writer);
 
                 WriteDefinedTypes(writer);
+
+                WriteEnumerations(writer);
 #if NOT_NOW
             m_generatedClasses = new HashSet<string>();
 
@@ -146,16 +155,16 @@ namespace RDFWrappers
         {
             WriteByTemplate(writer, Template.BeginDefinedTypes);
 
-            foreach (var cls in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
+            foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
             {
-                var type = new ExpressDefinedType(cls.Value);
+                var type = new ExpressDefinedType(decl.Value);
                 WriteDefinedType(writer, type);
             }
         }
 
         private bool WriteDefinedType(StreamWriter writer, ExpressDefinedType definedType)
         {
-            if (!m_wroteDeclarations.Add (definedType.declaration))
+            if (!m_wroteDefinedTyes.Add (definedType.declaration))
             {
                 return true;
             }
@@ -188,6 +197,46 @@ namespace RDFWrappers
             WriteByTemplate(writer, Template.DefinedType);
 
             return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        private void WriteEnumerations(StreamWriter writer)
+        {
+            WriteByTemplate(writer, Template.BeginEnumerations);
+
+            foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENUM])
+            {
+                var enumeration = new ExpressEnumeraion(decl.Key, decl.Value);
+                WriteEnumeration(writer, enumeration);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="enumeraion"></param>
+        private void WriteEnumeration(StreamWriter writer, ExpressEnumeraion enumeraion)
+        {
+            m_replacements[KWD_ENUMERATION_NAME] = enumeraion.name;
+
+            WriteByTemplate(writer, Template.BeginEnumeration);
+
+            int i = 0;
+            foreach (var e in enumeraion.GetValues())
+            {
+                m_replacements[KWD_ENUMERATION_ELEMENT] = e;
+                m_replacements[KWD_NUMBER] = i.ToString();
+
+                WriteByTemplate(writer, Template.EnumerationElement);
+
+                i++;
+            }
+
+            WriteByTemplate(writer, Template.EndEnumeration);
         }
 
         /// <summary>

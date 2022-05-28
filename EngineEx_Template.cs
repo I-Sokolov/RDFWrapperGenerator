@@ -9,6 +9,20 @@ namespace NAMESPACE_NAME
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)
 //## TEMPLATE: BeginDefinedTypes
 //## TEMPLATE: DefinedType
+//## TEMPLATE: BeginEnumerations
+
+    //
+    // Enumerations
+    //
+//## TEMPLATE: BeginEnumeration
+
+    enum ENUMERATION_NAME
+    {
+//## EnumerationElement
+        ENUMERATION_ELEMENT=1234,
+//## EndEnumeration
+        ENUMERATION_NULL = -1
+    };
 //## TEMPLATE: BeginAllClasses - empty in C#
 //## TEMPLATE: BeginWrapperClass
 #if NOT_NOW

@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using RDF;
 
-using SdaiInstance = System.Int64;
+using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
     class ExpressEnumeraion
     {
-        string name;
-        SdaiInstance inst;
-        public ExpressEnumeraion(string name, SdaiInstance inst)
+        public string name;
+        ExpressHandle inst;
+        public ExpressEnumeraion(string name, ExpressHandle inst)
         {
             this.name = name;
             this.inst = inst;
