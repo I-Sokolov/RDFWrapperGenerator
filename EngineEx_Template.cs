@@ -7,7 +7,7 @@ using RDF;
 namespace NAMESPACE_NAME
 {
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)
-//## TEMPLATE: DefinedTypesBegin
+//## TEMPLATE: BeginDefinedTypes
 //## TEMPLATE: DefinedType
 //## TEMPLATE: BeginAllClasses - empty in C#
 //## TEMPLATE: BeginWrapperClass

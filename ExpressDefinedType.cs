@@ -5,23 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using RDF;
 
-using SdaiInstance = System.Int64;
+using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
     class ExpressDefinedType
     {
-        string                            name;
-        SdaiInstance                      inst;
-        enum_express_attr_type            type;
-        SdaiInstance                      referenced;
+        public string                     name;
+        public ExpressHandle              declaration;
+        public enum_express_attr_type     type;
+        public ExpressHandle              referenced;
 
-        public ExpressDefinedType (string name, SdaiInstance inst)
+        public ExpressDefinedType (ExpressHandle declaration)
         {
-            this.name = name;
-            this.inst = inst;
+            this.declaration = declaration;
 
-            type = ifcengine.engiGetDefinedType(inst, out referenced);
+            System.Diagnostics.Debug.Assert(ifcengine.engiGetDeclarationType(declaration) == enum_express_declaration.__DEFINED_TYPE);
+
+            name = ExpressSchema.GetNameOfDeclaration(declaration);
+
+            type = ifcengine.engiGetDefinedType(declaration, out referenced);
         }
 
 
@@ -29,7 +32,7 @@ namespace RDFWrappers
         {
             var str = new StringBuilder();
 
-            str.Append(string.Format("{0}: {1} {2}", name, type.ToString(), ExpressSchema.GetNameOfEntity(referenced)));
+            str.Append(string.Format("{0}: {1} {2}", name, type.ToString(), ExpressSchema.GetNameOfDeclaration(referenced)));
 
             return str.ToString();
 

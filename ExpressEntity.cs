@@ -98,7 +98,7 @@ namespace RDFWrappers
 
             foreach (var parent in GetSupertypes())
             {
-                str.Append (string.Format(" {0}", ExpressSchema.GetNameOfEntity(parent)));
+                str.Append (string.Format(" {0}", ExpressSchema.GetNameOfDeclaration(parent)));
             }
             str.AppendLine() ;
 

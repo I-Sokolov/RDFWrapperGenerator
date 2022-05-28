@@ -23,8 +23,8 @@ namespace RDFWrappers
         public bool optional;
         public bool unique;
 
-        public string DefiningEntity { get { return ExpressSchema.GetNameOfEntity(definingEntity); } }
-        public string DomainEntity { get { return ExpressSchema.GetNameOfEntity(domainEntity); } }
+        public string DefiningEntity { get { return ExpressSchema.GetNameOfDeclaration(definingEntity); } }
+        public string DomainEntity { get { return ExpressSchema.GetNameOfDeclaration(domainEntity); } }
 
         override public string ToString()
         {
@@ -64,7 +64,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
                     if (domainEntity != 0)
                     {
-                        csType += ExpressSchema.GetNameOfEntity(domainEntity);
+                        csType += ExpressSchema.GetNameOfDeclaration(domainEntity);
                     }
                     else
                     {
@@ -75,7 +75,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__ENUMERATION:
                     if (domainEntity != 0)
                     {
-                        csType += "ENUM " + ExpressSchema.GetNameOfEntity(domainEntity);
+                        csType += "ENUM " + ExpressSchema.GetNameOfDeclaration(domainEntity);
                     }
                     else
                     {
@@ -86,7 +86,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__SELECT:
                     if (domainEntity != 0)
                     {
-                        csType += "SELECT " + ExpressSchema.GetNameOfEntity(domainEntity);
+                        csType += "SELECT " + ExpressSchema.GetNameOfDeclaration(domainEntity);
                     }
                     else
                     {

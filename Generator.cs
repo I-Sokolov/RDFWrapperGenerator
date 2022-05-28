@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ExpressHandle = System.Int64;
+
 namespace RDFWrappers
 {
     class Generator
@@ -17,10 +19,11 @@ namespace RDFWrappers
         const string KWD_NAMESPACE = "NAMESPACE_NAME";
         const string KWD_ENTITY_NAME = "ENTITY_NAME";
         const string KWD_BASE_CLASS = "/*PARENT_ENTITY NAME*/Entity";
+        const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
+        const string KWD_DATA_TYPE = "double";
 
         const string KWD_PROPERTIES_OF = "PROPERTIES_OF_CLASS";
         const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
-        const string KWD_DATA_TYPE = "double";
         const string KWD_CARDINALITY_MIN = "CARDINALITY_MIN";
         const string KWD_CARDINALITY_MAX = "CARDINALITY_MAX";
         const string KWD_OBJECT_TYPE = "Instance";
@@ -34,7 +37,7 @@ namespace RDFWrappers
             None,
             BeginFile,
             ClassForwardDeclaration,
-            DefinedTypesBegin,
+            BeginDefinedTypes,
             DefinedType,
             BeginAllClasses,
             BeginWrapperClass,
@@ -63,11 +66,9 @@ namespace RDFWrappers
 
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
-        Dictionary<string, string> m_replacements;
+        HashSet<ExpressHandle> m_wroteDeclarations = new HashSet<ExpressHandle>();
 
-        HashSet<string> m_generatedClasses;
-
-        HashSet<string> m_addedProperties;
+        Dictionary<string, string> m_replacements = new Dictionary<string, string>();
 
         /// <summary>
         /// 
@@ -96,17 +97,18 @@ namespace RDFWrappers
         /// <param name="outputFile"></param>
         public void WriteWrapper(string outputFile)
         {
-            m_generatedClasses = new HashSet<string>();
-
             using (var writer = new StreamWriter(outputFile))
             {
-                m_replacements = new Dictionary<string, string>();
                 m_replacements[KWD_NAMESPACE] = m_namespace;
 
                 WriteByTemplate(writer, Template.BeginFile);
 
                 WriteForwardDeclarations(writer);
+
+                WriteDefinedTypes(writer);
 #if NOT_NOW
+            m_generatedClasses = new HashSet<string>();
+
                 //
                 // write class definitions
                 //
@@ -123,11 +125,12 @@ namespace RDFWrappers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
         private void WriteForwardDeclarations(StreamWriter writer)
         {
-            //
-            // write forward declarationa
-            //
             foreach (var cls in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
                 m_replacements[KWD_ENTITY_NAME] = cls.Key;
@@ -135,6 +138,57 @@ namespace RDFWrappers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        private void WriteDefinedTypes(StreamWriter writer)
+        {
+            WriteByTemplate(writer, Template.BeginDefinedTypes);
+
+            foreach (var cls in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
+            {
+                var type = new ExpressDefinedType(cls.Value);
+                WriteDefinedType(writer, type);
+            }
+        }
+
+        private bool WriteDefinedType(StreamWriter writer, ExpressDefinedType definedType)
+        {
+            if (!m_wroteDeclarations.Add (definedType.declaration))
+            {
+                return true;
+            }
+
+            if (definedType.referenced != 0)
+            {
+                var referencedType = new ExpressDefinedType(definedType.referenced);
+                if (!WriteDefinedType(writer, referencedType))
+                {
+                    Console.WriteLine("Defineded type {0} is not supported, because referenced type {1} is not supported", definedType.name, referencedType.name);
+                    return false;
+                }
+
+                m_replacements[KWD_DATA_TYPE] = referencedType.name;
+            }
+            else
+            {
+                var csType = ExpressSchema.GetCSType(definedType.type);
+                if (csType==null)
+                {
+                    Console.WriteLine("Defined type {0} is not supproted, because primitive type is {1}", definedType.name, definedType.type.ToString());
+                    return false;
+                }
+
+                m_replacements[KWD_DATA_TYPE] = csType;
+            }
+
+            m_replacements[KWD_DEFINED_TYPE] = definedType.name;
+
+            WriteByTemplate(writer, Template.DefinedType);
+
+            return true;
+        }
 
         /// <summary>
         /// 
@@ -285,6 +339,7 @@ namespace RDFWrappers
         /// <param name="properties"></param>
         private void WriteProperties (StreamWriter writer, string properiesOfClass, List<Schema.ClassProperty> properties)
         {
+#if NOT_NOW
             m_replacements[KWD_PROPERTIES_OF] = properiesOfClass;
 
             bool first = true;
@@ -301,6 +356,7 @@ namespace RDFWrappers
                     WritePropertyMethods(writer, prop);
                 }
             }
+#endif
         }
 
         /// <summary>
@@ -367,7 +423,7 @@ namespace RDFWrappers
             {
                 foreach (var restr in prop.Restrictions())
                 {
-                    string instClass = ExpressSchema.GetNameOfEntity(restr);
+                    string instClass = ExpressSchema.GetNameOfDeclaration(restr);
                     WriteAccessObjectProperty(writer, instClass, "", template);
                 }
             }
@@ -392,7 +448,7 @@ namespace RDFWrappers
                 {
                     Verify(first, "This case was not tested yet: more then one restriction");
 
-                    string instClass = ExpressSchema.GetNameOfEntity(restr);
+                    string instClass = ExpressSchema.GetNameOfDeclaration(restr);
                     string asType = first ? "" : instClass;
                     WriteAccessObjectProperty(writer, instClass, asType, template);
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RDF;
 
-using SdaiInstance = System.Int64;
+using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
@@ -14,9 +14,8 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="clsid"></param>
-        /// <returns></returns>
-        static public string GetNameOfEntity(SdaiInstance clsid)
+
+        static public string GetNameOfDeclaration(ExpressHandle clsid)
         {
             if (clsid!=0)
             {
@@ -32,7 +31,42 @@ namespace RDFWrappers
             }
         }
 
-        public class DefinitionsList : SortedList<string, SdaiInstance> { }
+        static public string GetCSType(enum_express_attr_type attr_Type)
+        {
+            switch (attr_Type)
+            {
+                case enum_express_attr_type.__BOOLEAN:
+                    return "bool";
+
+                case enum_express_attr_type.__INTEGER:
+                    return "Int64";
+
+                case enum_express_attr_type.__LOGICAL:
+                    return "Int64";
+
+                case enum_express_attr_type.__NUMBER:
+                    return "double";
+
+                case enum_express_attr_type.__REAL:
+                    return "double";
+
+                case enum_express_attr_type.__STRING:
+                    return "string";
+
+                case enum_express_attr_type.__BINARY:
+                case enum_express_attr_type.__BINARY_32:
+                    return null;
+
+                case enum_express_attr_type.__NONE:
+                case enum_express_attr_type.__ENUMERATION:
+                case enum_express_attr_type.__SELECT:
+                default:
+                    System.Diagnostics.Debug.Assert(false);
+                    return null;
+            }
+        }
+
+        public class DefinitionsList : SortedList<string, ExpressHandle> { }
 
         public class Definitions : Dictionary <enum_express_declaration, DefinitionsList> { }
 
@@ -67,9 +101,9 @@ namespace RDFWrappers
             Int64 it = 0;
             while (0 != (it = ifcengine.engiGetNextDeclarationIterator(m_model, it)))
             {
-                SdaiInstance defenition = ifcengine.engiGetDeclarationFromIterator(m_model, it);
+                ExpressHandle defenition = ifcengine.engiGetDeclarationFromIterator(m_model, it);
 
-                var name = GetNameOfEntity(defenition);
+                var name = GetNameOfDeclaration(defenition);
                 var type = ifcengine.engiGetDeclarationType(defenition);
 
                 var defs = m_declarations[type];
@@ -86,7 +120,7 @@ namespace RDFWrappers
             if (definedTypes != null)
                 foreach (var def in definedTypes)
                 {
-                    var type = new ExpressDefinedType(def.Key, def.Value);
+                    var type = new ExpressDefinedType(def.Value);
                     Console.WriteLine (type.ToString());
                 }
 

@@ -9,10 +9,12 @@
 
 namespace NAMESPACE_NAME
 {
-    //Entities list
+    //
+    // Entities forward declarations
+    // 
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
-//## TEMPLATE: DefinedTypesBegin
+//## TEMPLATE: BeginDefinedTypes
 
     //
     // Defined types

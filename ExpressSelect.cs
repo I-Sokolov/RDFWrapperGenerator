@@ -43,7 +43,7 @@ namespace RDFWrappers
 
             foreach (var variant in GetVariants())
             {
-                var name = ExpressSchema.GetNameOfEntity(variant);
+                var name = ExpressSchema.GetNameOfDeclaration(variant);
                 var type = ifcengine.engiGetDeclarationType(variant);
 
                 str.AppendLine(string.Format("        {0} {1}", name, type.ToString()));
