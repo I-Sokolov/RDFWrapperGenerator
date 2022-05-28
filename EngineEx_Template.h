@@ -5,20 +5,28 @@
 #define __RDF_LTD__NAMESPACE_NAME_H
 
 #include    <assert.h>
-#include	"engine.h"
+#include	"ifcengine.h"
 
 namespace NAMESPACE_NAME
 {
+    //Entities list
 //## TEMPLATE: ClassForwardDeclaration
-    class CLASS_NAME;
-//## TEMPLATE: BeginAllClasses
+    class ENTITY_NAME;
+//## TEMPLATE: DefinedTypesBegin
 
+    //
+    // Defined types
+    // 
+//## TEMPLATE: DefinedType
+    typedef double DEFINED_TYPE_NAME;
+//## TEMPLATE: BeginAllClasses
+#if 0
 
     /// <summary>
     /// Provides utility methods to interact with a genetic instnace of OWL class
     /// You also can use object of this class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
-    class Instance
+    class Entity
     {
     protected:
         /// <summary>
@@ -51,7 +59,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Instance(int64_t instance, const char* cls)
+        Entity(int64_t instance, const char* cls)
         {
             m_instance = instance;
 #ifdef _DEBUG
@@ -162,27 +170,27 @@ namespace NAMESPACE_NAME
 //## TEMPLATE: BeginWrapperClass
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CLASS_NAME
+    /// Provides utility methods to interact with an instnace of OWL class ENTITY_NAME
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
-    class CLASS_NAME : public /*BASE CLASS*/Instance
+    class ENTITY_NAME : public /*PARENT_ENTITY_NAME*/Entity
     {
     public:
         /// <summary>
-        /// Create new instace of OWL class CLASS_NAME and returns object of this C++ class to interact with
+        /// Create new instace of OWL class ENTITY_NAME and returns object of this C++ class to interact with
         /// </summary>
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        static CLASS_NAME Create(int64_t model, const char* name=NULL) { return CLASS_NAME(Instance::Create(model, "CLASS_NAME", name), "CLASS_NAME");}
+        static ENTITY_NAME Create(int64_t model, const char* name=NULL) { return ENTITY_NAME(Entity::Create(model, "ENTITY_NAME", name), "ENTITY_NAME");}
         
         /// <summary>
         /// Constructs object of this C++ class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        CLASS_NAME(int64_t instance = NULL, const char* checkClassName = NULL)
-            : /*BASE CLASS*/Instance(instance, (checkClassName != NULL) ? checkClassName : "CLASS_NAME")
+        ENTITY_NAME(int64_t instance = NULL, const char* checkClassName = NULL)
+            : /*BASE CLASS*/Entity(instance, (checkClassName != NULL) ? checkClassName : "ENTITY_NAME")
         {}
 //## TEMPLATE StartPropertiesBlock
 
@@ -203,17 +211,17 @@ namespace NAMESPACE_NAME
         ///<summary>Gets values array of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
         const double* get_PROPERTY_NAMEasType(int64_t* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: SetObjectProperty
-        ///<summary>Sets relationship from this instance to an instance of Instance</summary>
-        void set_PROPERTY_NAME(const Instance& instance) { SetObjectProperty<Instance>("PROPERTY_NAME", &instance, 1); }
+        ///<summary>Sets relationship from this instance to an instance of Entity</summary>
+        void set_PROPERTY_NAME(const Entity& instance) { SetObjectProperty<Entity>("PROPERTY_NAME", &instance, 1); }
 //## TEMPLATE SetObjectArrayProperty
-        ///<summary>Sets relationships from this instance to an array of Instance. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        void set_PROPERTY_NAME(const Instance* instances, int64_t count) { SetObjectProperty<Instance>("PROPERTY_NAME", instances, count); }
+        ///<summary>Sets relationships from this instance to an array of Entity. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
+        void set_PROPERTY_NAME(const Entity* instances, int64_t count) { SetObjectProperty<Entity>("PROPERTY_NAME", instances, count); }
 //## TEMPLATE GetObjectProperty
         ///<summary>Get related instance. The method returns pointer to inernal buffer, a caller should not free or change it</summary>
-        const Instance* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Instance>("PROPERTY_NAME", NULL); }
+        const Entity* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Entity>("PROPERTY_NAME", NULL); }
 //## TEMPLATE GetObjectArrayProperty
         ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        const Instance* get_PROPERTY_NAMEasTYPE(int64_t* pCount) { return GetObjectProperty<Instance>("PROPERTY_NAME", pCount); }
+        const Entity* get_PROPERTY_NAMEasTYPE(int64_t* pCount) { return GetObjectProperty<Entity>("PROPERTY_NAME", pCount); }
 //## TEMPLATE GetObjectArrayPropertyInt64
         ///<summary>Get an array of related instance handles. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
         const int64_t* get_PROPERTY_NAME_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("PROPERTY_NAME", pCount); }
@@ -221,5 +229,5 @@ namespace NAMESPACE_NAME
     };
 //## TEMPLATE: EndFile template part
 }
-
 #endif
+

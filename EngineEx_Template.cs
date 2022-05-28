@@ -6,33 +6,34 @@ using RDF;
 
 namespace NAMESPACE_NAME
 {
-// Classes list:
+// Entities list:
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)
-//     CLASS_NAME
+//## TEMPLATE: DefinedTypesBegin
+//## TEMPLATE: DefinedType
 //## TEMPLATE: BeginAllClasses - empty in C#
 //## TEMPLATE: BeginWrapperClass
-
+#if NOT_NOW
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CLASS_NAME
+    /// Provides utility methods to interact with an instnace of OWL class ENTITY_NAME
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
-    public class CLASS_NAME : /*BASE CLASS*/Instance
+    public class ENTITY_NAME : /*PARENT_ENTITY_NAME*/Entity
     {
         /// <summary>
-        /// Create new instace of OWL class CLASS_NAME and returns object of this C# class to interact with
+        /// Create new instace of OWL class ENTITY_NAME and returns object of this C# class to interact with
         /// </summary>
         /// <param name="model">The handle to the model</param>
         /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
         /// <returns></returns>
-        public static new CLASS_NAME Create(Int64 model, string name=null) { return new CLASS_NAME(Instance.Create(model, "CLASS_NAME", name), "CLASS_NAME");}
+        public static new ENTITY_NAME Create(Int64 model, string name=null) { return new ENTITY_NAME(Entity.Create(model, "ENTITY_NAME", name), "ENTITY_NAME");}
         
         /// <summary>
         /// Constructs object of this C# class that wraps existing OWL instance
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        public CLASS_NAME(Int64 instance, string checkClassName = null) 
-            : base (instance, (checkClassName!=null) ? checkClassName : "CLASS_NAME") 
+        public ENTITY_NAME(Int64 instance, string checkClassName = null) 
+            : base (instance, (checkClassName!=null) ? checkClassName : "ENTITY_NAME") 
         {            
         }
 //## TEMPLATE StartPropertiesBlock
@@ -54,14 +55,14 @@ namespace NAMESPACE_NAME
         ///<summary>Gets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         public double[] get_PROPERTY_NAMEasType() { return GetDatatypeProperty_double("PROPERTY_NAME"); }
 //## TEMPLATE: SetObjectProperty
-        ///<summary>Sets relationship from this instance to an instance of Instance</summary>
-        public void set_PROPERTY_NAME(Instance instance) { SetObjectProperty("PROPERTY_NAME", instance); }
+        ///<summary>Sets relationship from this instance to an instance of Entity</summary>
+        public void set_PROPERTY_NAME(Entity instance) { SetObjectProperty("PROPERTY_NAME", instance); }
 //## TEMPLATE SetObjectArrayProperty
-        ///<summary>Sets relationships from this instance to an array of Instance. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        public void set_PROPERTY_NAME(Instance[] instances) { SetObjectProperty("PROPERTY_NAME", instances); }
+        ///<summary>Sets relationships from this instance to an array of Entity. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
+        public void set_PROPERTY_NAME(Entity[] instances) { SetObjectProperty("PROPERTY_NAME", instances); }
 //## TEMPLATE GetObjectProperty
         ///<summary>Get related instance</summary>
-        public Instance get_PROPERTY_NAMEasTYPe() 
+        public Entity get_PROPERTY_NAMEasTYPe() 
         {
             var propId = GetPropertyId("PROPERTY_NAME");
 
@@ -75,7 +76,7 @@ namespace NAMESPACE_NAME
                 var values = new Int64[1];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)1);
 
-                return new Instance(values[0], null);
+                return new Entity(values[0], null);
             }
             else
             {
@@ -84,7 +85,7 @@ namespace NAMESPACE_NAME
         }
 //## TEMPLATE GetObjectArrayProperty
         ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        public Instance[] get_PROPERTY_NAMEasTYPE() 
+        public Entity[] get_PROPERTY_NAMEasTYPE() 
         {
             var propId = GetPropertyId("PROPERTY_NAME");
 
@@ -98,10 +99,10 @@ namespace NAMESPACE_NAME
                 var values = new Int64[card];
                 System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
 
-                var ret = new Instance[card];
+                var ret = new Entity[card];
                 for (int i = 0; i < card; i++)
                 {
-                    ret[i] = new Instance(values[i], null);
+                    ret[i] = new Entity(values[i], null);
                 }
 
                 return ret;
@@ -138,12 +139,12 @@ namespace NAMESPACE_NAME
     }
 
 //## TEMPLATE: EndFile template part
-
+#if NOT_NOW
     /// <summary>
     /// Provides utility methods to interact with a genetic instnace of OWL class
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
-    public class Instance : IEquatable<Instance>, IComparable, IComparable<Instance>
+    public class Entity : IEquatable<Entity>, IComparable, IComparable<Entity>
     {
         /// <summary>
         /// Create an instance of specified class
@@ -174,7 +175,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        public Instance(Int64 instance, string cls)
+        public Entity(Int64 instance, string cls)
         {
             m_instance = instance;
 #if DEBUG
@@ -192,7 +193,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// Conversion to instance handle, so the object of the class can be used anywhere where a handle required
         /// </summary>
-        public static implicit operator Int64(Instance instance) => instance.m_instance;
+        public static implicit operator Int64(Entity instance) => instance.m_instance;
 
         /// <summary>
         /// Get property id from property name
@@ -431,7 +432,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// 
         /// </summary>
-        public void SetObjectProperty(string name, Instance[] instances)
+        public void SetObjectProperty(string name, Entity[] instances)
         {
             var inst = new Int64[instances.Length];
             for (int i = 0; i < instances.Length; i++)
@@ -459,25 +460,25 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator ==(Instance i1, Instance i2) => (Equals(i1, i2));
+        public static bool operator ==(Entity i1, Entity i2) => (Equals(i1, i2));
 
         /// <summary>
         /// 
         /// </summary>
-        public static bool operator !=(Instance i1, Instance i2) => (!(i1 == i2));
+        public static bool operator !=(Entity i1, Entity i2) => (!(i1 == i2));
 
         /// <summary>
         /// 
         /// </summary>
         public override bool Equals(Object obj) 
         {
-            return Equals(obj as Instance); 
+            return Equals(obj as Entity); 
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public bool Equals(Instance other)     
+        public bool Equals(Entity other)     
         {
             return (other == null) ? false : (other.m_instance == m_instance);
         }
@@ -487,13 +488,13 @@ namespace NAMESPACE_NAME
         /// </summary>
         public int CompareTo(object obj)
         {
-            return CompareTo (obj as Instance);
+            return CompareTo (obj as Entity);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public int CompareTo(Instance other)
+        public int CompareTo(Entity other)
         {
             return (other==null)?1:m_instance.CompareTo (other.m_instance);
         }
@@ -505,7 +506,8 @@ namespace NAMESPACE_NAME
         {
             return m_instance.GetHashCode();
         }
-
+#endif
     }
+#endif
 }
 

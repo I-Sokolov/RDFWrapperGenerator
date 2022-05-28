@@ -8,8 +8,8 @@ namespace RDFWrappers
     {
         public class Options
         {
-            [CommandLine.Option("model", HelpText = "Pathname of the model containing the ontology to generate wrapper classes for. If no model is given, it will generate classes for GeometryKernel (GEOM).")]
-            public string modelFile { get; set; }
+            [CommandLine.Option("schema", HelpText = "Pathname of EXPRESS file or name of embedded schema.")]
+            public string schema { get; set; }
 
             [CommandLine.Option("cs", HelpText = "Pathnamte of c# file to be generated. Default is model name.")]
             public string csFile { get; set; }
@@ -17,30 +17,20 @@ namespace RDFWrappers
             [CommandLine.Option('h', HelpText = "Pathname of c++ header file to be generated. Default is model name.")]
             public string hFile { get; set; }
 
-            [CommandLine.Option("namespace", HelpText = "Namespase. Default is model name.")]
+            [CommandLine.Option("namespace", HelpText = "Namespase. Default is schema name.")]
             public string Namespace { get; set; }
 
-            [CommandLine.Option("printClasses", Default = false, HelpText = "Print model classes with properties.")]
-            public bool printClasses { get; set; }
+            [CommandLine.Option("printSchema", Default = false, HelpText = "Print schema declarations.")]
+            public bool printSchema { get; set; }
         }
 
         static int Main(string[] args)
         {
             try
             {
-                //var sdai = new SdaiSchema("ap242ed2_mim_lf_v1.101.exp");
-                //var sdai = new SdaiSchema("AP242");
+                /*
                 var sdai = new ExpressSchema("IFC2x3");
                 sdai.ToConsole();
-
-                return 0;
-                /*
-                Console.WriteLine("Generate C# file IFC4.cs");
-                var gen = new Generator(sdai, true, "IFC4");
-                gen.WriteWrapper("IFC4.cs");
-                Console.WriteLine("Generate C++ file IFC4.h");
-                gen = new Generator(sdai, false, "IFC4");
-                gen.WriteWrapper("IFC4.h");
                 */
 
                 Options options = null;
@@ -51,48 +41,46 @@ namespace RDFWrappers
                 }
 
                 //
-                Console.WriteLine("This application generates C# and C++ header files with helper classes to work with RDF models.");
+                Console.WriteLine("This application generates C# and C++ header files with helper classes to work with EXPRESS models.");
                 Console.WriteLine("Use --help to ptint more information and visit http://www.rdf.bg");
                 Console.WriteLine("");
 
                 //
                 // Update and validate options
                 //
-                if (string.IsNullOrWhiteSpace (options.modelFile))
+                if (string.IsNullOrWhiteSpace (options.schema))
                 {
-                    options.modelFile = null;
-                }
-                else
-                {
-                    Generator.Verify(System.IO.File.Exists(options.modelFile), "File does not exist: " + options.modelFile);
+                    //options.schema = new SdaiSchema("ap242ed2_mim_lf_v1.101.exp");
+                    //options.schema = new SdaiSchema("AP242");
+                    options.schema = "IFC4";
                 }
 
-                string baseNameSmall = (options.modelFile == null ? "geom" : System.IO.Path.GetFileNameWithoutExtension (options.modelFile));
-                string baseNameCapital = (options.modelFile == null ? "GEOM" : System.IO.Path.GetFileNameWithoutExtension(options.modelFile));
+                string baseName = System.IO.Path.GetFileNameWithoutExtension (options.schema);
 
                 if (string.IsNullOrWhiteSpace (options.csFile))
                 {
-                    options.csFile = baseNameSmall + ".cs";
+                    options.csFile = baseName + ".cs";
                 }
                 if (string.IsNullOrWhiteSpace (options.hFile))
                 {
-                    options.hFile = baseNameSmall + ".h";
+                    options.hFile = baseName + ".h";
                 }
                 if (string.IsNullOrWhiteSpace (options.Namespace))
                 {
-                    options.Namespace = baseNameCapital;
+                    options.Namespace = baseName;
                 }
                 options.Namespace = Generator.ValidateIdentifier(options.Namespace);
 
                 //
                 // Main course
                 //
-                Console.WriteLine("Generating classes for " + baseNameCapital);
-                var model = RDF.engine.OpenModel(options.modelFile);
-                Console.WriteLine();
+                Console.WriteLine("Generating classes for " + baseName);
 
-                var schema = new RdfSchema(model);
-                if (options.printClasses)
+                var schema = new ExpressSchema(options.schema);
+
+                Console.WriteLine("....");
+
+                if (options.printSchema)
                 {
                     schema.ToConsole();
                     Console.WriteLine();
@@ -124,7 +112,6 @@ namespace RDFWrappers
                 }
                 System.Console.WriteLine();
 
-                RDF.engine.CloseModel(model);
                 return 0;
             }
             catch (Exception e)

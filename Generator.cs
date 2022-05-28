@@ -15,8 +15,9 @@ namespace RDFWrappers
         const string KWD_PREPROC = "//##";
 
         const string KWD_NAMESPACE = "NAMESPACE_NAME";
-        const string KWD_CLASS_NAME = "CLASS_NAME";
-        const string KWD_BASE_CLASS = "/*BASE CLASS*/Instance";
+        const string KWD_CLASS_NAME = "ENTITY_NAME";
+        const string KWD_BASE_CLASS = "/*PARENT_ENTITY NAME*/Entity";
+
         const string KWD_PROPERTIES_OF = "PROPERTIES_OF_CLASS";
         const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
         const string KWD_DATA_TYPE = "double";
@@ -33,6 +34,8 @@ namespace RDFWrappers
             None,
             BeginFile,
             ClassForwardDeclaration,
+            DefinedTypesBegin,
+            DefinedType,
             BeginAllClasses,
             BeginWrapperClass,
             StartPropertiesBlock,
@@ -56,7 +59,7 @@ namespace RDFWrappers
         string m_TInt64;
         string m_namespace;
 
-        Schema m_schema;
+        ExpressSchema m_schema;
 
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
@@ -71,7 +74,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="cs"></param>
-        public Generator (Schema schema, bool cs, string namespace_)
+        public Generator (ExpressSchema schema, bool cs, string namespace_)
         {
             m_cs = cs;            
             m_TInt64 = m_cs ? "Int64" : "int64_t";
@@ -102,6 +105,7 @@ namespace RDFWrappers
 
                 WriteByTemplate(writer, Template.BeginFile);
 
+#if NOT_NOW
                 //
                 // write forward declarationa
                 //
@@ -120,6 +124,7 @@ namespace RDFWrappers
                 {
                     WriteClassWrapper(writer, cls.Key, cls.Value);
                 }
+#endif
 
                 //
                 writer.Write(m_template[Template.EndFile]);
@@ -135,6 +140,7 @@ namespace RDFWrappers
         /// <param name="cls"></param>
         private void WriteClassWrapper (StreamWriter writer, string clsName, Schema.Class cls)
         {
+#if NOT_NOW
             if (!m_generatedClasses.Add (clsName))
             {
                 return;
@@ -194,6 +200,7 @@ namespace RDFWrappers
             //
             //
             WriteByTemplate(writer,Template.EndWrapperClass);
+#endif
         }
 
         /// <summary>
@@ -202,6 +209,7 @@ namespace RDFWrappers
         /// <param name="parentId"></param>
         private void CollectParentProperties(Int64 parentId)
         {
+#if NOT_NOW
             string parentName = m_schema.GetNameOfClass(parentId);
             var parentClass = m_schema.m_classes[parentName];
 
@@ -214,6 +222,7 @@ namespace RDFWrappers
             {
                 CollectParentProperties(nextParent);
             }
+#endif
         }
 
         private void WriteByTemplate(StreamWriter writer, Template template)
@@ -252,6 +261,7 @@ namespace RDFWrappers
         /// <param name="parentClassId"></param>
         private void WriteParentProperties (StreamWriter writer, Int64 parentClassId)
         {
+#if NOT_NOW
             string parentName = m_schema.GetNameOfClass(parentClassId);
             var parentClass = m_schema.m_classes[parentName];
 
@@ -261,6 +271,7 @@ namespace RDFWrappers
             {
                 WriteParentProperties(writer, nextParent);
             }
+#endif
         }
 
         /// <summary>
@@ -352,7 +363,7 @@ namespace RDFWrappers
             {
                 foreach (var restr in prop.Restrictions())
                 {
-                    string instClass = m_schema.GetNameOfClass(restr);
+                    string instClass = ExpressSchema.GetNameOfEntity(restr);
                     WriteAccessObjectProperty(writer, instClass, "", template);
                 }
             }
@@ -377,7 +388,7 @@ namespace RDFWrappers
                 {
                     Verify(first, "This case was not tested yet: more then one restriction");
 
-                    string instClass = m_schema.GetNameOfClass(restr);
+                    string instClass = ExpressSchema.GetNameOfEntity(restr);
                     string asType = first ? "" : instClass;
                     WriteAccessObjectProperty(writer, instClass, asType, template);
 
