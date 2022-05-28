@@ -15,7 +15,7 @@ namespace RDFWrappers
         const string KWD_PREPROC = "//##";
 
         const string KWD_NAMESPACE = "NAMESPACE_NAME";
-        const string KWD_CLASS_NAME = "ENTITY_NAME";
+        const string KWD_ENTITY_NAME = "ENTITY_NAME";
         const string KWD_BASE_CLASS = "/*PARENT_ENTITY NAME*/Entity";
 
         const string KWD_PROPERTIES_OF = "PROPERTIES_OF_CLASS";
@@ -105,16 +105,8 @@ namespace RDFWrappers
 
                 WriteByTemplate(writer, Template.BeginFile);
 
+                WriteForwardDeclarations(writer);
 #if NOT_NOW
-                //
-                // write forward declarationa
-                //
-                foreach (var cls in m_schema.m_classes)
-                {
-                    m_replacements[KWD_CLASS_NAME] = cls.Key;
-                    WriteByTemplate(writer, Template.ClassForwardDeclaration);
-                }
-
                 //
                 // write class definitions
                 //
@@ -128,6 +120,18 @@ namespace RDFWrappers
 
                 //
                 writer.Write(m_template[Template.EndFile]);
+            }
+        }
+
+        private void WriteForwardDeclarations(StreamWriter writer)
+        {
+            //
+            // write forward declarationa
+            //
+            foreach (var cls in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
+            {
+                m_replacements[KWD_ENTITY_NAME] = cls.Key;
+                WriteByTemplate(writer, Template.ClassForwardDeclaration);
             }
         }
 

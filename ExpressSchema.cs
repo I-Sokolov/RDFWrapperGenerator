@@ -39,7 +39,7 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
-        public Definitions m_definitions = new Definitions();
+        public Definitions m_declarations = new Definitions();
 
         private Int64 m_model = 0;
 
@@ -51,10 +51,10 @@ namespace RDFWrappers
         {
             m_model = ifcengine.sdaiCreateModelBN(1, "", schemaName);
 
-            m_definitions.Add(enum_express_declaration.__DEFINED_TYPE, new DefinitionsList());
-            m_definitions.Add(enum_express_declaration.__ENUM, new DefinitionsList());
-            m_definitions.Add(enum_express_declaration.__SELECT, new DefinitionsList());
-            m_definitions.Add(enum_express_declaration.__ENTITY, new DefinitionsList());
+            m_declarations.Add(enum_express_declaration.__DEFINED_TYPE, new DefinitionsList());
+            m_declarations.Add(enum_express_declaration.__ENUM, new DefinitionsList());
+            m_declarations.Add(enum_express_declaration.__SELECT, new DefinitionsList());
+            m_declarations.Add(enum_express_declaration.__ENTITY, new DefinitionsList());
 
             CollectDefinitions();
         }
@@ -72,7 +72,7 @@ namespace RDFWrappers
                 var name = GetNameOfEntity(defenition);
                 var type = ifcengine.engiGetDeclarationType(defenition);
 
-                var defs = m_definitions[type];
+                var defs = m_declarations[type];
                 defs.Add(name, defenition);
             }
         }
@@ -82,7 +82,7 @@ namespace RDFWrappers
             Console.WriteLine("-------- Extracted shcema ----------------");
 
             Console.WriteLine("============= Defined Types ====================");
-            var definedTypes = m_definitions[enum_express_declaration.__DEFINED_TYPE];
+            var definedTypes = m_declarations[enum_express_declaration.__DEFINED_TYPE];
             if (definedTypes != null)
                 foreach (var def in definedTypes)
                 {
@@ -91,7 +91,7 @@ namespace RDFWrappers
                 }
 
             Console.WriteLine("============= Enumerations ====================");
-            var enums = m_definitions[enum_express_declaration.__ENUM];
+            var enums = m_declarations[enum_express_declaration.__ENUM];
             if (enums != null)
                 foreach (var enm in enums)
                 {
@@ -100,7 +100,7 @@ namespace RDFWrappers
                 }
 
             Console.WriteLine("============= Selects ====================");
-            var sels = m_definitions[enum_express_declaration.__SELECT];
+            var sels = m_declarations[enum_express_declaration.__SELECT];
             if (sels != null)
                 foreach (var sel in sels)
                 {
@@ -109,7 +109,7 @@ namespace RDFWrappers
                 }
 
             Console.WriteLine("============= Entities ====================");
-            var entities = m_definitions[enum_express_declaration.__ENTITY];
+            var entities = m_declarations[enum_express_declaration.__ENTITY];
             if (entities != null)
                 foreach (var entity in entities)
                 {

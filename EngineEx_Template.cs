@@ -6,7 +6,6 @@ using RDF;
 
 namespace NAMESPACE_NAME
 {
-// Entities list:
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)
 //## TEMPLATE: DefinedTypesBegin
 //## TEMPLATE: DefinedType
