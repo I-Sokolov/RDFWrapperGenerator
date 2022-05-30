@@ -26,7 +26,7 @@ namespace NAMESPACE_NAME
 //## EnumerationElement
         ENUMERATION_ELEMENT=1234,
 //## EndEnumeration
-        ENUMERATION_NULL = -1
+        _NULL = -1
     };
 //## TEMPLATE: BeginEntities
 
@@ -42,19 +42,20 @@ namespace NAMESPACE_NAME
     public class ENTITY_NAME : /*PARENT_NAME*/Entity
     {
         /// <summary>
+        /// Constructs object of this C# class that wraps existing instance
+        /// </summary>
+        public ENTITY_NAME(SdaiInstance instance, string entityName = null)
+            : base(instance, entityName != null ? entityName : "ENTITY_NAME")
+        {
+        }
+
+//## EntityCreateMethod
+        /// <summary>
         /// Create new instace of ENTITY_NAME and returns object of this C++ class to interact with
         /// </summary>
         public static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst!=0); return new ENTITY_NAME(inst); }
 
-        /// <summary>
-        /// Constructs object of this C# class that wraps existing instance
-        /// </summary>
-        public ENTITY_NAME(Int64 instance) 
-            : base (instance, "ENTITY_NAME") 
-        {            
-        }
 //## TEMPLATE StartPropertiesBlock
-
        //
        // Properties with known cardinality restrictions to PROPERTIES_OF_CLASS
        //

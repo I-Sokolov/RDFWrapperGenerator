@@ -31,9 +31,9 @@ namespace NAMESPACE_NAME
     enum ENUMERATION_NAME
     {
 //## EnumerationElement
-        ENUMERATION_ELEMENT=1234,
+        ENUMERATION_NAME_ENUMERATION_ELEMENT=1234,
 //## EndEnumeration
-        ENUMERATION_NULL = -1
+        ENUMERATION_NAME__NULL = -1
     };
 //## TEMPLATE: BeginEntities
 
@@ -167,23 +167,24 @@ namespace NAMESPACE_NAME
     /// Provides utility methods to interact with an instnace of OWL class ENTITY_NAME
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
-    class ENTITY_NAME : public /*PARENT_NAME*/Entity
+    class ENTITY_NAME : public virtual /*PARENT_NAME*/Entity
     {
     public:
+        /// <summary>
+        /// Constructs object of this C++ class that wraps existing instance
+        /// </summary>
+        /// <param name="instance">An instance to interact with</param>
+        ENTITY_NAME(SdaiInstance instance = NULL, const char* entityName = NULL)
+            : Entity(instance, entityName ? entityName : "ENTITY_NAME")
+        {}
+
+//## EntityCreateMethod
         /// <summary>
         /// Create new instace of ENTITY_NAME and returns object of this C++ class to interact with
         /// </summary>
         static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }
         
-        /// <summary>
-        /// Constructs object of this C++ class that wraps existing instance
-        /// </summary>
-        /// <param name="instance">An instance to interact with</param>
-        ENTITY_NAME(int64_t instance = NULL)
-            : /*PARENT_NAME*/Entity(instance, "ENTITY_NAME")
-        {}
 //## TEMPLATE StartPropertiesBlock
-
        //
        // Properties with known cardinality restrictions to PROPERTIES_OF_CLASS
        //

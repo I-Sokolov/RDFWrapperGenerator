@@ -10,8 +10,14 @@
 int main()
 {
 
-    int_t  ifcModel = sdaiOpenModelBNUnicode(0, 0, ifcSchemaName_IFC4x1);
+    int_t  ifcModel = sdaiCreateModelBN(0, NULL, "IFC4");
     if (ifcModel) {
+
+        auto wall = IFC4::IfcWall::Create(ifcModel);
+
+        sdaiSaveModelBN(ifcModel, "Test.ifc");
+
+#if 0
         //
         //            IFCINDEXEDPOLYCURVE(#1, (IfcLineIndex((1, 2)), IfcArcIndex((2, 3, 4))), $);
         //
@@ -70,9 +76,7 @@ int main()
                     //
                 }
             }
-
-
-
-    std::cout << "Hello World!\n";
+        }
+#endif
+    }
 }
-

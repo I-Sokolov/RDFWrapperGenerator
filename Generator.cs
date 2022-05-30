@@ -48,6 +48,7 @@ namespace RDFWrappers
             EndEnumeration,
             BeginEntities,
             BeginEntity,
+            EntityCreateMethod,
             StartPropertiesBlock,
             SetDataProperty,
             SetDataArrayProperty,
@@ -283,7 +284,7 @@ namespace RDFWrappers
 
                 if (baseClass.Length != 0)
                 {
-                    baseClass += ", virtual ";
+                    baseClass += ", ";
                 }
                 baseClass += ValidateIdentifier(parent.name);
 
@@ -292,14 +293,7 @@ namespace RDFWrappers
 
             if (baseClass.Length == 0)
             {
-                if (m_cs)
-                {
-                    baseClass = "Entity";
-                }
-                else
-                {
-                    baseClass = "virtual Entitity";
-                }
+                baseClass = "Entity";
             }
 
             //
@@ -312,6 +306,11 @@ namespace RDFWrappers
             //
             WriteByTemplate(writer, Template.BeginEntity);
 
+            if (!entity.IsAbstract())
+            {
+                WriteByTemplate(writer, Template.EntityCreateMethod);
+            }
+                
             WriteProperties(writer, entity, parentProperties);
 
             WriteByTemplate(writer, Template.EndEntity);

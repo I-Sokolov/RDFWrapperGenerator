@@ -110,5 +110,9 @@ namespace RDFWrappers
             return str.ToString();
         }
 
+        public bool IsAbstract()
+        {
+            return 0!=ifcengine.engiGetEntityIsAbstract(inst);
+        }
     }
 }
