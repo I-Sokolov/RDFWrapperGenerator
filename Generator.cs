@@ -18,7 +18,7 @@ namespace RDFWrappers
 
         const string KWD_NAMESPACE = "NAMESPACE_NAME";
         const string KWD_ENTITY_NAME = "ENTITY_NAME";
-        const string KWD_BASE_CLASS = "/*PARENT_ENTITY NAME*/Entity";
+        const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
         const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
         const string KWD_DATA_TYPE = "double";
         const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
@@ -46,8 +46,8 @@ namespace RDFWrappers
             BeginEnumeration,
             EnumerationElement,
             EndEnumeration,
-            BeginAllClasses,
-            BeginWrapperClass,
+            BeginEntities,
+            BeginEntity,
             StartPropertiesBlock,
             SetDataProperty,
             SetDataArrayProperty,
@@ -58,7 +58,7 @@ namespace RDFWrappers
             GetObjectProperty,
             GetObjectArrayProperty,
             GetObjectArrayPropertyInt64,
-            EndWrapperClass,
+            EndEntity,
             EndFile
         }
 
@@ -74,6 +74,8 @@ namespace RDFWrappers
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
         HashSet<ExpressHandle> m_wroteDefinedTyes = new HashSet<ExpressHandle>();
+
+        HashSet<ExpressHandle> m_wroteEntities = new HashSet<ExpressHandle>();
 
         Dictionary<string, string> m_replacements = new Dictionary<string, string>();
 
@@ -115,22 +117,10 @@ namespace RDFWrappers
                 WriteDefinedTypes(writer);
 
                 WriteEnumerations(writer);
-#if NOT_NOW
-            m_generatedClasses = new HashSet<string>();
 
-                //
-                // write class definitions
-                //
-                writer.Write(m_template[Template.BeginAllClasses]);
+                WriteEntities(writer);
 
-                foreach (var cls in m_schema.m_classes)
-                {
-                    WriteClassWrapper(writer, cls.Key, cls.Value);
-                }
-#endif
-
-                //
-                writer.Write(m_template[Template.EndFile]);
+                WriteByTemplate(writer, Template.EndFile);
             }
         }
 
@@ -243,78 +233,96 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        /// <param name="clsName"></param>
-        /// <param name="cls"></param>
-        private void WriteClassWrapper (StreamWriter writer, string clsName, Schema.Class cls)
+        private void WriteEntities (StreamWriter writer)
         {
-#if NOT_NOW
-            if (!m_generatedClasses.Add (clsName))
+            WriteByTemplate(writer, Template.BeginEntities);
+
+            foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
-                return;
+                var entity = new ExpressEntity(decl.Value);
+                WriteEntity (writer, entity);
             }
-
-            if (!m_cs) //c++ requires base classes defined first
-            {
-                foreach (var parentId in cls.parents)
-                {
-                    var parentName = m_schema.GetNameOfClass(parentId);
-                    WriteClassWrapper(writer, parentName, m_schema.m_classes[parentName]);
-                }
-            }
-
-            clsName = ValidateIdentifier(clsName);
-
-            m_addedProperties = new HashSet<string>();
-            m_replacements = new Dictionary<string, string>();
-
-            //
-            //
-            m_replacements.Add(KWD_CLASS_NAME, clsName);
-
-            //
-            //
-            var baseClass = "Instance";
-            
-            //first parent is the base class
-            var itParent = cls.parents.GetEnumerator();
-            if (itParent.MoveNext())
-            {
-                var parentId = itParent.Current;
-                baseClass = m_schema.GetNameOfClass(parentId);
-                baseClass = ValidateIdentifier(baseClass);
-
-                //gather base classes properties to avoid override here
-                CollectParentProperties(parentId);
-            }
-
-            m_replacements[KWD_BASE_CLASS] = baseClass;
-
-            //
-            //
-            WriteByTemplate(writer, Template.BeginWrapperClass);
-
-            //
-            //
-            WriteProperties(writer, clsName, cls.properties);
-
-            //
-            // only single inheritance is suppirted, dirrectly take properties from othe parents
-            while (itParent.MoveNext())
-            {
-                WriteParentProperties(writer, itParent.Current);
-            }
-
-            //
-            //
-            WriteByTemplate(writer,Template.EndWrapperClass);
-#endif
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="parentId"></param>
-        private void CollectParentProperties(Int64 parentId)
+        /// <param name="writer"></param>
+        /// <param name="entity"></param>
+        private void WriteEntity(StreamWriter writer, ExpressEntity entity)
+        {
+            if (!m_wroteEntities.Add(entity.inst))
+            {
+                return;
+            }
+
+            var superTypes = entity.GetSupertypes();
+
+            //
+            // Gather base classes and their properties
+
+            if (m_cs) //C# allows one base class only
+            {
+                var parentId = superTypes.FirstOrDefault();
+                superTypes.Clear();
+                if (parentId != 0)
+                {
+                    superTypes.Add(parentId);
+                }
+            }
+
+
+            string baseClass = "";
+            var parentProperties = new HashSet<string>();
+
+            foreach (var parentId in superTypes)
+            {
+                var parent = new ExpressEntity(parentId);
+
+                WriteEntity(writer, parent);
+
+                if (baseClass.Length != 0)
+                {
+                    baseClass += ", virtual ";
+                }
+                baseClass += ValidateIdentifier(parent.name);
+
+                AddPropertiesNames(parentProperties, parent);
+            }
+
+            if (baseClass.Length == 0)
+            {
+                if (m_cs)
+                {
+                    baseClass = "Entity";
+                }
+                else
+                {
+                    baseClass = "virtual Entitity";
+                }
+            }
+
+            //
+            // Write this entity
+
+            string clsName = ValidateIdentifier(entity.name);
+            m_replacements[KWD_BASE_CLASS] = baseClass;
+            m_replacements[KWD_ENTITY_NAME] = clsName;
+
+            //
+            WriteByTemplate(writer, Template.BeginEntity);
+
+            WriteProperties(writer, entity, parentProperties);
+
+            WriteByTemplate(writer, Template.EndEntity);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="properties"></param>
+        /// <param name="entity"></param>
+        private void AddPropertiesNames(HashSet<string> properties, ExpressEntity entity)
         {
 #if NOT_NOW
             string parentName = m_schema.GetNameOfClass(parentId);
@@ -332,6 +340,11 @@ namespace RDFWrappers
 #endif
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="template"></param>
         private void WriteByTemplate(StreamWriter writer, Template template)
         {
             string code = m_template[template];
@@ -362,31 +375,7 @@ namespace RDFWrappers
             writer.Write(code);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parentClassId"></param>
-        private void WriteParentProperties (StreamWriter writer, Int64 parentClassId)
-        {
-#if NOT_NOW
-            string parentName = m_schema.GetNameOfClass(parentClassId);
-            var parentClass = m_schema.m_classes[parentName];
-
-            WriteProperties(writer, parentName, parentClass.properties);
-            
-            foreach (var nextParent in parentClass.parents)
-            {
-                WriteParentProperties(writer, nextParent);
-            }
-#endif
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="properiesOfClass"></param>
-        /// <param name="properties"></param>
-        private void WriteProperties (StreamWriter writer, string properiesOfClass, List<Schema.ClassProperty> properties)
+        private void WriteProperties (StreamWriter writer, ExpressEntity entity, HashSet<string> exportedProperties)
         {
 #if NOT_NOW
             m_replacements[KWD_PROPERTIES_OF] = properiesOfClass;

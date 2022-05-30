@@ -460,6 +460,11 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetEntity")]
 		public static extern int_t sdaiGetEntity(int_t model, string entityName);
 
+		
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityModel")]
+		public static extern int_t engiGetEntityModel(int_t entity);
+
+
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetEntity")]
 		public static extern int_t sdaiGetEntity(int_t model, byte[] entityName);
 

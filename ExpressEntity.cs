@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using RDF;
 
-using SdaiInstance = System.Int64;
+using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
     class ExpressEntity
     {
-        string name;
-        SdaiInstance inst;
+        public string name;
+        public ExpressHandle inst;
 
-        public ExpressEntity(string name, SdaiInstance inst)
+        public ExpressEntity(ExpressHandle inst)
         {
-            this.name = name;
+            this.name = ExpressSchema.GetNameOfDeclaration (inst);
             this.inst = inst;
         }
 
@@ -74,9 +74,9 @@ namespace RDFWrappers
             return ret;
         }
 
-        public List<SdaiInstance> GetSupertypes ()
+        public List<ExpressHandle> GetSupertypes ()
         {
-            var ret = new List<SdaiInstance>();
+            var ret = new List<ExpressHandle>();
 
             int ind = 0;
             while (true)

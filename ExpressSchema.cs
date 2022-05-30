@@ -147,7 +147,7 @@ namespace RDFWrappers
             if (entities != null)
                 foreach (var entity in entities)
                 {
-                    var e = new ExpressEntity(entity.Key, entity.Value); ;
+                    var e = new ExpressEntity(entity.Value); ;
                     Console.WriteLine(e.ToString());
                 }
         }

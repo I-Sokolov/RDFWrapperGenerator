@@ -35,12 +35,11 @@ namespace NAMESPACE_NAME
 //## EndEnumeration
         ENUMERATION_NULL = -1
     };
-//## TEMPLATE: BeginAllClasses
-#if 0
+//## TEMPLATE: BeginEntities
 
     /// <summary>
-    /// Provides utility methods to interact with a genetic instnace of OWL class
-    /// You also can use object of this class instead of int64_t handle of the OWL instance in any place where the handle is required
+    /// Provides utility methods to interact with a generic entity instnace
+    /// You also can use object of this class instead of int64_t handle of the instance in any place where the handle is required
     /// </summary>
     class Entity
     {
@@ -48,42 +47,19 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// underlyed instance handle
         /// </summary>
-        int64_t m_instance;
+        SdaiInstance m_instance;
 
     public:
-        /// <summary>
-        /// Create an instance of specified class
-        /// </summary>
-        static int64_t Create(int64_t model, const char* className, const char* instanseName)
-        {
-            int64_t clsid = GetClassByName(model, className);
-            assert(clsid != 0);
 
-            int64_t instance = CreateInstance(clsid, instanseName);
-            assert(instance != 0);
-
-            return instance;
-        }
-
-        /// <summary>
-        /// Create an instance of specified class
-        /// </summary>
-        static int64_t Create(int64_t model, const char* className) { return Create(model, className, NULL); }
-
-        /// <summary>
-        /// Constructs object that wraps existing OWL instance
-        /// </summary>
-        /// <param name="instance">OWL instance to interact with</param>
-        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        Entity(int64_t instance, const char* cls)
+        Entity(SdaiInstance instance, const char* entityName)
         {
             m_instance = instance;
 #ifdef _DEBUG
-            if (m_instance != 0 && cls != NULL) {
-                int64_t clsid1 = GetInstanceClass(m_instance);
-                int64_t model = GetModel(m_instance);
-                int64_t clsid2 = GetClassByName(model, cls);
-                assert(clsid1 == clsid2);
+            if (m_instance != 0 && entityName != NULL) {
+                SdaiEntity instType = sdaiGetInstanceType (m_instance);
+                SdaiModel model =  engiGetEntityModel (instType);
+                SdaiEntity entity = sdaiGetEntity (model, entityName);
+                assert(instType == entity);
             }
 #endif
         }
@@ -92,8 +68,9 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// Conversion to instance handle, so the object of the class can be used anywhere where a handle required
         /// </summary>
-        operator int64_t() const { return m_instance; }
+        operator SdaiInstance() const { return m_instance; }
 
+#if 0
         /// <summary>
         /// Get property id from property name
         /// </summary>
@@ -181,32 +158,29 @@ namespace NAMESPACE_NAME
                 return NULL;
             }
         }
+#endif
     };
 
-//## TEMPLATE: BeginWrapperClass
+//## TEMPLATE: BeginEntity
 
     /// <summary>
     /// Provides utility methods to interact with an instnace of OWL class ENTITY_NAME
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
-    class ENTITY_NAME : public /*PARENT_ENTITY_NAME*/Entity
+    class ENTITY_NAME : public /*PARENT_NAME*/Entity
     {
     public:
         /// <summary>
-        /// Create new instace of OWL class ENTITY_NAME and returns object of this C++ class to interact with
+        /// Create new instace of ENTITY_NAME and returns object of this C++ class to interact with
         /// </summary>
-        /// <param name="model">The handle to the model</param>
-        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
-        /// <returns></returns>
-        static ENTITY_NAME Create(int64_t model, const char* name=NULL) { return ENTITY_NAME(Entity::Create(model, "ENTITY_NAME", name), "ENTITY_NAME");}
+        static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }
         
         /// <summary>
-        /// Constructs object of this C++ class that wraps existing OWL instance
+        /// Constructs object of this C++ class that wraps existing instance
         /// </summary>
-        /// <param name="instance">OWL instance to interact with</param>
-        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        ENTITY_NAME(int64_t instance = NULL, const char* checkClassName = NULL)
-            : /*BASE CLASS*/Entity(instance, (checkClassName != NULL) ? checkClassName : "ENTITY_NAME")
+        /// <param name="instance">An instance to interact with</param>
+        ENTITY_NAME(int64_t instance = NULL)
+            : /*PARENT_NAME*/Entity(instance, "ENTITY_NAME")
         {}
 //## TEMPLATE StartPropertiesBlock
 
@@ -216,34 +190,34 @@ namespace NAMESPACE_NAME
 
 //## TEMPLATE: SetDataProperty
         ///<summary>Sets value of PROPERTY_NAME</summary>
-        void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", &value, 1); }
+        //void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", &value, 1); }
 //## TEMPLATE SetDataArrayProperty
         ///<summary>Sets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        void set_PROPERTY_NAME(double* values, int64_t count) { SetDatatypeProperty ("PROPERTY_NAME", values, count); }
+        //void set_PROPERTY_NAME(double* values, int64_t count) { SetDatatypeProperty ("PROPERTY_NAME", values, count); }
 //## TEMPLATE GetDataProperty
         ///<summary>Gets a value of PROPERTY_NAME, returns NULL is the property was not set. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        const double* get_PROPERTY_NAME() { return GetDatatypeProperty<double>("PROPERTY_NAME", NULL); }
+        //const double* get_PROPERTY_NAME() { return GetDatatypeProperty<double>("PROPERTY_NAME", NULL); }
 //## TEMPLATE GetDataArrayProperty
         ///<summary>Gets values array of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        const double* get_PROPERTY_NAMEasType(int64_t* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
+        //const double* get_PROPERTY_NAMEasType(int64_t* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
 //## TEMPLATE: SetObjectProperty
         ///<summary>Sets relationship from this instance to an instance of Entity</summary>
-        void set_PROPERTY_NAME(const Entity& instance) { SetObjectProperty<Entity>("PROPERTY_NAME", &instance, 1); }
+        //void set_PROPERTY_NAME(const Entity& instance) { SetObjectProperty<Entity>("PROPERTY_NAME", &instance, 1); }
 //## TEMPLATE SetObjectArrayProperty
         ///<summary>Sets relationships from this instance to an array of Entity. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        void set_PROPERTY_NAME(const Entity* instances, int64_t count) { SetObjectProperty<Entity>("PROPERTY_NAME", instances, count); }
+        //void set_PROPERTY_NAME(const Entity* instances, int64_t count) { SetObjectProperty<Entity>("PROPERTY_NAME", instances, count); }
 //## TEMPLATE GetObjectProperty
         ///<summary>Get related instance. The method returns pointer to inernal buffer, a caller should not free or change it</summary>
-        const Entity* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Entity>("PROPERTY_NAME", NULL); }
+        //const Entity* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Entity>("PROPERTY_NAME", NULL); }
 //## TEMPLATE GetObjectArrayProperty
         ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        const Entity* get_PROPERTY_NAMEasTYPE(int64_t* pCount) { return GetObjectProperty<Entity>("PROPERTY_NAME", pCount); }
+        //const Entity* get_PROPERTY_NAMEasTYPE(int64_t* pCount) { return GetObjectProperty<Entity>("PROPERTY_NAME", pCount); }
 //## TEMPLATE GetObjectArrayPropertyInt64
         ///<summary>Get an array of related instance handles. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        const int64_t* get_PROPERTY_NAME_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("PROPERTY_NAME", pCount); }
-//## TEMPLATE: EndWrapperClass
+        //const int64_t* get_PROPERTY_NAME_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("PROPERTY_NAME", pCount); }
+//## TEMPLATE: EndEntity
     };
 //## TEMPLATE: EndFile template part
 }
-#endif
 
+#endif //__RDF_LTD__NAMESPACE_NAME_H
