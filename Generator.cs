@@ -20,18 +20,15 @@ namespace RDFWrappers
         const string KWD_ENTITY_NAME = "ENTITY_NAME";
         const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
         const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
-        const string KWD_DATA_TYPE = "double";
+        const string KWD_CS_DATATYPE = "double";
         const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
         const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
         const string KWD_NUMBER = "1234";
+        const string KWD_ATTR_NAME = "ATTR_NAME";
+        const string KWD_sdai_DATATYPE = "sdaiREAL";
 
-        const string KWD_PROPERTIES_OF = "PROPERTIES_OF_CLASS";
-        const string KWD_PROPERTY_NAME = "PROPERTY_NAME";
-        const string KWD_CARDINALITY_MIN = "CARDINALITY_MIN";
-        const string KWD_CARDINALITY_MAX = "CARDINALITY_MAX";
-        const string KWD_OBJECT_TYPE = "Instance";
+
         const string KWD_asType = "asTYPE";
-
         /// <summary>
         /// 
         /// </summary>
@@ -49,8 +46,8 @@ namespace RDFWrappers
             BeginEntities,
             BeginEntity,
             EntityCreateMethod,
-            StartPropertiesBlock,
-            SetDataProperty,
+            SetSimpleAttribute,
+            GetSimpleAttribute,
             SetDataArrayProperty,
             GetDataProperty,
             GetDataArrayProperty,
@@ -169,7 +166,7 @@ namespace RDFWrappers
                     return false;
                 }
 
-                m_replacements[KWD_DATA_TYPE] = referencedType.name;
+                m_replacements[KWD_CS_DATATYPE] = referencedType.name;
             }
             else
             {
@@ -180,7 +177,7 @@ namespace RDFWrappers
                     return false;
                 }
 
-                m_replacements[KWD_DATA_TYPE] = csType;
+                m_replacements[KWD_CS_DATATYPE] = csType;
             }
 
             m_replacements[KWD_DEFINED_TYPE] = definedType.name;
@@ -264,17 +261,20 @@ namespace RDFWrappers
 
             if (m_cs) //C# allows one base class only
             {
-                var parentId = superTypes.FirstOrDefault();
-                superTypes.Clear();
-                if (parentId != 0)
+                if (superTypes.Count > 1)
                 {
-                    superTypes.Add(parentId);
+                    var parentId = superTypes.FirstOrDefault();
+                    superTypes.Clear();
+                    if (parentId != 0)
+                    {
+                        superTypes.Add(parentId);
+                    }
                 }
             }
 
 
             string baseClass = "";
-            var parentProperties = new HashSet<string>();
+            var parentAttributes = new HashSet<string>();
 
             foreach (var parentId in superTypes)
             {
@@ -288,7 +288,7 @@ namespace RDFWrappers
                 }
                 baseClass += ValidateIdentifier(parent.name);
 
-                AddPropertiesNames(parentProperties, parent);
+                GetAttributeNames(parentAttributes, parent);
             }
 
             if (baseClass.Length == 0)
@@ -311,7 +311,7 @@ namespace RDFWrappers
                 WriteByTemplate(writer, Template.EntityCreateMethod);
             }
                 
-            WriteProperties(writer, entity, parentProperties);
+            WriteAttributes(writer, entity, parentAttributes);
 
             WriteByTemplate(writer, Template.EndEntity);
         }
@@ -319,24 +319,15 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="properties"></param>
+        /// <param name="attributes"></param>
         /// <param name="entity"></param>
-        private void AddPropertiesNames(HashSet<string> properties, ExpressEntity entity)
+        private void GetAttributeNames(HashSet<string> attributes, ExpressEntity entity)
         {
-#if NOT_NOW
-            string parentName = m_schema.GetNameOfClass(parentId);
-            var parentClass = m_schema.m_classes[parentName];
-
-            foreach (var cp in parentClass.properties)
+            var attribs =  entity.GetAttributes();
+            foreach (var a in attribs)
             {
-                m_addedProperties.Add(cp.Name());
+                attributes.Add(a.name);
             }
-
-            foreach (var nextParent in parentClass.parents)
-            {
-                CollectParentProperties(nextParent);
-            }
-#endif
         }
 
         /// <summary>
@@ -374,79 +365,119 @@ namespace RDFWrappers
             writer.Write(code);
         }
 
-        private void WriteProperties (StreamWriter writer, ExpressEntity entity, HashSet<string> exportedProperties)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="entity"></param>
+        /// <param name="exportedAttributes"></param>
+        private void WriteAttributes(StreamWriter writer, ExpressEntity entity, HashSet<string> exportedAttributes)
         {
-#if NOT_NOW
-            m_replacements[KWD_PROPERTIES_OF] = properiesOfClass;
-
-            bool first = true;
-            foreach (var prop in properties)
+            var attribs = entity.GetAttributes();
+            foreach (var attr in attribs)
             {
-                if (m_addedProperties.Add (prop.Name()))
+                if (exportedAttributes.Add(attr.name))
                 {
-                    if (first)
+                    switch (attr.aggrType)
                     {
-                        WriteByTemplate(writer, Template.StartPropertiesBlock);
-                        first = false;
-                    }
+                        case RDF.enum_express_aggr.__NONE:
+                            WriteSingeAttribute(writer, attr);
+                            break;
 
-                    WritePropertyMethods(writer, prop);
+                        case RDF.enum_express_aggr.__ARRAY:
+                        case RDF.enum_express_aggr.__LIST:
+                            WriteListAggregation(writer, attr);
+                            break;
+
+                        case RDF.enum_express_aggr.__SET:
+                            WriteSetAggregation(writer, attr);
+                            break;
+
+                        case RDF.enum_express_aggr.__BAG:
+                            Console.WriteLine("Unsupported aggregation type: " + attr.aggrType.ToString());
+                            break;
+
+                        default:
+                            System.Diagnostics.Debug.Assert(false);
+                            break;
+                    }
                 }
             }
-#endif
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        /// <param name="classProp"></param>
-        private void WritePropertyMethods (StreamWriter writer, Schema.ClassProperty classProp)
+        /// <param name="attr"></param>
+        private void WriteSingeAttribute(StreamWriter writer, ExpressAttribute attr)
         {
-            if (classProp.CSDataType() == null)
+            string csType;
+            string sdaiType;
+            if (attr.AsSimpleType (m_cs, out csType, out sdaiType))
             {
-                return;
+                WriteSimpleAttribute(writer, attr, csType, sdaiType);
             }
-
-            m_replacements[KWD_PROPERTY_NAME] = classProp.Name();
-            m_replacements[KWD_DATA_TYPE] = classProp.CSDataType();
-            m_replacements[KWD_CARDINALITY_MIN] = classProp.CardinalityMin().ToString();
-            m_replacements[KWD_CARDINALITY_MAX] = classProp.CardinalityMax().ToString();
-            m_replacements[KWD_asType] = "";
-
-            if (!classProp.IsObject())
+/*
+            switch (attr.attrType)
             {
-                if (classProp.CardinalityMax() == 1)
-                {
-                    WriteByTemplate(writer, Template.SetDataProperty);
-                    WriteByTemplate(writer, Template.GetDataProperty);
-                }
-                else
-                {
-                    WriteByTemplate(writer, Template.SetDataArrayProperty);
-                    WriteByTemplate(writer, Template.GetDataArrayProperty);
-                }
+                case RDF.enum_express_attr_type.__NONE:
+                    //TODO
+                    break;
 
-            }
-            else
+                case RDF.enum_express_attr_type.__BINARY:
+                case RDF.enum_express_attr_type.__BINARY_32:
+                    Console.WriteLine("Unsupported attribute type: " + attr.aggrType.ToString());
+                    break;
+
+                case RDF.enum_express_attr_type.__BOOLEAN:
+                case RDF.enum_express_attr_type.__INTEGER:
+                case RDF.enum_express_attr_type.__LOGICAL:
+                case RDF.enum_express_attr_type.__NUMBER:
+                case RDF.enum_express_attr_type.__REAL:
+                case RDF.enum_express_attr_type.__STRING:
+                    WriteSimpleAttribute(writer, attr);
+                    break;
+
+                case RDF.enum_express_attr_type.__SELECT:
+                    //TODO
+                    break;
+
+                case RDF.enum_express_attr_type.__ENUMERATION:
+                    //TODO
+                    break;
+
+                default:
+                    System.Diagnostics.Debug.Assert(false);
+                    break;
+            }*/
+        }
+
+
+        private void WriteSimpleAttribute(StreamWriter writer, ExpressAttribute attr, string csType, string sdaiType)
+        {
+            m_replacements[KWD_ATTR_NAME] = attr.name;
+            m_replacements[KWD_CS_DATATYPE] = csType;
+            m_replacements[KWD_sdai_DATATYPE] = sdaiType;
+
+            WriteByTemplate(writer, Template.GetSimpleAttribute);
+            
+            if (!attr.inverse)
             {
-                if (classProp.CardinalityMax() == 1)
-                {
-                    WriteSetObjectProperty(writer, classProp, Template.SetObjectProperty);
-                    //do we need this? we lose restrictions control! WriteAccessObjectProperty(writer, classProp.name, TInt64, "", Template.SetObjectProperty);
-                    WriteGetObjectProperty(writer, classProp, Template.GetObjectProperty);
-                }
-                else
-                {
-                    WriteSetObjectProperty(writer, classProp, Template.SetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, m_TInt64, "", Template.SetObjectArrayProperty);
-
-                    WriteGetObjectProperty(writer, classProp, Template.GetObjectArrayProperty);
-                    WriteAccessObjectProperty(writer, m_TInt64, "", Template.GetObjectArrayPropertyInt64);
-                }
-
+                WriteByTemplate(writer, Template.SetSimpleAttribute);
             }
         }
+
+        private void WriteListAggregation(StreamWriter writer, ExpressAttribute attr)
+        { 
+            //TODO
+        }
+
+        private void WriteSetAggregation(StreamWriter writer, ExpressAttribute attr)
+        {
+            //TODO
+        }
+
 
         /// <summary>
         /// 
@@ -509,9 +540,11 @@ namespace RDFWrappers
         /// <param name="template"></param>
         private void WriteAccessObjectProperty(StreamWriter writer, string objectType, string asType, Template template)
         {
+/*
             m_replacements[KWD_OBJECT_TYPE] = objectType;
             m_replacements[KWD_asType] = asType;
             WriteByTemplate(writer, template);
+*/
         }
 
 
@@ -610,7 +643,7 @@ namespace RDFWrappers
 
                     var id = builder.ToString();
 
-                    Console.Write("!!!  {0} is not a valid identifier, changed to {1}", name, id);
+                    Console.WriteLine("!!!  {0} is not a valid identifier, changed to {1}", name, id);
                     return id;
                 }
                 else

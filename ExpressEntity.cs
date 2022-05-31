@@ -58,7 +58,7 @@ namespace RDFWrappers
                         definingEntity = definingEntity,
                         inverse = inverse != 0 ? true : false,
                         attrType = attrType,
-                        domainEntity = domainEntity,
+                        domain = domainEntity,
                         aggrType = aggrType,
                         nestedAggr = nestedAggr != 0 ? true : false,
                         cardinalityMin = cardinalityMin,

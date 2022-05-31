@@ -55,14 +55,12 @@ namespace NAMESPACE_NAME
         /// </summary>
         public static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst!=0); return new ENTITY_NAME(inst); }
 
-//## TEMPLATE StartPropertiesBlock
-       //
-       // Properties with known cardinality restrictions to PROPERTIES_OF_CLASS
-       //
-
-//## TEMPLATE: SetDataProperty
-        ///<summary>Sets value of PROPERTY_NAME</summary>
-        //public void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", value); }
+//## TEMPLATE: SetSimpleAttribute
+        ///<summary>Set value of ATTR_NAME</summary>
+        public void set_ATTR_NAME(double value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiREAL, ref value); }
+//## TEMPLATE: GetSimpleAttribute
+        ///<summary>Get value of ATTR_NAME</summary>
+        public double get_ATTR_NAME() { double value; ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiREAL, out value); return value; } 
 //## TEMPLATE SetDataArrayProperty
         ///<summary>Sets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         //public void set_PROPERTY_NAME(double[] values) { SetDatatypeProperty ("PROPERTY_NAME", values); }

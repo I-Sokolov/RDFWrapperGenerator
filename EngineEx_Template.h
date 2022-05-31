@@ -70,6 +70,74 @@ namespace NAMESPACE_NAME
         /// </summary>
         operator SdaiInstance() const { return m_instance; }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attrName"></param>
+        /// <returns></returns>
+        const char* get_sdaiSTRING(const char* attrName)
+        {
+            const char* str = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiSTRING, (void*) &str);
+            return str;
+        }
+
+        void put_sdaiSTRING(const char* attrName, const char* value)
+        {
+            sdaiPutAttrBN(m_instance, attrName, sdaiSTRING, value);
+        }
+
+        double get_sdaiREAL(const char* attrName)
+        {
+            double val = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiREAL, &val);
+            return val;
+        }
+
+        void put_sdaiREAL(const char* attrName, double value)
+        {
+            sdaiPutAttrBN(m_instance, attrName, sdaiREAL, &value);
+        }
+
+        bool get_sdaiBOOLEAN(const char* attrName)
+        {
+            bool val = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiBOOLEAN, &val);
+            return val;
+        }
+
+        void put_sdaiBOOLEAN(const char* attrName, bool value)
+        {
+            sdaiPutAttrBN(m_instance, attrName, sdaiBOOLEAN, &value);
+        }
+
+        int64_t get_sdaiLOGICAL(const char* attrName)
+        {
+            int64_t val = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiLOGICAL, &val);
+            return val;
+        }
+
+        void put_sdaiLOGICAL(const char* attrName, int64_t value)
+        {
+            sdaiPutAttrBN(m_instance, attrName, sdaiLOGICAL, &value);
+        }
+
+        int64_t get_sdaiINTEGER(const char* attrName)
+        {
+            int64_t val = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiINTEGER, &val);
+            return val;
+        }
+
+        void put_sdaiINTEGER(const char* attrName, int64_t value)
+        {
+            sdaiPutAttrBN(m_instance, attrName, sdaiINTEGER, &value);
+        }
+
+
+
 #if 0
         /// <summary>
         /// Get property id from property name
@@ -184,14 +252,11 @@ namespace NAMESPACE_NAME
         /// </summary>
         static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }
         
-//## TEMPLATE StartPropertiesBlock
-       //
-       // Properties with known cardinality restrictions to PROPERTIES_OF_CLASS
-       //
-
-//## TEMPLATE: SetDataProperty
-        ///<summary>Sets value of PROPERTY_NAME</summary>
-        //void set_PROPERTY_NAME(double value) { SetDatatypeProperty ("PROPERTY_NAME", &value, 1); }
+//## TEMPLATE: SetSimpleAttribute
+        void set_ATTR_NAME(double value) { put_sdaiREAL ("ATTR_NAME", value); }
+//## TEMPLATE: GetSimpleAttribute
+        ///
+        double get_ATTR_NAME() { return get_sdaiREAL("ATTR_NAME"); }
 //## TEMPLATE SetDataArrayProperty
         ///<summary>Sets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
         //void set_PROPERTY_NAME(double* values, int64_t count) { SetDatatypeProperty ("PROPERTY_NAME", values, count); }

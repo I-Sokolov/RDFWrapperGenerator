@@ -15,6 +15,14 @@ int main()
 
         auto wall = IFC4::IfcWall::Create(ifcModel);
 
+        auto descr = wall.get_Description();
+
+        wall.set_Description("Wall description");
+        wall.set_GlobalId("7-7-7");
+        wall.set_Name("Wall name");
+
+        descr = wall.get_Description();
+
         sdaiSaveModelBN(ifcModel, "Test.ifc");
 
 #if 0

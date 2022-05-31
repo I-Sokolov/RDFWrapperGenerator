@@ -50,7 +50,7 @@ namespace RDFWrappers
                 //
                 if (string.IsNullOrWhiteSpace (options.schema))
                 {
-                    //options.schema = new SdaiSchema("ap242ed2_mim_lf_v1.101.exp");
+                    //options.schema = "ap242ed2_mim_lf_v1.101.exp";
                     //options.schema = new SdaiSchema("AP242");
                     options.schema = "IFC4";
                 }
