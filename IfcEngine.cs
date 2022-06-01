@@ -890,6 +890,9 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetAttrBN")]
 		public static extern int_t sdaiGetAttrBN(int_t instance, byte[] attributeName, int_t valueType, out IntPtr value);
 
+		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetAttrBN")]
+		public static extern int_t sdaiGetAttrBN(int_t instance, string attributeName, int_t valueType, out bool value);
+
 		/// <summary>
 		///		sdaiGetAttrBNUnicode                        (http://rdf.bg/ifcdoc/CS64/sdaiGetAttrBNUnicode.html)
 		///
@@ -1336,6 +1339,9 @@ namespace RDF
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiPutAttrBN")]
 		public static extern void sdaiPutAttrBN(int_t instance, byte[] attributeName, int_t valueType, byte[] value);
+
+		[DllImport(IFCEngineDLL, EntryPoint = "sdaiPutAttrBN")]
+		public static extern void sdaiPutAttrBN(int_t instance, string attributeName, int_t valueType, ref bool value);
 
 		/// <summary>
 		///		sdaiUnsetAttr                               (http://rdf.bg/ifcdoc/CS64/sdaiUnsetAttr.html)

@@ -58,7 +58,7 @@ namespace NAMESPACE_NAME
 
 //## GetSimpleAttribute
         ///
-        public double? get_ATTR_NAME() { double value = 0; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiREAL, out value)) return value; else return null; } 
+        public double? get_ATTR_NAME() { double value; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiREAL, out value)) return value; else return null; } 
 //## SetSimpleAttribute
         public void set_ATTR_NAME(double value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiREAL, ref value); }
 //## GetSimpleAttributeString
