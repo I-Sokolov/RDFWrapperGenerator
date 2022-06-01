@@ -11,6 +11,7 @@ using SdaiEntity = System.Int64;
 
 namespace NAMESPACE_NAME
 {
+//## TemplateUtilityTypes
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)
 //## TEMPLATE: BeginDefinedTypes
 //## TEMPLATE: DefinedType
@@ -53,105 +54,19 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// Create new instace of ENTITY_NAME and returns object of this C++ class to interact with
         /// </summary>
-        public static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst!=0); return new ENTITY_NAME(inst); }
+        public new static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst!=0); return new ENTITY_NAME(inst); }
 
-//## TEMPLATE: SetSimpleAttribute
-        ///<summary>Set value of ATTR_NAME</summary>
+//## GetSimpleAttribute
+        ///
+        public double? get_ATTR_NAME() { double value = 0; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiREAL, out value)) return value; else return null; } 
+//## SetSimpleAttribute
         public void set_ATTR_NAME(double value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiREAL, ref value); }
-//## TEMPLATE: GetSimpleAttribute
-        ///<summary>Get value of ATTR_NAME</summary>
-        public double get_ATTR_NAME() { double value; ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiREAL, out value); return value; } 
-//## TEMPLATE SetDataArrayProperty
-        ///<summary>Sets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        //public void set_PROPERTY_NAME(double[] values) { SetDatatypeProperty ("PROPERTY_NAME", values); }
-//## TEMPLATE GetDataProperty
-        ///<summary>Gets value of PROPERTY_NAME, returns null is the property was not set</summary>
-        //public double? get_PROPERTY_NAME() { var arr = GetDatatypeProperty_double("PROPERTY_NAME"); return (arr != null && arr.Length > 0) ? (double?)arr[0] : null; }
-//## TEMPLATE GetDataArrayProperty
-        ///<summary>Gets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        //public double[] get_PROPERTY_NAMEasType() { return GetDatatypeProperty_double("PROPERTY_NAME"); }
-//## TEMPLATE: SetObjectProperty
-        ///<summary>Sets relationship from this instance to an instance of Entity</summary>
-        //public void set_PROPERTY_NAME(Entity instance) { SetObjectProperty("PROPERTY_NAME", instance); }
-//## TEMPLATE SetObjectArrayProperty
-        ///<summary>Sets relationships from this instance to an array of Entity. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        //public void set_PROPERTY_NAME(Entity[] instances) { SetObjectProperty("PROPERTY_NAME", instances); }
-//## TEMPLATE GetObjectProperty
-        ///<summary>Get related instance</summary>
-        /*public Entity get_PROPERTY_NAMEasTYPe() 
-        {
-            var propId = GetPropertyId("PROPERTY_NAME");
-
-            Int64 card = 0;
-            IntPtr valuesPtr = IntPtr.Zero;
-            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
-            System.Diagnostics.Debug.Assert(res == 0);
-
-            if (card > 0)
-            {
-                var values = new Int64[1];
-                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)1);
-
-                return new Entity(values[0], null);
-            }
-            else
-            {
-                return null;
-            }
-        }*/
-//## TEMPLATE GetObjectArrayProperty
-        ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        /*public Entity[] get_PROPERTY_NAMEasTYPE() 
-        {
-            var propId = GetPropertyId("PROPERTY_NAME");
-
-            Int64 card = 0;
-            IntPtr valuesPtr = IntPtr.Zero;
-            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
-            System.Diagnostics.Debug.Assert(res == 0);
-
-            if (card > 0)
-            {
-                var values = new Int64[card];
-                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
-
-                var ret = new Entity[card];
-                for (int i = 0; i < card; i++)
-                {
-                    ret[i] = new Entity(values[i], null);
-                }
-
-                return ret;
-            }
-            else
-            {
-                return null;
-            }
-        }*/
-//## TEMPLATE GetObjectArrayPropertyInt64
-        ///<summary>Get an array of handles of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        /*public Int64[] get_PROPERTY_NAME_Int64()  
-        {
-            var propId = GetPropertyId("PROPERTY_NAME");
-
-            Int64 card = 0;
-            IntPtr valuesPtr = IntPtr.Zero;
-            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
-            System.Diagnostics.Debug.Assert(res == 0);
-
-            if (card > 0)
-            {
-                var values = new Int64[card];
-                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
-
-                return values;
-            }
-            else
-            {
-                return null;
-            }
-        }*/
-//## TEMPLATE: EndEntity
+//## GetSimpleAttributeString
+        ///
+        public string get_attr_NAME() { return getString("ATTR_NAME"); } 
+//## SetSimpleAttributeString
+        public void set_ATTR_NAME(string value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiSTRING, value); }
+//## EndEntity
     }
 
 //## TEMPLATE: EndFile 
@@ -190,6 +105,27 @@ namespace NAMESPACE_NAME
         /// Conversion to instance handle, so the object of the class can be used anywhere where a handle required
         /// </summary>
         public static implicit operator SdaiInstance(Entity instance) => instance.m_instance;
+
+        public static Entity Create(SdaiModel model) { System.Diagnostics.Debug.Assert(false); return null; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attrName"></param>
+        /// <returns></returns>
+        protected string getString (string attrName)
+        {
+            IntPtr ptr = IntPtr.Zero;
+            if (0!=ifcengine.sdaiGetAttrBN(m_instance, attrName, ifcengine.sdaiSTRING, out ptr))
+            {
+                var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
+                return name;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         /// <summary>
         /// 
@@ -240,269 +176,6 @@ namespace NAMESPACE_NAME
         {
             return m_instance.GetHashCode();
         }
-
-#if _NOT_NOW
-        /// <summary>
-        /// Get property id from property name
-        /// </summary>
-        public Int64 GetPropertyId(string name, Int64 checkCardinality = -1)
-        {
-            var model = engine.GetModel(m_instance);
-            System.Diagnostics.Debug.Assert(model != 0);
-
-            var propId = engine.GetPropertyByName(model, name);
-            System.Diagnostics.Debug.Assert(propId != 0);
-
-#if DEBUG
-            if (propId != 0)
-            {
-                var clsId = engine.GetInstanceClass(m_instance);
-                Int64 minCard = 0, maxCard = 0;
-                engine.GetPropertyRestrictionsConsolidated(clsId, propId, out minCard, out maxCard);
-                System.Diagnostics.Debug.Assert(minCard >= 0); //property assigned to the class
-                if (checkCardinality > 0)
-                { //chek cardinatity when set property
-                    System.Diagnostics.Debug.Assert(checkCardinality >= minCard && (checkCardinality <= maxCard || maxCard < 0)); //cardinality is in range
-                }
-            }
-#endif
-
-            return propId;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, double value)
-        {
-            var propId = GetPropertyId(name, 1);
-            var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, double[] values)
-        {
-            var propId = GetPropertyId(name, values.Length);
-            var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, Int64 value)
-        {
-            var propId = GetPropertyId(name, 1);
-            var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, Int64[] values)
-        {
-            var propId = GetPropertyId(name, values.Length);
-            var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, bool value)
-        {
-            var propId = GetPropertyId(name, 1);
-            byte v = (byte)(value ? 1 : 0);
-            var res = engine.SetDatatypeProperty(m_instance, propId, ref v, 1);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, bool[] values)
-        {
-            byte[] bytes = new byte[values.Length];
-            for (int i = 0; i < values.Length; i++)
-                bytes[i] = values[i] ? (byte)1 : (byte)0;
-
-            var propId = GetPropertyId(name, values.Length);
-            var res = engine.SetDatatypeProperty(m_instance, propId, bytes, values.Length);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, string value)
-        {
-            var propId = GetPropertyId(name, 1);
-            var res = engine.SetDatatypeProperty(m_instance, propId, ref value, 1);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetDatatypeProperty(string name, string[] values)
-        {
-            var propId = GetPropertyId(name, values.Length);
-            var res = engine.SetDatatypeProperty(m_instance, propId, values, values.Length);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double[] GetDatatypeProperty_double(string name)
-        {
-            var propId = GetPropertyId(name);
-
-            Int64 card = 0;
-            IntPtr valuesPtr = IntPtr.Zero;
-            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
-            System.Diagnostics.Debug.Assert(res == 0);
-
-            if (card > 0)
-            {
-                var values = new double[card];
-                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
-
-                return values;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Int64[] GetDatatypeProperty_Int64(string name)
-        {
-            var propId = GetPropertyId(name);
-
-            Int64 card = 0;
-            IntPtr valuesPtr = IntPtr.Zero;
-            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
-            System.Diagnostics.Debug.Assert(res == 0);
-
-            if (card > 0)
-            {
-                var values = new Int64[card];
-                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
-
-                return values;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool[] GetDatatypeProperty_bool(string name)
-        {
-            var propId = GetPropertyId(name);
-
-            Int64 card = 0;
-            IntPtr valuesPtr = IntPtr.Zero;
-            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
-            System.Diagnostics.Debug.Assert(res == 0);
-
-            if (card > 0)
-            {
-                var values = new byte[card];
-                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
-
-                var bools = new bool[card];
-                for (int i = 0; i < card; i++)
-                {
-                    bools[i] = values[i] != 0;
-                }
-
-                return bools;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string[] GetDatatypeProperty_string(string name)
-        {
-            var propId = GetPropertyId(name);
-
-            Int64 card = 0;
-            IntPtr valuesPtr = IntPtr.Zero;
-            var res = engine.GetDatatypeProperty(m_instance, propId, out valuesPtr, out card);
-            System.Diagnostics.Debug.Assert(res == 0);
-
-            if (card > 0)
-            {
-                var values = new IntPtr[card];
-                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
-
-                var strings = new string[card];
-                for (int i = 0; i < (int)card; i++)
-                {
-                    strings[i] = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(values[i]);
-                }
-                return strings;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetObjectProperty(string name, Int64 instance)
-        {
-            var propId = GetPropertyId(name);
-            var res = engine.SetObjectProperty(m_instance, propId, ref instance, 1);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetObjectProperty(string name, Entity[] instances)
-        {
-            var inst = new Int64[instances.Length];
-            for (int i = 0; i < instances.Length; i++)
-                inst[i] = instances[i];
-
-            SetObjectProperty(name, inst);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void SetObjectProperty(string name, Int64[] instances)
-        {
-            var propId = GetPropertyId(name);
-
-            var inst = new Int64[instances.Length];
-            for (int i = 0; i < instances.Length; i++)
-                inst[i] = instances[i];
-
-            var res = engine.SetObjectProperty(m_instance, propId, ref inst[0], inst.Length);
-            System.Diagnostics.Debug.Assert(res == 0);
-        }
-#endif
     }
 }
 

@@ -23,15 +23,42 @@ int main()
 
     auto wall = IfcWall::Create(ifcModel);
 
+    auto guid = wall.get_GlobalId();
+    auto name = wall.get_Name();
+    auto descr = wall.get_Description();
+    ASSERT(!descr && !name && !guid);
+
     wall.set_GlobalId("7-7-7");
     wall.set_Name("Wall name");
     wall.set_Description("My wall description");
 
-    IfcGloballyUniqueId guid = wall.get_GlobalId();
-    IfcLabel name = wall.get_Name();
-    IfcText descr = wall.get_Description();
+    guid = wall.get_GlobalId();
+    name = wall.get_Name();
+    descr = wall.get_Description();
     ASSERT(!strcmp(descr, "My wall description") && !strcmp(name, "Wall name") && !strcmp(guid, "7-7-7"));
 
+    auto profile = IfcRectangleProfileDef::Create(ifcModel);
+    auto xdim = profile.get_XDim();
+    auto ydim = profile.get_YDim();
+    ASSERT(xdim.IsNull() && ydim.IsNull());
+    profile.set_XDim(10000);
+    profile.set_YDim(80);
+    xdim = profile.get_XDim();
+    ydim = profile.get_YDim();
+    ASSERT(xdim.Value() == 10000 && ydim.Value() == 80);
+
+
+    IfcTriangulatedFaceSet triangFaceSet = IfcTriangulatedFaceSet::Create(ifcModel);
+    auto closed = triangFaceSet.get_Closed();
+    ASSERT(closed.IsNull());
+    triangFaceSet.set_Closed(false);
+    closed = triangFaceSet.get_Closed();
+    ASSERT(!closed.Value());
+
+    IfcBSplineCurve curve = IfcBSplineCurveWithKnots::Create(ifcModel);
+    ASSERT(curve.get_Degree().IsNull());
+    curve.set_Degree(5);
+    ASSERT(curve.get_Degree().Value() == 5);
 
     IfcCartesianPointList3D pointList = IfcCartesianPointList3D::Create(ifcModel);
     int_t* coordList = nullptr;
@@ -51,8 +78,6 @@ int main()
         sdaiAppend((int_t) coords, sdaiREAL, (void*) &v);
         sdaiAppend((int_t) coordList, sdaiAGGR, (void*) coords);
     }
-
-    auto curve = IfcIndexedPolyCurve::Create(ifcModel);
 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 

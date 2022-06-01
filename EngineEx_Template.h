@@ -11,7 +11,9 @@ namespace NAMESPACE_NAME
 {
     //
     // Entities forward declarations
-    // 
+    //
+//## TemplateUtilityTypes
+    typedef const char* StringType;
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
 //## TEMPLATE: BeginDefinedTypes
@@ -36,6 +38,45 @@ namespace NAMESPACE_NAME
         ENUMERATION_NAME__NULL = -1
     };
 //## TEMPLATE: BeginEntities
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    template <typename T> class Nullable
+    {
+    protected:
+        T* m_value;
+
+    public:
+        Nullable<T>() : m_value(NULL) {}
+        Nullable<T>(T value) { m_value = new T(value); }
+
+        virtual ~Nullable<T>()
+        {
+            if (m_value) {
+                delete m_value;
+            }
+        };
+
+        bool IsNull() const { return !m_value; }
+        T Value() const { assert(m_value); if (m_value) return *m_value; else return 0; }
+
+        virtual Nullable<T>& operator=(const Nullable<T>& src)
+        {
+            if (m_value) {
+                delete m_value;
+            }
+
+            m_value = NULL;
+
+            if (src.m_value) {
+                m_value = new T(*(src.m_value));
+            }
+
+            return *this;
+        }
+    };
 
     /// <summary>
     /// Provides utility methods to interact with a generic entity instnace
@@ -66,167 +107,22 @@ namespace NAMESPACE_NAME
 
 
         /// <summary>
-        /// Conversion to instance handle, so the object of the class can be used anywhere where a handle required
+        /// Conversion  to instance handle, so the object of the class can be used anywhere where a handle required
         /// </summary>
         operator SdaiInstance() const { return m_instance; }
 
-
-        /// <summary>
+    protected:
         /// 
-        /// </summary>
-        /// <param name="attrName"></param>
-        /// <returns></returns>
+        /// 
         const char* get_sdaiSTRING(const char* attrName)
         {
             const char* str = NULL;
-            sdaiGetAttrBN(m_instance, attrName, sdaiSTRING, (void*) &str);
-            return str;
-        }
-
-        void put_sdaiSTRING(const char* attrName, const char* value)
-        {
-            sdaiPutAttrBN(m_instance, attrName, sdaiSTRING, value);
-        }
-
-        double get_sdaiREAL(const char* attrName)
-        {
-            double val = NULL;
-            sdaiGetAttrBN(m_instance, attrName, sdaiREAL, &val);
-            return val;
-        }
-
-        void put_sdaiREAL(const char* attrName, double value)
-        {
-            sdaiPutAttrBN(m_instance, attrName, sdaiREAL, &value);
-        }
-
-        bool get_sdaiBOOLEAN(const char* attrName)
-        {
-            bool val = NULL;
-            sdaiGetAttrBN(m_instance, attrName, sdaiBOOLEAN, &val);
-            return val;
-        }
-
-        void put_sdaiBOOLEAN(const char* attrName, bool value)
-        {
-            sdaiPutAttrBN(m_instance, attrName, sdaiBOOLEAN, &value);
-        }
-
-        int64_t get_sdaiLOGICAL(const char* attrName)
-        {
-            int64_t val = NULL;
-            sdaiGetAttrBN(m_instance, attrName, sdaiLOGICAL, &val);
-            return val;
-        }
-
-        void put_sdaiLOGICAL(const char* attrName, int64_t value)
-        {
-            sdaiPutAttrBN(m_instance, attrName, sdaiLOGICAL, &value);
-        }
-
-        int64_t get_sdaiINTEGER(const char* attrName)
-        {
-            int64_t val = NULL;
-            sdaiGetAttrBN(m_instance, attrName, sdaiINTEGER, &val);
-            return val;
-        }
-
-        void put_sdaiINTEGER(const char* attrName, int64_t value)
-        {
-            sdaiPutAttrBN(m_instance, attrName, sdaiINTEGER, &value);
-        }
-
-
-
-#if 0
-        /// <summary>
-        /// Get property id from property name
-        /// </summary>
-        int64_t GetPropertyId(const char* name, int64_t checkCardinality = -1)
-        {
-            int64_t model = GetModel(m_instance);
-            assert(model != 0);
-
-            int64_t propId = GetPropertyByName(model, name);
-            assert(propId != 0);
-
-#ifdef _DEBUG
-            if (propId) {
-                int64_t clsId = GetInstanceClass(m_instance);
-                int64_t minCard = 0, maxCard = 0;
-                GetPropertyRestrictionsConsolidated(clsId, propId, &minCard, &maxCard);
-                assert(minCard >= 0); //property assigned to the class
-                if (checkCardinality > 0) { //chek cardinatity when set property
-                    assert(checkCardinality >= minCard && (checkCardinality <= maxCard || maxCard < 0)); //cardinality is in range
-                }
-            }
-#endif
-
-            return propId;
-        }
-
-        ///<summary></summary>
-        template<typename TElem> void SetDatatypeProperty(const char* name, TElem* values, int64_t count)
-        {
-            int64_t propId = GetPropertyId(name, count);
-            int64_t res = ::SetDatatypeProperty(m_instance, propId, values, count);
-            assert(res == 0);
-        }
-
-
-        ///<summary>The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        template<typename TElem> const TElem*  GetDatatypeProperty(const char* name, int64_t* pCount)
-        {
-            int64_t propId = GetPropertyId(name);
-
-            TElem* values = NULL;
-            int64_t count = 0;
-            int64_t res = ::GetDatatypeProperty(m_instance, propId, (void**)&values, &count);
-            assert(res == 0);
-
-            if (pCount) {
-                *pCount = count;
-            }
-
-            if (count > 0) {
-                return values;
-            }
-            else {
+            if (sdaiGetAttrBN(m_instance, attrName, sdaiSTRING, (void*) &str))
+                return str;
+            else
                 return NULL;
-            }
         }
 
-
-        ///<summary></summary>
-        template<class TInstance> void SetObjectProperty(const char* name, const TInstance* instances, int64_t count)
-        {
-            int64_t propId = GetPropertyId(name, count);
-            int64_t res = ::SetObjectProperty(m_instance, propId, (int64_t*)instances, count);
-            assert(res == 0);
-        }
-
-        ///<summary>The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        template<class TInstance> const TInstance* GetObjectProperty(const char* name, int64_t* pCount)
-        {
-            int64_t propId = GetPropertyId(name);
-
-            int64_t* values = NULL;
-            int64_t count = 0;
-            int64_t res = ::GetObjectProperty(m_instance, propId, &values, &count);
-            assert(res == 0);
-
-            if (pCount) {
-                *pCount = count;
-            }
-
-            if (count > 0) {
-                return (TInstance*)values;
-            }
-            else {
-                return NULL;
-            }
-        }
-#endif
     };
 
 //## TEMPLATE: BeginEntity
@@ -252,36 +148,17 @@ namespace NAMESPACE_NAME
         /// </summary>
         static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }
         
-//## TEMPLATE: SetSimpleAttribute
-        void set_ATTR_NAME(double value) { put_sdaiREAL ("ATTR_NAME", value); }
-//## TEMPLATE: GetSimpleAttribute
-        ///
-        double get_ATTR_NAME() { return get_sdaiREAL("ATTR_NAME"); }
-//## TEMPLATE SetDataArrayProperty
-        ///<summary>Sets values of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        //void set_PROPERTY_NAME(double* values, int64_t count) { SetDatatypeProperty ("PROPERTY_NAME", values, count); }
-//## TEMPLATE GetDataProperty
-        ///<summary>Gets a value of PROPERTY_NAME, returns NULL is the property was not set. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        //const double* get_PROPERTY_NAME() { return GetDatatypeProperty<double>("PROPERTY_NAME", NULL); }
-//## TEMPLATE GetDataArrayProperty
-        ///<summary>Gets values array of PROPERTY_NAME. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        //const double* get_PROPERTY_NAMEasType(int64_t* pCount) { return GetDatatypeProperty<double>("PROPERTY_NAME", pCount); }
-//## TEMPLATE: SetObjectProperty
-        ///<summary>Sets relationship from this instance to an instance of Entity</summary>
-        //void set_PROPERTY_NAME(const Entity& instance) { SetObjectProperty<Entity>("PROPERTY_NAME", &instance, 1); }
-//## TEMPLATE SetObjectArrayProperty
-        ///<summary>Sets relationships from this instance to an array of Entity. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX</summary>
-        //void set_PROPERTY_NAME(const Entity* instances, int64_t count) { SetObjectProperty<Entity>("PROPERTY_NAME", instances, count); }
-//## TEMPLATE GetObjectProperty
-        ///<summary>Get related instance. The method returns pointer to inernal buffer, a caller should not free or change it</summary>
-        //const Entity* get_PROPERTY_NAMEasTYPe() { return GetObjectProperty<Entity>("PROPERTY_NAME", NULL); }
-//## TEMPLATE GetObjectArrayProperty
-        ///<summary>Get an array of related instances. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        //const Entity* get_PROPERTY_NAMEasTYPE(int64_t* pCount) { return GetObjectProperty<Entity>("PROPERTY_NAME", pCount); }
-//## TEMPLATE GetObjectArrayPropertyInt64
-        ///<summary>Get an array of related instance handles. OWL cardinality CARDINALITY_MIN..CARDINALITY_MAX. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
-        //const int64_t* get_PROPERTY_NAME_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("PROPERTY_NAME", pCount); }
-//## TEMPLATE: EndEntity
+//## GetSimpleAttribute
+        //
+        Nullable<double> get_ATTR_NAME() { double val = 0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiREAL, &val)) return val; else return Nullable<double>(); }
+//## SetSimpleAttribute
+        void set_ATTR_NAME(double value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiREAL, &value); }
+//## GetSimpleAttributeString
+        //
+        StringType get_attr_NAME() { return get_sdaiSTRING("ATTR_NAME"); }
+//## SetSimpleAttributeString
+        void set_ATTR_NAME(StringType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, value); }
+//## EndEntity
     };
 //## TEMPLATE: EndFile template part
 }

@@ -23,14 +23,15 @@ namespace RDFWrappers
         public bool optional;
         public bool unique;
 
-        public bool AsSimpleType(bool downgradeDefinedType, out string csType, out string sdaiType)
+        public bool AsSimpleType(out string definedType, out string baseType, out string sdaiType)
         {
-            return AsSimpleType(downgradeDefinedType, attrType, domain, out csType, out sdaiType);
+            return AsSimpleType(attrType, domain, out definedType, out baseType, out sdaiType);
         }
 
-        private bool AsSimpleType (bool downgradeDefinedType, enum_express_attr_type attrType, ExpressHandle domainEntity, out string csType, out string sdaiType)
+        private bool AsSimpleType (enum_express_attr_type attrType, ExpressHandle domainEntity, out string definedTypeName, out string baseType, out string sdaiType)
         {
-            csType = null;
+            definedTypeName = null;
+            baseType = null;
             sdaiType = null;
 
             switch (attrType)
@@ -39,11 +40,8 @@ namespace RDFWrappers
                     if (enum_express_declaration.__DEFINED_TYPE == ifcengine.engiGetDeclarationType(domainEntity))
                     {
                         var definedType = new ExpressDefinedType(domainEntity);
-                        bool ret = AsSimpleType(downgradeDefinedType, definedType.type, definedType.referenced, out csType, out sdaiType);
-                        if (ret && !downgradeDefinedType)
-                        {
-                            csType = definedType.name;
-                        }
+                        bool ret = AsSimpleType(definedType.type, definedType.referenced, out definedTypeName, out baseType, out sdaiType);
+                        definedTypeName = definedType.name;
                         return ret;
                     }
                     else
@@ -51,6 +49,7 @@ namespace RDFWrappers
                         return false;
                     }
 
+                case enum_express_attr_type.__LOGICAL:
                 case enum_express_attr_type.__ENUMERATION:
                 case enum_express_attr_type.__SELECT:
                 case enum_express_attr_type.__BINARY:
@@ -58,28 +57,23 @@ namespace RDFWrappers
                     return false;
 
                 case enum_express_attr_type.__BOOLEAN:
-                    csType = "bool";
+                    baseType = "bool";
                     sdaiType = "sdaiBOOLEAN";
                     return true;
 
                 case enum_express_attr_type.__INTEGER:
-                    csType = "Int64";
+                    baseType = "Int64";
                     sdaiType = "sdaiINTEGER";
-                    return true;
-
-                case enum_express_attr_type.__LOGICAL:
-                    csType = "Int64";
-                    sdaiType = "sdaiLOGICAL";
                     return true;
 
                 case enum_express_attr_type.__REAL:
                 case enum_express_attr_type.__NUMBER:
-                    csType = "double";
+                    baseType = "double";
                     sdaiType = "sdaiREAL";
                     return true;
 
                 case enum_express_attr_type.__STRING:
-                    csType = "string";
+                    baseType = "string";
                     sdaiType = "sdaiSTRING";
                     return true;
 

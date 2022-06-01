@@ -21,14 +21,14 @@ namespace RDFWrappers
         const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
         const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
         const string KWD_CS_DATATYPE = "double";
+        const string KWD_StringType = "StringType";
         const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
         const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
         const string KWD_NUMBER = "1234";
         const string KWD_ATTR_NAME = "ATTR_NAME";
         const string KWD_sdai_DATATYPE = "sdaiREAL";
-
-
         const string KWD_asType = "asTYPE";
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,6 +36,7 @@ namespace RDFWrappers
         { 
             None,
             BeginFile,
+            TemplateUtilityTypes,
             ClassForwardDeclaration,
             BeginDefinedTypes,
             DefinedType,
@@ -46,16 +47,10 @@ namespace RDFWrappers
             BeginEntities,
             BeginEntity,
             EntityCreateMethod,
-            SetSimpleAttribute,
             GetSimpleAttribute,
-            SetDataArrayProperty,
-            GetDataProperty,
-            GetDataArrayProperty,
-            SetObjectProperty,
-            SetObjectArrayProperty,
-            GetObjectProperty,
-            GetObjectArrayProperty,
-            GetObjectArrayPropertyInt64,
+            SetSimpleAttribute,
+            GetSimpleAttributeString,
+            SetSimpleAttributeString,
             EndEntity,
             EndFile
         }
@@ -341,14 +336,14 @@ namespace RDFWrappers
 
             foreach (var r in m_replacements)
             {
-                if (r.Key.Equals(KWD_asType))
+                //if (r.Key.Equals(KWD_asType))
                 {
                     code = code.Replace(r.Key, r.Value, true, null); //ignore case
                 }
-                else 
+                /*else 
                 {
                     code = code.Replace(r.Key, r.Value);
-                }
+                }*/
             }
 
             if (m_cs)
@@ -412,11 +407,12 @@ namespace RDFWrappers
         /// <param name="attr"></param>
         private void WriteSingeAttribute(StreamWriter writer, ExpressAttribute attr)
         {
-            string csType;
+            string definedType;
+            string baseType;
             string sdaiType;
-            if (attr.AsSimpleType (m_cs, out csType, out sdaiType))
+            if (attr.AsSimpleType (out definedType, out baseType, out sdaiType))
             {
-                WriteSimpleAttribute(writer, attr, csType, sdaiType);
+                WriteSimpleAttribute(writer, attr, definedType, baseType, sdaiType);
             }
 /*
             switch (attr.attrType)
@@ -454,17 +450,18 @@ namespace RDFWrappers
         }
 
 
-        private void WriteSimpleAttribute(StreamWriter writer, ExpressAttribute attr, string csType, string sdaiType)
+        private void WriteSimpleAttribute(StreamWriter writer, ExpressAttribute attr, string definedType, string baseType, string sdaiType)
         {
             m_replacements[KWD_ATTR_NAME] = attr.name;
-            m_replacements[KWD_CS_DATATYPE] = csType;
+            m_replacements[KWD_CS_DATATYPE] = baseType;
+            m_replacements[KWD_StringType] = (baseType == "string" && definedType != null) ? definedType : "const char*";
             m_replacements[KWD_sdai_DATATYPE] = sdaiType;
 
-            WriteByTemplate(writer, Template.GetSimpleAttribute);
+            WriteByTemplate(writer, baseType=="string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute);
             
             if (!attr.inverse)
             {
-                WriteByTemplate(writer, Template.SetSimpleAttribute);
+                WriteByTemplate(writer, baseType == "string" ? Template.SetSimpleAttributeString : Template.SetSimpleAttribute);
             }
         }
 
