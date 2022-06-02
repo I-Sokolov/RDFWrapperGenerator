@@ -29,6 +29,8 @@ namespace RDFWrappers
         const string KWD_sdai_DATATYPE = "sdaiREAL";
         const string KWD_asType = "asTYPE";
         const string KWD_REF_ENTITY = "REF_ENTITY";
+        const string KWD_ENUM_TYPE = "ENUMERATION_NAME";
+        const string KWD_ENUM_VALUES = "\"ENUMERATION_STRING_VALUES\"";
 
         /// <summary>
         /// 
@@ -54,6 +56,8 @@ namespace RDFWrappers
             SetSimpleAttributeString,
             GetEntityAttribute,
             SetEntityAttribute,
+            GetEnumAttribute,
+            SetEnumAttribute,
             EndEntity,
             GetEntityAttributeImplementation,
             SetEntityAttributeImplementation,
@@ -219,6 +223,7 @@ namespace RDFWrappers
             WriteByTemplate(writer, Template.BeginEnumeration);
 
             int i = 0;
+            var values = new StringBuilder();
             foreach (var e in enumeraion.GetValues())
             {
                 m_replacements[KWD_ENUMERATION_ELEMENT] = e;
@@ -226,8 +231,16 @@ namespace RDFWrappers
 
                 WriteByTemplate(writer, Template.EnumerationElement);
 
+                if (i>0)
+                    values.Append(", ");
+                values.Append("\"");
+                values.Append(e);
+                values.Append("\"");
+
                 i++;
             }
+
+            m_replacements[KWD_ENUM_VALUES] = values.ToString ();
 
             WriteByTemplate(writer, Template.EndEnumeration);
         }
@@ -368,7 +381,7 @@ namespace RDFWrappers
             }
             else
             {
-                code = code.Replace("string", "const char* const");
+                code = code.Replace("string", "const char*");
                 code = code.Replace("const const", "const");
                 code = code.Replace("Int64", "int64_t");
             }
@@ -425,58 +438,26 @@ namespace RDFWrappers
         {
             m_replacements[KWD_ATTR_NAME] = attr.name;
 
-            string definedType;
+            string expressType;
             string baseType;
             string sdaiType;
-            if (attr.IsSimpleType(out definedType, out baseType, out sdaiType))
+
+            if (attr.IsSimpleType(out expressType, out baseType, out sdaiType))
             {
-                WriteSimpleAttribute(writer, attr, definedType, baseType, sdaiType);
+                WriteSimpleAttribute(writer, attr, expressType, baseType, sdaiType);
             }
-            else if (attr.IsEntityReference(out definedType))
+            else if (attr.IsEntityReference(out expressType))
             {
-                WriteEntityReference(writer, attr, definedType);
+                WriteEntityReference(writer, attr, expressType);
             }
-            else if (attr.attrType == RDF.enum_express_attr_type.__ENUMERATION)
+            else if (attr.IsEnumeration (out expressType))
             {
-                WriteEnumAttribute(writer, attr);
+                WriteEnumAttribute(writer, attr, expressType);
             }
             else
             {
                 Console.WriteLine(attr.name + " not supported");
             }
-/*
-            switch (attr.attrType)
-            {
-                case RDF.enum_express_attr_type.__NONE:
-                    //TODO
-                    break;
-
-                case RDF.enum_express_attr_type.__BINARY:
-                case RDF.enum_express_attr_type.__BINARY_32:
-                    Console.WriteLine("Unsupported attribute type: " + attr.aggrType.ToString());
-                    break;
-
-                case RDF.enum_express_attr_type.__BOOLEAN:
-                case RDF.enum_express_attr_type.__INTEGER:
-                case RDF.enum_express_attr_type.__LOGICAL:
-                case RDF.enum_express_attr_type.__NUMBER:
-                case RDF.enum_express_attr_type.__REAL:
-                case RDF.enum_express_attr_type.__STRING:
-                    WriteSimpleAttribute(writer, attr);
-                    break;
-
-                case RDF.enum_express_attr_type.__SELECT:
-                    //TODO
-                    break;
-
-                case RDF.enum_express_attr_type.__ENUMERATION:
-                    //TODO
-                    break;
-
-                default:
-                    System.Diagnostics.Debug.Assert(false);
-                    break;
-            }*/
         }
 
 
@@ -526,9 +507,10 @@ namespace RDFWrappers
         }
 
 
-        private void WriteEnumAttribute(StreamWriter writer, ExpressAttribute attr)
+        private void WriteEnumAttribute(StreamWriter writer, ExpressAttribute attr, string domain)
         {
-
+            m_replacements[KWD_ENUM_TYPE] = domain;
+            WriteGetSet(writer, Template.GetEnumAttribute, Template.SetEnumAttribute, attr.inverse);
         }
 
         private void WriteListAggregation(StreamWriter writer, ExpressAttribute attr)

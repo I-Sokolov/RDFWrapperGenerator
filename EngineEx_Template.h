@@ -12,9 +12,11 @@ namespace NAMESPACE_NAME
     //
     // Entities forward declarations
     //
-//## TemplateUtilityTypes
+//## TemplateUtilityTypes    - this section just to make templates syntax correc
+
     typedef const char* StringType;
-    typedef SdaiEntity  REF_ENTITY;
+    typedef SdaiEntity  REF_ENTITY;    
+
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
 //## TEMPLATE: BeginDefinedTypes
@@ -36,8 +38,9 @@ namespace NAMESPACE_NAME
 //## EnumerationElement
         ENUMERATION_NAME_ENUMERATION_ELEMENT=1234,
 //## EndEnumeration
-        ENUMERATION_NAME__NULL = -1
+        ENUMERATION_NAME___unk = -1
     };
+    static const char* ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
 //## TEMPLATE: BeginEntities
 
     /// <summary>
@@ -61,7 +64,7 @@ namespace NAMESPACE_NAME
         };
 
         bool IsNull() const { return !m_value; }
-        T Value() const { assert(m_value); if (m_value) return *m_value; else return 0; }
+        T Value() const { assert(m_value); if (m_value) return *m_value; else return (T)0; }
 
         virtual Nullable<T>& operator=(const Nullable<T>& src)
         {
@@ -123,6 +126,23 @@ namespace NAMESPACE_NAME
             else
                 return NULL;
         }
+
+        int get_sdaiENUM(const char* attrName, const char* rEnumValues[])
+        {
+            const char* value = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiENUM, (void*) &value);
+
+            if (value) {
+
+                for (int i = 0; rEnumValues[i]; i++) {
+                    if (0 == _stricmp(value, rEnumValues[i])) {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
     };
 
 //## TEMPLATE: BeginEntity
@@ -163,6 +183,11 @@ namespace NAMESPACE_NAME
         REF_ENTITY get_Attr_NAME();
 //## SetEntityAttribute
         void set_Attr_NAME(REF_ENTITY inst);
+//## GetEnumAttribute
+
+        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = get_sdaiENUM("ATTR_NAME", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
+//## SetEnumAttribute
+        void set_ATTR_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
 //## EndEntity
     };
 

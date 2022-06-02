@@ -29,18 +29,26 @@ int main()
     auto name = wall.get_Name();
     auto descr = wall.get_Description();
     IfcOwnerHistory oh = wall.get_OwnerHistory();
-    ASSERT(!descr && !name && !guid && !oh);
+    auto predType = wall.get_PredefinedType();
+    ASSERT(!descr && !name && !guid && !oh && predType.IsNull());
 
     wall.set_GlobalId("7-7-7");
     wall.set_Name("Wall name");
     wall.set_Description("My wall description");
     wall.set_OwnerHistory(ownerHistory);
+    wall.set_PredefinedType(IfcWallTypeEnum_POLYGONAL);
 
     guid = wall.get_GlobalId();
     name = wall.get_Name();
     descr = wall.get_Description();
     oh = wall.get_OwnerHistory();
-    ASSERT(!strcmp(descr, "My wall description") && !strcmp(name, "Wall name") && !strcmp(guid, "7-7-7") && oh==ownerHistory) ;
+    predType = wall.get_PredefinedType();
+    ASSERT(!strcmp(descr, "My wall description") 
+           && !strcmp(name, "Wall name") 
+           && !strcmp(guid, "7-7-7") 
+           && oh==ownerHistory
+           && predType.Value() == IfcWallTypeEnum_POLYGONAL
+    ) ;
 
 
 

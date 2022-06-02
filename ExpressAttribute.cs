@@ -103,6 +103,22 @@ namespace RDFWrappers
             return false;
         }
 
+        public bool IsEnumeration (out string enumerationName)
+        {
+            enumerationName = null;
+            
+            if (attrType == enum_express_attr_type.__NONE)
+            {
+                if (enum_express_declaration.__ENUM == ifcengine.engiGetDeclarationType(domain))
+                {
+                    enumerationName = ExpressSchema.GetNameOfDeclaration(domain);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private string DefiningEntity { get { return ExpressSchema.GetNameOfDeclaration(definingEntity); } }
         //private string Domain { get { return ExpressSchema.GetNameOfDeclaration(domain); } }
 
