@@ -23,12 +23,12 @@ namespace RDFWrappers
         public bool optional;
         public bool unique;
 
-        public bool AsSimpleType(out string definedType, out string baseType, out string sdaiType)
+        public bool IsSimpleType(out string definedType, out string baseType, out string sdaiType)
         {
-            return AsSimpleType(attrType, domain, out definedType, out baseType, out sdaiType);
+            return IsSimpleType(attrType, domain, out definedType, out baseType, out sdaiType);
         }
 
-        private bool AsSimpleType (enum_express_attr_type attrType, ExpressHandle domainEntity, out string definedTypeName, out string baseType, out string sdaiType)
+        private bool IsSimpleType (enum_express_attr_type attrType, ExpressHandle domainEntity, out string definedTypeName, out string baseType, out string sdaiType)
         {
             definedTypeName = null;
             baseType = null;
@@ -40,7 +40,7 @@ namespace RDFWrappers
                     if (enum_express_declaration.__DEFINED_TYPE == ifcengine.engiGetDeclarationType(domainEntity))
                     {
                         var definedType = new ExpressDefinedType(domainEntity);
-                        bool ret = AsSimpleType(definedType.type, definedType.referenced, out definedTypeName, out baseType, out sdaiType);
+                        bool ret = IsSimpleType(definedType.type, definedType.referenced, out definedTypeName, out baseType, out sdaiType);
                         definedTypeName = definedType.name;
                         return ret;
                     }
@@ -81,6 +81,26 @@ namespace RDFWrappers
                     System.Diagnostics.Debug.Assert(false);
                     return false;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entityName"></param>
+        /// <returns></returns>
+        public bool IsEntityReference(out string entityName)
+        {
+            entityName = null;
+
+            if (attrType == enum_express_attr_type.__NONE)
+            {
+                if (enum_express_declaration.__ENTITY == ifcengine.engiGetDeclarationType(domain))
+                {
+                    entityName = ExpressSchema.GetNameOfDeclaration(domain);
+                    return true;
+                }
+            }
+            return false;
         }
 
         private string DefiningEntity { get { return ExpressSchema.GetNameOfDeclaration(definingEntity); } }

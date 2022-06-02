@@ -21,21 +21,28 @@ int main()
     int_t  ifcModel = sdaiCreateModelBN(0, NULL, "IFC4");
     ASSERT(ifcModel);
 
+    auto ownerHistory = IfcOwnerHistory::Create(ifcModel);
+
     auto wall = IfcWall::Create(ifcModel);
 
     auto guid = wall.get_GlobalId();
     auto name = wall.get_Name();
     auto descr = wall.get_Description();
-    ASSERT(!descr && !name && !guid);
+    IfcOwnerHistory oh = wall.get_OwnerHistory();
+    ASSERT(!descr && !name && !guid && !oh);
 
     wall.set_GlobalId("7-7-7");
     wall.set_Name("Wall name");
     wall.set_Description("My wall description");
+    wall.set_OwnerHistory(ownerHistory);
 
     guid = wall.get_GlobalId();
     name = wall.get_Name();
     descr = wall.get_Description();
-    ASSERT(!strcmp(descr, "My wall description") && !strcmp(name, "Wall name") && !strcmp(guid, "7-7-7"));
+    oh = wall.get_OwnerHistory();
+    ASSERT(!strcmp(descr, "My wall description") && !strcmp(name, "Wall name") && !strcmp(guid, "7-7-7") && oh==ownerHistory) ;
+
+
 
     auto profile = IfcRectangleProfileDef::Create(ifcModel);
     auto xdim = profile.get_XDim();

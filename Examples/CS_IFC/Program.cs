@@ -15,21 +15,26 @@ namespace CS_GeometryKernel
         {
             var ifcModel = ifcengine.sdaiOpenModelBN(0, (string)null, "IFC4");
 
+            var ownerHistory = IfcOwnerHistory.Create(ifcModel);
+
             var wall = IFC4.IfcWall.Create(ifcModel);
 
             var guid = wall.get_GlobalId();
             var name = wall.get_Name();
             var descr = wall.get_Description();
-            Debug.Assert(descr==null && name==null && guid==null);
+            var oh = wall.get_OwnerHistory();
+            Debug.Assert(descr==null && name==null && guid==null && oh == null);
 
             wall.set_GlobalId("7-7-7");
             wall.set_Name("Wall name");
             wall.set_Description("My wall description");
+            wall.set_OwnerHistory(ownerHistory);
 
             guid = wall.get_GlobalId();
             name = wall.get_Name();
             descr = wall.get_Description();
-            Debug.Assert(descr == "My wall description" && name == "Wall name" && guid == "7-7-7");
+            oh = wall.get_OwnerHistory();
+            Debug.Assert(descr == "My wall description" && name == "Wall name" && guid == "7-7-7" && oh == ownerHistory);
 
             var profile = IfcRectangleProfileDef.Create(ifcModel);
             var xdim = profile.get_XDim();

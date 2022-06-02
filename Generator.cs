@@ -28,6 +28,7 @@ namespace RDFWrappers
         const string KWD_ATTR_NAME = "ATTR_NAME";
         const string KWD_sdai_DATATYPE = "sdaiREAL";
         const string KWD_asType = "asTYPE";
+        const string KWD_REF_ENTITY = "REF_ENTITY";
 
         /// <summary>
         /// 
@@ -51,9 +52,16 @@ namespace RDFWrappers
             SetSimpleAttribute,
             GetSimpleAttributeString,
             SetSimpleAttributeString,
+            GetEntityAttribute,
+            SetEntityAttribute,
             EndEntity,
+            GetEntityAttributeImplementation,
+            SetEntityAttributeImplementation,
             EndFile
         }
+
+        //
+        StringBuilder m_implementations = new StringBuilder ();
 
         /// <summary>
         /// 
@@ -112,6 +120,8 @@ namespace RDFWrappers
                 WriteEnumerations(writer);
 
                 WriteEntities(writer);
+
+                writer.Write (m_implementations);
 
                 WriteByTemplate(writer, Template.EndFile);
             }
@@ -332,6 +342,12 @@ namespace RDFWrappers
         /// <param name="template"></param>
         private void WriteByTemplate(StreamWriter writer, Template template)
         {
+            string str = StringByTemplate(template);
+            writer.Write(str);
+        }
+
+        private string StringByTemplate (Template template)
+        {
             string code = m_template[template];
 
             foreach (var r in m_replacements)
@@ -357,7 +373,7 @@ namespace RDFWrappers
                 code = code.Replace("Int64", "int64_t");
             }
 
-            writer.Write(code);
+            return code;
         }
 
         /// <summary>
@@ -407,12 +423,26 @@ namespace RDFWrappers
         /// <param name="attr"></param>
         private void WriteSingeAttribute(StreamWriter writer, ExpressAttribute attr)
         {
+            m_replacements[KWD_ATTR_NAME] = attr.name;
+
             string definedType;
             string baseType;
             string sdaiType;
-            if (attr.AsSimpleType (out definedType, out baseType, out sdaiType))
+            if (attr.IsSimpleType(out definedType, out baseType, out sdaiType))
             {
                 WriteSimpleAttribute(writer, attr, definedType, baseType, sdaiType);
+            }
+            else if (attr.IsEntityReference(out definedType))
+            {
+                WriteEntityReference(writer, attr, definedType);
+            }
+            else if (attr.attrType == RDF.enum_express_attr_type.__ENUMERATION)
+            {
+                WriteEnumAttribute(writer, attr);
+            }
+            else
+            {
+                Console.WriteLine(attr.name + " not supported");
             }
 /*
             switch (attr.attrType)
@@ -452,17 +482,53 @@ namespace RDFWrappers
 
         private void WriteSimpleAttribute(StreamWriter writer, ExpressAttribute attr, string definedType, string baseType, string sdaiType)
         {
-            m_replacements[KWD_ATTR_NAME] = attr.name;
             m_replacements[KWD_CS_DATATYPE] = baseType;
             m_replacements[KWD_StringType] = (baseType == "string" && definedType != null) ? definedType : "const char*";
             m_replacements[KWD_sdai_DATATYPE] = sdaiType;
 
-            WriteByTemplate(writer, baseType=="string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute);
+            Template tplGet = baseType == "string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute;
+            Template tplSet = baseType == "string" ? Template.SetSimpleAttributeString : Template.SetSimpleAttribute;
+
+            WriteGetSet(writer, tplGet, tplSet, attr.inverse);
+        }
+
+        private void WriteGetSet(StreamWriter writer, Template tplGet, Template tplSet, bool inverse)
+        {
+            var str = BuildGetSet(tplGet, tplSet, inverse);
+            writer.Write(str);
+        }
+
+        private StringBuilder BuildGetSet (Template tplGet, Template tplSet, bool inverse)
+        {
+            StringBuilder str = new StringBuilder();
+
+            string s = StringByTemplate(tplGet);
+            str.Append(s);
             
-            if (!attr.inverse)
+            if (!inverse)
             {
-                WriteByTemplate(writer, baseType == "string" ? Template.SetSimpleAttributeString : Template.SetSimpleAttribute);
+                s = StringByTemplate(tplSet);
+                str.Append(s);
             }
+
+            return str;
+        }
+
+
+        private void WriteEntityReference (StreamWriter writer, ExpressAttribute attr, string domain)
+        {
+            m_replacements[KWD_REF_ENTITY] = domain;
+
+            WriteGetSet(writer, Template.GetEntityAttribute, Template.SetEntityAttribute, attr.inverse);
+
+            var impl = BuildGetSet(Template.GetEntityAttributeImplementation, Template.SetEntityAttributeImplementation, attr.inverse);
+            m_implementations.Append(impl);
+        }
+
+
+        private void WriteEnumAttribute(StreamWriter writer, ExpressAttribute attr)
+        {
+
         }
 
         private void WriteListAggregation(StreamWriter writer, ExpressAttribute attr)
@@ -474,76 +540,6 @@ namespace RDFWrappers
         {
             //TODO
         }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="prop"></param>
-        /// <param name="template"></param>
-        private void WriteSetObjectProperty(StreamWriter writer, Schema.ClassProperty prop, Template template)
-        {
-            if (prop.Restrictions().Count > 0)
-            {
-                foreach (var restr in prop.Restrictions())
-                {
-                    string instClass = ExpressSchema.GetNameOfDeclaration(restr);
-                    WriteAccessObjectProperty(writer, instClass, "", template);
-                }
-            }
-            else
-            {
-                WriteAccessObjectProperty(writer, "Instance", "", template);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="prop"></param>
-        /// <param name="template"></param>
-        private void WriteGetObjectProperty(StreamWriter writer, Schema.ClassProperty prop, Template template)
-        {
-            if (prop.Restrictions().Count > 0)
-            {
-                bool first = true;
-                foreach (var restr in prop.Restrictions())
-                {
-                    Verify(first, "This case was not tested yet: more then one restriction");
-
-                    string instClass = ExpressSchema.GetNameOfDeclaration(restr);
-                    string asType = first ? "" : instClass;
-                    WriteAccessObjectProperty(writer, instClass, asType, template);
-
-                    first = false;
-                }
-            }
-            else
-            {
-                WriteAccessObjectProperty(writer, "Instance", "", template);
-            }
-        }
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="objectType"></param>
-        /// <param name="asType"></param>
-        /// <param name="template"></param>
-        private void WriteAccessObjectProperty(StreamWriter writer, string objectType, string asType, Template template)
-        {
-/*
-            m_replacements[KWD_OBJECT_TYPE] = objectType;
-            m_replacements[KWD_asType] = asType;
-            WriteByTemplate(writer, template);
-*/
-        }
-
 
         /// <summary>
         /// 

@@ -12,6 +12,7 @@ using SdaiEntity = System.Int64;
 namespace NAMESPACE_NAME
 {
 //## TemplateUtilityTypes
+using REF_ENTITY = ENTITY_NAME;
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)
 //## TEMPLATE: BeginDefinedTypes
 //## TEMPLATE: DefinedType
@@ -57,18 +58,25 @@ namespace NAMESPACE_NAME
         public new static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst!=0); return new ENTITY_NAME(inst); }
 
 //## GetSimpleAttribute
-        ///
+        
         public double? get_ATTR_NAME() { double value; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiREAL, out value)) return value; else return null; } 
 //## SetSimpleAttribute
         public void set_ATTR_NAME(double value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiREAL, ref value); }
 //## GetSimpleAttributeString
-        ///
+        
         public string get_attr_NAME() { return getString("ATTR_NAME"); } 
 //## SetSimpleAttributeString
         public void set_ATTR_NAME(string value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiSTRING, value); }
+//## GetEntityAttribute
+
+        public REF_ENTITY get_Attr_NAME() { SdaiInstance inst = 0; ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, out inst); return inst != 0 ? new REF_ENTITY(inst) : null; } 
+//## SetEntityAttribute
+        public void set_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, i); }
 //## EndEntity
     }
 
+//## GetEntityAttributeImplementation
+//## SetEntityAttributeImplementation
 //## TEMPLATE: EndFile 
     /// <summary>
     /// Provides utility methods to interact with a generic entity instnace
@@ -86,7 +94,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         /// <param name="instance">OWL instance to interact with</param>
         /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
-        public Entity(SdaiInstance instance, string entityName)
+        protected Entity(SdaiInstance instance, string entityName)
         {
             m_instance = instance;
 #if DEBUG

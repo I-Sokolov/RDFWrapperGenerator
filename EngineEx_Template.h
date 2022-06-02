@@ -14,6 +14,7 @@ namespace NAMESPACE_NAME
     //
 //## TemplateUtilityTypes
     typedef const char* StringType;
+    typedef SdaiEntity  REF_ENTITY;
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
 //## TEMPLATE: BeginDefinedTypes
@@ -122,7 +123,6 @@ namespace NAMESPACE_NAME
             else
                 return NULL;
         }
-
     };
 
 //## TEMPLATE: BeginEntity
@@ -149,18 +149,30 @@ namespace NAMESPACE_NAME
         static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }
         
 //## GetSimpleAttribute
-        //
+
         Nullable<double> get_ATTR_NAME() { double val = 0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiREAL, &val)) return val; else return Nullable<double>(); }
 //## SetSimpleAttribute
         void set_ATTR_NAME(double value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiREAL, &value); }
 //## GetSimpleAttributeString
-        //
+
         StringType get_attr_NAME() { return get_sdaiSTRING("ATTR_NAME"); }
 //## SetSimpleAttributeString
         void set_ATTR_NAME(StringType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, value); }
+//## GetEntityAttribute
+
+        REF_ENTITY get_Attr_NAME();
+//## SetEntityAttribute
+        void set_Attr_NAME(REF_ENTITY inst);
 //## EndEntity
     };
+
+//## GetEntityAttributeImplementation
+
+    REF_ENTITY ENTITY_NAME::get_Attr_NAME() { SdaiInstance inst = 0; sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, &inst); return inst; }
+//## SetEntityAttributeImplementation
+    void ENTITY_NAME::set_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, (void*)i); }
 //## TEMPLATE: EndFile template part
+
 }
 
 #endif //__RDF_LTD__NAMESPACE_NAME_H
