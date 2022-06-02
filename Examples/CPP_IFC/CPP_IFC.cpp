@@ -25,9 +25,9 @@ int main()
 
     auto wall = IfcWall::Create(ifcModel);
 
-    auto guid = wall.get_GlobalId();
-    auto name = wall.get_Name();
-    auto descr = wall.get_Description();
+    IfcGloballyUniqueId guid = wall.get_GlobalId();
+    IfcLabel name = wall.get_Name();
+    IfcText descr = wall.get_Description();
     IfcOwnerHistory oh = wall.get_OwnerHistory();
     auto predType = wall.get_PredefinedType();
     ASSERT(!descr && !name && !guid && !oh && predType.IsNull());

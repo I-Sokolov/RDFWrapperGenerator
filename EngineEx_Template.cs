@@ -21,16 +21,20 @@ using REF_ENTITY = ENTITY_NAME;
     //
     // Enumerations
     //
+    public class Enums
+    {
 //## TEMPLATE: BeginEnumeration
 
-    enum ENUMERATION_NAME
-    {
+        public enum ENUMERATION_NAME
+        {
 //## EnumerationElement
-        ENUMERATION_ELEMENT=1234,
+            ENUMERATION_ELEMENT = 1234,
 //## EndEnumeration
-        _NULL = -1
-    };
+            _NULL = -1
+        };
+        public static string[] ENUMERATION_NAME_ = { "ENUMERATION_STRING_VALUES" };
 //## TEMPLATE: BeginEntities
+    }
 
     //
     // Entities
@@ -72,6 +76,11 @@ using REF_ENTITY = ENTITY_NAME;
         public REF_ENTITY get_Attr_NAME() { SdaiInstance inst = 0; ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, out inst); return inst != 0 ? new REF_ENTITY(inst) : null; } 
 //## SetEntityAttribute
         public void set_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, i); }
+//## GetEnumAttribute
+
+        public Enums.ENUMERATION_NAME? get_ATtr_NAME() { int v = getENUM("ATTR_NAME", Enums.ENUMERATION_NAME_); if (v >= 0) return (Enums.ENUMERATION_NAME) v; else return null; }
+//## SetEnumAttribute
+        public void set_ATTR_NAME(Enums.ENUMERATION_NAME value) { string val = Enums.ENUMERATION_NAME_[(int)value]; ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiENUM, val); }
 //## EndEntity
     }
 
@@ -121,10 +130,10 @@ using REF_ENTITY = ENTITY_NAME;
         /// </summary>
         /// <param name="attrName"></param>
         /// <returns></returns>
-        protected string getString (string attrName)
+        protected string getString (string attrName, Int64 valueType = ifcengine.sdaiSTRING)
         {
             IntPtr ptr = IntPtr.Zero;
-            if (0!=ifcengine.sdaiGetAttrBN(m_instance, attrName, ifcengine.sdaiSTRING, out ptr))
+            if (0!=ifcengine.sdaiGetAttrBN(m_instance, attrName, valueType, out ptr))
             {
                 var name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
                 return name;
@@ -133,6 +142,31 @@ using REF_ENTITY = ENTITY_NAME;
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attrName"></param>
+        /// <param name="rEnumValues"></param>
+        /// <returns></returns>
+        protected int getENUM(string attrName, string[] rEnumValues)
+        {
+            string value = getString(attrName, ifcengine.sdaiENUM);
+
+            if (value != null)
+            {
+
+                for (int i = 0; i < rEnumValues.Length; i++)
+                {
+                    if (value == rEnumValues[i])
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
         }
 
         /// <summary>

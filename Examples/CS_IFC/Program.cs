@@ -23,18 +23,27 @@ namespace CS_GeometryKernel
             var name = wall.get_Name();
             var descr = wall.get_Description();
             var oh = wall.get_OwnerHistory();
-            Debug.Assert(descr==null && name==null && guid==null && oh == null);
+            var predType = wall.get_PredefinedType();
+            Debug.Assert(descr==null && name==null && guid==null && oh == null && predType == null);
 
             wall.set_GlobalId("7-7-7");
             wall.set_Name("Wall name");
             wall.set_Description("My wall description");
             wall.set_OwnerHistory(ownerHistory);
+            wall.set_PredefinedType(Enums.IfcWallTypeEnum.PARTITIONING);
 
             guid = wall.get_GlobalId();
             name = wall.get_Name();
             descr = wall.get_Description();
             oh = wall.get_OwnerHistory();
-            Debug.Assert(descr == "My wall description" && name == "Wall name" && guid == "7-7-7" && oh == ownerHistory);
+            predType = wall.get_PredefinedType();
+            Debug.Assert
+                (descr == "My wall description" 
+                && name == "Wall name" 
+                && guid == "7-7-7" 
+                && oh == ownerHistory 
+                && predType == Enums.IfcWallTypeEnum.PARTITIONING
+                );
 
             var profile = IfcRectangleProfileDef.Create(ifcModel);
             var xdim = profile.get_XDim();
