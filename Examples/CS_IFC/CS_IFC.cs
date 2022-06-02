@@ -3,9 +3,9 @@ using RDF;
 using IFC4;
 using System.Diagnostics;
 
-namespace CS_GeometryKernel
+namespace CS_IFC
 {
-    class Program
+    class CS_IFC
     {
         /// <summary>
         /// 

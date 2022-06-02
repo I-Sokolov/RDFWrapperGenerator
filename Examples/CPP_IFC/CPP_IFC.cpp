@@ -3,7 +3,6 @@
 
 #include <iostream>
 
-#include "ifcengine.h"
 #include "O:\DevArea\RDF\RDFWrappers\EngineEx_Template.h"
 #include "O:\DevArea\RDF\RDFWrappers\bin\Debug\net5.0\IFC4.h"
 
@@ -17,7 +16,6 @@ using namespace IFC4;
 
 int main()
 {
-
     int_t  ifcModel = sdaiCreateModelBN(0, NULL, "IFC4");
     ASSERT(ifcModel);
 
@@ -74,7 +72,9 @@ int main()
     ASSERT(curve.get_Degree().IsNull());
     curve.set_Degree(5);
     ASSERT(curve.get_Degree().Value() == 5);
+    sdaiSaveModelBN(ifcModel, "Test.ifc");
 
+#if 0
     IfcCartesianPointList3D pointList = IfcCartesianPointList3D::Create(ifcModel);
     int_t* coordList = nullptr;
     void* ret = sdaiGetAttrBN(pointList, "CoordList", sdaiAGGR, &coordList);
@@ -94,9 +94,7 @@ int main()
         sdaiAppend((int_t) coordList, sdaiAGGR, (void*) coords);
     }
 
-    sdaiSaveModelBN(ifcModel, "Test.ifc");
 
-#if 0
     //
     //            IFCINDEXEDPOLYCURVE(#1, (IfcLineIndex((1, 2)), IfcArcIndex((2, 3, 4))), $);
     //
