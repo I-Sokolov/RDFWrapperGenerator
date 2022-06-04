@@ -119,6 +119,20 @@ namespace RDFWrappers
             return false;
         }
 
+        public ExpressSelect IsSelect ()
+        {
+            if (attrType == enum_express_attr_type.__NONE)
+            {
+                if (enum_express_declaration.__SELECT == ifcengine.engiGetDeclarationType(domain))
+                {
+                    var sel = new ExpressSelect(domain);
+                    return sel;
+                }
+            }
+
+            return null;
+        }
+
         private string DefiningEntity { get { return ExpressSchema.GetNameOfDeclaration(definingEntity); } }
         //private string Domain { get { return ExpressSchema.GetNameOfDeclaration(domain); } }
 
@@ -213,6 +227,7 @@ namespace RDFWrappers
                     break;
 
                 case enum_express_attr_type.__ENUMERATION:
+                    System.Diagnostics.Debug.Assert(false); //never happens
                     if (domain != 0)
                     {
                         str += "ENUM " + ExpressSchema.GetNameOfDeclaration(domain);
@@ -224,6 +239,7 @@ namespace RDFWrappers
                     break;
 
                 case enum_express_attr_type.__SELECT:
+                    System.Diagnostics.Debug.Assert(false); //never happens
                     if (domain != 0)
                     {
                         str += "SELECT " + ExpressSchema.GetNameOfDeclaration(domain);

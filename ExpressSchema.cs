@@ -9,7 +9,7 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    class ExpressSchema
+    public class ExpressSchema
     {
         /// <summary>
         /// 
@@ -52,6 +52,39 @@ namespace RDFWrappers
 
                 case enum_express_attr_type.__STRING:
                     return "string";
+
+                case enum_express_attr_type.__BINARY:
+                case enum_express_attr_type.__BINARY_32:
+                    return null;
+
+                case enum_express_attr_type.__NONE:
+                case enum_express_attr_type.__ENUMERATION:
+                case enum_express_attr_type.__SELECT:
+                default:
+                    System.Diagnostics.Debug.Assert(false);
+                    return null;
+            }
+        }
+
+        static public string GetSdaiType(enum_express_attr_type attr_Type)
+        {
+            switch (attr_Type)
+            {
+                case enum_express_attr_type.__BOOLEAN:
+                    return "sdaiBOOLEAN";
+
+                case enum_express_attr_type.__INTEGER:
+                    return "sdaiINTEGER";
+
+                case enum_express_attr_type.__LOGICAL:
+                    return "sdaiLOGICAL";
+
+                case enum_express_attr_type.__NUMBER:
+                case enum_express_attr_type.__REAL:
+                    return "sdaiREAL";
+
+                case enum_express_attr_type.__STRING:
+                    return "sdaiSTRING";
 
                 case enum_express_attr_type.__BINARY:
                 case enum_express_attr_type.__BINARY_32:
@@ -138,7 +171,7 @@ namespace RDFWrappers
             if (sels != null)
                 foreach (var sel in sels)
                 {
-                    var s = new ExpressSelect(sel.Key, sel.Value); ;
+                    var s = new ExpressSelect(sel.Value); ;
                     Console.WriteLine(s.ToString());
                 }
 

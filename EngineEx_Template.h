@@ -116,8 +116,8 @@ namespace NAMESPACE_NAME
         operator SdaiInstance() const { return m_instance; }
 
     protected:
-        /// 
-        /// 
+        // 
+        // 
         const char* get_sdaiSTRING(const char* attrName)
         {
             const char* str = NULL;
@@ -127,6 +127,8 @@ namespace NAMESPACE_NAME
                 return NULL;
         }
 
+        //
+        //
         int get_sdaiENUM(const char* attrName, const char* rEnumValues[])
         {
             const char* value = NULL;
@@ -143,6 +145,37 @@ namespace NAMESPACE_NAME
 
             return -1;
         }
+
+        //
+        //
+        template <typename T> Nullable<T> getSelectValue(const char* attrName, const char* typeName, int_t sdaiType)
+        {
+            Nullable<T> ret;
+            void* adb = sdaiCreateEmptyADB();
+            
+            if (sdaiGetAttrBN(m_instance, attrName, sdaiADB, &adb)) {
+                char* path = sdaiGetADBTypePath(adb, 0);
+                if (path && 0 == _stricmp(path, typeName)) {
+                    T val = (T) 0;
+                    sdaiGetADBValue(adb, sdaiType, &val);
+                    ret = val;
+                }
+            }
+
+            sdaiDeleteADB(adb);          
+            return ret;
+        }
+
+        //
+        //
+        template <typename T> void setSelectValue(const char* attrName, const char* typeName, int_t sdaiType, T value)
+        {
+            void* adb = sdaiCreateADB(sdaiType, &value);
+            sdaiPutADBTypePath(adb, 1, typeName);
+            sdaiPutAttrBN(m_instance, attrName, sdaiADB, adb);
+            sdaiDeleteADB(adb);
+        }
+
     };
 
 //## TEMPLATE: BeginEntity
@@ -188,6 +221,10 @@ namespace NAMESPACE_NAME
         Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = get_sdaiENUM("ATTR_NAME", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
 //## SetEnumAttribute
         void set_ATTR_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
+//## GetSelectSimpleAttribute
+        Nullable<double> get_ATTR_NAME_TYPE_NAME() { return getSelectValue<double>("ATTR_NAME", "TYPE_NAME", sdaiREAL); }
+//## SetSelectSimpleAttribute
+        void set_ATTR_NAME_TYPE_NAME(double value) { setSelectValue("ATTR_NAME", "TYPE_NAME", sdaiREAL, value); }
 //## EndEntity
     };
 

@@ -27,6 +27,30 @@ namespace RDFWrappers
             type = ifcengine.engiGetDefinedType(declaration, out referenced);
         }
 
+        public string GetBaseCSType()
+        {
+            if (referenced != 0)
+            { var refType = new ExpressDefinedType(referenced);
+                return refType.GetBaseCSType();
+            }
+            else
+            {
+                return ExpressSchema.GetCSType(type);
+            }
+        }
+
+        public string GetSdaiType()
+        {
+            if (referenced != 0)
+            {
+                var refType = new ExpressDefinedType(referenced);
+                return refType.GetSdaiType();
+            }
+            else
+            {
+                return ExpressSchema.GetSdaiType(type);
+            }
+        }
 
         public override string ToString()
         {

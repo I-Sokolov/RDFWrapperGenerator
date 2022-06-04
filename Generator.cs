@@ -9,33 +9,34 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    class Generator
+    public class Generator
     {
         /// <summary>
         /// 
         /// </summary>
         const string KWD_PREPROC = "//##";
 
-        const string KWD_NAMESPACE = "NAMESPACE_NAME";
-        const string KWD_ENTITY_NAME = "ENTITY_NAME";
-        const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
-        const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
-        const string KWD_CS_DATATYPE = "double";
-        const string KWD_StringType = "StringType";
-        const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
-        const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
-        const string KWD_NUMBER = "1234";
-        const string KWD_ATTR_NAME = "ATTR_NAME";
-        const string KWD_sdai_DATATYPE = "sdaiREAL";
-        const string KWD_asType = "asTYPE";
-        const string KWD_REF_ENTITY = "REF_ENTITY";
-        const string KWD_ENUM_TYPE = "ENUMERATION_NAME";
-        const string KWD_ENUM_VALUES = "\"ENUMERATION_STRING_VALUES\"";
+        public const string KWD_NAMESPACE = "NAMESPACE_NAME";
+        public const string KWD_ENTITY_NAME = "ENTITY_NAME";
+        public const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
+        public const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
+        public const string KWD_CS_DATATYPE = "double";
+        public const string KWD_StringType = "StringType";
+        public const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
+        public const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
+        public const string KWD_NUMBER = "1234";
+        public const string KWD_ATTR_NAME = "ATTR_NAME";
+        public const string KWD_sdai_DATATYPE = "sdaiREAL";
+        public const string KWD_asType = "asTYPE";
+        public const string KWD_REF_ENTITY = "REF_ENTITY";
+        public const string KWD_ENUM_TYPE = "ENUMERATION_NAME";
+        public const string KWD_ENUM_VALUES = "\"ENUMERATION_STRING_VALUES\"";
+        public const string KWD_TYPE_NAME = "TYPE_NAME";
 
         /// <summary>
         /// 
         /// </summary>
-        enum Template
+        public enum Template
         { 
             None,
             BeginFile,
@@ -58,6 +59,8 @@ namespace RDFWrappers
             SetEntityAttribute,
             GetEnumAttribute,
             SetEnumAttribute,
+            GetSelectSimpleAttribute,
+            SetSelectSimpleAttribute,
             EndEntity,
             GetEntityAttributeImplementation,
             SetEntityAttributeImplementation,
@@ -76,13 +79,15 @@ namespace RDFWrappers
 
         ExpressSchema m_schema;
 
+        StreamWriter m_writer;
+
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
         HashSet<ExpressHandle> m_wroteDefinedTyes = new HashSet<ExpressHandle>();
 
         HashSet<ExpressHandle> m_wroteEntities = new HashSet<ExpressHandle>();
 
-        Dictionary<string, string> m_replacements = new Dictionary<string, string>();
+        public Dictionary<string, string> m_replacements = new Dictionary<string, string>();
 
         /// <summary>
         /// 
@@ -111,23 +116,23 @@ namespace RDFWrappers
         /// <param name="outputFile"></param>
         public void WriteWrapper(string outputFile)
         {
-            using (var writer = new StreamWriter(outputFile))
+            using (m_writer = new StreamWriter(outputFile))
             {
                 m_replacements[KWD_NAMESPACE] = m_namespace;
 
-                WriteByTemplate(writer, Template.BeginFile);
+                WriteByTemplate(Template.BeginFile);
 
-                WriteForwardDeclarations(writer);
+                WriteForwardDeclarations();
 
-                WriteDefinedTypes(writer);
+                WriteDefinedTypes();
 
-                WriteEnumerations(writer);
+                WriteEnumerations();
 
-                WriteEntities(writer);
+                WriteEntities();
 
-                writer.Write (m_implementations);
+                m_writer.Write (m_implementations);
 
-                WriteByTemplate(writer, Template.EndFile);
+                WriteByTemplate(Template.EndFile);
             }
         }
 
@@ -135,12 +140,12 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        private void WriteForwardDeclarations(StreamWriter writer)
+        private void WriteForwardDeclarations()
         {
             foreach (var cls in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
                 m_replacements[KWD_ENTITY_NAME] = cls.Key;
-                WriteByTemplate(writer, Template.ClassForwardDeclaration);
+                WriteByTemplate(Template.ClassForwardDeclaration);
             }
         }
 
@@ -148,18 +153,18 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        private void WriteDefinedTypes(StreamWriter writer)
+        private void WriteDefinedTypes()
         {
-            WriteByTemplate(writer, Template.BeginDefinedTypes);
+            WriteByTemplate(Template.BeginDefinedTypes);
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
             {
                 var type = new ExpressDefinedType(decl.Value);
-                WriteDefinedType(writer, type);
+                WriteDefinedType(type);
             }
         }
 
-        private bool WriteDefinedType(StreamWriter writer, ExpressDefinedType definedType)
+        private bool WriteDefinedType(ExpressDefinedType definedType)
         {
             if (!m_wroteDefinedTyes.Add (definedType.declaration))
             {
@@ -169,7 +174,7 @@ namespace RDFWrappers
             if (definedType.referenced != 0)
             {
                 var referencedType = new ExpressDefinedType(definedType.referenced);
-                if (!WriteDefinedType(writer, referencedType))
+                if (!WriteDefinedType(referencedType))
                 {
                     Console.WriteLine("Defineded type {0} is not supported, because referenced type {1} is not supported", definedType.name, referencedType.name);
                     return false;
@@ -191,7 +196,7 @@ namespace RDFWrappers
 
             m_replacements[KWD_DEFINED_TYPE] = definedType.name;
 
-            WriteByTemplate(writer, Template.DefinedType);
+            WriteByTemplate(Template.DefinedType);
 
             return true;
         }
@@ -200,14 +205,14 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        private void WriteEnumerations(StreamWriter writer)
+        private void WriteEnumerations()
         {
-            WriteByTemplate(writer, Template.BeginEnumerations);
+            WriteByTemplate(Template.BeginEnumerations);
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENUM])
             {
                 var enumeration = new ExpressEnumeraion(decl.Key, decl.Value);
-                WriteEnumeration(writer, enumeration);
+                WriteEnumeration(enumeration);
             }
         }
 
@@ -216,11 +221,11 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="enumeraion"></param>
-        private void WriteEnumeration(StreamWriter writer, ExpressEnumeraion enumeraion)
+        private void WriteEnumeration(ExpressEnumeraion enumeraion)
         {
             m_replacements[KWD_ENUMERATION_NAME] = enumeraion.name;
 
-            WriteByTemplate(writer, Template.BeginEnumeration);
+            WriteByTemplate(Template.BeginEnumeration);
 
             int i = 0;
             var values = new StringBuilder();
@@ -229,7 +234,7 @@ namespace RDFWrappers
                 m_replacements[KWD_ENUMERATION_ELEMENT] = e;
                 m_replacements[KWD_NUMBER] = i.ToString();
 
-                WriteByTemplate(writer, Template.EnumerationElement);
+                WriteByTemplate(Template.EnumerationElement);
 
                 if (i>0)
                     values.Append(", ");
@@ -242,21 +247,21 @@ namespace RDFWrappers
 
             m_replacements[KWD_ENUM_VALUES] = values.ToString ();
 
-            WriteByTemplate(writer, Template.EndEnumeration);
+            WriteByTemplate(Template.EndEnumeration);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        private void WriteEntities (StreamWriter writer)
+        private void WriteEntities ()
         {
-            WriteByTemplate(writer, Template.BeginEntities);
+            WriteByTemplate(Template.BeginEntities);
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
                 var entity = new ExpressEntity(decl.Value);
-                WriteEntity (writer, entity);
+                WriteEntity (entity);
             }
         }
 
@@ -265,7 +270,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="entity"></param>
-        private void WriteEntity(StreamWriter writer, ExpressEntity entity)
+        private void WriteEntity(ExpressEntity entity)
         {
             if (!m_wroteEntities.Add(entity.inst))
             {
@@ -298,7 +303,7 @@ namespace RDFWrappers
             {
                 var parent = new ExpressEntity(parentId);
 
-                WriteEntity(writer, parent);
+                WriteEntity(parent);
 
                 if (baseClass.Length != 0)
                 {
@@ -322,16 +327,16 @@ namespace RDFWrappers
             m_replacements[KWD_ENTITY_NAME] = clsName;
 
             //
-            WriteByTemplate(writer, Template.BeginEntity);
+            WriteByTemplate(Template.BeginEntity);
 
             if (!entity.IsAbstract())
             {
-                WriteByTemplate(writer, Template.EntityCreateMethod);
+                WriteByTemplate(Template.EntityCreateMethod);
             }
                 
-            WriteAttributes(writer, entity, parentAttributes);
+            WriteAttributes(entity, parentAttributes);
 
-            WriteByTemplate(writer, Template.EndEntity);
+            WriteByTemplate(Template.EndEntity);
         }
 
         /// <summary>
@@ -353,10 +358,10 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="template"></param>
-        private void WriteByTemplate(StreamWriter writer, Template template)
+        private void WriteByTemplate(Template template)
         {
             string str = StringByTemplate(template);
-            writer.Write(str);
+            m_writer.Write(str);
         }
 
         private string StringByTemplate (Template template)
@@ -395,26 +400,28 @@ namespace RDFWrappers
         /// <param name="writer"></param>
         /// <param name="entity"></param>
         /// <param name="exportedAttributes"></param>
-        private void WriteAttributes(StreamWriter writer, ExpressEntity entity, HashSet<string> exportedAttributes)
+        private void WriteAttributes(ExpressEntity entity, HashSet<string> exportedAttributes)
         {
             var attribs = entity.GetAttributes();
             foreach (var attr in attribs)
             {
+                m_replacements[KWD_ATTR_NAME] = attr.name;
+
                 if (exportedAttributes.Add(attr.name))
                 {
                     switch (attr.aggrType)
                     {
                         case RDF.enum_express_aggr.__NONE:
-                            WriteSingeAttribute(writer, attr);
+                            WriteSingeAttribute(attr);
                             break;
 
                         case RDF.enum_express_aggr.__ARRAY:
                         case RDF.enum_express_aggr.__LIST:
-                            WriteListAggregation(writer, attr);
+                            WriteListAggregation(attr);
                             break;
 
                         case RDF.enum_express_aggr.__SET:
-                            WriteSetAggregation(writer, attr);
+                            WriteSetAggregation(attr);
                             break;
 
                         case RDF.enum_express_aggr.__BAG:
@@ -434,25 +441,28 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="attr"></param>
-        private void WriteSingeAttribute(StreamWriter writer, ExpressAttribute attr)
+        private void WriteSingeAttribute(ExpressAttribute attr)
         {
-            m_replacements[KWD_ATTR_NAME] = attr.name;
-
-            string expressType;
-            string baseType;
-            string sdaiType;
+            string expressType = null;
+            string baseType = null;
+            string sdaiType = null;
+            ExpressSelect select = null;
 
             if (attr.IsSimpleType(out expressType, out baseType, out sdaiType))
             {
-                WriteSimpleAttribute(writer, attr, expressType, baseType, sdaiType);
+                WriteSimpleAttribute(attr, expressType, baseType, sdaiType);
             }
             else if (attr.IsEntityReference(out expressType))
             {
-                WriteEntityReference(writer, attr, expressType);
+                WriteEntityReference(attr, expressType);
             }
             else if (attr.IsEnumeration (out expressType))
             {
-                WriteEnumAttribute(writer, attr, expressType);
+                WriteEnumAttribute(attr, expressType);
+            }
+            else if ((select = attr.IsSelect ())!=null)
+            {
+                select.WriteGetSetMethods(this, attr);
             }
             else
             {
@@ -461,7 +471,7 @@ namespace RDFWrappers
         }
 
 
-        private void WriteSimpleAttribute(StreamWriter writer, ExpressAttribute attr, string definedType, string baseType, string sdaiType)
+        private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
         {
             m_replacements[KWD_CS_DATATYPE] = baseType;
             m_replacements[KWD_StringType] = (baseType == "string" && definedType != null) ? definedType : "const char*";
@@ -470,16 +480,16 @@ namespace RDFWrappers
             Template tplGet = baseType == "string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute;
             Template tplSet = baseType == "string" ? Template.SetSimpleAttributeString : Template.SetSimpleAttribute;
 
-            WriteGetSet(writer, tplGet, tplSet, attr.inverse);
+            WriteGetSet(tplGet, tplSet, attr.inverse);
         }
 
-        private void WriteGetSet(StreamWriter writer, Template tplGet, Template tplSet, bool inverse)
+        public void WriteGetSet(Template tplGet, Template tplSet, bool inverse)
         {
             var str = BuildGetSet(tplGet, tplSet, inverse);
-            writer.Write(str);
+            m_writer.Write(str);
         }
 
-        private StringBuilder BuildGetSet (Template tplGet, Template tplSet, bool inverse)
+        private string BuildGetSet (Template tplGet, Template tplSet, bool inverse)
         {
             StringBuilder str = new StringBuilder();
 
@@ -492,33 +502,33 @@ namespace RDFWrappers
                 str.Append(s);
             }
 
-            return str;
+            return str.ToString();
         }
 
 
-        private void WriteEntityReference (StreamWriter writer, ExpressAttribute attr, string domain)
+        private void WriteEntityReference (ExpressAttribute attr, string domain)
         {
             m_replacements[KWD_REF_ENTITY] = domain;
 
-            WriteGetSet(writer, Template.GetEntityAttribute, Template.SetEntityAttribute, attr.inverse);
+            WriteGetSet(Template.GetEntityAttribute, Template.SetEntityAttribute, attr.inverse);
 
             var impl = BuildGetSet(Template.GetEntityAttributeImplementation, Template.SetEntityAttributeImplementation, attr.inverse);
             m_implementations.Append(impl);
         }
 
 
-        private void WriteEnumAttribute(StreamWriter writer, ExpressAttribute attr, string domain)
+        private void WriteEnumAttribute(ExpressAttribute attr, string domain)
         {
             m_replacements[KWD_ENUM_TYPE] = domain;
-            WriteGetSet(writer, Template.GetEnumAttribute, Template.SetEnumAttribute, attr.inverse);
+            WriteGetSet(Template.GetEnumAttribute, Template.SetEnumAttribute, attr.inverse);
         }
 
-        private void WriteListAggregation(StreamWriter writer, ExpressAttribute attr)
+        private void WriteListAggregation(ExpressAttribute attr)
         { 
             //TODO
         }
 
-        private void WriteSetAggregation(StreamWriter writer, ExpressAttribute attr)
+        private void WriteSetAggregation(ExpressAttribute attr)
         {
             //TODO
         }

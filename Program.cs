@@ -87,7 +87,7 @@ namespace RDFWrappers
                 }
 
                 //
-                //
+                /*/
                 if (!string.IsNullOrWhiteSpace(options.csFile))
                 {
                     Console.WriteLine("Generate C# file " + options.csFile);
@@ -98,7 +98,7 @@ namespace RDFWrappers
                 {
                     Console.WriteLine("Do not create C# file");
                 }
-                System.Console.WriteLine();
+                System.Console.WriteLine();*/
 
                 if (!string.IsNullOrWhiteSpace(options.hFile))
                 {

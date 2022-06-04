@@ -72,7 +72,16 @@ int main()
     ASSERT(curve.get_Degree().IsNull());
     curve.set_Degree(5);
     ASSERT(curve.get_Degree().Value() == 5);
+  
+    /*
+    IfcMeasureWithUnit measure = IfcMeasureWithUnit::Create(ifcModel);
+    Nullable<double> dval = measure.get_ValueComponent();
+    measure.set_ValueComponent_IfcRatioMeasure(0.5);
+    dval = measure.get_ValueComponent();
+    */
     sdaiSaveModelBN(ifcModel, "Test.ifc");
+
+
 
 #if 0
     IfcCartesianPointList3D pointList = IfcCartesianPointList3D::Create(ifcModel);
