@@ -55,29 +55,18 @@ namespace NAMESPACE_NAME
     public:
         Nullable<T>() : m_value(NULL) {}
         Nullable<T>(T value) { m_value = new T(value); }
+        Nullable<T>(const Nullable<T>& src) { if (src.m_value) m_value = new T(*src.m_value); else m_value = NULL; }
 
-        virtual ~Nullable<T>()
-        {
-            if (m_value) {
-                delete m_value;
-            }
-        };
+        virtual ~Nullable<T>() { if (m_value) { delete m_value; } };
 
         bool IsNull() const { return !m_value; }
         T Value() const { assert(m_value); if (m_value) return *m_value; else return (T)0; }
 
         virtual Nullable<T>& operator=(const Nullable<T>& src)
         {
-            if (m_value) {
-                delete m_value;
-            }
-
+            if (m_value) { delete m_value; }
             m_value = NULL;
-
-            if (src.m_value) {
-                m_value = new T(*(src.m_value));
-            }
-
+            if (src.m_value) { m_value = new T(*(src.m_value)); }
             return *this;
         }
     };
