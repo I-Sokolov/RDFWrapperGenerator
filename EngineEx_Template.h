@@ -213,13 +213,13 @@ namespace NAMESPACE_NAME
     public:
         TYPE_NAME_accessor(SdaiInstance instance, const char* attrName) : SelectAccess(instance, attrName) {}
 //## SelectGetSimpleValue
-        Nullable<SimpleType> _SimpleType() { return getSimpleValue<SimpleType>("SimpleType", sdaiTYPE); }
+        Nullable<SimpleType> _SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
 //## SelectSetSimpleValue
-        void _SimpleType(SimpleType value) { setSimpleValue("SimpleType", sdaiTYPE, value); }
+        void _SimpleType(SimpleType value) { setSimpleValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectGetStringValue
-        StringType _StringType() { return getStringValue("StringType"); }
+        StringType _StringType() { return getStringValue("TypeNameUpper"); }
 //## SelectSetStringValue
-        void _StringType(StringType value) { setStringValue("StringType", value); }
+        void _StringType(StringType value) { setStringValue("TypeNameUpper", value); }
 //## SelectNested
         TYPE_NAME_accessor _TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
 //## SelectAccessorEnd

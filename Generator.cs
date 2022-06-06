@@ -22,6 +22,7 @@ namespace RDFWrappers
         public const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
         public const string KWD_SimpleType = "SimpleType";
         public const string KWD_StringType = "StringType";
+        public const string KWD_TypeNameUpper = "TypeNameUpper";
         public const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
         public const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
         public const string KWD_NUMBER = "1234";
