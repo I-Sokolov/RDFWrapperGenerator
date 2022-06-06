@@ -104,6 +104,32 @@ namespace NAMESPACE_NAME
             sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
             sdaiDeleteADB(adb);
         }
+
+        
+        //
+        int64_t getEntityInstance(const char* typeName)
+        {
+            int64_t ret = 0;
+            int64_t inst = 0;
+
+            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINSTANCE, &inst)) {
+                SdaiEntity instType = sdaiGetInstanceType(inst);
+                SdaiModel model = engiGetEntityModel(instType);
+                SdaiEntity requiredType = sdaiGetEntity(model, typeName);
+                if (instType == requiredType) {
+                    ret = inst;
+                }
+            }
+
+            return ret;
+        }
+
+        //
+        void setEntityInstance(const char* typeName, int64_t inst)
+        {
+            sdaiPutAttrBN(m_instance, m_attrName, sdaiINSTANCE, (void*) inst);
+        }
+
     };
 
 
@@ -220,6 +246,10 @@ namespace NAMESPACE_NAME
         StringType _StringType() { return getStringValue("TypeNameUpper"); }
 //## SelectSetStringValue
         void _StringType(StringType value) { setStringValue("TypeNameUpper", value); }
+//## SelectGetEntity
+        REF_ENTITY _REF_ENTITY();
+//## SelectSetEntity
+        void _REF_ENTITY(REF_ENTITY inst);
 //## SelectNested
         TYPE_NAME_accessor _TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
 //## SelectAccessorEnd
@@ -272,8 +302,11 @@ namespace NAMESPACE_NAME
 //## EndEntity
     };
 
+//## SelectGetEntityImplementation
+    REF_ENTITY TYPE_NAME_accessor::_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
+//## SelectSetEntityImplementation
+    void TYPE_NAME_accessor::_REF_ENTITY(REF_ENTITY inst) { setEntityInstance("TypeNameUpper", inst); }
 //## GetEntityAttributeImplementation
-
     REF_ENTITY ENTITY_NAME::get_Attr_NAME() { SdaiInstance inst = 0; sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, &inst); return inst; }
 //## SetEntityAttributeImplementation
     void ENTITY_NAME::set_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, (void*)i); }

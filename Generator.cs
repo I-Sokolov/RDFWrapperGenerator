@@ -57,6 +57,8 @@ namespace RDFWrappers
             SelectSetSimpleValue,
             SelectGetStringValue,
             SelectSetStringValue,
+            SelectGetEntity,
+            SelectSetEntity,
             SelectNested,
             SelectAccessorEnd,
             BeginEntity,
@@ -71,13 +73,15 @@ namespace RDFWrappers
             SetEnumAttribute,
             SelectAccessor,
             EndEntity,
+            SelectGetEntityImplementation,
+            SelectSetEntityImplementation,
             GetEntityAttributeImplementation,
             SetEntityAttributeImplementation,
             EndFile
         }
 
         //
-        StringBuilder m_implementations = new StringBuilder ();
+        public StringBuilder m_implementations = new StringBuilder ();
 
         /// <summary>
         /// 
@@ -387,7 +391,7 @@ namespace RDFWrappers
             m_writer.Write(str);
         }
 
-        private string StringByTemplate (Template template)
+        public string StringByTemplate (Template template)
         {
             string code = m_template[template];
 

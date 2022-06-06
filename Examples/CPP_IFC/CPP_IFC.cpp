@@ -77,6 +77,10 @@ int main()
     //
     // SELECT tests
     //
+
+    //
+    // various data type and nested selects
+    //
     IfcMeasureWithUnit measureWithUnit = IfcMeasureWithUnit::Create(ifcModel);
 
     //numeric value (sequence notation)
@@ -132,7 +136,31 @@ int main()
     txt = measureWithUnit.get_ValueComponent()._IfcSimpleValue()._IfcText();
     ASSERT(0==strcmp (txt, "my text"));
 
+    //
+    // entities select
+    //
+    auto actor = IfcActor::Create(ifcModel);
+    
+    auto person = actor.get_TheActor()._IfcPerson();
+    auto organization = actor.get_TheActor()._IfcOrganization();
+    ASSERT(person == 0 && organization == 0);
+
+    auto setPerson = IfcPerson::Create(ifcModel);
+    setPerson.set_Identification("justApeson");
+    
+    actor.set_TheActor()._IfcPerson(setPerson);
+
+    person = actor.get_TheActor()._IfcPerson();
+    ASSERT(setPerson == person);
+
+    organization = actor.get_TheActor()._IfcOrganization();
+    ASSERT(organization == 0);
+
+
+
+    //
     //'short' access
+    // 
     //dval = measure.get_ValueComponent()._double();
 
     //dval = measure.get_ValueComponent();

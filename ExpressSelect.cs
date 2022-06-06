@@ -137,6 +137,8 @@ namespace RDFWrappers
                     break;
 
                 case enum_express_declaration.__ENTITY:
+                    var entityType = new ExpressEntity(selectVariant);
+                    WriteAccessorMethod(generator, entityType, bGet);
                     break;
 
                 case enum_express_declaration.__ENUM:
@@ -147,6 +149,19 @@ namespace RDFWrappers
                     break;
             }
         }
+
+
+        private void WriteAccessorMethod(Generator generator, ExpressEntity entityType, bool bGet)
+        {
+            generator.m_replacements[Generator.KWD_REF_ENTITY] = entityType.name;
+            generator.m_replacements[Generator.KWD_TypeNameUpper] = entityType.name.ToUpper();
+
+            generator.WriteByTemplate(bGet ? Generator.Template.SelectGetEntity : Generator.Template.SelectSetEntity);
+
+            var impl = generator.StringByTemplate(bGet ? Generator.Template.SelectGetEntityImplementation : Generator.Template.SelectSetEntityImplementation);
+            generator.m_implementations.Append(impl);
+        }
+
 
         private void WriteAccessorMethod(Generator generator, ExpressDefinedType definedType, bool bGet)
         {
