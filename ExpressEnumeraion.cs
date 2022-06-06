@@ -11,11 +11,11 @@ namespace RDFWrappers
 {
     class ExpressEnumeraion
     {
-        public string name;
+        public string name { get { return ExpressSchema.GetNameOfDeclaration(inst); } }
         ExpressHandle inst;
-        public ExpressEnumeraion(string name, ExpressHandle inst)
+
+        public ExpressEnumeraion(ExpressHandle inst)
         {
-            this.name = name;
             this.inst = inst;
         }
 

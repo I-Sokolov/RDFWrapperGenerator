@@ -142,12 +142,27 @@ namespace RDFWrappers
                     break;
 
                 case enum_express_declaration.__ENUM:
+                    var enumType = new ExpressEnumeraion(selectVariant);
+                    WriteAccessorMethod(generator, enumType, bGet);
                     break;
 
                 default:
                     System.Diagnostics.Debug.Assert(false);
                     break;
             }
+        }
+
+        
+        private void WriteAccessorMethod(Generator generator, ExpressEnumeraion enumType, bool bGet)
+        {
+            generator.m_replacements[Generator.KWD_ENUMERATION_NAME] = enumType.name;
+            generator.m_replacements[Generator.KWD_TypeNameUpper] = enumType.name.ToUpper();
+
+            generator.WriteByTemplate(bGet ? Generator.Template.SelectGetEnumeration : Generator.Template.SelectSetEnumeration);
+
+            //var impl = generator.StringByTemplate(bGet ? Generator.Template.SelectGetEntityImplementation : Generator.Template.SelectSetEntityImplementation);
+            //generator.m_implementations.Append(impl);
+
         }
 
 

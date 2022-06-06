@@ -37,6 +37,23 @@ namespace NAMESPACE_NAME
         }
     };
 
+    //
+    //
+    static int EnumerationNameToIndex(const char* rEnumValues[], const char* value)
+    {
+        if (value) {
+
+            for (int i = 0; rEnumValues[i]; i++) {
+                if (0 == _stricmp(value, rEnumValues[i])) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+
 
     /// <summary>
     /// Helper class to access SELET data
@@ -105,7 +122,35 @@ namespace NAMESPACE_NAME
             sdaiDeleteADB(adb);
         }
 
-        
+        //
+        int getEnumerationValue(const char* typeName, const char* rEnumValues[])
+        {
+            int ret = -1;
+
+            void* adb = sdaiCreateEmptyADB();
+
+            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+                char* path = sdaiGetADBTypePath(adb, 0);
+                if (path && 0 == _stricmp(path, typeName)) {
+                    const char* value = NULL;
+                    sdaiGetADBValue(adb, sdaiENUM, &value);
+                    ret = EnumerationNameToIndex(rEnumValues, value);
+                }
+            }
+
+            sdaiDeleteADB(adb);
+            return ret;
+        }
+
+        //
+        void setEnumerationValue(const char* typeName, const char* value)
+        {
+            void* adb = sdaiCreateADB(sdaiENUM, value);
+            sdaiPutADBTypePath(adb, 1, typeName);
+            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
+            sdaiDeleteADB(adb);
+        }
+
         //
         int64_t getEntityInstance(const char* typeName)
         {
@@ -180,17 +225,7 @@ namespace NAMESPACE_NAME
         {
             const char* value = NULL;
             sdaiGetAttrBN(m_instance, attrName, sdaiENUM, (void*) &value);
-
-            if (value) {
-
-                for (int i = 0; rEnumValues[i]; i++) {
-                    if (0 == _stricmp(value, rEnumValues[i])) {
-                        return i;
-                    }
-                }
-            }
-
-            return -1;
+            return EnumerationNameToIndex(rEnumValues, value);
         }
     };
 
@@ -250,6 +285,10 @@ namespace NAMESPACE_NAME
         REF_ENTITY _REF_ENTITY();
 //## SelectSetEntity
         void _REF_ENTITY(REF_ENTITY inst);
+//## SelectGetEnumeration
+        Nullable<ENUMERATION_NAME> _ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
+//## SelectSetEnumeration
+        void _ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; setEnumerationValue("TypeNameUpper", val); }
 //## SelectNested
         TYPE_NAME_accessor _TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
 //## SelectAccessorEnd

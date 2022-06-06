@@ -59,6 +59,8 @@ namespace RDFWrappers
             SelectSetStringValue,
             SelectGetEntity,
             SelectSetEntity,
+            SelectGetEnumeration,
+            SelectSetEnumeration,
             SelectNested,
             SelectAccessorEnd,
             BeginEntity,
@@ -226,7 +228,7 @@ namespace RDFWrappers
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENUM])
             {
-                var enumeration = new ExpressEnumeraion(decl.Key, decl.Value);
+                var enumeration = new ExpressEnumeraion(decl.Value);
                 WriteEnumeration(enumeration);
             }
         }

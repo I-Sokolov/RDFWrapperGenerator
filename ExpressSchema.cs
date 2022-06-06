@@ -162,7 +162,7 @@ namespace RDFWrappers
             if (enums != null)
                 foreach (var enm in enums)
                 {
-                    var e = new ExpressEnumeraion(enm.Key, enm.Value);
+                    var e = new ExpressEnumeraion(enm.Value);
                     Console.WriteLine (e.ToString());
                 }
 

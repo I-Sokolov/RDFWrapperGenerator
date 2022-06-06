@@ -156,8 +156,6 @@ int main()
     organization = actor.get_TheActor()._IfcOrganization();
     ASSERT(organization == 0);
 
-
-
     //
     //'short' access
     // 
