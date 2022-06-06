@@ -213,6 +213,8 @@ namespace RDF
 
         public const string IFCEngineDLL = @"IFCEngine.dll";
 
+		public const int_t sdaiTYPE = sdaiREAL;
+
         //
         //  File IO API Calls
         //

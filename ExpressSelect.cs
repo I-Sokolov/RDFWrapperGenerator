@@ -13,8 +13,8 @@ namespace RDFWrappers
 {
     public class ExpressSelect
     {
-        string name { get { return ExpressSchema.GetNameOfDeclaration(inst); } }
-        ExpressHandle inst;
+        public string name { get { return ExpressSchema.GetNameOfDeclaration(inst); } }
+        public ExpressHandle inst;
 
         public ExpressSelect(ExpressHandle inst)
         {
@@ -53,26 +53,93 @@ namespace RDFWrappers
             return ret;
         }
 
-        public void WriteGetSetMethods (Generator generator, ExpressAttribute attr)
+        private List<ExpressHandle> GetNestedSelects()
         {
-            var variants = GetVariants(true);
-            foreach (var variant in variants)
+            var ret = new List<ExpressHandle>();
+
+            int i = 0;
+            ExpressHandle variant;
+            while (0 != (variant = ifcengine.engiGetSelectElement(inst, i++)))
             {
-                WriteGetSetMethods(generator, attr, variant);
+                if (ifcengine.engiGetDeclarationType(variant) == enum_express_declaration.__SELECT)
+                {
+                    ret.Add(variant);
+                }
             }
+
+            return ret;
         }
 
-
-        private void WriteGetSetMethods(Generator generator, ExpressAttribute attr, ExpressHandle selectVariant)
+        public void WriteAttribute(Generator generator, ExpressAttribute attr)
         {
-            switch (ifcengine.engiGetDeclarationType (selectVariant))
+            generator.m_writer.WriteLine();
+
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = name;
+
+            generator.m_replacements[Generator.KWD_GETSET] = "get";
+            generator.m_replacements[Generator.KWD_ACCESSOR] = "getter";
+            generator.WriteByTemplate(Generator.Template.SelectAccessor);
+
+            if (!attr.inverse)
+            {
+                generator.m_replacements[Generator.KWD_GETSET] = "set";
+                generator.m_replacements[Generator.KWD_ACCESSOR] = "setter";
+                generator.WriteByTemplate(Generator.Template.SelectAccessor);
+            }
+
+            generator.m_replacements.Remove(Generator.KWD_GETSET);
+            generator.m_replacements.Remove(Generator.KWD_ACCESSOR);
+        }
+
+        public void WriteAccessors(Generator generator)
+        {
+            if (!generator.m_wroteSelects.Add(inst))
+            {
+                return;
+            }
+
+            foreach (var nested in GetNestedSelects())
+            {
+                (new ExpressSelect(nested)).WriteAccessors(generator);
+            }
+
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = name;
+
+            foreach (var bGet in new bool[] { true, false })
+            {
+                generator.m_replacements[Generator.KWD_ACCESSOR] = bGet ? "getter" : "setter";
+
+                generator.WriteByTemplate(Generator.Template.SelectAccessorBegin);
+
+                foreach (var variant in GetVariants(false))
+                {
+                    WriteAccessorMethod(generator, variant, bGet);
+                }
+
+                generator.WriteByTemplate(Generator.Template.SelectAccessorEnd);
+            }
+
+        }
+
+        private void WriteAccessorMethod(Generator generator, ExpressHandle selectVariant, bool bGet)
+        {
+            var type = ifcengine.engiGetDeclarationType(selectVariant);
+            switch (type)
             {
                 case enum_express_declaration.__DEFINED_TYPE:
                     var definedType = new ExpressDefinedType(selectVariant);
-                    WriteGetSetMethods(generator, attr, definedType);
+                    WriteAccessorMethod(generator, definedType, bGet);
+                    break;
+
+                case enum_express_declaration.__SELECT:
+                    var selectType = new ExpressSelect(selectVariant);
+                    WriteAccessorMethod(generator, selectType);
                     break;
 
                 case enum_express_declaration.__ENTITY:
+                    break;
+
+                case enum_express_declaration.__ENUM:
                     break;
 
                 default:
@@ -81,24 +148,38 @@ namespace RDFWrappers
             }
         }
 
-        private void WriteGetSetMethods(Generator generator, ExpressAttribute attr, ExpressDefinedType definedType)
+        private void WriteAccessorMethod(Generator generator, ExpressDefinedType definedType, bool bGet)
         {
             if (definedType.name == "IfcBinary")
                 return;
-
-            //TODO - methods that return defined typed does not use defined type
+            
             string sdaiType = definedType.GetSdaiType();
+            string baseType = definedType.GetBaseCSType();
 
-            generator.m_replacements[Generator.KWD_CS_DATATYPE] = definedType.name;
-            generator.m_replacements[Generator.KWD_TYPE_NAME] = definedType.name;
-            //generator.m_replacements[Generator.KWD_StringType] = (baseType == "string" && definedType != null) ? definedType : "const char*";
-            generator.m_replacements[Generator.KWD_sdai_DATATYPE] = sdaiType;
+            generator.m_replacements[Generator.KWD_SimpleType] = definedType.name;
+            generator.m_replacements[Generator.KWD_StringType] = definedType.name;
+            generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
 
-            //Template tplGet = baseType == "string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute;
-            //Template tplSet = baseType == "string" ? Template.SetSimpleAttributeString : Template.SetSimpleAttribute;
+            var tpl = Generator.Template.None;
+            if (bGet)
+                tpl = baseType == "string" ? Generator.Template.SelectGetStringValue : Generator.Template.SelectGetSimpleValue;
+            else
+                tpl = baseType == "string" ? Generator.Template.SelectSetStringValue : Generator.Template.SelectSetSimpleValue;
 
-            generator.WriteGetSet(Generator.Template.GetSelectSimpleAttribute, Generator.Template.SetSelectSimpleAttribute, attr.inverse);
+            generator.WriteByTemplate (tpl);
         }
+
+
+        private void WriteAccessorMethod(Generator generator, ExpressSelect selectType)
+        {
+            var saveSelect = generator.m_replacements[Generator.KWD_TYPE_NAME];
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = selectType.name;
+
+            generator.WriteByTemplate(Generator.Template.SelectNested);
+
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = saveSelect;
+        }
+
 
         public override string ToString()
         {

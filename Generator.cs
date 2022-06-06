@@ -20,18 +20,20 @@ namespace RDFWrappers
         public const string KWD_ENTITY_NAME = "ENTITY_NAME";
         public const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
         public const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
-        public const string KWD_CS_DATATYPE = "double";
+        public const string KWD_SimpleType = "SimpleType";
         public const string KWD_StringType = "StringType";
         public const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
         public const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
         public const string KWD_NUMBER = "1234";
         public const string KWD_ATTR_NAME = "ATTR_NAME";
-        public const string KWD_sdai_DATATYPE = "sdaiREAL";
+        public const string KWD_sdaiTYPE = "sdaiTYPE";
         public const string KWD_asType = "asTYPE";
         public const string KWD_REF_ENTITY = "REF_ENTITY";
         public const string KWD_ENUM_TYPE = "ENUMERATION_NAME";
         public const string KWD_ENUM_VALUES = "\"ENUMERATION_STRING_VALUES\"";
         public const string KWD_TYPE_NAME = "TYPE_NAME";
+        public const string KWD_ACCESSOR = "Accessor";
+        public const string KWD_GETSET = "getOrset";
 
         /// <summary>
         /// 
@@ -49,6 +51,13 @@ namespace RDFWrappers
             EnumerationElement,
             EndEnumeration,
             BeginEntities,
+            SelectAccessorBegin,
+            SelectGetSimpleValue,
+            SelectSetSimpleValue,
+            SelectGetStringValue,
+            SelectSetStringValue,
+            SelectNested,
+            SelectAccessorEnd,
             BeginEntity,
             EntityCreateMethod,
             GetSimpleAttribute,
@@ -59,8 +68,7 @@ namespace RDFWrappers
             SetEntityAttribute,
             GetEnumAttribute,
             SetEnumAttribute,
-            GetSelectSimpleAttribute,
-            SetSelectSimpleAttribute,
+            SelectAccessor,
             EndEntity,
             GetEntityAttributeImplementation,
             SetEntityAttributeImplementation,
@@ -79,12 +87,12 @@ namespace RDFWrappers
 
         ExpressSchema m_schema;
 
-        StreamWriter m_writer;
+        public StreamWriter m_writer;
 
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
         HashSet<ExpressHandle> m_wroteDefinedTyes = new HashSet<ExpressHandle>();
-
+        public HashSet<ExpressHandle> m_wroteSelects = new HashSet<ExpressHandle>();
         HashSet<ExpressHandle> m_wroteEntities = new HashSet<ExpressHandle>();
 
         public Dictionary<string, string> m_replacements = new Dictionary<string, string>();
@@ -127,6 +135,8 @@ namespace RDFWrappers
                 WriteDefinedTypes();
 
                 WriteEnumerations();
+
+                WriteSelects();
 
                 WriteEntities();
 
@@ -180,7 +190,7 @@ namespace RDFWrappers
                     return false;
                 }
 
-                m_replacements[KWD_CS_DATATYPE] = referencedType.name;
+                m_replacements[KWD_SimpleType] = referencedType.name;
             }
             else
             {
@@ -191,7 +201,7 @@ namespace RDFWrappers
                     return false;
                 }
 
-                m_replacements[KWD_CS_DATATYPE] = csType;
+                m_replacements[KWD_SimpleType] = csType;
             }
 
             m_replacements[KWD_DEFINED_TYPE] = definedType.name;
@@ -248,6 +258,18 @@ namespace RDFWrappers
             m_replacements[KWD_ENUM_VALUES] = values.ToString ();
 
             WriteByTemplate(Template.EndEnumeration);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void WriteSelects ()
+        {
+            foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__SELECT])
+            {
+                var sel = new ExpressSelect(decl.Value);
+                sel.WriteAccessors(this);
+            }
         }
 
         /// <summary>
@@ -358,7 +380,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="template"></param>
-        private void WriteByTemplate(Template template)
+        public void WriteByTemplate(Template template)
         {
             string str = StringByTemplate(template);
             m_writer.Write(str);
@@ -462,7 +484,7 @@ namespace RDFWrappers
             }
             else if ((select = attr.IsSelect ())!=null)
             {
-                select.WriteGetSetMethods(this, attr);
+                select.WriteAttribute(this, attr);
             }
             else
             {
@@ -470,12 +492,11 @@ namespace RDFWrappers
             }
         }
 
-
         private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
         {
-            m_replacements[KWD_CS_DATATYPE] = baseType;
+            m_replacements[KWD_SimpleType] = (!m_cs && definedType !=null) ? definedType : baseType;
             m_replacements[KWD_StringType] = (baseType == "string" && definedType != null) ? definedType : "const char*";
-            m_replacements[KWD_sdai_DATATYPE] = sdaiType;
+            m_replacements[KWD_sdaiTYPE] = sdaiType;
 
             Template tplGet = baseType == "string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute;
             Template tplSet = baseType == "string" ? Template.SetSimpleAttributeString : Template.SetSimpleAttribute;

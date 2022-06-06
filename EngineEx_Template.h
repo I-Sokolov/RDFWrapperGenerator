@@ -9,40 +9,6 @@
 
 namespace NAMESPACE_NAME
 {
-    //
-    // Entities forward declarations
-    //
-//## TemplateUtilityTypes    - this section just to make templates syntax correc
-
-    typedef const char* StringType;
-    typedef SdaiEntity  REF_ENTITY;    
-
-//## TEMPLATE: ClassForwardDeclaration
-    class ENTITY_NAME;
-//## TEMPLATE: BeginDefinedTypes
-
-    //
-    // Defined types
-    // 
-//## TEMPLATE: DefinedType
-    typedef double DEFINED_TYPE_NAME;
-//## TEMPLATE: BeginEnumerations
-
-    //
-    // Enumerations
-    //
-//## BeginEnumeration
-
-    enum ENUMERATION_NAME
-    {
-//## EnumerationElement
-        ENUMERATION_NAME_ENUMERATION_ELEMENT=1234,
-//## EndEnumeration
-        ENUMERATION_NAME___unk = -1
-    };
-    static const char* ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
-//## TEMPLATE: BeginEntities
-
     /// <summary>
     /// 
     /// </summary>
@@ -60,7 +26,7 @@ namespace NAMESPACE_NAME
         virtual ~Nullable<T>() { if (m_value) { delete m_value; } };
 
         bool IsNull() const { return !m_value; }
-        T Value() const { assert(m_value); if (m_value) return *m_value; else return (T)0; }
+        T Value() const { assert(m_value); if (m_value) return *m_value; else return (T) 0; }
 
         virtual Nullable<T>& operator=(const Nullable<T>& src)
         {
@@ -71,6 +37,76 @@ namespace NAMESPACE_NAME
         }
     };
 
+
+    /// <summary>
+    /// Helper class to access SELET data
+    /// </summary>
+    class SelectAccess
+    {
+    protected:
+        SdaiInstance m_instance;
+        const char* m_attrName;
+
+    protected:
+        //
+        SelectAccess(SdaiInstance instance, const char* attrName) { m_instance = instance; m_attrName = attrName; }
+
+        //
+        template <typename T> Nullable<T> getSimpleValue(const char* typeName, int_t sdaiType)
+        {
+            Nullable<T> ret;
+            void* adb = sdaiCreateEmptyADB();
+
+            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+                char* path = sdaiGetADBTypePath(adb, 0);
+                if (path && 0 == _stricmp(path, typeName)) {
+                    T val = (T) 0;
+                    sdaiGetADBValue(adb, sdaiType, &val);
+                    ret = val;
+                }
+            }
+
+            sdaiDeleteADB(adb);
+            return ret;
+        }
+
+        //
+        template <typename T> void setSimpleValue(const char* typeName, int_t sdaiType, T value)
+        {
+            void* adb = sdaiCreateADB(sdaiType, &value);
+            sdaiPutADBTypePath(adb, 1, typeName);
+            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
+            sdaiDeleteADB(adb);
+        }
+
+        //
+        const char* getStringValue(const char* typeName)
+        {
+            const char* ret = NULL;
+            void* adb = sdaiCreateEmptyADB();
+
+            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+                char* path = sdaiGetADBTypePath(adb, 0);
+                if (path && 0 == _stricmp(path, typeName)) {
+                    sdaiGetADBValue(adb, sdaiSTRING, &ret);
+                }
+            }
+
+            sdaiDeleteADB(adb);
+            return ret;
+        }
+
+        //
+        void setStringValue(const char* typeName, const char* value)
+        {
+            void* adb = sdaiCreateADB(sdaiSTRING, value);
+            sdaiPutADBTypePath(adb, 1, typeName);
+            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
+            sdaiDeleteADB(adb);
+        }
+    };
+
+
     /// <summary>
     /// Provides utility methods to interact with a generic entity instnace
     /// You also can use object of this class instead of int64_t handle of the instance in any place where the handle is required
@@ -78,21 +114,17 @@ namespace NAMESPACE_NAME
     class Entity
     {
     protected:
-        /// <summary>
-        /// underlyed instance handle
-        /// </summary>
         SdaiInstance m_instance;
 
     public:
-
         Entity(SdaiInstance instance, const char* entityName)
         {
             m_instance = instance;
 #ifdef _DEBUG
             if (m_instance != 0 && entityName != NULL) {
-                SdaiEntity instType = sdaiGetInstanceType (m_instance);
-                SdaiModel model =  engiGetEntityModel (instType);
-                SdaiEntity entity = sdaiGetEntity (model, entityName);
+                SdaiEntity instType = sdaiGetInstanceType(m_instance);
+                SdaiModel model = engiGetEntityModel(instType);
+                SdaiEntity entity = sdaiGetEntity(model, entityName);
                 assert(instType == entity);
             }
 #endif
@@ -134,39 +166,64 @@ namespace NAMESPACE_NAME
 
             return -1;
         }
-
-        //
-        //
-        template <typename T> Nullable<T> getSelectValue(const char* attrName, const char* typeName, int_t sdaiType)
-        {
-            Nullable<T> ret;
-            void* adb = sdaiCreateEmptyADB();
-            
-            if (sdaiGetAttrBN(m_instance, attrName, sdaiADB, &adb)) {
-                char* path = sdaiGetADBTypePath(adb, 0);
-                if (path && 0 == _stricmp(path, typeName)) {
-                    T val = (T) 0;
-                    sdaiGetADBValue(adb, sdaiType, &val);
-                    ret = val;
-                }
-            }
-
-            sdaiDeleteADB(adb);          
-            return ret;
-        }
-
-        //
-        //
-        template <typename T> void setSelectValue(const char* attrName, const char* typeName, int_t sdaiType, T value)
-        {
-            void* adb = sdaiCreateADB(sdaiType, &value);
-            sdaiPutADBTypePath(adb, 1, typeName);
-            sdaiPutAttrBN(m_instance, attrName, sdaiADB, adb);
-            sdaiDeleteADB(adb);
-        }
-
     };
 
+
+    //
+    // Entities forward declarations
+    //
+//## TemplateUtilityTypes    - this section just to make templates syntax correc
+
+    typedef double      SimpleType;
+    typedef const char* StringType;
+    typedef int         SelectType;
+    typedef SdaiEntity  REF_ENTITY;    
+
+#define sdaiTYPE sdaiREAL
+
+//## TEMPLATE: ClassForwardDeclaration
+    class ENTITY_NAME;
+//## TEMPLATE: BeginDefinedTypes
+
+    //
+    // Defined types
+    // 
+//## TEMPLATE: DefinedType
+    typedef SimpleType DEFINED_TYPE_NAME;
+//## TEMPLATE: BeginEnumerations
+
+    //
+    // Enumerations
+    //
+//## BeginEnumeration
+
+    enum ENUMERATION_NAME
+    {
+//## EnumerationElement
+        ENUMERATION_NAME_ENUMERATION_ELEMENT=1234,
+//## EndEnumeration
+        ENUMERATION_NAME___unk = -1
+    };
+    static const char* ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
+//## TEMPLATE: BeginEntities
+//## TEMPLATE: SelectAccessorBegin
+
+    class TYPE_NAME_accessor : protected SelectAccess
+    {
+    public:
+        TYPE_NAME_accessor(SdaiInstance instance, const char* attrName) : SelectAccess(instance, attrName) {}
+//## SelectGetSimpleValue
+        Nullable<SimpleType> _SimpleType() { return getSimpleValue<SimpleType>("SimpleType", sdaiTYPE); }
+//## SelectSetSimpleValue
+        void _SimpleType(SimpleType value) { setSimpleValue("SimpleType", sdaiTYPE, value); }
+//## SelectGetStringValue
+        StringType _StringType() { return getStringValue("StringType"); }
+//## SelectSetStringValue
+        void _StringType(StringType value) { setStringValue("StringType", value); }
+//## SelectNested
+        TYPE_NAME_accessor _TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
+//## SelectAccessorEnd
+    };
 //## TEMPLATE: BeginEntity
 
     /// <summary>
@@ -192,9 +249,9 @@ namespace NAMESPACE_NAME
         
 //## GetSimpleAttribute
 
-        Nullable<double> get_ATTR_NAME() { double val = 0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiREAL, &val)) return val; else return Nullable<double>(); }
+        Nullable<SimpleType> get_ATTR_NAME() { SimpleType val = 0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &val)) return val; else return Nullable<SimpleType>(); }
 //## SetSimpleAttribute
-        void set_ATTR_NAME(double value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiREAL, &value); }
+        void set_ATTR_NAME(SimpleType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &value); }
 //## GetSimpleAttributeString
 
         StringType get_attr_NAME() { return get_sdaiSTRING("ATTR_NAME"); }
@@ -207,13 +264,11 @@ namespace NAMESPACE_NAME
         void set_Attr_NAME(REF_ENTITY inst);
 //## GetEnumAttribute
 
-        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = get_sdaiENUM("ATTR_NAME", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
+        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = get_sdaiENUM("ATTR_NAME", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
 //## SetEnumAttribute
         void set_ATTR_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
-//## GetSelectSimpleAttribute
-        Nullable<double> get_ATTR_NAME_TYPE_NAME() { return getSelectValue<double>("ATTR_NAME", "TYPE_NAME", sdaiREAL); }
-//## SetSelectSimpleAttribute
-        void set_ATTR_NAME_TYPE_NAME(double value) { setSelectValue("ATTR_NAME", "TYPE_NAME", sdaiREAL, value); }
+//## SelectAccessor
+        TYPE_NAME_accessor getOrset_ATTR_NAME() { return TYPE_NAME_accessor(m_instance, "ATTR_NAME"); }
 //## EndEntity
     };
 

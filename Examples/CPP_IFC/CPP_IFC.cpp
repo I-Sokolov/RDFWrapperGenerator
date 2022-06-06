@@ -73,12 +73,70 @@ int main()
     curve.set_Degree(5);
     ASSERT(curve.get_Degree().Value() == 5);
   
-    /*
-    IfcMeasureWithUnit measure = IfcMeasureWithUnit::Create(ifcModel);
-    Nullable<double> dval = measure.get_ValueComponent();
-    measure.set_ValueComponent_IfcRatioMeasure(0.5);
-    dval = measure.get_ValueComponent();
-    */
+    
+    //
+    // SELECT tests
+    //
+    IfcMeasureWithUnit measureWithUnit = IfcMeasureWithUnit::Create(ifcModel);
+
+    //numeric value (sequence notation)
+    Nullable<IfcAbsorbedDoseMeasure> dval = measureWithUnit.get_ValueComponent()._IfcMeasureValue()._IfcRatioMeasure();
+    //Nullable<double> works also good
+    ASSERT(dval.IsNull());
+
+    //numeric value (alteranative notation)
+    IfcMeasureValue_getter getMeasureValue(measureWithUnit, "ValueComponent");
+    dval = getMeasureValue._IfcRatioMeasure();
+    ASSERT(dval.IsNull());
+
+    //text based value
+    IfcDescriptiveMeasure sval = getMeasureValue._IfcDescriptiveMeasure();
+    ASSERT(sval == NULL);
+
+    IfcText txt = measureWithUnit.get_ValueComponent()._IfcSimpleValue()._IfcText();
+    ASSERT(txt == NULL);
+
+    //set to numeric
+    measureWithUnit.set_ValueComponent()._IfcMeasureValue()._IfcRatioMeasure(0.5);
+    
+    dval = measureWithUnit.get_ValueComponent()._IfcMeasureValue()._IfcRatioMeasure();
+    ASSERT(dval.Value() == 0.5);
+    
+    sval = measureWithUnit.get_ValueComponent()._IfcMeasureValue()._IfcDescriptiveMeasure();
+    ASSERT(sval == NULL);
+
+    txt = measureWithUnit.get_ValueComponent()._IfcSimpleValue()._IfcText();
+    ASSERT(txt == NULL);
+
+    //set DescriptiveMeasure
+    measureWithUnit.set_ValueComponent()._IfcMeasureValue()._IfcDescriptiveMeasure("my descreptive measure");
+    
+    dval = measureWithUnit.get_ValueComponent()._IfcMeasureValue()._IfcRatioMeasure();
+    ASSERT(dval.IsNull());
+
+    sval = measureWithUnit.get_ValueComponent()._IfcMeasureValue()._IfcDescriptiveMeasure();
+    ASSERT(0==strcmp (sval, "my descreptive measure"));
+
+    txt = measureWithUnit.get_ValueComponent()._IfcSimpleValue()._IfcText();
+    ASSERT(txt == NULL);
+
+    //set text
+    measureWithUnit.set_ValueComponent()._IfcSimpleValue()._IfcText("my text");
+
+    dval = measureWithUnit.get_ValueComponent()._IfcMeasureValue()._IfcRatioMeasure();
+    ASSERT(dval.IsNull());
+
+    sval = measureWithUnit.get_ValueComponent()._IfcMeasureValue()._IfcDescriptiveMeasure();
+    ASSERT(sval == NULL);
+
+    txt = measureWithUnit.get_ValueComponent()._IfcSimpleValue()._IfcText();
+    ASSERT(0==strcmp (txt, "my text"));
+
+    //'short' access
+    //dval = measure.get_ValueComponent()._double();
+
+    //dval = measure.get_ValueComponent();
+    
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 
 

@@ -13,6 +13,8 @@ namespace NAMESPACE_NAME
 {
 //## TemplateUtilityTypes
 using REF_ENTITY = ENTITY_NAME;
+using SimpleType = System.Double;
+
 //## TEMPLATE: ClassForwardDeclaration (not really required in C#)
 //## TEMPLATE: BeginDefinedTypes
 //## TEMPLATE: DefinedType
@@ -63,9 +65,9 @@ using REF_ENTITY = ENTITY_NAME;
 
 //## GetSimpleAttribute
         
-        public double? get_ATTR_NAME() { double value; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiREAL, out value)) return value; else return null; } 
+        public SimpleType? get_ATTR_NAME() { SimpleType value; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, out value)) return value; else return null; } 
 //## SetSimpleAttribute
-        public void set_ATTR_NAME(double value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiREAL, ref value); }
+        public void set_ATTR_NAME(SimpleType value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, ref value); }
 //## GetSimpleAttributeString
         
         public string get_attr_NAME() { return getString("ATTR_NAME"); } 
