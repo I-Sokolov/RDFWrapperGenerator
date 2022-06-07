@@ -274,23 +274,33 @@ namespace NAMESPACE_NAME
     public:
         TYPE_NAME_accessor(SdaiInstance instance, const char* attrName) : SelectAccess(instance, attrName) {}
 //## SelectGetSimpleValue
-        Nullable<SimpleType> _SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
+        Nullable<SimpleType> select_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
 //## SelectSetSimpleValue
-        void _SimpleType(SimpleType value) { setSimpleValue("TypeNameUpper", sdaiTYPE, value); }
+        void select_SimpleType(SimpleType value) { setSimpleValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectGetStringValue
-        StringType _StringType() { return getStringValue("TypeNameUpper"); }
+        StringType select_StringType() { return getStringValue("TypeNameUpper"); }
 //## SelectSetStringValue
-        void _StringType(StringType value) { setStringValue("TypeNameUpper", value); }
+        void select_StringType(StringType value) { setStringValue("TypeNameUpper", value); }
 //## SelectGetEntity
-        REF_ENTITY _REF_ENTITY();
+        REF_ENTITY select_REF_ENTITY();
 //## SelectSetEntity
-        void _REF_ENTITY(REF_ENTITY inst);
+        void select_REF_ENTITY(REF_ENTITY inst);
 //## SelectGetEnumeration
-        Nullable<ENUMERATION_NAME> _ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
+        Nullable<ENUMERATION_NAME> select_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
 //## SelectSetEnumeration
-        void _ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; setEnumerationValue("TypeNameUpper", val); }
+        void select_ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; setEnumerationValue("TypeNameUpper", val); }
 //## SelectNested
-        TYPE_NAME_accessor _TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
+        TYPE_NAME_accessor select_TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
+//## SelectGetAsDouble
+        Nullable<double> as_double() { double val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiREAL, &val)) return val; else return Nullable<double>(); }
+//## SelectGetAsInt
+        Nullable<int64_t> as_int() { int64_t val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINTEGER, &val)) return val; else return Nullable<int64_t>(); }
+//## SelectGetAsBool
+        Nullable<bool> as_bool() { bool val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiBOOLEAN, &val)) return val; else return Nullable<bool>(); }
+//## SelectGetAsString
+        const char* as_text() { const char* val = NULL; sdaiGetAttrBN(m_instance, m_attrName, sdaiSTRING, &val); return val; }
+//## SelectGetAsInstance
+        SdaiInstance as_instance() { SdaiInstance val = NULL; sdaiGetAttrBN(m_instance, m_attrName, sdaiINSTANCE, &val); return val; }
 //## SelectAccessorEnd
     };
 //## TEMPLATE: BeginEntity
@@ -342,9 +352,9 @@ namespace NAMESPACE_NAME
     };
 
 //## SelectGetEntityImplementation
-    REF_ENTITY TYPE_NAME_accessor::_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
+    REF_ENTITY TYPE_NAME_accessor::select_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
 //## SelectSetEntityImplementation
-    void TYPE_NAME_accessor::_REF_ENTITY(REF_ENTITY inst) { setEntityInstance("TypeNameUpper", inst); }
+    void TYPE_NAME_accessor::select_REF_ENTITY(REF_ENTITY inst) { setEntityInstance("TypeNameUpper", inst); }
 //## GetEntityAttributeImplementation
     REF_ENTITY ENTITY_NAME::get_Attr_NAME() { SdaiInstance inst = 0; sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, &inst); return inst; }
 //## SetEntityAttributeImplementation

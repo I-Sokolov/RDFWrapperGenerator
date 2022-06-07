@@ -21,7 +21,7 @@ namespace RDFWrappers
             this.inst = inst;
         }
 
-        public HashSet<ExpressHandle> GetVariants(bool resolveNestedSelects)
+        private HashSet<ExpressHandle> GetVariants(bool resolveNestedSelects)
         {
             var ret = new HashSet<ExpressHandle>();
 
@@ -70,6 +70,56 @@ namespace RDFWrappers
             return ret;
         }
 
+        private HashSet<Generator.Template> CollectAsTypes ()
+        {
+            var ret = new HashSet<Generator.Template>();
+
+            int i = 0;
+            ExpressHandle variant;
+            while (0 != (variant = ifcengine.engiGetSelectElement(inst, i++)))
+            {
+                enum_express_declaration declType = ifcengine.engiGetDeclarationType(variant);
+
+                switch (declType)
+                {
+                    case enum_express_declaration.__ENTITY:
+                        ret.Add(Generator.Template.SelectGetAsInstance);
+                        break;
+
+                    case enum_express_declaration.__ENUM:
+                        //ret.Add(Generator.Template.SelectGetAsString);
+                        break;
+
+                    case enum_express_declaration.__SELECT:
+                        var nestedSelect = new ExpressSelect(variant);
+                        foreach (var nestedType in nestedSelect.CollectAsTypes())
+                        {
+                            ret.Add(nestedType);
+                        }
+                        break;
+
+                    case enum_express_declaration.__DEFINED_TYPE:
+                        var definedType = new ExpressDefinedType(variant);
+                        var cstype = definedType.GetBaseCSType();
+                        if (cstype!=null)
+                        {
+                            switch (cstype)
+                            {
+                                case "double": ret.Add(Generator.Template.SelectGetAsDouble); break;
+                                case "Int64": ret.Add(Generator.Template.SelectGetAsInt); break;
+                                case "bool": ret.Add(Generator.Template.SelectGetAsBool); break;
+                                case "string": ret.Add(Generator.Template.SelectGetAsString); break;
+                                default: throw new ApplicationException("unexpected cs type " + cstype);
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return ret;
+
+        }
+
         public void WriteAttribute(Generator generator, ExpressAttribute attr)
         {
             generator.m_writer.WriteLine();
@@ -116,6 +166,19 @@ namespace RDFWrappers
                     WriteAccessorMethod(generator, variant, bGet);
                 }
 
+                if (bGet)
+                {
+                    var astypes = CollectAsTypes();
+                    if (astypes.Count > 0)
+                    {
+                        generator.m_writer.WriteLine();
+                        foreach (var astype in astypes)
+                        {
+                            generator.WriteByTemplate(astype);
+                        }
+                    }
+                }
+
                 generator.WriteByTemplate(Generator.Template.SelectAccessorEnd);
             }
 
@@ -151,7 +214,6 @@ namespace RDFWrappers
                     break;
             }
         }
-
         
         private void WriteAccessorMethod(Generator generator, ExpressEnumeraion enumType, bool bGet)
         {
