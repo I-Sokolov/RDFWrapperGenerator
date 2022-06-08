@@ -179,7 +179,6 @@ int main()
     setPerson.set_Identification("justApeson");
     
     actor.set_TheActor().select_IfcPerson(setPerson);
-
     person = actor.get_TheActor().select_IfcPerson();
     ASSERT(setPerson == person);
 
@@ -188,6 +187,43 @@ int main()
 
     instance = actor.get_TheActor().as_instance();
     ASSERT(instance == person);
+
+    //
+    // Aggregations
+    //
+
+    //simple
+    auto point = IfcCartesianPoint::Create(ifcModel);
+    
+    std::list<double> coords; 
+    point.get_Coordinates(coords);
+    ASSERT(coords.empty());
+
+    double my2DPoint[] = {1.0,2.0}; //can use array to set
+    point.set_Coordinates(my2DPoint, 2); 
+
+    coords.clear();
+    point.get_Coordinates(coords);
+    ASSERT(coords.size() == 2 && coords.front() == 1 && coords.back() == 2);
+
+    coords.push_back(3);
+    point.set_Coordinates(coords); //can use sdt::list to set
+    ASSERT(coords.size() == 3 && coords.front() == 1 && coords.back() == 3);
+
+    //string
+    std::list<std::string> middleNames;
+    person.get_MiddleNames(middleNames);
+    ASSERT(middleNames.empty());
+
+    const char* DaliMiddleNames[] = {"Domingo", "Felipe", "Jacinto"};   
+    person.set_MiddleNames(DaliMiddleNames, 3);
+
+    person.get_MiddleNames(middleNames);
+    ASSERT(middleNames.size() == 3);
+    int i = 0;
+    for (auto m : middleNames) {
+        ASSERT(0 == strcmp(m.c_str(), DaliMiddleNames[i++]));
+    }
 
     //
     

@@ -35,6 +35,7 @@ namespace RDFWrappers
         public const string KWD_TYPE_NAME = "TYPE_NAME";
         public const string KWD_ACCESSOR = "Accessor";
         public const string KWD_GETSET = "getOrset";
+        public const string KWD_AGGR_TYPE = "AGGR_TYPE";
 
         /// <summary>
         /// 
@@ -79,6 +80,10 @@ namespace RDFWrappers
             GetEnumAttribute,
             SetEnumAttribute,
             SelectAccessor,
+            AggregationGetSimple,
+            AggregationSetSimple,
+            AggregationGetString,
+            AggregationSetString,
             EndEntity,
             SelectGetEntityImplementation,
             SelectSetEntityImplementation,
@@ -93,7 +98,7 @@ namespace RDFWrappers
         /// <summary>
         /// 
         /// </summary>
-        bool m_cs; //cs or cpp
+        public bool m_cs; //cs or cpp
         string m_TInt64;
         string m_namespace;
 
@@ -422,6 +427,8 @@ namespace RDFWrappers
             {
                 code = code.Replace("string", "const char*");
                 code = code.Replace("const const", "const");
+                code = code.Replace("<const char*>", "<string>");
+                code = code.Replace("std::const char*", "std::string");
                 code = code.Replace("Int64", "int64_t");
             }
 
@@ -451,11 +458,8 @@ namespace RDFWrappers
 
                         case RDF.enum_express_aggr.__ARRAY:
                         case RDF.enum_express_aggr.__LIST:
-                            WriteListAggregation(attr);
-                            break;
-
                         case RDF.enum_express_aggr.__SET:
-                            WriteSetAggregation(attr);
+                            (new Aggregation (this,attr)).Write();
                             break;
 
                         case RDF.enum_express_aggr.__BAG:
@@ -507,7 +511,7 @@ namespace RDFWrappers
         private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
         {
             m_replacements[KWD_SimpleType] = (!m_cs && definedType !=null) ? definedType : baseType;
-            m_replacements[KWD_StringType] = (baseType == "string" && definedType != null) ? definedType : "const char*";
+            m_replacements[KWD_StringType] = m_replacements[KWD_SimpleType]; //just different words in template
             m_replacements[KWD_sdaiTYPE] = sdaiType;
 
             Template tplGet = baseType == "string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute;
@@ -554,16 +558,6 @@ namespace RDFWrappers
         {
             m_replacements[KWD_ENUM_TYPE] = domain;
             WriteGetSet(Template.GetEnumAttribute, Template.SetEnumAttribute, attr.inverse);
-        }
-
-        private void WriteListAggregation(ExpressAttribute attr)
-        { 
-            //TODO
-        }
-
-        private void WriteSetAggregation(ExpressAttribute attr)
-        {
-            //TODO
         }
 
         /// <summary>

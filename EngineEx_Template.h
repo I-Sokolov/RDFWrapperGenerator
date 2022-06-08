@@ -5,6 +5,10 @@
 #define __RDF_LTD__NAMESPACE_NAME_H
 
 #include    <assert.h>
+#include    <list>
+#include    <set>
+#include    <string>
+
 #include	"ifcengine.h"
 
 namespace NAMESPACE_NAME
@@ -208,24 +212,118 @@ namespace NAMESPACE_NAME
         operator SdaiInstance() const { return m_instance; }
 
     protected:
-        // 
-        // 
-        const char* get_sdaiSTRING(const char* attrName)
-        {
-            const char* str = NULL;
-            if (sdaiGetAttrBN(m_instance, attrName, sdaiSTRING, (void*) &str))
-                return str;
-            else
-                return NULL;
-        }
-
         //
         //
-        int get_sdaiENUM(const char* attrName, const char* rEnumValues[])
+        int getENUM(const char* attrName, const char* rEnumValues[])
         {
             const char* value = NULL;
             sdaiGetAttrBN(m_instance, attrName, sdaiENUM, (void*) &value);
             return EnumerationNameToIndex(rEnumValues, value);
+        }
+
+        //
+        //
+        template <typename T> void getListOfSimple(std::list<T>& lst, const char* attrName, int_t sdaiType)
+        {
+            int_t* aggr = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiAGGR, &aggr);
+            int_t  cnt = sdaiGetMemberCount(aggr);
+            for (int_t i = 0; i < cnt; i++) {
+                T val = 0;
+                /*must be if*/ engiGetAggrElement(aggr, i, sdaiType, &val); 
+                    lst.push_back(val);
+            }
+        }
+
+        //
+        //
+        void getListOfString(std::list<std::string>& lst, const char* attrName)
+        {
+            int_t* aggr = NULL;
+            sdaiGetAttrBN(m_instance, attrName, sdaiAGGR, &aggr);
+            int_t  cnt = sdaiGetMemberCount(aggr);
+            for (int_t i = 0; i < cnt; i++) {
+                const char* val = NULL;
+                /*must be if*/ engiGetAggrElement(aggr, i, sdaiSTRING, &val);
+                lst.push_back(val);
+            }
+        }
+
+        //
+        //
+        template <typename T, typename List> void setListOfSimple(List const& lst, const char* attrName, int_t sdaiType)
+        {
+            SdaiInstance entity = sdaiGetInstanceType(m_instance);
+            if (entity) {
+                void* attr = sdaiGetAttrDefinition(entity, attrName);
+                if (attr) {
+                    int_t* aggr = sdaiCreateAggr(m_instance, attr);
+                    for (auto it = lst.begin(); it != lst.end(); it++) {
+                        T val = *it;
+                        sdaiAppend((int_t) aggr, sdaiType, &val);
+                    }
+                    //sdaiPutAttr(m_instance, attr, sdaiAGGR, &aggr);
+                }
+            }
+        }
+
+        //
+        //
+        void setListOfString(std::list<std::string> const& lst, const char* attrName)
+        {
+            SdaiInstance entity = sdaiGetInstanceType(m_instance);
+            if (entity) {
+                void* attr = sdaiGetAttrDefinition(entity, attrName);
+                if (attr) {
+                    int_t* aggr = sdaiCreateAggr(m_instance, attr);
+                    for (auto it = lst.begin(); it != lst.end(); it++) {
+                        const char* val = it->c_str();
+                        sdaiAppend((int_t) aggr, sdaiSTRING, val);
+                    }
+                    //sdaiPutAttr(m_instance, attr, sdaiAGGR, &aggr);
+                }
+            }
+        }
+
+        //
+        //
+        template <typename T, typename List> void setListOfRef(List const& lst, const char* attrName, int_t sdaiType)
+        {
+            SdaiInstance entity = sdaiGetInstanceType(m_instance);
+            if (entity) {
+                void* attr = sdaiGetAttrDefinition(entity, attrName);
+                if (attr) {
+                    int_t* aggr = sdaiCreateAggr(m_instance, attr);
+                    for (auto it = lst.begin(); it != lst.end(); it++) {
+                        T val = *it;
+                        sdaiAppend((int_t) aggr, sdaiType, val);
+                    }
+                    //sdaiPutAttr(m_instance, attr, sdaiAGGR, &aggr);
+                }
+            }
+        }
+
+        //
+        //
+        template <typename T> void setListOfSimple(const T* arr, size_t n, const char* attrName, int_t sdaiType)
+        {
+            std::list<T> lst;
+            for (int i = 0; i < n; i++) {
+                lst.push_back(arr[i]);
+            }
+            setListOfSimple<T>(lst, attrName, sdaiType);
+        }
+
+        //
+        //
+        void setListOfString(const char** arr, size_t n, const char* attrName)
+        {
+            std::list<std::string> lst;
+            for (int i = 0; i < n; i++) {
+                std::string s(arr[i]);
+                lst.push_back(s);
+            }
+            setListOfString(lst, attrName);
         }
     };
 
@@ -240,7 +338,8 @@ namespace NAMESPACE_NAME
     typedef int         SelectType;
     typedef SdaiEntity  REF_ENTITY;    
 
-#define sdaiTYPE sdaiREAL
+#define sdaiTYPE  sdaiREAL
+#define AGGR_TYPE list
 
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
@@ -324,8 +423,7 @@ namespace NAMESPACE_NAME
         /// <summary>
         /// Create new instace of ENTITY_NAME and returns object of this C++ class to interact with
         /// </summary>
-        static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }
-        
+        static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }        
 //## GetSimpleAttribute
 
         Nullable<SimpleType> get_ATTR_NAME() { SimpleType val = 0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &val)) return val; else return Nullable<SimpleType>(); }
@@ -333,7 +431,7 @@ namespace NAMESPACE_NAME
         void set_ATTR_NAME(SimpleType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &value); }
 //## GetSimpleAttributeString
 
-        StringType get_attr_NAME() { return get_sdaiSTRING("ATTR_NAME"); }
+        StringType get_attr_NAME() { StringType val = NULL; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, &val)) return val; else return NULL; }
 //## SetSimpleAttributeString
         void set_ATTR_NAME(StringType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, value); }
 //## GetEntityAttribute
@@ -343,11 +441,23 @@ namespace NAMESPACE_NAME
         void set_Attr_NAME(REF_ENTITY inst);
 //## GetEnumAttribute
 
-        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = get_sdaiENUM("ATTR_NAME", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
+        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = getENUM("ATTR_NAME", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
 //## SetEnumAttribute
         void set_ATTR_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
 //## SelectAccessor
         TYPE_NAME_accessor getOrset_ATTR_NAME() { return TYPE_NAME_accessor(m_instance, "ATTR_NAME"); }
+//## AggregationGetSimple
+
+        void get_ATTr_NAME(std::list<SimpleType>& lst) { getListOfSimple(lst, "ATTR_NAME", sdaiTYPE); }
+//## AggregationSetSimple
+        void set_ATTr_NAME(std::AGGR_TYPE<SimpleType> const& lst) { setListOfSimple<SimpleType>(lst, "ATTR_NAME", sdaiTYPE); }
+        void set_ATTr_NAME(const SimpleType* arr, size_t n) { setListOfSimple<SimpleType>(arr, n, "ATTR_NAME", sdaiTYPE); }
+//## AggregationGetString
+
+        void get_ATTr_NAME(std::list<std::string>& lst) { getListOfString(lst, "ATTR_NAME"); }
+//## AggregationSetString
+        void set_ATTr_NAME(std::AGGR_TYPE<std::string> const& lst) { setListOfString(lst, "ATTR_NAME"); }
+        void set_ATTr_NAME(const char** arr, size_t n) { setListOfString(arr, n, "ATTR_NAME"); }
 //## EndEntity
     };
 

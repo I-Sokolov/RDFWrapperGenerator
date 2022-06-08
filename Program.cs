@@ -53,6 +53,7 @@ namespace RDFWrappers
                     //options.schema = "ap242ed2_mim_lf_v1.101.exp";
                     //options.schema = new SdaiSchema("AP242");
                     options.schema = "IFC4";
+                    //options.schema = "IFC2x3";
                 }
 
                 string baseName = System.IO.Path.GetFileNameWithoutExtension (options.schema);
