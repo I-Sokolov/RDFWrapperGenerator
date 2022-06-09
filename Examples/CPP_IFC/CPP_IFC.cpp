@@ -226,7 +226,35 @@ int main()
     }
 
     //
+    // LIST of LIST
+    //
     
+    auto pointList = IfcCartesianPointList3D::Create(ifcModel);
+    
+    ListOfListOfIfcLengthMeasure coordList;
+    
+    pointList.get_CoordList(coordList);
+    ASSERT(coordList.empty());
+
+    //point (1,0.1)
+    coordList.push_back(ListOfIfcLengthMeasure());
+    coordList.back().push_back(1);
+    coordList.back().push_back(0);
+    coordList.back().push_back(1);
+
+    //point (0,1,0)
+    coordList.push_back(ListOfIfcLengthMeasure());
+    coordList.back().push_back(0);
+    coordList.back().push_back(1);
+    coordList.back().push_back(0);
+
+    pointList.set_CoordList(coordList);
+    
+    ListOfListOfIfcLengthMeasure coordListCheck;
+    pointList.get_CoordList(coordListCheck);
+    ASSERT(coordList == coordListCheck);
+
+
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 
 
