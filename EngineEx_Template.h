@@ -15,7 +15,7 @@ namespace NAMESPACE_NAME
 
 
     /// <summary>
-    /// Provides utility methods to interact with a genetic instnace of OWL class
+    /// Provides utility methods to interact with a genetic instance of OWL class
     /// You also can use object of this class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Instance
@@ -162,7 +162,7 @@ namespace NAMESPACE_NAME
 //## TEMPLATE: BeginWrapperClass
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CLASS_NAME
+    /// Provides utility methods to interact with an instance of OWL class CLASS_NAME
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class CLASS_NAME : public /*BASE CLASS*/Instance

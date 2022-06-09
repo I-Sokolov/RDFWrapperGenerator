@@ -13,7 +13,7 @@ namespace NAMESPACE_NAME
 //## TEMPLATE: BeginWrapperClass
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CLASS_NAME
+    /// Provides utility methods to interact with an instance of OWL class CLASS_NAME
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class CLASS_NAME : /*BASE CLASS*/Instance
@@ -140,7 +140,7 @@ namespace NAMESPACE_NAME
 //## TEMPLATE: EndFile template part
 
     /// <summary>
-    /// Provides utility methods to interact with a genetic instnace of OWL class
+    /// Provides utility methods to interact with a genetic instance of OWL class
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Instance : IEquatable<Instance>, IComparable, IComparable<Instance>
