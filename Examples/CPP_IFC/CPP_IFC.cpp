@@ -192,7 +192,7 @@ int main()
     // Aggregations
     //
 
-    //simple
+    //double
     auto point = IfcCartesianPoint::Create(ifcModel);
     
     std::list<double> coords; 
@@ -228,7 +228,7 @@ int main()
     //
     // LIST of LIST
     //
-    
+#if 0
     auto pointList = IfcCartesianPointList3D::Create(ifcModel);
     
     ListOfListOfIfcLengthMeasure coordList;
@@ -253,7 +253,7 @@ int main()
     ListOfListOfIfcLengthMeasure coordListCheck;
     pointList.get_CoordList(coordListCheck);
     ASSERT(coordList == coordListCheck);
-
+#endif
 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 
