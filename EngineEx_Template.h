@@ -6,6 +6,7 @@
 
 #include    <assert.h>
 #include	"engine.h"
+#include    "engineinline.h"
 
 namespace NAMESPACE_NAME
 {
@@ -54,14 +55,7 @@ namespace NAMESPACE_NAME
         Instance(int64_t instance, const char* cls)
         {
             m_instance = instance;
-#ifdef _DEBUG
-            if (m_instance != 0 && cls != NULL) {
-                int64_t clsid1 = GetInstanceClass(m_instance);
-                int64_t model = GetModel(m_instance);
-                int64_t clsid2 = GetClassByName(model, cls);
-                assert(clsid1 == clsid2);
-            }
-#endif
+            assert(cls == NULL/*do not check*/ || ::IsInstanceOfClass(instance, cls));
         }
 
 

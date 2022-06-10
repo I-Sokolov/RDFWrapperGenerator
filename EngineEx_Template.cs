@@ -177,15 +177,7 @@ namespace NAMESPACE_NAME
         public Instance(Int64 instance, string cls)
         {
             m_instance = instance;
-#if DEBUG
-            if (m_instance != 0 && cls != null)
-            {
-                var clsid1 = engine.GetInstanceClass(m_instance);
-                var model = engine.GetModel(m_instance);
-                var clsid2 = engine.GetClassByName(model, cls);
-                System.Diagnostics.Trace.Assert(clsid1 == clsid2);
-            }
-#endif
+            System.Diagnostics.Debug.Assert(cls == null/*do not check*/ || engine.IsInstanceOfClass(instance, cls));
         }
 
 
