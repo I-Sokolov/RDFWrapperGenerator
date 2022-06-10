@@ -5016,5 +5016,35 @@ namespace RDF
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "GetParentsByIterator")]
 		public static extern Int64 GetParentsByIterator(Int64 owlClassOrRdfProperty, Int64 parentOwlClassOrRdfProperty);
-    }
+
+		/// <summary>
+		///		IsKindOfClass                           (http://rdf.bg/gkdoc/CS64/IsKindOfClass.html)
+		///
+		///	...
+		/// </summary>
+		public static bool IsKindOfClass(Int64 owlMyClass, Int64 owlClass)
+		{
+			if (owlMyClass == owlClass) return true;
+			var owlParentClass = GetClassParentsByIterator(owlMyClass, 0);
+			while (owlParentClass != 0)
+			{
+				if (IsKindOfClass(owlParentClass, owlClass)) return true;
+				owlParentClass = GetClassParentsByIterator(owlMyClass, owlParentClass);
+			}
+			return false;
+		}
+
+		/// <summary>
+		///		IsInstanceOfClass                           (http://rdf.bg/gkdoc/CS64/IsInstanceOfClass.html)
+		///
+		///	...
+		/// </summary>
+		public static bool IsInstanceOfClass(Int64 owlInstance, string name)
+		{
+			return IsKindOfClass(GetInstanceClass(owlInstance), GetClassByName(GetModel(owlInstance), name));
+		}
+
+
+
+	}
 }

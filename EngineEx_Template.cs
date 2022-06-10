@@ -108,15 +108,7 @@ using SimpleType = System.Double;
         protected Entity(SdaiInstance instance, string entityName)
         {
             m_instance = instance;
-#if DEBUG
-            if (m_instance != 0 && entityName != null)
-            {
-                SdaiEntity instType = ifcengine.sdaiGetInstanceType(m_instance);
-                SdaiModel model = ifcengine.engiGetEntityModel(instType);
-                SdaiEntity entity = ifcengine.sdaiGetEntity(model, entityName);
-                Debug.Assert(instType == entity);
-            }
-#endif
+            System.Diagnostics.Debug.Assert(entityName == null/*do not check*/ || ifcengine.IsInstanceOfClass(instance, entityName));
         }
 
 

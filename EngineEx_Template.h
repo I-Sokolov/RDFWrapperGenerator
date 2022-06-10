@@ -10,6 +10,7 @@
 #include    <string>
 
 #include	"ifcengine.h"
+#include    "engineinline.h"
 
 namespace NAMESPACE_NAME
 {
@@ -195,14 +196,7 @@ namespace NAMESPACE_NAME
         Entity(SdaiInstance instance, const char* entityName)
         {
             m_instance = instance;
-#ifdef _DEBUG
-            if (m_instance != 0 && entityName != NULL) {
-                SdaiEntity instType = sdaiGetInstanceType(m_instance);
-                SdaiModel model = engiGetEntityModel(instType);
-                SdaiEntity entity = sdaiGetEntity(model, entityName);
-                assert(instType == entity);
-            }
-#endif
+            assert(entityName == NULL/*do not check*/ || IsInstanceOfClass(instance, entityName));
         }
 
 
