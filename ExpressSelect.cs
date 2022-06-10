@@ -108,7 +108,7 @@ namespace RDFWrappers
                                 case "double": ret.Add(Generator.Template.SelectGetAsDouble); break;
                                 case "Int64": ret.Add(Generator.Template.SelectGetAsInt); break;
                                 case "bool": ret.Add(Generator.Template.SelectGetAsBool); break;
-                                case "string": ret.Add(Generator.Template.SelectGetAsString); break;
+                                case "string": ret.Add(Generator.Template.SelectGetAsText); break;
                                 default: throw new ApplicationException("unexpected cs type " + cstype);
                             }
                         }

@@ -430,9 +430,9 @@ namespace NAMESPACE_NAME
     //
     // Aggregations
     //
-//## AggregationSimpleType
+//## AggregationOfSimple
     typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationOfSimpleType;
-//## AggregationTextType
+//## AggregationOfText
     typedef AggregationOfText<std::string> AggregationOfTextType;
 //## AggregationOfAggregation
     typedef AggregationOfAggregationType<AggregationOfSimpleType> AggregationOfTYPE_NAME;
