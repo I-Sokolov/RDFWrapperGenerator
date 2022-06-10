@@ -2128,16 +2128,48 @@ namespace RDF
 		public static extern byte IsInstance(Int64 owlInstance);
 
 		/// <summary>
+		///		IsKindOfClass                           (http://rdf.bg/gkdoc/CS64/IsKindOfClass.html)
+		///
+		///	...
+		/// </summary>
+		public static bool IsKindOfClass(Int64 owlMyClass, Int64 owlClass)
+		{
+			if (owlMyClass == owlClass) return true;
+			var owlParentClass = GetClassParentsByIterator(owlClass, 0);
+			while (owlParentClass != 0)
+			{
+				if (IsKindOfClass(owlMyClass, owlParentClass)) return true;
+				owlParentClass = GetClassParentsByIterator(owlClass, owlParentClass);
+			}
+			return false;
+		}
+
+		/// <summary>
 		///		IsInstanceOfClass                           (http://rdf.bg/gkdoc/CS64/IsInstanceOfClass.html)
 		///
 		///	...
 		/// </summary>
 		public static bool IsInstanceOfClass(Int64 owlInstance, string name)
 		{
-			return GetInstanceClass(owlInstance) == GetClassByName(GetModel(owlInstance), name);
+			return IsKindOfClass (GetInstanceClass(owlInstance), GetClassByName(GetModel(owlInstance), name));
 		}
 
 		public static bool IsInstanceOfClass(Int64 owlInstance, byte[] name)
+		{
+			return IsKindOfClass(owlInstance, GetClassByName(GetModel(owlInstance), name));
+		}
+
+		/// <summary>
+		///		IsInstanceOfClassExact                           (http://rdf.bg/gkdoc/CS64/IsInstanceOfClassExact.html)
+		///
+		///	...
+		/// </summary>
+		public static bool IsInstanceOfClassExact(Int64 owlInstance, string name)
+		{
+			return GetInstanceClass(owlInstance) == GetClassByName(GetModel(owlInstance), name);
+		}
+
+		public static bool IsInstanceOfClassExact(Int64 owlInstance, byte[] name)
 		{
 			return GetInstanceClass(owlInstance) == GetClassByName(GetModel(owlInstance), name);
 		}
