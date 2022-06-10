@@ -97,19 +97,6 @@ static	inline	wchar_t	* GetNameOfClassWEx(
 	return	name;
 }
 
-#ifdef NDEBUG
-#define AssertInstanceClass (owlInstance,className) /*noop*/
-#else
-static inline void AssertInstanceClass(int64_t owlInstance, const char* className)
-{
-	int64_t thisClass = GetInstanceClass(owlInstance);	
-	const char* thisClassName = GetNameOfClass(thisClass);
-	int64_t expectedClass = GetClassByName(GetModel(owlInstance), className);
-	assert(thisClass == expectedClass);
-}
-#endif
-
-
 static	inline	char	* GetNameOfProperty(
 									int64_t				rdfProperty
 								)
@@ -374,6 +361,36 @@ static	inline	int64_t	SetObjectProperty(
 				);
 }
 
+static	inline	bool	IsKindOfClass(
+									int64_t				owlMyClass,
+									int64_t				owlClass
+)
+{
+	if (owlMyClass == owlClass) return true;
+	int64_t owlParentClass = GetClassParentsByIterator(owlClass, 0);
+	while (owlParentClass) {
+		if (IsKindOfClass(owlMyClass, owlParentClass)) return  true;
+		owlParentClass = GetClassParentsByIterator(owlClass, owlParentClass);
+	}
+	return	false;
+}
+
+static	inline	bool	IsInstanceOfClass(
+									int64_t				owlInstance,
+									const char			* name
+								)
+{
+	return	IsKindOfClass(GetInstanceClass(owlInstance), GetClassByName(GetModel(owlInstance), name));
+}
+
+static	inline	bool	IsInstanceOfClassExact(
+									int64_t				owlInstance,
+									const char			* name
+								)
+{
+	return	GetInstanceClass(owlInstance) == GetClassByName(GetModel(owlInstance), name);
+}
+
 static	inline	int64_t	CalculateInstance(
 									int64_t				owlInstance,
 									int64_t				* vertexBufferSize,
@@ -400,10 +417,6 @@ static	inline	int64_t	GetConceptualFaceEx(
 									int64_t				* noIndicesPoints
 								)
 {
-	int64_t	* startIndexFacePolygons = nullptr,
-			* noIndicesFacePolygons = nullptr,
-			* startIndexConceptualFacePolygons = nullptr,
-			* noIndicesConceptualFacePolygons = nullptr;
 	return	GetConceptualFaceEx(
 					owlInstance,
 					index,
@@ -413,10 +426,27 @@ static	inline	int64_t	GetConceptualFaceEx(
 					noIndicesLines,
 					startIndexPoints,
 					noIndicesPoints,
-					startIndexFacePolygons,
-					noIndicesFacePolygons,
-					startIndexConceptualFacePolygons,
-					noIndicesConceptualFacePolygons
+					nullptr,		//	startIndexFacePolygons
+					nullptr,		//	noIndicesFacePolygons
+					nullptr,		//	startIndexConceptualFacePolygons
+					nullptr			//	noIndicesConceptualFacePolygons
+				);
+}
+
+static	inline	int64_t	GetConceptualFaceEx(
+									int64_t				owlInstance,
+									int64_t				index
+								)
+{
+	return	GetConceptualFaceEx(
+					owlInstance,
+					index,
+					nullptr,		//	startIndexTriangles
+					nullptr,		//	noIndicesTriangles
+					nullptr,		//	startIndexLines
+					nullptr,		//	noIndicesLines
+					nullptr,		//	startIndexPoints
+					nullptr			//	noIndicesPoints
 				);
 }
 
@@ -489,19 +519,18 @@ static	inline	double	GetConceptualFaceArea(
 				);
 }
 
-static	inline	int32_t	GetColorComponent(
-								int64_t					owlInstanceColorComponent
-							)
+static	inline	int32_t	GetColorOfComponent(
+									int64_t				owlInstanceColorComponent
+								)
 {
-	AssertInstanceClass(owlInstanceColorComponent, "ColorComponent");
+	assert(IsInstanceOfClass(owlInstanceColorComponent, "ColorComponent"));
 
 	int64_t	model = GetModel(owlInstanceColorComponent);
 
-	const char* rgbwNames[4] = {"R","G","B","W"};
-	double	    rgbwValues[4] = {0,0,0,0};
+	const char	* rgbwNames[4] = { "R", "G", "B", "W" };
+	double		rgbwValues[4] = { 0., 0., 0., 0. };
 
-	for (int i = 0; i<4; i++)
-	{
+	for	(size_t i = 0; i < 4; i++) {
 		double	* values = nullptr;
 		int64_t	card = 0;
 		GetDatatypeProperty(
@@ -513,146 +542,281 @@ static	inline	int32_t	GetColorComponent(
 				(void**) &values,
 				&card
 			);
-		assert(card == 1); //color component consistent if all values are set
+		assert(card == 1);
 		rgbwValues[i] = (card == 1) ? values[0] : 0.;
 	}
 
 	return	COLOR_ARR_RGBW(rgbwValues);
 }
 
-static inline void SetColorComponent (
-								int64_t					owlInstanceColorComponent,
-								int32_t					color
-							)
+static	inline	void	SetColorOfComponent(
+									int64_t				owlInstanceColorComponent,
+									int32_t				color
+								)
 {
-	AssertInstanceClass(owlInstanceColorComponent, "ColorComponent");
+	assert(IsInstanceOfClass(owlInstanceColorComponent, "ColorComponent"));
 
 	int64_t	model = GetModel(owlInstanceColorComponent);
 
-	const char* rgbwNames[4] = {"R","G","B","W"};
-	double      rgbwValues[4];
+	const char	* rgbwNames[4] = { "R", "G", "B", "W" };
+	double		rgbwValues[4];
 
 	COLOR_GET_COMPONENTS(rgbwValues, color);
 
-	for (int i = 0; i < 4; i++) {
+	for (size_t i = 0; i < 4; i++) {
 		SetDatatypeProperty(
-			owlInstanceColorComponent,
-			GetPropertyByName(
-				model,
-				rgbwNames[i]
-			),
-			&rgbwValues[i],
-			1
-		);
+				owlInstanceColorComponent,
+				GetPropertyByName(
+						model,
+						rgbwNames[i]
+					),
+				&rgbwValues[i],
+				1
+			);
 	}
 }
 
-
 static	inline	void	GetColor(
-								int64_t					owlInstanceColor,
-								int32_t					* ambient,
-								int32_t					* diffuse,
-								int32_t					* emissive,
-								int32_t					* specular
-							)
+									int64_t				owlInstanceColor,
+									int32_t				* ambient,
+									int32_t				* diffuse,
+									int32_t				* emissive,
+									int32_t				* specular
+								)
 {
-	if (owlInstanceColor) {
-		AssertInstanceClass(owlInstanceColor, "Color");
+	assert(IsInstanceOfClass(owlInstanceColor, "Color"));
 
-		int64_t	model = GetModel(owlInstanceColor);
-		GetDefaultColor(
-				model,
-				ambient,
-				diffuse,
-				emissive,
-				specular
-			);
+	int64_t	model = GetModel(owlInstanceColor);
 
-		const char* componentNames[4] = {"ambient", "diffuse", "emissive", "specular"};
-		int32_t* componentColors[4] = {ambient, diffuse, emissive, specular};
-		
-		for (int i = 0; i < 4; i++) {
-			if (componentColors[i]) {
-				int64_t* values = nullptr, card = 0;
-				GetObjectProperty(
+	GetDefaultColor(
+			model,
+			ambient,
+			diffuse,
+			emissive,
+			specular
+		);
+
+	const char	* componentNames[4] = { "ambient", "diffuse", "emissive", "specular" };
+	int32_t		* componentColors[4] = { ambient, diffuse, emissive, specular };
+
+	for (size_t i = 0; i < 4; i++) {
+		if (componentColors[i]) {
+			int64_t	* values = nullptr, card = 0;
+			GetObjectProperty(
 					owlInstanceColor,
 					GetPropertyByName(
-						model,
-						componentNames[i]
-					),
+							model,
+							componentNames[i]
+						),
 					&values,
 					&card
 				);
 
-				int64_t	owlInstanceColorComponent = (card == 1) ? values[0] : 0;
-				if (owlInstanceColorComponent) { //if color component is not set - remains default
-					(*componentColors[i]) = GetColorComponent(owlInstanceColorComponent);
-				}
+			int64_t owlInstanceColorComponent = (card == 1) ? values[0] : 0;
+			if (owlInstanceColorComponent) {
+				(*componentColors[i]) = GetColorOfComponent(owlInstanceColorComponent);
 			}
 		}
 	}
 }
 
-static	inline	void	GetMaterialColor(
-								int64_t					owlInstanceMaterial,
-								int32_t					* ambient,
-								int32_t					* diffuse,
-								int32_t					* emissive,
-								int32_t					* specular
-							)
+static	inline	void	SetColor(
+									int64_t				owlInstanceColor,
+									int32_t				ambient,
+									int32_t				diffuse,
+									int32_t				emissive,
+									int32_t				specular
+								)
 {
-	AssertInstanceClass(owlInstanceMaterial, "Material");
+	assert(IsInstanceOfClass(owlInstanceColor, "Color"));
 
-	int64_t* values = nullptr, card = 0;
+}
+
+static	inline	void	GetMaterialColor(
+									int64_t				owlInstanceMaterial,
+									int32_t				* ambient,
+									int32_t				* diffuse,
+									int32_t				* emissive,
+									int32_t				* specular
+								)
+{
+	assert(IsInstanceOfClass(owlInstanceMaterial, "Material"));
+
+	int64_t	* values = nullptr, card = 0;
 	GetObjectProperty(
-		owlInstanceMaterial,
-		GetPropertyByName(
-			GetModel(owlInstanceMaterial),
-			(char*) "color"
-		),
-		&values,
-		&card
-	);
+			owlInstanceMaterial,
+			GetPropertyByName(
+					GetModel(owlInstanceMaterial),
+					(char*) "color"
+				),
+			&values,
+			&card
+		);
 
 	int64_t	owlInstanceColor = (card == 1) ? values[0] : 0;
 	if (owlInstanceColor) {
-		return	GetColor(
-			owlInstanceColor,
-			ambient,
-			diffuse,
-			emissive,
-			specular
-		);
+		GetColor(
+				owlInstanceColor,
+				ambient,
+				diffuse,
+				emissive,
+				specular
+			);
 	}
 	else {
 		GetDefaultColor(
-			GetModel(owlInstanceMaterial),
-			ambient,
-			diffuse,
-			emissive,
-			specular
-		);
+				GetModel(owlInstanceMaterial),
+				ambient,
+				diffuse,
+				emissive,
+				specular
+			);
 	}
 }
 
-static inline int32_t GetMaterialColorAmbient(
-								int64_t					owlInstanceMaterial
-							)
+static	inline	int32_t	GetMaterialColorAmbient(
+									int64_t				owlInstanceMaterial
+								)
 {
-	int32_t ret = 0;
-	GetMaterialColor(owlInstanceMaterial, &ret, nullptr, nullptr, nullptr);
-	return ret;
+	int32_t	ambient = 0;
+	GetMaterialColor(
+			owlInstanceMaterial,
+			&ambient,
+			nullptr,		//	diffuse
+			nullptr,		//	emissive
+			nullptr			//	specular
+		);
+	return	ambient;
 }
 
-static inline int32_t GetVertexColorAmbient(
-								int64_t                model,
-								const void* vertexBuffer,
-								int64_t                vertexIndex,
-								int64_t                setting
-							)
+static	inline	int32_t	GetMaterialColorDiffuse(
+									int64_t				owlInstanceMaterial
+								)
 {
-	int32_t ambient = 0;
-	GetVertexColor(model, vertexBuffer, vertexIndex, setting, &ambient, NULL, NULL, NULL);
-	return ambient;
+	int32_t	diffuse = 0;
+	GetMaterialColor(
+			owlInstanceMaterial,
+			nullptr,		//	ambient
+			&diffuse,
+			nullptr,		//	emissive
+			nullptr			//	specular
+		);
+	return	diffuse;
 }
+
+static	inline	int32_t	GetMaterialColorEmissive(
+									int64_t				owlInstanceMaterial
+								)
+{
+	int32_t	emissive = 0;
+	GetMaterialColor(
+			owlInstanceMaterial,
+			nullptr,		//	ambient
+			nullptr,		//	diffuse
+			&emissive,
+			nullptr			//	specular
+		);
+	return	emissive;
+}
+
+static	inline	int32_t	GetMaterialColorSpecular(
+									int64_t				owlInstanceMaterial
+								)
+{
+	int32_t	specular = 0;
+	GetMaterialColor(
+			owlInstanceMaterial,
+			nullptr,		//	ambient
+			nullptr,		//	diffuse
+			nullptr,		//	emissive
+			&specular
+		);
+	return	specular;
+}
+
+static	inline	int32_t	GetVertexColorAmbient(
+									int64_t				model,
+									const void			* vertexBuffer,
+									int64_t				vertexIndex,
+									int64_t				setting
+								)
+{
+	int32_t	ambient = 0;
+	GetVertexColor(
+			model,
+			vertexBuffer,
+			vertexIndex,
+			setting,
+			&ambient,
+			nullptr,		//	diffuse
+			nullptr,		//	emissive
+			nullptr			//	specular
+		);
+	return	ambient;
+}
+
+static	inline	int32_t	GetVertexColorDiffuse(
+									int64_t				model,
+									const void			* vertexBuffer,
+									int64_t				vertexIndex,
+									int64_t				setting
+								)
+{
+	int32_t	diffuse = 0;
+	GetVertexColor(
+			model,
+			vertexBuffer,
+			vertexIndex,
+			setting,
+			nullptr,		//	ambient
+			&diffuse,
+			nullptr,		//	emissive
+			nullptr			//	specular
+		);
+	return	diffuse;
+}
+
+static	inline	int32_t	GetVertexColorEmissive(
+									int64_t				model,
+									const void			* vertexBuffer,
+									int64_t				vertexIndex,
+									int64_t				setting
+								)
+{
+	int32_t	emissive = 0;
+	GetVertexColor(
+			model,
+			vertexBuffer,
+			vertexIndex,
+			setting,
+			nullptr,		//	ambient
+			nullptr,		//	diffuse
+			&emissive,
+			nullptr			//	specular
+		);
+	return	emissive;
+}
+
+static	inline	int32_t	GetVertexColorSpecular(
+									int64_t				model,
+									const void			* vertexBuffer,
+									int64_t				vertexIndex,
+									int64_t				setting
+								)
+{
+	int32_t	specular = 0;
+	GetVertexColor(
+			model,
+			vertexBuffer,
+			vertexIndex,
+			setting,
+			nullptr,		//	ambient
+			nullptr,		//	diffuse
+			nullptr,		//	emissive
+			&specular
+		);
+	return	specular;
+}
+
+
 #endif

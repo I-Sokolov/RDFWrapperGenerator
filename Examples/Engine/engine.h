@@ -3022,7 +3022,6 @@ int64_t		DECL STDC	GetConceptualFaceMaterial(
 									int64_t				conceptualFace
 								);
 
-
 //
 //		GetConceptualFaceOriginCnt                  (http://rdf.bg/gkdoc/CP64/GetConceptualFaceOriginCnt.html)
 //				int64_t				conceptualFace						IN
@@ -3067,8 +3066,6 @@ void		DECL STDC	GetConceptualFaceOriginEx(
 									int64_t				* originatingOwlInstance,
 									int64_t				* originatingConceptualFace
 								);
-
-
 
 //
 //		GetFaceCnt                                  (http://rdf.bg/gkdoc/CP64/GetFaceCnt.html)
@@ -3512,34 +3509,6 @@ void		DECL STDC	GetDefaultColor(
 								);
 
 //
-//		GetVertexColor                              (http://rdf.bg/gkdoc/CP64/GetVertexColor.html)
-//				int64_t				model								IN
-//				const void			* vertexBuffer						IN
-//				int64_t				vertexIndex							IN
-//				int64_t				setting								IN
-//				int32_t				* ambient							IN / OUT
-//				int32_t				* diffuse							IN / OUT
-//				int32_t				* emissive							IN / OUT
-//				int32_t				* specular							IN / OUT
-//
-//				void				returns								OUT
-//
-//	Returns vertex color.
-//	If vertex format does provide required color, the model default color will be used
-//
-void		DECL STDC	GetVertexColor(
-									int64_t				model,
-									const void			* vertexBuffer,
-									int64_t				vertexIndex,
-									int64_t				setting,
-									int32_t				* ambient,
-									int32_t				* diffuse,
-									int32_t				* emissive,
-									int32_t				* specular
-								);
-
-
-//
 //		CheckConsistency                            (http://rdf.bg/gkdoc/CP64/CheckConsistency.html)
 //				int64_t				model								IN
 //				int64_t				mask								IN
@@ -3818,9 +3787,9 @@ double		DECL STDC	GetConceptualFaceArea(
 //
 //		SetBoundingBoxReference                     (http://rdf.bg/gkdoc/CP64/SetBoundingBoxReference.html)
 //				int64_t				owlInstance							IN
-//				const double		* transformationMatrix				IN
-//				const double		* startVector						IN
-//				const double		* endVector							IN
+//				double				* transformationMatrix				IN
+//				double				* startVector						IN
+//				double				* endVector							IN
 //
 //				void				returns
 //
@@ -3835,9 +3804,9 @@ double		DECL STDC	GetConceptualFaceArea(
 //
 void		DECL STDC	SetBoundingBoxReference(
 									int64_t				owlInstance,
-									const double		* transformationMatrix,
-									const double		* startVector,
-									const double		* endVector
+									double				* transformationMatrix,
+									double				* startVector,
+									double				* endVector
 								);
 
 //
@@ -3896,6 +3865,34 @@ double		DECL STDC	GetDistance(
 									int64_t				secondOwlInstance,
 									double				* pointFirstInstance,
 									double				* pointSecondInstance
+								);
+
+//
+//		GetVertexColor                              (http://rdf.bg/gkdoc/CP64/GetVertexColor.html)
+//				int64_t				model								IN
+//				const void			* vertexBuffer						IN
+//				int64_t				vertexIndex							IN
+//				int64_t				setting								IN
+//				int32_t				* ambient							IN / OUT
+//				int32_t				* diffuse							IN / OUT
+//				int32_t				* emissive							IN / OUT
+//				int32_t				* specular							IN / OUT
+//
+//				void				returns
+//
+//	Returns vertex color
+//	requiredColor is one of the control vertex data bits applied to colors (FORMAT_VERTEX_COLOR...) 
+//	If vertex format does provide required color, the model default color will be used
+//
+void		DECL STDC	GetVertexColor(
+									int64_t				model,
+									const void			* vertexBuffer,
+									int64_t				vertexIndex,
+									int64_t				setting,
+									int32_t				* ambient,
+									int32_t				* diffuse,
+									int32_t				* emissive,
+									int32_t				* specular
 								);
 
 //

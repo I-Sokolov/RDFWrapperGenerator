@@ -157,6 +157,12 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetRevision")]
 		public static extern Int64 GetRevision(out IntPtr timeStamp);
 
+		public static Int64 GetRevision()
+		{
+			IntPtr timeStamp = IntPtr.Zero;
+			return RDF.engine.GetRevision(out timeStamp);
+		}
+
 		/// <summary>
 		///		GetRevisionW                                (http://rdf.bg/gkdoc/CS64/GetRevisionW.html)
 		///
@@ -165,6 +171,12 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetRevisionW")]
 		public static extern Int64 GetRevisionW(out IntPtr timeStamp);
+
+		public static Int64 GetRevisionW()
+		{
+			IntPtr timeStamp = IntPtr.Zero;
+			return RDF.engine.GetRevisionW(out timeStamp);
+		}
 
 		/// <summary>
 		///		GetProtection                               (http://rdf.bg/gkdoc/CS64/GetProtection.html)
@@ -242,6 +254,13 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetAssertionFile")]
 		public static extern void GetAssertionFile(out IntPtr fileName);
 
+		public static string GetAssertionFile()
+		{
+			IntPtr fileName = IntPtr.Zero;
+			RDF.engine.GetAssertionFile(out fileName);
+			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(fileName);
+		}
+
 		/// <summary>
 		///		GetAssertionFileW                           (http://rdf.bg/gkdoc/CS64/GetAssertionFileW.html)
 		///
@@ -250,6 +269,13 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetAssertionFileW")]
 		public static extern void GetAssertionFileW(out IntPtr fileName);
+
+		public static string GetAssertionFileW()
+		{
+			IntPtr fileName = IntPtr.Zero;
+			RDF.engine.GetAssertionFileW(out fileName);
+			return System.Runtime.InteropServices.Marshal.PtrToStringUni(fileName);
+		}
 
 		/// <summary>
 		///		SetCharacterSerialization                   (http://rdf.bg/gkdoc/CS64/SetCharacterSerialization.html)
@@ -1095,6 +1121,13 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetNameOfClass")]
 		public static extern void GetNameOfClass(Int64 owlClass, out IntPtr name);
 
+		public static string GetNameOfClass(Int64 owlClass)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfClass(owlClass, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(name);
+		}
+
 		/// <summary>
 		///		GetNameOfClassW                             (http://rdf.bg/gkdoc/CS64/GetNameOfClassW.html)
 		///
@@ -1102,6 +1135,13 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetNameOfClassW")]
 		public static extern void GetNameOfClassW(Int64 owlClass, out IntPtr name);
+
+		public static string GetNameOfClassW(Int64 owlClass)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfClassW(owlClass, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringUni(name);
+		}
 
 		/// <summary>
 		///		GetNameOfClassEx                            (http://rdf.bg/gkdoc/CS64/GetNameOfClassEx.html)
@@ -1114,6 +1154,13 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetNameOfClassEx")]
 		public static extern void GetNameOfClassEx(Int64 model, Int64 owlClass, out IntPtr name);
 
+		public static string GetNameOfClassEx(Int64 model, Int64 owlClass)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfClassEx(model, owlClass, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(name);
+		}
+
 		/// <summary>
 		///		GetNameOfClassWEx                           (http://rdf.bg/gkdoc/CS64/GetNameOfClassWEx.html)
 		///
@@ -1124,6 +1171,13 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetNameOfClassWEx")]
 		public static extern void GetNameOfClassWEx(Int64 model, Int64 owlClass, out IntPtr name);
+
+		public static string GetNameOfClassWEx(Int64 model, Int64 owlClass)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfClassWEx(model, owlClass, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringUni(name);
+		}
 
 		/// <summary>
 		///		SetClassPropertyCardinalityRestriction      (http://rdf.bg/gkdoc/CS64/SetClassPropertyCardinalityRestriction.html)
@@ -1333,6 +1387,16 @@ namespace RDF
 		public static extern Int64 GetRangeRestrictionsByIteratorEx(Int64 model, Int64 rdfProperty, Int64 owlClass);
 
 		/// <summary>
+		///		GetPropertyParentsByIterator                (http://rdf.bg/gkdoc/CS64/GetPropertyParentsByIterator.html)
+		///
+		///	Returns the next parent of the property.
+		///	If input parent is zero, the handle will point to the first relevant parent.
+		///	If all parent are past (or no relevant parent are found), the function will return 0.
+		/// </summary>
+		[DllImport(enginedll, EntryPoint = "GetPropertyParentsByIterator")]
+		public static extern Int64 GetPropertyParentsByIterator(Int64 rdfProperty, Int64 parentRdfProperty);
+
+		/// <summary>
 		///		SetNameOfProperty                           (http://rdf.bg/gkdoc/CS64/SetNameOfProperty.html)
 		///
 		///	Sets/updates the name of the property, if no error it returns 0.
@@ -1388,6 +1452,13 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetNameOfProperty")]
 		public static extern void GetNameOfProperty(Int64 rdfProperty, out IntPtr name);
 
+		public static string GetNameOfProperty(Int64 rdfProperty)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfProperty(rdfProperty, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(name);
+		}
+
 		/// <summary>
 		///		GetNameOfPropertyW                          (http://rdf.bg/gkdoc/CS64/GetNameOfPropertyW.html)
 		///
@@ -1395,6 +1466,13 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetNameOfPropertyW")]
 		public static extern void GetNameOfPropertyW(Int64 rdfProperty, out IntPtr name);
+
+		public static string GetNameOfPropertyW(Int64 rdfProperty)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfPropertyW(rdfProperty, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringUni(name);
+		}
 
 		/// <summary>
 		///		GetNameOfPropertyEx                         (http://rdf.bg/gkdoc/CS64/GetNameOfPropertyEx.html)
@@ -1404,6 +1482,13 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetNameOfPropertyEx")]
 		public static extern void GetNameOfPropertyEx(Int64 model, Int64 rdfProperty, out IntPtr name);
 
+		public static string GetNameOfPropertyEx(Int64 model, Int64 rdfProperty)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfPropertyEx(model, rdfProperty, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(name);
+		}
+
 		/// <summary>
 		///		GetNameOfPropertyWEx                        (http://rdf.bg/gkdoc/CS64/GetNameOfPropertyWEx.html)
 		///
@@ -1411,6 +1496,13 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetNameOfPropertyWEx")]
 		public static extern void GetNameOfPropertyWEx(Int64 model, Int64 rdfProperty, out IntPtr name);
+
+		public static string GetNameOfPropertyWEx(Int64 model, Int64 rdfProperty)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfPropertyWEx(model, rdfProperty, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringUni(name);
+		}
 
 		/// <summary>
 		///		SetPropertyType                             (http://rdf.bg/gkdoc/CS64/SetPropertyType.html)
@@ -1723,6 +1815,13 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetNameOfInstance")]
 		public static extern void GetNameOfInstance(Int64 owlInstance, out IntPtr name);
 
+		public static string GetNameOfInstance(Int64 owlInstance)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfInstance(owlInstance, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(name);
+		}
+
 		/// <summary>
 		///		GetNameOfInstanceW                          (http://rdf.bg/gkdoc/CS64/GetNameOfInstanceW.html)
 		///
@@ -1730,6 +1829,13 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetNameOfInstanceW")]
 		public static extern void GetNameOfInstanceW(Int64 owlInstance, out IntPtr name);
+
+		public static string GetNameOfInstanceW(Int64 owlInstance)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfInstanceW(owlInstance, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringUni(name);
+		}
 
 		/// <summary>
 		///		GetNameOfInstanceEx                         (http://rdf.bg/gkdoc/CS64/GetNameOfInstanceEx.html)
@@ -1739,6 +1845,13 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetNameOfInstanceEx")]
 		public static extern void GetNameOfInstanceEx(Int64 model, Int64 owlInstance, out IntPtr name);
 
+		public static string GetNameOfInstanceEx(Int64 model, Int64 owlInstance)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfInstanceEx(model, owlInstance, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(name);
+		}
+
 		/// <summary>
 		///		GetNameOfInstanceWEx                        (http://rdf.bg/gkdoc/CS64/GetNameOfInstanceWEx.html)
 		///
@@ -1746,6 +1859,13 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "GetNameOfInstanceWEx")]
 		public static extern void GetNameOfInstanceWEx(Int64 model, Int64 owlInstance, out IntPtr name);
+
+		public static string GetNameOfInstanceWEx(Int64 model, Int64 owlInstance)
+		{
+			IntPtr name = IntPtr.Zero;
+			RDF.engine.GetNameOfInstanceWEx(model, owlInstance, out name);
+			return System.Runtime.InteropServices.Marshal.PtrToStringUni(name);
+		}
 
 		/// <summary>
 		///		SetDatatypeProperty                         (http://rdf.bg/gkdoc/CS64/SetDatatypeProperty.html)
@@ -2006,6 +2126,21 @@ namespace RDF
 		/// </summary>
 		[DllImport(enginedll, EntryPoint = "IsInstance")]
 		public static extern byte IsInstance(Int64 owlInstance);
+
+		/// <summary>
+		///		IsInstanceOfClass                           (http://rdf.bg/gkdoc/CS64/IsInstanceOfClass.html)
+		///
+		///	...
+		/// </summary>
+		public static bool IsInstanceOfClass(Int64 owlInstance, string name)
+		{
+			return GetInstanceClass(owlInstance) == GetClassByName(GetModel(owlInstance), name);
+		}
+
+		public static bool IsInstanceOfClass(Int64 owlInstance, byte[] name)
+		{
+			return GetInstanceClass(owlInstance) == GetClassByName(GetModel(owlInstance), name);
+		}
 
         //
         //  Retrieve Geometry API Calls
@@ -2647,19 +2782,6 @@ namespace RDF
 		public static extern void GetDefaultColor(Int64 model, out Int32 ambient, out Int32 diffuse, out Int32 emissive, out Int32 specular);
 
 		/// <summary>
-		///		GetVertexColor                              (http://rdf.bg/gkdoc/CS64/GetVertexColor.html)
-		///
-		///	Returns vertex color
-		///	requiredColor is one of the control vertex data bits applied to colors (FORMAT_VERTEX_COLOR...) 
-		///	If vertex format does provide required color, the model default color will be used
-		/// </summary>
-		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
-		public static extern Int32 GetVertexColor(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 requiredColor, Int64 setting);
-
-		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
-		public static extern Int32 GetVertexColor(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 requiredColor, Int64 setting);
-
-		/// <summary>
 		///		CheckConsistency                            (http://rdf.bg/gkdoc/CS64/CheckConsistency.html)
 		///
 		///	This function returns information about the consistency of each instance.
@@ -2967,6 +3089,229 @@ namespace RDF
 		[DllImport(enginedll, EntryPoint = "GetDistance")]
 		public static extern double GetDistance(Int64 firstOwlInstance, Int64 secondOwlInstance, out double pointFirstInstance, out double pointSecondInstance);
 
+		public static Int64 SetDatatypeProperty(Int64 owlInstance, Int64 rdfProperty, double value)
+		{
+			return RDF.engine.SetDatatypeProperty(owlInstance, rdfProperty, ref value, 1);
+		}
+
+		public static Int64 SetDatatypeProperty(Int64 owlInstance, Int64 rdfProperty, Int64 value)
+		{
+			return RDF.engine.SetDatatypeProperty(owlInstance, rdfProperty, ref value, 1);
+		}
+
+
+		/// <summary>
+		///		GetColorOfComponent                         (http://rdf.bg/gkdoc/CS64/GetColorOfComponent.html)
+		///
+		///	...
+		/// </summary>
+		public static UInt32 GetColorOfComponent(Int64 owlInstanceColorComponent)
+		{
+			System.Diagnostics.Debug.Assert(IsInstanceOfClass(owlInstanceColorComponent, "ColorComponent"));
+
+			Int64 model = GetModel(owlInstanceColorComponent);
+
+			string[] rgbwNames = { "R", "G", "B", "W" };
+			double[] rgbwValues = { 0.0, 0.0, 0.0, 0.0 };
+
+			for (int i = 0; i < 4; i++) {
+				Int64 card = 0;
+				IntPtr valuesPtr = IntPtr.Zero;
+				RDF.engine.GetDatatypeProperty(owlInstanceColorComponent, RDF.engine.GetPropertyByName(model, rgbwNames[i]), out valuesPtr, out card);
+				if (card == 1) {
+					double[] values = new double[card];
+					System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+					rgbwValues[i] = values[0];
+				}
+			}
+
+			return RDF.COLOR.RGBW(rgbwValues);
+		}
+
+
+		/// <summary>
+		///		SetColorOfComponent                         (http://rdf.bg/gkdoc/CS64/SetColorOfComponent.html)
+		///
+		///	...
+		/// </summary>
+		public static void SetColorOfComponent(Int64 owlInstanceColorComponent, UInt32 color)
+		{
+			System.Diagnostics.Debug.Assert(IsInstanceOfClass(owlInstanceColorComponent, "ColorComponent"));
+
+			Int64 model = GetModel(owlInstanceColorComponent);
+
+			string[] rgbwNames = { "R", "G", "B", "W" };
+			double[] rgbwValues =RDF.COLOR.GET_COMPONENTS(color);
+
+			for (int i = 0; i < 4; i++) {
+				RDF.engine.SetDatatypeProperty(owlInstanceColorComponent, RDF.engine.GetPropertyByName(model, rgbwNames[i]), rgbwValues[i]);
+			}
+		}
+
+
+		/// <summary>
+		///		GetColor                                    (http://rdf.bg/gkdoc/CS64/GetColor.html)
+		///
+		///	...
+		/// </summary>
+
+
+		/// <summary>
+		///		SetColor                                    (http://rdf.bg/gkdoc/CS64/SetColor.html)
+		///
+		///	...
+		/// </summary>
+
+
+		/// <summary>
+		///		GetMaterialColor                            (http://rdf.bg/gkdoc/CS64/GetMaterialColor.html)
+		///
+		///	This function returns the color definition of any material instance. It will return default material
+		///	in case the material does not have that specific color component defined.
+		/// </summary>
+
+
+		/// <summary>
+		///		GetMaterialColorAmbient                     (http://rdf.bg/gkdoc/CS64/GetMaterialColorAmbient.html)
+		///
+		///	...
+		/// </summary>
+
+
+		/// <summary>
+		///		GetMaterialColorDiffuse                     (http://rdf.bg/gkdoc/CS64/GetMaterialColorDiffuse.html)
+		///
+		///	...
+		/// </summary>
+
+
+		/// <summary>
+		///		GetMaterialColorEmissive                    (http://rdf.bg/gkdoc/CS64/GetMaterialColorEmissive.html)
+		///
+		///	...
+		/// </summary>
+
+
+		/// <summary>
+		///		GetMaterialColorSpecular                    (http://rdf.bg/gkdoc/CS64/GetMaterialColorSpecular.html)
+		///
+		///	...
+		/// </summary>
+
+
+		/// <summary>
+		///		GetVertexColor                              (http://rdf.bg/gkdoc/CS64/GetVertexColor.html)
+		///
+		///	Returns vertex color
+		///	requiredColor is one of the control vertex data bits applied to colors (FORMAT_VERTEX_COLOR...) 
+		///	If vertex format does provide required color, the model default color will be used
+		/// </summary>
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting, out Int32 ambient, out Int32 diffuse, out Int32 emissive, out Int32 specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting, out Int32 ambient, out Int32 diffuse, out Int32 emissive, out Int32 specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting, out Int32 ambient, IntPtr diffuse, IntPtr emissive, IntPtr specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting, out Int32 ambient, IntPtr diffuse, IntPtr emissive, IntPtr specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting, IntPtr ambient, out Int32 diffuse, IntPtr emissive, IntPtr specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting, IntPtr ambient, out Int32 diffuse, IntPtr emissive, IntPtr specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting, IntPtr ambient, IntPtr diffuse, out Int32 emissive, IntPtr specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting, IntPtr ambient, IntPtr diffuse, out Int32 emissive, IntPtr specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting, IntPtr ambient, IntPtr diffuse, IntPtr emissive, out Int32 specular);
+
+		[DllImport(enginedll, EntryPoint = "GetVertexColor")]
+		public static extern void GetVertexColor(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting, IntPtr ambient, IntPtr diffuse, IntPtr emissive, out Int32 specular);
+
+		/// <summary>
+		///		GetVertexColorAmbient                       (http://rdf.bg/gkdoc/CS64/GetVertexColorAmbient.html)
+		///
+		///	...
+		/// </summary>
+		public static Int32 GetVertexColorAmbient(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	ambient = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, out ambient, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+			return ambient;
+		}
+
+		public static Int32 GetVertexColorAmbient(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	ambient = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, out ambient, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+			return ambient;
+		}
+
+		/// <summary>
+		///		GetVertexColorDiffuse                       (http://rdf.bg/gkdoc/CS64/GetVertexColorDiffuse.html)
+		///
+		///	...
+		/// </summary>
+		public static Int32 GetVertexColorDiffuse(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	diffuse = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, IntPtr.Zero, out diffuse, IntPtr.Zero, IntPtr.Zero);
+			return diffuse;
+		}
+
+		public static Int32 GetVertexColorDiffuse(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	diffuse = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, IntPtr.Zero, out diffuse, IntPtr.Zero, IntPtr.Zero);
+			return diffuse;
+		}
+
+		/// <summary>
+		///		GetVertexColorEmissive                      (http://rdf.bg/gkdoc/CS64/GetVertexColorEmissive.html)
+		///
+		///	...
+		/// </summary>
+		public static Int32 GetVertexColorEmissive(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	emissive = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, IntPtr.Zero, IntPtr.Zero, out emissive, IntPtr.Zero);
+			return emissive;
+		}
+
+		public static Int32 GetVertexColorEmissive(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	emissive = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, IntPtr.Zero, IntPtr.Zero, out emissive, IntPtr.Zero);
+			return emissive;
+		}
+
+		/// <summary>
+		///		GetVertexColorSpecular                      (http://rdf.bg/gkdoc/CS64/GetVertexColorSpecular.html)
+		///
+		///	...
+		/// </summary>
+		public static Int32 GetVertexColorSpecular(Int64 model, ref float vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	specular = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, out specular);
+			return specular;
+		}
+
+		public static Int32 GetVertexColorSpecular(Int64 model, ref double vertexBuffer, Int64 vertexIndex, Int64 setting)
+		{
+			Int32	specular = 0;
+			RDF.engine.GetVertexColor(model, ref vertexBuffer, vertexIndex, setting, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, out specular);
+			return specular;
+		}
+
         //
         //  Deprecated API Calls
         //
@@ -3096,5 +3441,15 @@ namespace RDF
 
 		[DllImport(enginedll, EntryPoint = "GetPropertyByNameAndType")]
 		public static extern Int64 GetPropertyByNameAndType(Int64 model, byte[] name, Int64 rdfPropertyType);
+
+		/// <summary>
+		///		GetParentsByIterator                        (http://rdf.bg/gkdoc/CS64/GetParentsByIterator___.html)
+		///
+		///	Returns the next parent of the class or property.
+		///	If input parent is zero, the handle will point to the first relevant parent.
+		///	If all parent are past (or no relevant parent are found), the function will return 0.
+		/// </summary>
+		[DllImport(enginedll, EntryPoint = "GetParentsByIterator")]
+		public static extern Int64 GetParentsByIterator(Int64 owlClassOrRdfProperty, Int64 parentOwlClassOrRdfProperty);
     }
 }
