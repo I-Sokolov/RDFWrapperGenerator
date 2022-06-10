@@ -6,6 +6,7 @@
 
 #include    <assert.h>
 #include	"engine.h"
+#include    "engineinline.h"
 
 namespace GEOM
 {
@@ -72,6 +73,9 @@ namespace GEOM
     class HornTorus;
     class Hyperbola;
     class InfiniteSurface;
+    class Intersection;
+    class IntersectionCurve;
+    class IntersectionPoint;
     class InverseMatrix;
     class InvertedCurve;
     class InvertedSurface;
@@ -145,7 +149,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with a genetic instnace of OWL class
+    /// Provides utility methods to interact with a genetic instance of OWL class
     /// You also can use object of this class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Instance
@@ -184,14 +188,7 @@ namespace GEOM
         Instance(int64_t instance, const char* cls)
         {
             m_instance = instance;
-#ifdef _DEBUG
-            if (m_instance != 0 && cls != NULL) {
-                int64_t clsid1 = GetInstanceClass(m_instance);
-                int64_t model = GetModel(m_instance);
-                int64_t clsid2 = GetClassByName(model, cls);
-                assert(clsid1 == clsid2);
-            }
-#endif
+            assert(cls == NULL/*do not check*/ || ::IsInstanceOfClass(instance, cls));
         }
 
 
@@ -291,7 +288,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class GeometricItem
+    /// Provides utility methods to interact with an instance of OWL class GeometricItem
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class GeometricItem : public Instance
@@ -325,7 +322,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFace
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFace
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class AdvancedFace : public GeometricItem
@@ -367,7 +364,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Face
+    /// Provides utility methods to interact with an instance of OWL class Face
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Face : public GeometricItem
@@ -392,7 +389,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFace2D
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFace2D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class AdvancedFace2D : public AdvancedFace
@@ -434,7 +431,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFace3D
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFace3D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class AdvancedFace3D : public AdvancedFace
@@ -459,7 +456,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Curve
+    /// Provides utility methods to interact with an instance of OWL class Curve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Curve : public GeometricItem
@@ -484,7 +481,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFaceMapped
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFaceMapped
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class AdvancedFaceMapped : public AdvancedFace
@@ -522,7 +519,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AlignedSegment
+    /// Provides utility methods to interact with an instance of OWL class AlignedSegment
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class AlignedSegment : public Curve
@@ -572,7 +569,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AlignedSegments
+    /// Provides utility methods to interact with an instance of OWL class AlignedSegments
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class AlignedSegments : public Curve
@@ -610,7 +607,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Alignment
+    /// Provides utility methods to interact with an instance of OWL class Alignment
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Alignment : public Curve
@@ -656,7 +653,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Environment
+    /// Provides utility methods to interact with an instance of OWL class Environment
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Environment : public Instance
@@ -681,7 +678,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Light
+    /// Provides utility methods to interact with an instance of OWL class Light
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Light : public Environment
@@ -715,7 +712,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AmbientLight
+    /// Provides utility methods to interact with an instance of OWL class AmbientLight
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class AmbientLight : public Light
@@ -740,7 +737,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Appearance
+    /// Provides utility methods to interact with an instance of OWL class Appearance
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Appearance : public Instance
@@ -765,7 +762,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Arc3D
+    /// Provides utility methods to interact with an instance of OWL class Arc3D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Arc3D : public Curve
@@ -815,7 +812,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SplineCurve
+    /// Provides utility methods to interact with an instance of OWL class SplineCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SplineCurve : public Curve
@@ -873,7 +870,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BezierCurve
+    /// Provides utility methods to interact with an instance of OWL class BezierCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BezierCurve : public SplineCurve
@@ -898,7 +895,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Surface
+    /// Provides utility methods to interact with an instance of OWL class Surface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Surface : public Face
@@ -923,7 +920,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class FiniteSurface
+    /// Provides utility methods to interact with an instance of OWL class FiniteSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class FiniteSurface : public Surface
@@ -948,7 +945,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SplineSurface
+    /// Provides utility methods to interact with an instance of OWL class SplineSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SplineSurface : public FiniteSurface
@@ -1026,7 +1023,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BezierSurface
+    /// Provides utility methods to interact with an instance of OWL class BezierSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BezierSurface : public SplineSurface
@@ -1060,7 +1057,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TransitionalCurve
+    /// Provides utility methods to interact with an instance of OWL class TransitionalCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class TransitionalCurve : public Curve
@@ -1114,7 +1111,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BiQuadraticParabola
+    /// Provides utility methods to interact with an instance of OWL class BiQuadraticParabola
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BiQuadraticParabola : public TransitionalCurve
@@ -1139,7 +1136,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Solid
+    /// Provides utility methods to interact with an instance of OWL class Solid
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Solid : public GeometricItem
@@ -1164,7 +1161,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Blend
+    /// Provides utility methods to interact with an instance of OWL class Blend
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Blend : public Solid
@@ -1222,7 +1219,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BlossCurve
+    /// Provides utility methods to interact with an instance of OWL class BlossCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BlossCurve : public TransitionalCurve
@@ -1247,7 +1244,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BooleanOperation
+    /// Provides utility methods to interact with an instance of OWL class BooleanOperation
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BooleanOperation : public Solid
@@ -1297,7 +1294,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BooleanOperation2D
+    /// Provides utility methods to interact with an instance of OWL class BooleanOperation2D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BooleanOperation2D : public Face
@@ -1343,7 +1340,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BoundaryRepresentation
+    /// Provides utility methods to interact with an instance of OWL class BoundaryRepresentation
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BoundaryRepresentation : public Solid
@@ -1425,7 +1422,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Box
+    /// Provides utility methods to interact with an instance of OWL class Box
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Box : public Solid
@@ -1467,7 +1464,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BSplineCurve
+    /// Provides utility methods to interact with an instance of OWL class BSplineCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BSplineCurve : public SplineCurve
@@ -1509,7 +1506,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BSplineSurface
+    /// Provides utility methods to interact with an instance of OWL class BSplineSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class BSplineSurface : public SplineSurface
@@ -1559,7 +1556,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ConicalCurve
+    /// Provides utility methods to interact with an instance of OWL class ConicalCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ConicalCurve : public Curve
@@ -1605,7 +1602,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Circle
+    /// Provides utility methods to interact with an instance of OWL class Circle
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Circle : public ConicalCurve
@@ -1630,7 +1627,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CircleByPoints
+    /// Provides utility methods to interact with an instance of OWL class CircleByPoints
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class CircleByPoints : public Circle
@@ -1668,7 +1665,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ClippedPyramid
+    /// Provides utility methods to interact with an instance of OWL class ClippedPyramid
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ClippedPyramid : public Solid
@@ -1706,7 +1703,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Clipping
+    /// Provides utility methods to interact with an instance of OWL class Clipping
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Clipping : public Solid
@@ -1752,7 +1749,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Clothoid
+    /// Provides utility methods to interact with an instance of OWL class Clothoid
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Clothoid : public Curve
@@ -1806,7 +1803,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ClothoidCurve
+    /// Provides utility methods to interact with an instance of OWL class ClothoidCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ClothoidCurve : public TransitionalCurve
@@ -1831,7 +1828,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Collection
+    /// Provides utility methods to interact with an instance of OWL class Collection
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Collection : public GeometricItem
@@ -1893,7 +1890,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Color
+    /// Provides utility methods to interact with an instance of OWL class Color
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Color : public Appearance
@@ -1947,7 +1944,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ColorComponent
+    /// Provides utility methods to interact with an instance of OWL class ColorComponent
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ColorComponent : public Appearance
@@ -1993,7 +1990,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cone
+    /// Provides utility methods to interact with an instance of OWL class Cone
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Cone : public Solid
@@ -2035,7 +2032,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InfiniteSurface
+    /// Provides utility methods to interact with an instance of OWL class InfiniteSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class InfiniteSurface : public Surface
@@ -2060,7 +2057,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ConicalSurface
+    /// Provides utility methods to interact with an instance of OWL class ConicalSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ConicalSurface : public InfiniteSurface
@@ -2106,7 +2103,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Copy
+    /// Provides utility methods to interact with an instance of OWL class Copy
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Copy : public GeometricItem
@@ -2140,7 +2137,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CosineCurve
+    /// Provides utility methods to interact with an instance of OWL class CosineCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class CosineCurve : public TransitionalCurve
@@ -2165,7 +2162,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cube
+    /// Provides utility methods to interact with an instance of OWL class Cube
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Cube : public Solid
@@ -2199,7 +2196,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CubicParabola
+    /// Provides utility methods to interact with an instance of OWL class CubicParabola
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class CubicParabola : public TransitionalCurve
@@ -2224,7 +2221,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cuboid
+    /// Provides utility methods to interact with an instance of OWL class Cuboid
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Cuboid : public Solid
@@ -2266,7 +2263,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CurvesFromSurface
+    /// Provides utility methods to interact with an instance of OWL class CurvesFromSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class CurvesFromSurface : public Curve
@@ -2304,7 +2301,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cylinder
+    /// Provides utility methods to interact with an instance of OWL class Cylinder
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Cylinder : public Solid
@@ -2346,7 +2343,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CylindricalSurface
+    /// Provides utility methods to interact with an instance of OWL class CylindricalSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class CylindricalSurface : public InfiniteSurface
@@ -2384,7 +2381,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class DegenerateToroidalSurface
+    /// Provides utility methods to interact with an instance of OWL class DegenerateToroidalSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class DegenerateToroidalSurface : public FiniteSurface
@@ -2426,7 +2423,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Deviation
+    /// Provides utility methods to interact with an instance of OWL class Deviation
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Deviation : public Instance
@@ -2464,7 +2461,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class DirectLight
+    /// Provides utility methods to interact with an instance of OWL class DirectLight
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class DirectLight : public Light
@@ -2502,7 +2499,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class DirectionalLight
+    /// Provides utility methods to interact with an instance of OWL class DirectionalLight
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class DirectionalLight : public DirectLight
@@ -2536,7 +2533,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Dummy
+    /// Provides utility methods to interact with an instance of OWL class Dummy
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Dummy : public GeometricItem
@@ -2561,7 +2558,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Ellipse
+    /// Provides utility methods to interact with an instance of OWL class Ellipse
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Ellipse : public ConicalCurve
@@ -2603,7 +2600,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class EllipticCone
+    /// Provides utility methods to interact with an instance of OWL class EllipticCone
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class EllipticCone : public Solid
@@ -2649,7 +2646,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrudedPolygon
+    /// Provides utility methods to interact with an instance of OWL class ExtrudedPolygon
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ExtrudedPolygon : public Solid
@@ -2703,7 +2700,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrudedPolygonTapered
+    /// Provides utility methods to interact with an instance of OWL class ExtrudedPolygonTapered
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ExtrudedPolygonTapered : public Solid
@@ -2769,7 +2766,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrusionAreaSolid
+    /// Provides utility methods to interact with an instance of OWL class ExtrusionAreaSolid
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ExtrusionAreaSolid : public Solid
@@ -2823,7 +2820,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrusionAreaSolidSet
+    /// Provides utility methods to interact with an instance of OWL class ExtrusionAreaSolidSet
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ExtrusionAreaSolidSet : public Solid
@@ -2873,7 +2870,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Face2D
+    /// Provides utility methods to interact with an instance of OWL class Face2D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Face2D : public Face
@@ -2919,7 +2916,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Face2DSet
+    /// Provides utility methods to interact with an instance of OWL class Face2DSet
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Face2DSet : public Face
@@ -2961,7 +2958,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class FrustumCone
+    /// Provides utility methods to interact with an instance of OWL class FrustumCone
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class FrustumCone : public Solid
@@ -3007,7 +3004,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Torus
+    /// Provides utility methods to interact with an instance of OWL class Torus
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Torus : public Solid
@@ -3049,7 +3046,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class HornTorus
+    /// Provides utility methods to interact with an instance of OWL class HornTorus
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class HornTorus : public Torus
@@ -3074,7 +3071,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Hyperbola
+    /// Provides utility methods to interact with an instance of OWL class Hyperbola
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Hyperbola : public ConicalCurve
@@ -3108,7 +3105,108 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Mathematics
+    /// Provides utility methods to interact with an instance of OWL class Intersection
+    /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
+    /// </summary>
+    class Intersection : public GeometricItem
+    {
+    public:
+        /// <summary>
+        /// Create new instace of OWL class Intersection and returns object of this C++ class to interact with
+        /// </summary>
+        /// <param name="model">The handle to the model</param>
+        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
+        /// <returns></returns>
+        static Intersection Create(int64_t model, const char* name=NULL) { return Intersection(Instance::Create(model, "Intersection", name), "Intersection");}
+        
+        /// <summary>
+        /// Constructs object of this C++ class that wraps existing OWL instance
+        /// </summary>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
+        Intersection(int64_t instance = NULL, const char* checkClassName = NULL)
+            : GeometricItem(instance, (checkClassName != NULL) ? checkClassName : "Intersection")
+        {}
+    };
+
+    /// <summary>
+    /// Provides utility methods to interact with an instance of OWL class IntersectionCurve
+    /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
+    /// </summary>
+    class IntersectionCurve : public Intersection
+    {
+    public:
+        /// <summary>
+        /// Create new instace of OWL class IntersectionCurve and returns object of this C++ class to interact with
+        /// </summary>
+        /// <param name="model">The handle to the model</param>
+        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
+        /// <returns></returns>
+        static IntersectionCurve Create(int64_t model, const char* name=NULL) { return IntersectionCurve(Instance::Create(model, "IntersectionCurve", name), "IntersectionCurve");}
+        
+        /// <summary>
+        /// Constructs object of this C++ class that wraps existing OWL instance
+        /// </summary>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
+        IntersectionCurve(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Intersection(instance, (checkClassName != NULL) ? checkClassName : "IntersectionCurve")
+        {}
+
+       //
+       // Properties with known cardinality restrictions to IntersectionCurve
+       //
+
+        ///<summary>Sets relationships from this instance to an array of Surface. OWL cardinality 2..2</summary>
+        void set_surfaces(const Surface* instances, int64_t count) { SetObjectProperty<Surface>("surfaces", instances, count); }
+        ///<summary>Sets relationships from this instance to an array of int64_t. OWL cardinality 2..2</summary>
+        void set_surfaces(const int64_t* instances, int64_t count) { SetObjectProperty<int64_t>("surfaces", instances, count); }
+        ///<summary>Get an array of related instances. OWL cardinality 2..2. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        const Surface* get_surfaces(int64_t* pCount) { return GetObjectProperty<Surface>("surfaces", pCount); }
+        ///<summary>Get an array of related instance handles. OWL cardinality 2..2. The method returns pointer to inernal buffer, a caller should not free or change it.</summary>
+        const int64_t* get_surfaces_int64(int64_t* pCount) { return GetObjectProperty<int64_t>("surfaces", pCount); }
+    };
+
+    /// <summary>
+    /// Provides utility methods to interact with an instance of OWL class IntersectionPoint
+    /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
+    /// </summary>
+    class IntersectionPoint : public Intersection
+    {
+    public:
+        /// <summary>
+        /// Create new instace of OWL class IntersectionPoint and returns object of this C++ class to interact with
+        /// </summary>
+        /// <param name="model">The handle to the model</param>
+        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
+        /// <returns></returns>
+        static IntersectionPoint Create(int64_t model, const char* name=NULL) { return IntersectionPoint(Instance::Create(model, "IntersectionPoint", name), "IntersectionPoint");}
+        
+        /// <summary>
+        /// Constructs object of this C++ class that wraps existing OWL instance
+        /// </summary>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
+        IntersectionPoint(int64_t instance = NULL, const char* checkClassName = NULL)
+            : Intersection(instance, (checkClassName != NULL) ? checkClassName : "IntersectionPoint")
+        {}
+
+       //
+       // Properties with known cardinality restrictions to IntersectionPoint
+       //
+
+        ///<summary>Sets relationship from this instance to an instance of Curve</summary>
+        void set_curve(const Curve& instance) { SetObjectProperty<Curve>("curve", &instance, 1); }
+        ///<summary>Get related instance. The method returns pointer to inernal buffer, a caller should not free or change it</summary>
+        const Curve* get_curve() { return GetObjectProperty<Curve>("curve", NULL); }
+        ///<summary>Sets relationship from this instance to an instance of Surface</summary>
+        void set_surface(const Surface& instance) { SetObjectProperty<Surface>("surface", &instance, 1); }
+        ///<summary>Get related instance. The method returns pointer to inernal buffer, a caller should not free or change it</summary>
+        const Surface* get_surface() { return GetObjectProperty<Surface>("surface", NULL); }
+    };
+
+    /// <summary>
+    /// Provides utility methods to interact with an instance of OWL class Mathematics
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Mathematics : public Instance
@@ -3133,7 +3231,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Matrix
+    /// Provides utility methods to interact with an instance of OWL class Matrix
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Matrix : public Mathematics
@@ -3215,7 +3313,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InverseMatrix
+    /// Provides utility methods to interact with an instance of OWL class InverseMatrix
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class InverseMatrix : public Matrix
@@ -3249,7 +3347,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InvertedCurve
+    /// Provides utility methods to interact with an instance of OWL class InvertedCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class InvertedCurve : public Curve
@@ -3283,7 +3381,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InvertedSurface
+    /// Provides utility methods to interact with an instance of OWL class InvertedSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class InvertedSurface : public Surface
@@ -3317,7 +3415,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Line3D
+    /// Provides utility methods to interact with an instance of OWL class Line3D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Line3D : public Curve
@@ -3355,7 +3453,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Line3Dn
+    /// Provides utility methods to interact with an instance of OWL class Line3Dn
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Line3Dn : public Curve
@@ -3425,7 +3523,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Line3DSet
+    /// Provides utility methods to interact with an instance of OWL class Line3DSet
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Line3DSet : public Curve
@@ -3463,7 +3561,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class LineByFace
+    /// Provides utility methods to interact with an instance of OWL class LineByFace
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class LineByFace : public Curve
@@ -3501,7 +3599,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Material
+    /// Provides utility methods to interact with an instance of OWL class Material
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Material : public Appearance
@@ -3543,7 +3641,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class MatrixMultiplication
+    /// Provides utility methods to interact with an instance of OWL class MatrixMultiplication
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class MatrixMultiplication : public Matrix
@@ -3581,7 +3679,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Mesh
+    /// Provides utility methods to interact with an instance of OWL class Mesh
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Mesh : public Face
@@ -3615,7 +3713,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class NURBSCurve
+    /// Provides utility methods to interact with an instance of OWL class NURBSCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class NURBSCurve : public BSplineCurve
@@ -3649,7 +3747,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class NURBSSurface
+    /// Provides utility methods to interact with an instance of OWL class NURBSSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class NURBSSurface : public BSplineSurface
@@ -3683,7 +3781,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Parabola
+    /// Provides utility methods to interact with an instance of OWL class Parabola
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Parabola : public ConicalCurve
@@ -3708,7 +3806,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Plane
+    /// Provides utility methods to interact with an instance of OWL class Plane
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Plane : public Mathematics
@@ -3754,7 +3852,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PlaneSurface
+    /// Provides utility methods to interact with an instance of OWL class PlaneSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class PlaneSurface : public InfiniteSurface
@@ -3788,7 +3886,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point
+    /// Provides utility methods to interact with an instance of OWL class Point
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Point : public GeometricItem
@@ -3813,7 +3911,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point3D
+    /// Provides utility methods to interact with an instance of OWL class Point3D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Point3D : public Point
@@ -3867,7 +3965,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point3DSet
+    /// Provides utility methods to interact with an instance of OWL class Point3DSet
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Point3DSet : public Point
@@ -3909,7 +4007,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point3DSetByGeometricItem
+    /// Provides utility methods to interact with an instance of OWL class Point3DSetByGeometricItem
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Point3DSetByGeometricItem : public Point3DSet
@@ -3943,7 +4041,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PointLight
+    /// Provides utility methods to interact with an instance of OWL class PointLight
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class PointLight : public DirectLight
@@ -3977,7 +4075,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PointLoop
+    /// Provides utility methods to interact with an instance of OWL class PointLoop
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class PointLoop : public Curve
@@ -4023,7 +4121,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Polygon2D
+    /// Provides utility methods to interact with an instance of OWL class Polygon2D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Polygon2D : public Curve
@@ -4061,7 +4159,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Polygon3D
+    /// Provides utility methods to interact with an instance of OWL class Polygon3D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Polygon3D : public Curve
@@ -4099,7 +4197,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PolyLine3D
+    /// Provides utility methods to interact with an instance of OWL class PolyLine3D
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class PolyLine3D : public Curve
@@ -4149,7 +4247,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Prism
+    /// Provides utility methods to interact with an instance of OWL class Prism
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Prism : public Solid
@@ -4187,7 +4285,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Profile
+    /// Provides utility methods to interact with an instance of OWL class Profile
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Profile : public Curve
@@ -4229,7 +4327,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Projection
+    /// Provides utility methods to interact with an instance of OWL class Projection
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Projection : public Environment
@@ -4263,7 +4361,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Pyramid
+    /// Provides utility methods to interact with an instance of OWL class Pyramid
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Pyramid : public Solid
@@ -4305,7 +4403,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RationalBezierCurve
+    /// Provides utility methods to interact with an instance of OWL class RationalBezierCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class RationalBezierCurve : public BezierCurve
@@ -4339,7 +4437,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RationalBezierSurface
+    /// Provides utility methods to interact with an instance of OWL class RationalBezierSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class RationalBezierSurface : public BezierSurface
@@ -4373,7 +4471,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RectangleCurve
+    /// Provides utility methods to interact with an instance of OWL class RectangleCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class RectangleCurve : public Curve
@@ -4423,7 +4521,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Repetition
+    /// Provides utility methods to interact with an instance of OWL class Repetition
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Repetition : public GeometricItem
@@ -4465,7 +4563,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RingTorus
+    /// Provides utility methods to interact with an instance of OWL class RingTorus
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class RingTorus : public Torus
@@ -4490,7 +4588,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Shadow
+    /// Provides utility methods to interact with an instance of OWL class Shadow
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Shadow : public Face
@@ -4544,7 +4642,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SineCurve
+    /// Provides utility methods to interact with an instance of OWL class SineCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SineCurve : public TransitionalCurve
@@ -4569,7 +4667,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SkewedCone
+    /// Provides utility methods to interact with an instance of OWL class SkewedCone
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SkewedCone : public Solid
@@ -4619,7 +4717,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SkewedFrustumCone
+    /// Provides utility methods to interact with an instance of OWL class SkewedFrustumCone
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SkewedFrustumCone : public Solid
@@ -4673,7 +4771,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SolidBySurface
+    /// Provides utility methods to interact with an instance of OWL class SolidBySurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SolidBySurface : public Solid
@@ -4711,7 +4809,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SolidLine
+    /// Provides utility methods to interact with an instance of OWL class SolidLine
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SolidLine : public Solid
@@ -4753,7 +4851,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Sphere
+    /// Provides utility methods to interact with an instance of OWL class Sphere
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Sphere : public Solid
@@ -4791,7 +4889,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SphericalSurface
+    /// Provides utility methods to interact with an instance of OWL class SphericalSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SphericalSurface : public FiniteSurface
@@ -4829,7 +4927,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SpindleTorus
+    /// Provides utility methods to interact with an instance of OWL class SpindleTorus
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SpindleTorus : public Torus
@@ -4854,7 +4952,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Spiral
+    /// Provides utility methods to interact with an instance of OWL class Spiral
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Spiral : public Curve
@@ -4908,7 +5006,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SpotLight
+    /// Provides utility methods to interact with an instance of OWL class SpotLight
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SpotLight : public DirectLight
@@ -4933,7 +5031,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SurfaceBySweptCurve
+    /// Provides utility methods to interact with an instance of OWL class SurfaceBySweptCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SurfaceBySweptCurve : public FiniteSurface
@@ -4979,7 +5077,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SurfaceOfLinearExtrusion
+    /// Provides utility methods to interact with an instance of OWL class SurfaceOfLinearExtrusion
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SurfaceOfLinearExtrusion : public FiniteSurface
@@ -5017,7 +5115,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SurfaceOfRevolution
+    /// Provides utility methods to interact with an instance of OWL class SurfaceOfRevolution
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SurfaceOfRevolution : public Surface
@@ -5055,7 +5153,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptAreaSolid
+    /// Provides utility methods to interact with an instance of OWL class SweptAreaSolid
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SweptAreaSolid : public Solid
@@ -5109,7 +5207,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptAreaSolidSet
+    /// Provides utility methods to interact with an instance of OWL class SweptAreaSolidSet
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SweptAreaSolidSet : public Solid
@@ -5159,7 +5257,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptAreaSolidTapered
+    /// Provides utility methods to interact with an instance of OWL class SweptAreaSolidTapered
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SweptAreaSolidTapered : public Solid
@@ -5225,7 +5323,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptBlend
+    /// Provides utility methods to interact with an instance of OWL class SweptBlend
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class SweptBlend : public Solid
@@ -5295,7 +5393,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Texture
+    /// Provides utility methods to interact with an instance of OWL class Texture
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Texture : public Appearance
@@ -5357,7 +5455,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ToroidalSurface
+    /// Provides utility methods to interact with an instance of OWL class ToroidalSurface
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ToroidalSurface : public FiniteSurface
@@ -5399,7 +5497,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Transformation
+    /// Provides utility methods to interact with an instance of OWL class Transformation
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Transformation : public Curve
@@ -5437,7 +5535,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TriangleCurve
+    /// Provides utility methods to interact with an instance of OWL class TriangleCurve
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class TriangleCurve : public Curve
@@ -5491,7 +5589,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TriangleReduction
+    /// Provides utility methods to interact with an instance of OWL class TriangleReduction
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class TriangleReduction : public Solid
@@ -5533,7 +5631,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TriangleSet
+    /// Provides utility methods to interact with an instance of OWL class TriangleSet
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class TriangleSet : public Surface
@@ -5571,7 +5669,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Vector
+    /// Provides utility methods to interact with an instance of OWL class Vector
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Vector : public Mathematics
@@ -5596,7 +5694,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Vector3
+    /// Provides utility methods to interact with an instance of OWL class Vector3
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class Vector3 : public Vector
@@ -5642,7 +5740,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class View
+    /// Provides utility methods to interact with an instance of OWL class View
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class View : public Environment
@@ -5676,7 +5774,7 @@ namespace GEOM
     };
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class World
+    /// Provides utility methods to interact with an instance of OWL class World
     /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class World : public Environment

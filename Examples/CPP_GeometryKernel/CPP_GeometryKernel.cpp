@@ -94,6 +94,9 @@ static void MoreExamplesToAccessDifferentTypesOfProperties(int64_t model)
 	Texture texture = Texture::Create(model);
 	NURBSCurve curve = NURBSCurve::Create(model);
 
+	GeometricItem geometricItem ((int64_t)curve); //no assertion
+	//GeometricItem notGeometricItem (texture); //expected assertion
+
 	//double
 	const double* lseg = curve.get_segmentationLength();
 	ASSERT(lseg == NULL);

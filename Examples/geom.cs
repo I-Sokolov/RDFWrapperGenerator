@@ -70,6 +70,9 @@ namespace GEOM
 //     HornTorus
 //     Hyperbola
 //     InfiniteSurface
+//     Intersection
+//     IntersectionCurve
+//     IntersectionPoint
 //     InverseMatrix
 //     InvertedCurve
 //     InvertedSurface
@@ -142,7 +145,7 @@ namespace GEOM
 //     World
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFace
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFace
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class AdvancedFace : GeometricItem
@@ -251,7 +254,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFace2D
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFace2D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class AdvancedFace2D : AdvancedFace
@@ -294,7 +297,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFace3D
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFace3D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class AdvancedFace3D : AdvancedFace
@@ -320,7 +323,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AdvancedFaceMapped
+    /// Provides utility methods to interact with an instance of OWL class AdvancedFaceMapped
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class AdvancedFaceMapped : AdvancedFace
@@ -359,7 +362,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AlignedSegment
+    /// Provides utility methods to interact with an instance of OWL class AlignedSegment
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class AlignedSegment : Curve
@@ -430,7 +433,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AlignedSegments
+    /// Provides utility methods to interact with an instance of OWL class AlignedSegments
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class AlignedSegments : Curve
@@ -515,7 +518,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Alignment
+    /// Provides utility methods to interact with an instance of OWL class Alignment
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Alignment : Curve
@@ -602,7 +605,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class AmbientLight
+    /// Provides utility methods to interact with an instance of OWL class AmbientLight
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class AmbientLight : Light
@@ -628,7 +631,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Appearance
+    /// Provides utility methods to interact with an instance of OWL class Appearance
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Appearance : Instance
@@ -654,7 +657,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Arc3D
+    /// Provides utility methods to interact with an instance of OWL class Arc3D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Arc3D : Curve
@@ -705,7 +708,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BezierCurve
+    /// Provides utility methods to interact with an instance of OWL class BezierCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BezierCurve : SplineCurve
@@ -731,7 +734,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BezierSurface
+    /// Provides utility methods to interact with an instance of OWL class BezierSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BezierSurface : SplineSurface
@@ -766,7 +769,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BiQuadraticParabola
+    /// Provides utility methods to interact with an instance of OWL class BiQuadraticParabola
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BiQuadraticParabola : TransitionalCurve
@@ -792,7 +795,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Blend
+    /// Provides utility methods to interact with an instance of OWL class Blend
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Blend : Solid
@@ -891,7 +894,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BlossCurve
+    /// Provides utility methods to interact with an instance of OWL class BlossCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BlossCurve : TransitionalCurve
@@ -917,7 +920,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BooleanOperation
+    /// Provides utility methods to interact with an instance of OWL class BooleanOperation
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BooleanOperation : Solid
@@ -1028,7 +1031,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BooleanOperation2D
+    /// Provides utility methods to interact with an instance of OWL class BooleanOperation2D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BooleanOperation2D : Face
@@ -1135,7 +1138,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BoundaryRepresentation
+    /// Provides utility methods to interact with an instance of OWL class BoundaryRepresentation
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BoundaryRepresentation : Solid
@@ -1264,7 +1267,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Box
+    /// Provides utility methods to interact with an instance of OWL class Box
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Box : Solid
@@ -1307,7 +1310,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BSplineCurve
+    /// Provides utility methods to interact with an instance of OWL class BSplineCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BSplineCurve : SplineCurve
@@ -1350,7 +1353,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class BSplineSurface
+    /// Provides utility methods to interact with an instance of OWL class BSplineSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class BSplineSurface : SplineSurface
@@ -1401,7 +1404,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Circle
+    /// Provides utility methods to interact with an instance of OWL class Circle
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Circle : ConicalCurve
@@ -1427,7 +1430,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CircleByPoints
+    /// Provides utility methods to interact with an instance of OWL class CircleByPoints
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class CircleByPoints : Circle
@@ -1512,7 +1515,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ClippedPyramid
+    /// Provides utility methods to interact with an instance of OWL class ClippedPyramid
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ClippedPyramid : Solid
@@ -1551,7 +1554,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Clipping
+    /// Provides utility methods to interact with an instance of OWL class Clipping
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Clipping : Solid
@@ -1658,7 +1661,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Clothoid
+    /// Provides utility methods to interact with an instance of OWL class Clothoid
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Clothoid : Curve
@@ -1733,7 +1736,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ClothoidCurve
+    /// Provides utility methods to interact with an instance of OWL class ClothoidCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ClothoidCurve : TransitionalCurve
@@ -1759,7 +1762,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Collection
+    /// Provides utility methods to interact with an instance of OWL class Collection
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Collection : GeometricItem
@@ -1868,7 +1871,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Color
+    /// Provides utility methods to interact with an instance of OWL class Color
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Color : Appearance
@@ -2003,7 +2006,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ColorComponent
+    /// Provides utility methods to interact with an instance of OWL class ColorComponent
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ColorComponent : Appearance
@@ -2050,7 +2053,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cone
+    /// Provides utility methods to interact with an instance of OWL class Cone
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Cone : Solid
@@ -2093,7 +2096,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ConicalCurve
+    /// Provides utility methods to interact with an instance of OWL class ConicalCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ConicalCurve : Curve
@@ -2140,7 +2143,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ConicalSurface
+    /// Provides utility methods to interact with an instance of OWL class ConicalSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ConicalSurface : InfiniteSurface
@@ -2187,7 +2190,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Copy
+    /// Provides utility methods to interact with an instance of OWL class Copy
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Copy : GeometricItem
@@ -2222,7 +2225,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CosineCurve
+    /// Provides utility methods to interact with an instance of OWL class CosineCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class CosineCurve : TransitionalCurve
@@ -2248,7 +2251,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cube
+    /// Provides utility methods to interact with an instance of OWL class Cube
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Cube : Solid
@@ -2283,7 +2286,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CubicParabola
+    /// Provides utility methods to interact with an instance of OWL class CubicParabola
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class CubicParabola : TransitionalCurve
@@ -2309,7 +2312,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cuboid
+    /// Provides utility methods to interact with an instance of OWL class Cuboid
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Cuboid : Solid
@@ -2352,7 +2355,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Curve
+    /// Provides utility methods to interact with an instance of OWL class Curve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Curve : GeometricItem
@@ -2378,7 +2381,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CurvesFromSurface
+    /// Provides utility methods to interact with an instance of OWL class CurvesFromSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class CurvesFromSurface : Curve
@@ -2463,7 +2466,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Cylinder
+    /// Provides utility methods to interact with an instance of OWL class Cylinder
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Cylinder : Solid
@@ -2506,7 +2509,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class CylindricalSurface
+    /// Provides utility methods to interact with an instance of OWL class CylindricalSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class CylindricalSurface : InfiniteSurface
@@ -2545,7 +2548,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class DegenerateToroidalSurface
+    /// Provides utility methods to interact with an instance of OWL class DegenerateToroidalSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class DegenerateToroidalSurface : FiniteSurface
@@ -2588,7 +2591,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Deviation
+    /// Provides utility methods to interact with an instance of OWL class Deviation
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Deviation : Instance
@@ -2627,7 +2630,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class DirectionalLight
+    /// Provides utility methods to interact with an instance of OWL class DirectionalLight
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class DirectionalLight : DirectLight
@@ -2682,7 +2685,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class DirectLight
+    /// Provides utility methods to interact with an instance of OWL class DirectLight
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class DirectLight : Light
@@ -2721,7 +2724,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Dummy
+    /// Provides utility methods to interact with an instance of OWL class Dummy
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Dummy : GeometricItem
@@ -2747,7 +2750,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Ellipse
+    /// Provides utility methods to interact with an instance of OWL class Ellipse
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Ellipse : ConicalCurve
@@ -2790,7 +2793,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class EllipticCone
+    /// Provides utility methods to interact with an instance of OWL class EllipticCone
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class EllipticCone : Solid
@@ -2837,7 +2840,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Environment
+    /// Provides utility methods to interact with an instance of OWL class Environment
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Environment : Instance
@@ -2863,7 +2866,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrudedPolygon
+    /// Provides utility methods to interact with an instance of OWL class ExtrudedPolygon
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ExtrudedPolygon : Solid
@@ -2918,7 +2921,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrudedPolygonTapered
+    /// Provides utility methods to interact with an instance of OWL class ExtrudedPolygonTapered
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ExtrudedPolygonTapered : Solid
@@ -2985,7 +2988,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrusionAreaSolid
+    /// Provides utility methods to interact with an instance of OWL class ExtrusionAreaSolid
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ExtrusionAreaSolid : Solid
@@ -3106,7 +3109,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ExtrusionAreaSolidSet
+    /// Provides utility methods to interact with an instance of OWL class ExtrusionAreaSolidSet
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ExtrusionAreaSolidSet : Solid
@@ -3203,7 +3206,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Face
+    /// Provides utility methods to interact with an instance of OWL class Face
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Face : GeometricItem
@@ -3229,7 +3232,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Face2D
+    /// Provides utility methods to interact with an instance of OWL class Face2D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Face2D : Face
@@ -3342,7 +3345,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Face2DSet
+    /// Provides utility methods to interact with an instance of OWL class Face2DSet
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Face2DSet : Face
@@ -3431,7 +3434,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class FiniteSurface
+    /// Provides utility methods to interact with an instance of OWL class FiniteSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class FiniteSurface : Surface
@@ -3457,7 +3460,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class FrustumCone
+    /// Provides utility methods to interact with an instance of OWL class FrustumCone
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class FrustumCone : Solid
@@ -3504,7 +3507,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class GeometricItem
+    /// Provides utility methods to interact with an instance of OWL class GeometricItem
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class GeometricItem : Instance
@@ -3559,7 +3562,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class HornTorus
+    /// Provides utility methods to interact with an instance of OWL class HornTorus
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class HornTorus : Torus
@@ -3585,7 +3588,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Hyperbola
+    /// Provides utility methods to interact with an instance of OWL class Hyperbola
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Hyperbola : ConicalCurve
@@ -3620,7 +3623,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InfiniteSurface
+    /// Provides utility methods to interact with an instance of OWL class InfiniteSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class InfiniteSurface : Surface
@@ -3646,7 +3649,197 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InverseMatrix
+    /// Provides utility methods to interact with an instance of OWL class Intersection
+    /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
+    /// </summary>
+    public class Intersection : GeometricItem
+    {
+        /// <summary>
+        /// Create new instace of OWL class Intersection and returns object of this C# class to interact with
+        /// </summary>
+        /// <param name="model">The handle to the model</param>
+        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
+        /// <returns></returns>
+        public static new Intersection Create(Int64 model, string name=null) { return new Intersection(Instance.Create(model, "Intersection", name), "Intersection");}
+        
+        /// <summary>
+        /// Constructs object of this C# class that wraps existing OWL instance
+        /// </summary>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
+        public Intersection(Int64 instance, string checkClassName = null) 
+            : base (instance, (checkClassName!=null) ? checkClassName : "Intersection") 
+        {            
+        }
+    }
+
+
+    /// <summary>
+    /// Provides utility methods to interact with an instance of OWL class IntersectionCurve
+    /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
+    /// </summary>
+    public class IntersectionCurve : Intersection
+    {
+        /// <summary>
+        /// Create new instace of OWL class IntersectionCurve and returns object of this C# class to interact with
+        /// </summary>
+        /// <param name="model">The handle to the model</param>
+        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
+        /// <returns></returns>
+        public static new IntersectionCurve Create(Int64 model, string name=null) { return new IntersectionCurve(Instance.Create(model, "IntersectionCurve", name), "IntersectionCurve");}
+        
+        /// <summary>
+        /// Constructs object of this C# class that wraps existing OWL instance
+        /// </summary>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
+        public IntersectionCurve(Int64 instance, string checkClassName = null) 
+            : base (instance, (checkClassName!=null) ? checkClassName : "IntersectionCurve") 
+        {            
+        }
+
+       //
+       // Properties with known cardinality restrictions to IntersectionCurve
+       //
+
+        ///<summary>Sets relationships from this instance to an array of Surface. OWL cardinality 2..2</summary>
+        public void set_surfaces(Surface[] instances) { SetObjectProperty("surfaces", instances); }
+        ///<summary>Sets relationships from this instance to an array of Int64. OWL cardinality 2..2</summary>
+        public void set_surfaces(Int64[] instances) { SetObjectProperty("surfaces", instances); }
+        ///<summary>Get an array of related instances. OWL cardinality 2..2</summary>
+        public Surface[] get_surfaces() 
+        {
+            var propId = GetPropertyId("surfaces");
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                var values = new Int64[card];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+
+                var ret = new Surface[card];
+                for (int i = 0; i < card; i++)
+                {
+                    ret[i] = new Surface(values[i], null);
+                }
+
+                return ret;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        ///<summary>Get an array of handles of related instances. OWL cardinality 2..2</summary>
+        public Int64[] get_surfaces_Int64()  
+        {
+            var propId = GetPropertyId("surfaces");
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                var values = new Int64[card];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)card);
+
+                return values;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Provides utility methods to interact with an instance of OWL class IntersectionPoint
+    /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
+    /// </summary>
+    public class IntersectionPoint : Intersection
+    {
+        /// <summary>
+        /// Create new instace of OWL class IntersectionPoint and returns object of this C# class to interact with
+        /// </summary>
+        /// <param name="model">The handle to the model</param>
+        /// <param name="name">This attribute represents the name of the instance (given as char array / ASCII). The name is given by the host and the attribute is not changed</param>
+        /// <returns></returns>
+        public static new IntersectionPoint Create(Int64 model, string name=null) { return new IntersectionPoint(Instance.Create(model, "IntersectionPoint", name), "IntersectionPoint");}
+        
+        /// <summary>
+        /// Constructs object of this C# class that wraps existing OWL instance
+        /// </summary>
+        /// <param name="instance">OWL instance to interact with</param>
+        /// <param name="checkClassName">Expected OWL class of the instance, used for diagnostic (optionally)</param>
+        public IntersectionPoint(Int64 instance, string checkClassName = null) 
+            : base (instance, (checkClassName!=null) ? checkClassName : "IntersectionPoint") 
+        {            
+        }
+
+       //
+       // Properties with known cardinality restrictions to IntersectionPoint
+       //
+
+        ///<summary>Sets relationship from this instance to an instance of Curve</summary>
+        public void set_curve(Curve instance) { SetObjectProperty("curve", instance); }
+        ///<summary>Get related instance</summary>
+        public Curve get_curve() 
+        {
+            var propId = GetPropertyId("curve");
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                var values = new Int64[1];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)1);
+
+                return new Curve(values[0], null);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        ///<summary>Sets relationship from this instance to an instance of Surface</summary>
+        public void set_surface(Surface instance) { SetObjectProperty("surface", instance); }
+        ///<summary>Get related instance</summary>
+        public Surface get_surface() 
+        {
+            var propId = GetPropertyId("surface");
+
+            Int64 card = 0;
+            IntPtr valuesPtr = IntPtr.Zero;
+            var res = engine.GetObjectProperty(m_instance, propId, out valuesPtr, out card);
+            System.Diagnostics.Debug.Assert(res == 0);
+
+            if (card > 0)
+            {
+                var values = new Int64[1];
+                System.Runtime.InteropServices.Marshal.Copy(valuesPtr, values, 0, (int)1);
+
+                return new Surface(values[0], null);
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// Provides utility methods to interact with an instance of OWL class InverseMatrix
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class InverseMatrix : Matrix
@@ -3701,7 +3894,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InvertedCurve
+    /// Provides utility methods to interact with an instance of OWL class InvertedCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class InvertedCurve : Curve
@@ -3756,7 +3949,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class InvertedSurface
+    /// Provides utility methods to interact with an instance of OWL class InvertedSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class InvertedSurface : Surface
@@ -3811,7 +4004,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Light
+    /// Provides utility methods to interact with an instance of OWL class Light
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Light : Environment
@@ -3866,7 +4059,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Line3D
+    /// Provides utility methods to interact with an instance of OWL class Line3D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Line3D : Curve
@@ -3905,7 +4098,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Line3Dn
+    /// Provides utility methods to interact with an instance of OWL class Line3Dn
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Line3Dn : Curve
@@ -3976,7 +4169,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Line3DSet
+    /// Provides utility methods to interact with an instance of OWL class Line3DSet
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Line3DSet : Curve
@@ -4015,7 +4208,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class LineByFace
+    /// Provides utility methods to interact with an instance of OWL class LineByFace
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class LineByFace : Curve
@@ -4100,7 +4293,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Material
+    /// Provides utility methods to interact with an instance of OWL class Material
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Material : Appearance
@@ -4209,7 +4402,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Mathematics
+    /// Provides utility methods to interact with an instance of OWL class Mathematics
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Mathematics : Instance
@@ -4235,7 +4428,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Matrix
+    /// Provides utility methods to interact with an instance of OWL class Matrix
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Matrix : Mathematics
@@ -4318,7 +4511,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class MatrixMultiplication
+    /// Provides utility methods to interact with an instance of OWL class MatrixMultiplication
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class MatrixMultiplication : Matrix
@@ -4397,7 +4590,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Mesh
+    /// Provides utility methods to interact with an instance of OWL class Mesh
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Mesh : Face
@@ -4452,7 +4645,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class NURBSCurve
+    /// Provides utility methods to interact with an instance of OWL class NURBSCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class NURBSCurve : BSplineCurve
@@ -4487,7 +4680,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class NURBSSurface
+    /// Provides utility methods to interact with an instance of OWL class NURBSSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class NURBSSurface : BSplineSurface
@@ -4522,7 +4715,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Parabola
+    /// Provides utility methods to interact with an instance of OWL class Parabola
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Parabola : ConicalCurve
@@ -4548,7 +4741,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Plane
+    /// Provides utility methods to interact with an instance of OWL class Plane
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Plane : Mathematics
@@ -4595,7 +4788,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PlaneSurface
+    /// Provides utility methods to interact with an instance of OWL class PlaneSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class PlaneSurface : InfiniteSurface
@@ -4650,7 +4843,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point
+    /// Provides utility methods to interact with an instance of OWL class Point
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Point : GeometricItem
@@ -4676,7 +4869,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point3D
+    /// Provides utility methods to interact with an instance of OWL class Point3D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Point3D : Point
@@ -4731,7 +4924,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point3DSet
+    /// Provides utility methods to interact with an instance of OWL class Point3DSet
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Point3DSet : Point
@@ -4774,7 +4967,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Point3DSetByGeometricItem
+    /// Provides utility methods to interact with an instance of OWL class Point3DSetByGeometricItem
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Point3DSetByGeometricItem : Point3DSet
@@ -4829,7 +5022,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PointLight
+    /// Provides utility methods to interact with an instance of OWL class PointLight
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class PointLight : DirectLight
@@ -4884,7 +5077,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PointLoop
+    /// Provides utility methods to interact with an instance of OWL class PointLoop
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class PointLoop : Curve
@@ -4931,7 +5124,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Polygon2D
+    /// Provides utility methods to interact with an instance of OWL class Polygon2D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Polygon2D : Curve
@@ -5016,7 +5209,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Polygon3D
+    /// Provides utility methods to interact with an instance of OWL class Polygon3D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Polygon3D : Curve
@@ -5101,7 +5294,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class PolyLine3D
+    /// Provides utility methods to interact with an instance of OWL class PolyLine3D
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class PolyLine3D : Curve
@@ -5198,7 +5391,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Prism
+    /// Provides utility methods to interact with an instance of OWL class Prism
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Prism : Solid
@@ -5237,7 +5430,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Profile
+    /// Provides utility methods to interact with an instance of OWL class Profile
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Profile : Curve
@@ -5346,7 +5539,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Projection
+    /// Provides utility methods to interact with an instance of OWL class Projection
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Projection : Environment
@@ -5401,7 +5594,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Pyramid
+    /// Provides utility methods to interact with an instance of OWL class Pyramid
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Pyramid : Solid
@@ -5444,7 +5637,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RationalBezierCurve
+    /// Provides utility methods to interact with an instance of OWL class RationalBezierCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class RationalBezierCurve : BezierCurve
@@ -5479,7 +5672,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RationalBezierSurface
+    /// Provides utility methods to interact with an instance of OWL class RationalBezierSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class RationalBezierSurface : BezierSurface
@@ -5514,7 +5707,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RectangleCurve
+    /// Provides utility methods to interact with an instance of OWL class RectangleCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class RectangleCurve : Curve
@@ -5565,7 +5758,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Repetition
+    /// Provides utility methods to interact with an instance of OWL class Repetition
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Repetition : GeometricItem
@@ -5648,7 +5841,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class RingTorus
+    /// Provides utility methods to interact with an instance of OWL class RingTorus
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class RingTorus : Torus
@@ -5674,7 +5867,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Shadow
+    /// Provides utility methods to interact with an instance of OWL class Shadow
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Shadow : Face
@@ -5829,7 +6022,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SineCurve
+    /// Provides utility methods to interact with an instance of OWL class SineCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SineCurve : TransitionalCurve
@@ -5855,7 +6048,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SkewedCone
+    /// Provides utility methods to interact with an instance of OWL class SkewedCone
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SkewedCone : Solid
@@ -5906,7 +6099,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SkewedFrustumCone
+    /// Provides utility methods to interact with an instance of OWL class SkewedFrustumCone
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SkewedFrustumCone : Solid
@@ -5961,7 +6154,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Solid
+    /// Provides utility methods to interact with an instance of OWL class Solid
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Solid : GeometricItem
@@ -5987,7 +6180,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SolidBySurface
+    /// Provides utility methods to interact with an instance of OWL class SolidBySurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SolidBySurface : Solid
@@ -6072,7 +6265,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SolidLine
+    /// Provides utility methods to interact with an instance of OWL class SolidLine
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SolidLine : Solid
@@ -6115,7 +6308,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Sphere
+    /// Provides utility methods to interact with an instance of OWL class Sphere
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Sphere : Solid
@@ -6154,7 +6347,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SphericalSurface
+    /// Provides utility methods to interact with an instance of OWL class SphericalSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SphericalSurface : FiniteSurface
@@ -6193,7 +6386,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SpindleTorus
+    /// Provides utility methods to interact with an instance of OWL class SpindleTorus
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SpindleTorus : Torus
@@ -6219,7 +6412,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Spiral
+    /// Provides utility methods to interact with an instance of OWL class Spiral
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Spiral : Curve
@@ -6274,7 +6467,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SplineCurve
+    /// Provides utility methods to interact with an instance of OWL class SplineCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SplineCurve : Curve
@@ -6379,7 +6572,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SplineSurface
+    /// Provides utility methods to interact with an instance of OWL class SplineSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SplineSurface : FiniteSurface
@@ -6504,7 +6697,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SpotLight
+    /// Provides utility methods to interact with an instance of OWL class SpotLight
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SpotLight : DirectLight
@@ -6530,7 +6723,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Surface
+    /// Provides utility methods to interact with an instance of OWL class Surface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Surface : Face
@@ -6556,7 +6749,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SurfaceBySweptCurve
+    /// Provides utility methods to interact with an instance of OWL class SurfaceBySweptCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SurfaceBySweptCurve : FiniteSurface
@@ -6689,7 +6882,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SurfaceOfLinearExtrusion
+    /// Provides utility methods to interact with an instance of OWL class SurfaceOfLinearExtrusion
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SurfaceOfLinearExtrusion : FiniteSurface
@@ -6768,7 +6961,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SurfaceOfRevolution
+    /// Provides utility methods to interact with an instance of OWL class SurfaceOfRevolution
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SurfaceOfRevolution : Surface
@@ -6827,7 +7020,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptAreaSolid
+    /// Provides utility methods to interact with an instance of OWL class SweptAreaSolid
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SweptAreaSolid : Solid
@@ -6988,7 +7181,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptAreaSolidSet
+    /// Provides utility methods to interact with an instance of OWL class SweptAreaSolidSet
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SweptAreaSolidSet : Solid
@@ -7125,7 +7318,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptAreaSolidTapered
+    /// Provides utility methods to interact with an instance of OWL class SweptAreaSolidTapered
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SweptAreaSolidTapered : Solid
@@ -7364,7 +7557,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class SweptBlend
+    /// Provides utility methods to interact with an instance of OWL class SweptBlend
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class SweptBlend : Solid
@@ -7495,7 +7688,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Texture
+    /// Provides utility methods to interact with an instance of OWL class Texture
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Texture : Appearance
@@ -7558,7 +7751,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ToroidalSurface
+    /// Provides utility methods to interact with an instance of OWL class ToroidalSurface
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class ToroidalSurface : FiniteSurface
@@ -7601,7 +7794,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Torus
+    /// Provides utility methods to interact with an instance of OWL class Torus
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Torus : Solid
@@ -7644,7 +7837,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Transformation
+    /// Provides utility methods to interact with an instance of OWL class Transformation
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Transformation : Curve
@@ -7723,7 +7916,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TransitionalCurve
+    /// Provides utility methods to interact with an instance of OWL class TransitionalCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class TransitionalCurve : Curve
@@ -7818,7 +8011,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TriangleCurve
+    /// Provides utility methods to interact with an instance of OWL class TriangleCurve
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class TriangleCurve : Curve
@@ -7919,7 +8112,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TriangleReduction
+    /// Provides utility methods to interact with an instance of OWL class TriangleReduction
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class TriangleReduction : Solid
@@ -7982,7 +8175,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class TriangleSet
+    /// Provides utility methods to interact with an instance of OWL class TriangleSet
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class TriangleSet : Surface
@@ -8021,7 +8214,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Vector
+    /// Provides utility methods to interact with an instance of OWL class Vector
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Vector : Mathematics
@@ -8047,7 +8240,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class Vector3
+    /// Provides utility methods to interact with an instance of OWL class Vector3
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Vector3 : Vector
@@ -8094,7 +8287,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class View
+    /// Provides utility methods to interact with an instance of OWL class View
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class View : Environment
@@ -8149,7 +8342,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class World
+    /// Provides utility methods to interact with an instance of OWL class World
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class World : Environment
@@ -8204,7 +8397,7 @@ namespace GEOM
 
 
     /// <summary>
-    /// Provides utility methods to interact with a genetic instnace of OWL class
+    /// Provides utility methods to interact with a genetic instance of OWL class
     /// You also can use object of this C# class instead of Int64 handle of the OWL instance in any place where the handle is required
     /// </summary>
     public class Instance : IEquatable<Instance>, IComparable, IComparable<Instance>
@@ -8241,15 +8434,7 @@ namespace GEOM
         public Instance(Int64 instance, string cls)
         {
             m_instance = instance;
-#if DEBUG
-            if (m_instance != 0 && cls != null)
-            {
-                var clsid1 = engine.GetInstanceClass(m_instance);
-                var model = engine.GetModel(m_instance);
-                var clsid2 = engine.GetClassByName(model, cls);
-                System.Diagnostics.Trace.Assert(clsid1 == clsid2);
-            }
-#endif
+            System.Diagnostics.Debug.Assert(cls == null/*do not check*/ || engine.IsInstanceOfClass(instance, cls));
         }
 
 

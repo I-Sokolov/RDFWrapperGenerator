@@ -76,6 +76,9 @@ namespace CS_GeometryKernel
 			Texture texture = Texture.Create(model);
 			var curve = NURBSCurve.Create(model);
 
+			new GeometricItem (curve); //no assertion
+			new GeometricItem (texture); //expected assertion
+
 			//double
 			double? lseg = curve.get_segmentationLength();
 			Trace.Assert(lseg == null);
