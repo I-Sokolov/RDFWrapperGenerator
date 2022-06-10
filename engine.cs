@@ -2135,11 +2135,11 @@ namespace RDF
 		public static bool IsKindOfClass(Int64 owlMyClass, Int64 owlClass)
 		{
 			if (owlMyClass == owlClass) return true;
-			var owlParentClass = GetClassParentsByIterator(owlClass, 0);
+			var owlParentClass = GetClassParentsByIterator(owlMyClass, 0);
 			while (owlParentClass != 0)
 			{
-				if (IsKindOfClass(owlMyClass, owlParentClass)) return true;
-				owlParentClass = GetClassParentsByIterator(owlClass, owlParentClass);
+				if (IsKindOfClass(owlParentClass, owlClass)) return true;
+				owlParentClass = GetClassParentsByIterator(owlMyClass, owlParentClass);
 			}
 			return false;
 		}

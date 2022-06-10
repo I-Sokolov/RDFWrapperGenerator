@@ -367,10 +367,10 @@ static	inline	bool	IsKindOfClass(
 )
 {
 	if (owlMyClass == owlClass) return true;
-	int64_t owlParentClass = GetClassParentsByIterator(owlClass, 0);
+	int64_t owlParentClass = GetClassParentsByIterator(owlMyClass, 0);
 	while (owlParentClass) {
-		if (IsKindOfClass(owlMyClass, owlParentClass)) return  true;
-		owlParentClass = GetClassParentsByIterator(owlClass, owlParentClass);
+		if (IsKindOfClass(owlParentClass, owlClass)) return  true;
+		owlParentClass = GetClassParentsByIterator(owlMyClass, owlParentClass);
 	}
 	return	false;
 }
