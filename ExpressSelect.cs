@@ -83,7 +83,7 @@ namespace RDFWrappers
                 switch (declType)
                 {
                     case enum_express_declaration.__ENTITY:
-                        ret.Add(Generator.Template.SelectGetAsInstance);
+                        ret.Add(Generator.Template.SelectGetAsEntity);
                         break;
 
                     case enum_express_declaration.__ENUM:
@@ -128,13 +128,13 @@ namespace RDFWrappers
 
             generator.m_replacements[Generator.KWD_GETSET] = "get";
             generator.m_replacements[Generator.KWD_ACCESSOR] = "getter";
-            generator.WriteByTemplate(Generator.Template.SelectAccessor);
+            generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
 
             if (!attr.inverse)
             {
                 generator.m_replacements[Generator.KWD_GETSET] = "set";
                 generator.m_replacements[Generator.KWD_ACCESSOR] = "setter";
-                generator.WriteByTemplate(Generator.Template.SelectAccessor);
+                generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
             }
 
             generator.m_replacements.Remove(Generator.KWD_GETSET);
@@ -220,7 +220,7 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_ENUMERATION_NAME] = enumType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = enumType.name.ToUpper();
 
-            generator.WriteByTemplate(bGet ? Generator.Template.SelectGetEnumeration : Generator.Template.SelectSetEnumeration);
+            generator.WriteByTemplate(bGet ? Generator.Template.SelectEnumerationGet : Generator.Template.SelectEnumerationSet);
 
             //var impl = generator.StringByTemplate(bGet ? Generator.Template.SelectGetEntityImplementation : Generator.Template.SelectSetEntityImplementation);
             //generator.m_implementations.Append(impl);
@@ -233,9 +233,9 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_REF_ENTITY] = entityType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = entityType.name.ToUpper();
 
-            generator.WriteByTemplate(bGet ? Generator.Template.SelectGetEntity : Generator.Template.SelectSetEntity);
+            generator.WriteByTemplate(bGet ? Generator.Template.SelectEntityGet : Generator.Template.SelectEntitySet);
 
-            var impl = generator.StringByTemplate(bGet ? Generator.Template.SelectGetEntityImplementation : Generator.Template.SelectSetEntityImplementation);
+            var impl = generator.StringByTemplate(bGet ? Generator.Template.SelectEntityGetImplementation : Generator.Template.SelectEntitySetImplementation);
             generator.m_implementations.Append(impl);
         }
 
@@ -255,9 +255,9 @@ namespace RDFWrappers
 
             var tpl = Generator.Template.None;
             if (bGet)
-                tpl = baseType == "string" ? Generator.Template.SelectGetStringValue : Generator.Template.SelectGetSimpleValue;
+                tpl = baseType == "string" ? Generator.Template.SelectTextGet : Generator.Template.SelectSimpleGet;
             else
-                tpl = baseType == "string" ? Generator.Template.SelectSetStringValue : Generator.Template.SelectSetSimpleValue;
+                tpl = baseType == "string" ? Generator.Template.SelectTextSet : Generator.Template.SelectTextSet;
 
             generator.WriteByTemplate (tpl);
         }

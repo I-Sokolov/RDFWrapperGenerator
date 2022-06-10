@@ -71,10 +71,10 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
             generator.m_replacements[Generator.KWD_AGGR_TYPE] = GetCAggrType();
 
-            Generator.Template tplGet = (baseType == "string") ? Generator.Template.AggregationGetString : Generator.Template.AggregationGetSimple;
-            Generator.Template tplSet = (baseType == "string") ? Generator.Template.AggregationSetString : Generator.Template.AggregationSetSimple;
+            //Generator.Template tplGet = (baseType == "string") ? Generator.Template.AggregationTextGet : Generator.Template.AggregationGetSimple;
+            //Generator.Template tplSet = (baseType == "string") ? Generator.Template.AggregationSetString : Generator.Template.AggregationSetSimple;
 
-            generator.WriteGetSet(tplGet, tplSet, attr.inverse);
+            //generator.WriteGetSet(tplGet, tplSet, attr.inverse);
         }
     }
 }

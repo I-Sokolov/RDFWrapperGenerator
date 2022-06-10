@@ -46,49 +46,54 @@ namespace RDFWrappers
             BeginFile,
             TemplateUtilityTypes,
             ClassForwardDeclaration,
-            BeginDefinedTypes,
+            DefinedTypesBegin,
             DefinedType,
-            BeginEnumerations,
-            BeginEnumeration,
+            EnumerationsBegin,
+            EnumerationBegin,
             EnumerationElement,
-            EndEnumeration,
-            BeginEntities,
+            EnumerationEnd,
+            SelectsBegin,
             SelectAccessorBegin,
-            SelectGetSimpleValue,
-            SelectSetSimpleValue,
-            SelectGetStringValue,
-            SelectSetStringValue,
-            SelectGetEntity,
-            SelectSetEntity,
-            SelectGetEnumeration,
-            SelectSetEnumeration,
+            SelectSimpleGet,
+            SelectSimpleSet,
+            SelectTextGet,
+            SelectTextSet,
+            SelectEntityGet,
+            SelectEntitySet,
+            SelectEnumerationGet,
+            SelectEnumerationSet,
             SelectNested,
             SelectGetAsDouble,
             SelectGetAsInt,
             SelectGetAsBool,
             SelectGetAsString,
-            SelectGetAsInstance,
+            SelectGetAsEntity,
             SelectAccessorEnd,
-            BeginEntity,
+            AggrgarionTypesBegin,
+            AggregationOfSimple,
+            AggregationOfText,
+            AggregationOfAggregation,
+            EntitiesBegin,
+            EntityBegin,
             EntityCreateMethod,
-            GetSimpleAttribute,
-            SetSimpleAttribute,
-            GetSimpleAttributeString,
-            SetSimpleAttributeString,
-            GetEntityAttribute,
-            SetEntityAttribute,
-            GetEnumAttribute,
-            SetEnumAttribute,
-            SelectAccessor,
-            AggregationGetSimple,
-            AggregationSetSimple,
-            AggregationGetString,
+            AttributeSimpleGet,
+            AttributeSimpleSet,
+            AttributeTextGet,
+            AttributeTextSet,
+            AttributeEntityGet,
+            AttributeEntitySet,
+            AttributeEnumGet,
+            AttributeEnumSet,
+            AttributeSelectAccessor,
+            AttributeAggregationGet,
+            AttributeAggregationSet,
+            AttributeAggregationSetArray,
             AggregationSetString,
-            EndEntity,
-            SelectGetEntityImplementation,
-            SelectSetEntityImplementation,
-            GetEntityAttributeImplementation,
-            SetEntityAttributeImplementation,
+            EntityEnd,
+            SelectEntityGetImplementation,
+            SelectEntitySetImplementation,
+            AttributeEntityGetImplementation,
+            AttributeEntitySetImplementation,
             EndFile
         }
 
@@ -182,7 +187,7 @@ namespace RDFWrappers
         /// <param name="writer"></param>
         private void WriteDefinedTypes()
         {
-            WriteByTemplate(Template.BeginDefinedTypes);
+            WriteByTemplate(Template.DefinedTypesBegin);
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
             {
@@ -234,7 +239,7 @@ namespace RDFWrappers
         /// <param name="writer"></param>
         private void WriteEnumerations()
         {
-            WriteByTemplate(Template.BeginEnumerations);
+            WriteByTemplate(Template.EnumerationsBegin);
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENUM])
             {
@@ -252,7 +257,7 @@ namespace RDFWrappers
         {
             m_replacements[KWD_ENUMERATION_NAME] = enumeraion.name;
 
-            WriteByTemplate(Template.BeginEnumeration);
+            WriteByTemplate(Template.EnumerationBegin);
 
             int i = 0;
             var values = new StringBuilder();
@@ -274,7 +279,7 @@ namespace RDFWrappers
 
             m_replacements[KWD_ENUM_VALUES] = values.ToString ();
 
-            WriteByTemplate(Template.EndEnumeration);
+            WriteByTemplate(Template.EnumerationEnd);
         }
 
         /// <summary>
@@ -295,7 +300,7 @@ namespace RDFWrappers
         /// <param name="writer"></param>
         private void WriteEntities ()
         {
-            WriteByTemplate(Template.BeginEntities);
+            WriteByTemplate(Template.EntitiesBegin);
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
@@ -366,7 +371,7 @@ namespace RDFWrappers
             m_replacements[KWD_ENTITY_NAME] = clsName;
 
             //
-            WriteByTemplate(Template.BeginEntity);
+            WriteByTemplate(Template.EntityBegin);
 
             if (!entity.IsAbstract())
             {
@@ -375,7 +380,7 @@ namespace RDFWrappers
                 
             WriteAttributes(entity, parentAttributes);
 
-            WriteByTemplate(Template.EndEntity);
+            WriteByTemplate(Template.EntityEnd);
         }
 
         /// <summary>
@@ -514,8 +519,8 @@ namespace RDFWrappers
             m_replacements[KWD_StringType] = m_replacements[KWD_SimpleType]; //just different words in template
             m_replacements[KWD_sdaiTYPE] = sdaiType;
 
-            Template tplGet = baseType == "string" ? Template.GetSimpleAttributeString : Template.GetSimpleAttribute;
-            Template tplSet = baseType == "string" ? Template.SetSimpleAttributeString : Template.SetSimpleAttribute;
+            Template tplGet = baseType == "string" ? Template.AttributeTextGet : Template.AttributeSimpleGet;
+            Template tplSet = baseType == "string" ? Template.AttributeTextSet : Template.AttributeSimpleSet;
 
             WriteGetSet(tplGet, tplSet, attr.inverse);
         }
@@ -547,9 +552,9 @@ namespace RDFWrappers
         {
             m_replacements[KWD_REF_ENTITY] = domain;
 
-            WriteGetSet(Template.GetEntityAttribute, Template.SetEntityAttribute, attr.inverse);
+            WriteGetSet(Template.AttributeEntityGet, Template.AttributeEntitySet, attr.inverse);
 
-            var impl = BuildGetSet(Template.GetEntityAttributeImplementation, Template.SetEntityAttributeImplementation, attr.inverse);
+            var impl = BuildGetSet(Template.AttributeEntityGetImplementation, Template.AttributeEntitySetImplementation, attr.inverse);
             m_implementations.Append(impl);
         }
 
@@ -557,7 +562,7 @@ namespace RDFWrappers
         private void WriteEnumAttribute(ExpressAttribute attr, string domain)
         {
             m_replacements[KWD_ENUM_TYPE] = domain;
-            WriteGetSet(Template.GetEnumAttribute, Template.SetEnumAttribute, attr.inverse);
+            WriteGetSet(Template.AttributeEnumGet, Template.AttributeEnumSet, attr.inverse);
         }
 
         /// <summary>
