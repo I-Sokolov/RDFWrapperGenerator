@@ -141,16 +141,16 @@ namespace RDFWrappers
             generator.m_replacements.Remove(Generator.KWD_ACCESSOR);
         }
 
-        public void WriteAccessors(Generator generator)
+        public void WriteAccessors(Generator generator, HashSet<ExpressHandle> wroteSelects)
         {
-            if (!generator.m_wroteSelects.Add(inst))
+            if (!wroteSelects.Add(inst))
             {
                 return;
             }
 
             foreach (var nested in GetNestedSelects())
             {
-                (new ExpressSelect(nested)).WriteAccessors(generator);
+                (new ExpressSelect(nested)).WriteAccessors(generator, wroteSelects);
             }
 
             generator.m_replacements[Generator.KWD_TYPE_NAME] = name;
@@ -249,7 +249,7 @@ namespace RDFWrappers
             string baseType = definedType.GetBaseCSType();
 
             generator.m_replacements[Generator.KWD_SimpleType] = definedType.name;
-            generator.m_replacements[Generator.KWD_StringType] = definedType.name;
+            generator.m_replacements[Generator.KWD_TextType] = definedType.name;
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
 
@@ -257,7 +257,7 @@ namespace RDFWrappers
             if (bGet)
                 tpl = baseType == "string" ? Generator.Template.SelectTextGet : Generator.Template.SelectSimpleGet;
             else
-                tpl = baseType == "string" ? Generator.Template.SelectTextSet : Generator.Template.SelectTextSet;
+                tpl = baseType == "string" ? Generator.Template.SelectTextSet : Generator.Template.SelectSimpleSet;
 
             generator.WriteByTemplate (tpl);
         }

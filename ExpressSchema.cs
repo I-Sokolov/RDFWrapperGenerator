@@ -31,7 +31,7 @@ namespace RDFWrappers
             }
         }
 
-        static public string GetCSType(enum_express_attr_type attr_Type)
+        static public string GetPrimitiveType(enum_express_attr_type attr_Type)
         {
             switch (attr_Type)
             {

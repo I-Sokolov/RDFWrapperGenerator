@@ -35,7 +35,7 @@ namespace RDFWrappers
             }
             else
             {
-                return ExpressSchema.GetCSType(type);
+                return ExpressSchema.GetPrimitiveType(type);
             }
         }
 

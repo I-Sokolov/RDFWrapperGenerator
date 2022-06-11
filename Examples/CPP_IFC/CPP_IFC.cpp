@@ -195,7 +195,7 @@ int main()
     //double
     auto point = IfcCartesianPoint::Create(ifcModel);
     
-    std::list<double> coords; 
+    ListOfIfcLengthMeasure coords; 
     point.get_Coordinates(coords);
     ASSERT(coords.empty());
 
@@ -211,7 +211,7 @@ int main()
     ASSERT(coords.size() == 3 && coords.front() == 1 && coords.back() == 3);
 
     //string
-    std::list<std::string> middleNames;
+    ListOfIfcLabel middleNames;
     person.get_MiddleNames(middleNames);
     ASSERT(middleNames.empty());
 
@@ -228,6 +228,7 @@ int main()
     //
     // LIST of LIST
     //
+#if 0
     auto pointList = IfcCartesianPointList3D::Create(ifcModel);
     
     ListOfListOfIfcLengthMeasure coordList;
@@ -252,6 +253,7 @@ int main()
     ListOfListOfIfcLengthMeasure coordListCheck;
     pointList.get_CoordList(coordListCheck);
     ASSERT(coordList == coordListCheck);
+#endif
 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 

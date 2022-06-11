@@ -21,7 +21,7 @@ namespace RDFWrappers
         public const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
         public const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
         public const string KWD_SimpleType = "SimpleType";
-        public const string KWD_StringType = "StringType";
+        public const string KWD_TextType = "TextType";
         public const string KWD_TypeNameUpper = "TypeNameUpper";
         public const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
         public const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
@@ -35,7 +35,7 @@ namespace RDFWrappers
         public const string KWD_TYPE_NAME = "TYPE_NAME";
         public const string KWD_ACCESSOR = "Accessor";
         public const string KWD_GETSET = "getOrset";
-        public const string KWD_AGGR_TYPE = "AGGR_TYPE";
+        public const string KWD_AggregationType = "AggregationType";
 
         /// <summary>
         /// 
@@ -87,7 +87,8 @@ namespace RDFWrappers
             AttributeSelectAccessor,
             AttributeAggregationGet,
             AttributeAggregationSet,
-            AttributeAggregationSetArray,
+            AttributeAggregationSetArraySimple,
+            AttributeAggregationSetArrayText,
             EntityEnd,
             SelectEntityGetImplementation,
             SelectEntitySetImplementation,
@@ -106,15 +107,15 @@ namespace RDFWrappers
         string m_TInt64;
         string m_namespace;
 
-        ExpressSchema m_schema;
+        public ExpressSchema m_schema;
 
         public StreamWriter m_writer;
 
-        Dictionary<Template, string> m_template = new Dictionary<Template, string>();
+        HashSet <ExpressHandle> m_knownDefinedTyes = new HashSet<ExpressHandle>();
 
-        HashSet<ExpressHandle> m_wroteDefinedTyes = new HashSet<ExpressHandle>();
-        public HashSet<ExpressHandle> m_wroteSelects = new HashSet<ExpressHandle>();
-        HashSet<ExpressHandle> m_wroteEntities = new HashSet<ExpressHandle>();
+        public HashSet<string> m_knownAggregationTypes = new HashSet<string>();
+
+        Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
         public Dictionary<string, string> m_replacements = new Dictionary<string, string>();
 
@@ -159,6 +160,8 @@ namespace RDFWrappers
 
                 WriteSelects();
 
+                Aggregation.WriteTypes(this);
+
                 WriteEntities();
 
                 m_writer.Write (m_implementations);
@@ -188,38 +191,41 @@ namespace RDFWrappers
         {
             WriteByTemplate(Template.DefinedTypesBegin);
 
+            var visitedTypes = new HashSet<ExpressHandle>();
+
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
             {
                 var type = new ExpressDefinedType(decl.Value);
-                WriteDefinedType(type);
+                WriteDefinedType(type, visitedTypes);
             }
         }
 
-        private bool WriteDefinedType(ExpressDefinedType definedType)
+        private void WriteDefinedType(ExpressDefinedType definedType, HashSet<ExpressHandle> visitedTypes)
         {
-            if (!m_wroteDefinedTyes.Add (definedType.declaration))
+            if (!visitedTypes.Add (definedType.declaration))
             {
-                return true;
+                return;
             }
 
             if (definedType.referenced != 0)
             {
                 var referencedType = new ExpressDefinedType(definedType.referenced);
-                if (!WriteDefinedType(referencedType))
+                WriteDefinedType(referencedType, visitedTypes);
+                if (!m_knownDefinedTyes.Contains (referencedType.declaration))
                 {
                     Console.WriteLine("Defineded type {0} is not supported, because referenced type {1} is not supported", definedType.name, referencedType.name);
-                    return false;
+                    return;
                 }
 
                 m_replacements[KWD_SimpleType] = referencedType.name;
             }
             else
             {
-                var csType = ExpressSchema.GetCSType(definedType.type);
+                var csType = ExpressSchema.GetPrimitiveType(definedType.type);
                 if (csType==null)
                 {
                     Console.WriteLine("Defined type {0} is not supproted, because primitive type is {1}", definedType.name, definedType.type.ToString());
-                    return false;
+                    return;
                 }
 
                 m_replacements[KWD_SimpleType] = csType;
@@ -229,7 +235,9 @@ namespace RDFWrappers
 
             WriteByTemplate(Template.DefinedType);
 
-            return true;
+            m_knownDefinedTyes.Add(definedType.declaration);
+
+            return;
         }
 
         /// <summary>
@@ -286,10 +294,12 @@ namespace RDFWrappers
         /// </summary>
         private void WriteSelects ()
         {
+            var wroteSelects = new HashSet<ExpressHandle>();
+
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__SELECT])
             {
                 var sel = new ExpressSelect(decl.Value);
-                sel.WriteAccessors(this);
+                sel.WriteAccessors(this, wroteSelects);
             }
         }
 
@@ -301,10 +311,12 @@ namespace RDFWrappers
         {
             WriteByTemplate(Template.EntitiesBegin);
 
+            HashSet<ExpressHandle> wroteEntities = new HashSet<ExpressHandle>();
+
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
                 var entity = new ExpressEntity(decl.Value);
-                WriteEntity (entity);
+                WriteEntity (entity, wroteEntities);
             }
         }
 
@@ -313,9 +325,9 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="entity"></param>
-        private void WriteEntity(ExpressEntity entity)
+        private void WriteEntity(ExpressEntity entity, HashSet<ExpressHandle> wroteEntities)
         {
-            if (!m_wroteEntities.Add(entity.inst))
+            if (!wroteEntities.Add(entity.inst))
             {
                 return;
             }
@@ -346,7 +358,7 @@ namespace RDFWrappers
             {
                 var parent = new ExpressEntity(parentId);
 
-                WriteEntity(parent);
+                WriteEntity(parent, wroteEntities);
 
                 if (baseClass.Length != 0)
                 {
@@ -463,11 +475,8 @@ namespace RDFWrappers
                         case RDF.enum_express_aggr.__ARRAY:
                         case RDF.enum_express_aggr.__LIST:
                         case RDF.enum_express_aggr.__SET:
-                            (new Aggregation (this,attr)).Write();
-                            break;
-
                         case RDF.enum_express_aggr.__BAG:
-                            Console.WriteLine("Unsupported aggregation type: " + attr.aggrType.ToString());
+                            Aggregation.WriteAttribute (this,attr);
                             break;
 
                         default:
@@ -515,7 +524,7 @@ namespace RDFWrappers
         private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
         {
             m_replacements[KWD_SimpleType] = (!m_cs && definedType !=null) ? definedType : baseType;
-            m_replacements[KWD_StringType] = m_replacements[KWD_SimpleType]; //just different words in template
+            m_replacements[KWD_TextType] = m_replacements[KWD_SimpleType]; //just different words in template
             m_replacements[KWD_sdaiTYPE] = sdaiType;
 
             Template tplGet = baseType == "string" ? Template.AttributeTextGet : Template.AttributeSimpleGet;

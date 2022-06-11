@@ -282,7 +282,7 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    template <typename T> class AggregationOfAggregationType : public Aggregation, public std::list<T>
+    template <typename T> class AggregationOfAggregation : public Aggregation, public std::list<T>
     {
     public:
         //
@@ -325,7 +325,14 @@ namespace NAMESPACE_NAME
         Entity(SdaiInstance instance, const char* entityName)
         {
             m_instance = instance;
-            assert(entityName == NULL/*do not check*/ || IsInstanceOfClass(instance, entityName));
+#ifdef _DEBUG
+            if (m_instance != 0 && entityName != NULL) {
+                SdaiEntity instType = sdaiGetInstanceType(m_instance);
+                SdaiModel model = engiGetEntityModel(instType);
+                SdaiEntity entity = sdaiGetEntity(model, entityName);
+                assert(instType == entity);
+            }
+#endif
         }
 
 
@@ -357,7 +364,6 @@ namespace NAMESPACE_NAME
     typedef SdaiEntity  REF_ENTITY;    
 
 #define sdaiTYPE  sdaiREAL
-#define AGGR_TYPE list
 
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
@@ -431,11 +437,11 @@ namespace NAMESPACE_NAME
     // Aggregations
     //
 //## AggregationOfSimple
-    typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationOfSimpleType;
+    typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationType;
 //## AggregationOfText
-    typedef AggregationOfText<std::string> AggregationOfTextType;
+    typedef AggregationOfText<std::string> Aggregationtype;
 //## AggregationOfAggregation
-    typedef AggregationOfAggregationType<AggregationOfSimpleType> AggregationOfTYPE_NAME;
+    typedef AggregationOfAggregation<SimpleType> AggregationTYPE;
 
 //## TEMPLATE: EntitiesBegin
     
@@ -489,11 +495,13 @@ namespace NAMESPACE_NAME
         TYPE_NAME_accessor getOrset_ATTR_NAME() { return TYPE_NAME_accessor(m_instance, "ATTR_NAME"); }
 //## AttributeAggregationGet
 
-        void get_ATTr_NAME(AggregationOfSimpleType& lst) { lst.FromAttr (m_instance, "ATTR_NAME"); }
+        void get_ATTr_NAME(AggregationType& lst) { lst.FromAttr (m_instance, "ATTR_NAME"); }
 //## AttributeAggregationSet
-        void set_ATTr_NAME(const AggregationOfSimpleType& lst) { lst.ToSdaiAggr(m_instance, "ATTR_NAME"); }
-//## AttributeAggregationSetArray
-        void set_ATTr_NAME(const SimpleType* arr, size_t n) { AggregationOfSimpleType::ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+        void set_ATTr_NAME(const AggregationType& lst) { lst.ToSdaiAggr(m_instance, "ATTR_NAME"); }
+//## AttributeAggregationSetArraySimple
+        void set_ATTr_NAME(const SimpleType arr[], size_t n) { AggregationType::ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+//## AttributeAggregationSetArrayText
+        void set_ATTr_NAME(const char* arr[], size_t n) { Aggregationtype::ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
 //## EntityEnd
     };
 
