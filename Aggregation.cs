@@ -58,44 +58,69 @@ namespace RDFWrappers
         private void WriteType ()
         {
             string aggrType;
-            Generator.Template template;
+            int nested;
             string elemType;
             string sdaiType;
 
-            if (GetTypeInfo(out aggrType, out template, out elemType, out sdaiType))
+            Generator.Template template = GetTypeInfo(out aggrType, out nested, out elemType, out sdaiType);
+
+            if (template != Generator.Template.None)
             {
-                string aggrName = GetTypeName(aggrType, elemType);
-
-                if (generator.m_knownAggregationTypes.Add(aggrName))
+                for (int nest = 0; nest <= nested; nest++)
                 {
-                    generator.m_replacements[Generator.KWD_SimpleType] = elemType;
-                    generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
-                    generator.m_replacements[Generator.KWD_AggregationType] = aggrName;
+                    string aggrName = GetTypeName(aggrType, nest, elemType);
 
-                    generator.WriteByTemplate(template);
+                    if (generator.m_knownAggregationTypes.Add(aggrName))
+                    {
+                        generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
+                        generator.m_replacements[Generator.KWD_AggregationType] = aggrName;
+
+                        if (nest == 0)
+                        {
+                            generator.m_replacements[Generator.KWD_SimpleType] = elemType;
+                            generator.WriteByTemplate(template);
+                        }
+                        else
+                        {
+                            generator.m_replacements[Generator.KWD_SimpleType] = GetTypeName(aggrType, nest - 1, elemType);
+                            generator.WriteByTemplate(Generator.Template.AggregationOfAggregation);
+                        }
+                    }
                 }
             }
         }
 
-        private string GetTypeName (string aggrType, string elemType)
+        private string GetTypeName (string aggrType, int nesting, string elemType)
         {
+            var name = new StringBuilder();
+
+            for (; nesting >= 0; nesting--)
+            {
+                name.Append(aggrType);
+                name.Append("Of");
+            }
+
             var ch = elemType.FirstOrDefault();
             if (Char.IsLower (ch))
             {
                 ch = Char.ToUpper(ch);
             }
 
-            elemType = elemType.Substring(1);
+            name.Append(ch);
 
-            return string.Format("{0}Of{1}{2}", aggrType, ch, elemType);
+            name.Append(elemType.Substring(1));
+
+            return name.ToString();
         }
 
-        private bool GetTypeInfo(out string aggrType, out Generator.Template template, out string elemType, out string sdaiType)
+        private Generator.Template GetTypeInfo(out string aggrType, out int nested, out string elemType, out string sdaiType)
         {
+            Generator.Template template = Generator.Template.None;
+
             aggrType = null;
-            template = Generator.Template.None;
             elemType = null;
             sdaiType = "";
+            nested = 0;
 
             switch (attr.aggrType)
             {
@@ -103,37 +128,26 @@ namespace RDFWrappers
                     aggrType = "Array";
                     break;
 
-                case RDF.enum_express_aggr.__LIST: 
+                case RDF.enum_express_aggr.__LIST:
                     aggrType = "List";
                     break;
 
-                case RDF.enum_express_aggr.__SET: 
+                case RDF.enum_express_aggr.__SET:
                     aggrType = "Set";
                     break;
 
                 default:
                     Console.WriteLine("unsupported aggrType " + attr.aggrType.ToString());
-                    return false;
+                    return template;
             }
 
-            if (attr.nestedAggr)
-            {
-                //TODO
-                return false;
-            }
-            else
-            {
-                string baseType = null;
-                ExpressSelect select = null;
+            string baseType = null;
+            ExpressSelect select = null;
 
-                if (attr.IsSimpleType(out elemType, out baseType, out sdaiType))
+            if (attr.IsSimpleType(out elemType, out baseType, out sdaiType))
+            {
+                if (baseType != null)
                 {
-                    if (baseType == null)
-                    {
-                        Console.WriteLine("Unsupported type in aggregations " + elemType);
-                        return false;
-                    }
-
                     if (generator.m_cs || elemType == null)
                     {
                         elemType = baseType;
@@ -147,40 +161,47 @@ namespace RDFWrappers
                     {
                         template = Generator.Template.AggregationOfSimple;
                     }
-
-                    return true;
-                }
-                else if (attr.IsEntityReference(out elemType))
-                {
-                    //WriteEntityReference(attr, expressType);
-                }
-                else if (attr.IsEnumeration(out elemType))
-                {
-                    //WriteEnumAttribute(attr, expressType);
-                }
-                else if ((select = attr.IsSelect()) != null)
-                {
-                    //select.WriteAttribute(this, attr);
                 }
                 else
                 {
-                    Console.WriteLine(attr.name + " not supported");
+                    Console.WriteLine("Unsupported type in aggregations " + elemType);
                 }
             }
+            else if (attr.IsEntityReference(out elemType))
+            {
+                //WriteEntityReference(attr, expressType);
+            }
+            else if (attr.IsEnumeration(out elemType))
+            {
+                //WriteEnumAttribute(attr, expressType);
+            }
+            else if ((select = attr.IsSelect()) != null)
+            {
+                //select.WriteAttribute(this, attr);
+            }
+            else
+            {
+                Console.WriteLine(attr.name + " not supported");
+            }
 
-            return false;
+            if (attr.nestedAggr)
+            {
+                nested = 1;
+            }
+
+            return template;
         }
-
         private void WriteAttribute()
         {
             string aggrType;
-            Generator.Template template;
+            int nesting;
             string elemType;
             string sdaiType;
+            Generator.Template template = GetTypeInfo(out aggrType, out nesting, out elemType, out sdaiType);
 
-            if (GetTypeInfo(out aggrType, out template, out elemType, out sdaiType))
+            if (template != Generator.Template.None)
             {
-                string aggrName = GetTypeName(aggrType, elemType);
+                string aggrName = GetTypeName(aggrType, nesting, elemType);
 
                 if (generator.m_knownAggregationTypes.Contains(aggrName))
                 {
@@ -189,7 +210,7 @@ namespace RDFWrappers
                     generator.m_replacements[Generator.KWD_SimpleType] = elemType;
 
                     generator.WriteGetSet(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationSet, attr.inverse);
-                    if (!attr.nestedAggr)
+                    if (nesting == 0)
                     {
                         if (sdaiType == "sdaiSTRING")
                             generator.WriteByTemplate(Generator.Template.AttributeAggregationSetArrayText);

@@ -228,7 +228,6 @@ int main()
     //
     // LIST of LIST
     //
-#if 0
     auto pointList = IfcCartesianPointList3D::Create(ifcModel);
     
     ListOfListOfIfcLengthMeasure coordList;
@@ -253,7 +252,6 @@ int main()
     ListOfListOfIfcLengthMeasure coordListCheck;
     pointList.get_CoordList(coordListCheck);
     ASSERT(coordList == coordListCheck);
-#endif
 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 

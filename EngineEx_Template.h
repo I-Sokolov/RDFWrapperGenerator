@@ -293,7 +293,7 @@ namespace NAMESPACE_NAME
                 SdaiAggr nested = 0;
                 engiGetAggrElement(aggr, i, sdaiAGGR, &nested);
                 if (nested) {
-                    push_back(T());
+                    this->push_back(T());
                     this->back().FromSdaiAggr(nested);
                 }
             }
@@ -305,7 +305,7 @@ namespace NAMESPACE_NAME
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto it = this->begin(); it != this->end(); it++) {
                 const T& val = *it;
-                SdaiAggr nested = val.CreateSdaiAggr(instance, NULL);
+                SdaiAggr nested = val.ToSdaiAggr(instance, NULL);
                 sdaiAppend((int_t) aggr, sdaiAGGR, nested);
             }
             return aggr;
