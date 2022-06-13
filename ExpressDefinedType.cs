@@ -9,12 +9,10 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    class ExpressDefinedType
+    public class ExpressDefinedType :  TypeDef
     {
         public string                     name;
         public ExpressHandle              declaration;
-        public enum_express_attr_type     type;
-        public ExpressHandle              referenced;
 
         public ExpressDefinedType (ExpressHandle declaration)
         {
@@ -24,31 +22,31 @@ namespace RDFWrappers
 
             name = ExpressSchema.GetNameOfDeclaration(declaration);
 
-            type = ifcengine.engiGetDefinedType(declaration, out referenced);
+            attrType = ifcengine.engiGetDefinedType(declaration, out domain, out aggrType, out nestedAggr, out cardinalityMin, out cardinalityMax);
         }
 
         public string GetBaseCSType()
         {
-            if (referenced != 0)
-            { var refType = new ExpressDefinedType(referenced);
+            if (domain != 0)
+            { var refType = new ExpressDefinedType(domain);
                 return refType.GetBaseCSType();
             }
             else
             {
-                return ExpressSchema.GetPrimitiveType(type);
+                return ExpressSchema.GetPrimitiveType(attrType);
             }
         }
 
         public string GetSdaiType()
         {
-            if (referenced != 0)
+            if (domain != 0)
             {
-                var refType = new ExpressDefinedType(referenced);
+                var refType = new ExpressDefinedType(domain);
                 return refType.GetSdaiType();
             }
             else
             {
-                return ExpressSchema.GetSdaiType(type);
+                return ExpressSchema.GetSdaiType(attrType);
             }
         }
 
@@ -56,7 +54,7 @@ namespace RDFWrappers
         {
             var str = new StringBuilder();
 
-            str.Append(string.Format("{0}: {1} {2}", name, type.ToString(), ExpressSchema.GetNameOfDeclaration(referenced)));
+            str.Append(string.Format("{0}: {1} {2}", name, attrType.ToString(), ExpressSchema.GetNameOfDeclaration(domain)));
 
             return str.ToString();
 

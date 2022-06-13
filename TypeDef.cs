@@ -18,25 +18,30 @@ namespace RDFWrappers
         public Int64 cardinalityMin;
         public Int64 cardinalityMax;
 
-        public bool IsSimpleType(out string definedType, out string baseType, out string sdaiType)
+        public bool IsSimpleType(out string domainType, out string baseType, out string sdaiType)
         {
-            return IsSimpleType(attrType, domain, out definedType, out baseType, out sdaiType);
+            return IsSimpleType(attrType, domain, out domainType, out baseType, out sdaiType);
         }
 
-        private bool IsSimpleType(enum_express_attr_type attrType, ExpressHandle domainEntity, out string definedTypeName, out string baseType, out string sdaiType)
+        private bool IsSimpleType(enum_express_attr_type attrType, ExpressHandle domainEntity, out string domainTypeName, out string baseType, out string sdaiType)
         {
-            definedTypeName = null;
+            domainTypeName = null;
             baseType = null;
             sdaiType = null;
+
+            if (domainEntity != 0)
+            {
+                domainTypeName = ExpressSchema.GetNameOfDeclaration(domainEntity);
+            }
 
             switch (attrType)
             {
                 case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
                     if (enum_express_declaration.__DEFINED_TYPE == ifcengine.engiGetDeclarationType(domainEntity))
                     {
-                        var definedType = new ExpressDefinedType(domainEntity);
-                        bool ret = IsSimpleType(definedType.type, definedType.referenced, out definedTypeName, out baseType, out sdaiType);
-                        definedTypeName = definedType.name;
+                        var domainType = new ExpressDefinedType(domainEntity);
+                        string skip;
+                        bool ret = IsSimpleType(domainType.attrType, domainType.domain, out skip, out baseType, out sdaiType);
                         return ret;
                     }
                     else

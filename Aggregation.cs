@@ -12,7 +12,7 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="generator"></param>
-        public static void WriteTypes (Generator generator)
+        public static void WriteAttributesTypes (Generator generator)
         {
             generator.WriteByTemplate(Generator.Template.AggrgarionTypesBegin);
 
@@ -25,10 +25,16 @@ namespace RDFWrappers
                     if (attr.aggrType != RDF.enum_express_aggr.__NONE)
                     {
                         var aggr = new Aggregation(generator, attr);
-                        aggr.WriteType();
+                        aggr.WriteType(null);
                     }
                 }
             }
+        }
+
+        public static void WriteDefinedType (Generator generator, ExpressDefinedType definedType)
+        {
+            var aggr = new Aggregation(generator, definedType);
+            aggr.WriteType(definedType.name);
         }
 
         /// <summary>
@@ -55,7 +61,7 @@ namespace RDFWrappers
         }
 
 
-        private void WriteType ()
+        private void WriteType (string name)
         {
             string aggrType;
             int nested;
@@ -68,7 +74,11 @@ namespace RDFWrappers
             {
                 for (int nest = 0; nest <= nested; nest++)
                 {
-                    string aggrName = GetTypeName(aggrType, nest, elemType);
+                    string aggrName = name;
+                    if (aggrName == null || nest < nested)
+                    {
+                        aggrName = GetTypeName(aggrType, nest, elemType);
+                    }
 
                     if (generator.m_knownAggregationTypes.Add(aggrName))
                     {

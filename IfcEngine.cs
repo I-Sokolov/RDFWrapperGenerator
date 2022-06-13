@@ -684,8 +684,8 @@ namespace RDF
 		public static extern int_t engiGetSelectElement(int_t select, int_t index);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinedType")]
-		public static extern enum_express_attr_type engiGetDefinedType(int_t definedType, out int_t referencedDeclaration);
-
+		public static extern enum_express_attr_type engiGetDefinedType(int_t definedType, out int_t referencedDeclaration, out enum_express_aggr aggr, out bool nestedAggr, out int_t cardinalityMin, out int_t cardinalityMax);
+		
 		/// <summary>
 		///		engiGetEntityProperty                       (http://rdf.bg/ifcdoc/CS64/engiGetEntityProperty.html)
 		///

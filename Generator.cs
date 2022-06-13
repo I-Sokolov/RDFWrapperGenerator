@@ -111,7 +111,7 @@ namespace RDFWrappers
 
         public StreamWriter m_writer;
 
-        HashSet <ExpressHandle> m_knownDefinedTyes = new HashSet<ExpressHandle>();
+        Dictionary<ExpressHandle, RDF.enum_express_aggr> m_knownDefinedTyes = new Dictionary<ExpressHandle, RDF.enum_express_aggr>();
 
         public HashSet<string> m_knownAggregationTypes = new HashSet<string>();
 
@@ -160,7 +160,7 @@ namespace RDFWrappers
 
                 WriteSelects();
 
-                Aggregation.WriteTypes(this);
+                Aggregation.WriteAttributesTypes(this);
 
                 WriteEntities();
 
@@ -207,11 +207,11 @@ namespace RDFWrappers
                 return;
             }
 
-            if (definedType.referenced != 0)
+            if (definedType.domain != 0)
             {
-                var referencedType = new ExpressDefinedType(definedType.referenced);
+                var referencedType = new ExpressDefinedType(definedType.domain);
                 WriteDefinedType(referencedType, visitedTypes);
-                if (!m_knownDefinedTyes.Contains (referencedType.declaration))
+                if (!m_knownDefinedTyes.ContainsKey (referencedType.declaration))
                 {
                     Console.WriteLine("Defineded type {0} is not supported, because referenced type {1} is not supported", definedType.name, referencedType.name);
                     return;
@@ -221,21 +221,27 @@ namespace RDFWrappers
             }
             else
             {
-                var csType = ExpressSchema.GetPrimitiveType(definedType.type);
+                var csType = ExpressSchema.GetPrimitiveType(definedType.attrType);
                 if (csType==null)
                 {
-                    Console.WriteLine("Defined type {0} is not supproted, because primitive type is {1}", definedType.name, definedType.type.ToString());
+                    Console.WriteLine("Defined type {0} is not supproted, because primitive type is {1}", definedType.name, definedType.attrType.ToString());
                     return;
                 }
 
                 m_replacements[KWD_SimpleType] = csType;
             }
 
-            m_replacements[KWD_DEFINED_TYPE] = definedType.name;
+            if (definedType.aggrType == RDF.enum_express_aggr.__NONE)
+            {
+                m_replacements[KWD_DEFINED_TYPE] = definedType.name;
+                WriteByTemplate(Template.DefinedType);
+            }
+            else
+            {
+                Aggregation.WriteDefinedType(this, definedType);
+           }
 
-            WriteByTemplate(Template.DefinedType);
-
-            m_knownDefinedTyes.Add(definedType.declaration);
+            m_knownDefinedTyes.Add(definedType.declaration, definedType.aggrType);
 
             return;
         }
