@@ -54,7 +54,7 @@ namespace RDFWrappers
         {
             var str = new StringBuilder();
 
-            str.Append(string.Format("{0}: {1} {2}", name, attrType.ToString(), ExpressSchema.GetNameOfDeclaration(domain)));
+            str.Append(string.Format("{0}: {1}", name, base.ToString ()));
 
             return str.ToString();
 

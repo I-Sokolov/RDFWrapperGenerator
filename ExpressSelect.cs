@@ -191,7 +191,14 @@ namespace RDFWrappers
             {
                 case enum_express_declaration.__DEFINED_TYPE:
                     var definedType = new ExpressDefinedType(selectVariant);
-                    WriteAccessorMethod(generator, definedType, bGet);
+                    if (definedType.GetAggregationType() == enum_express_aggr.__NONE)
+                    {
+                        WriteAccessorMethod(generator, definedType, bGet);
+                    }
+                    else
+                    {
+                        Console.WriteLine("TODO SELECT accessor method: " + definedType.ToString());
+                    }
                     break;
 
                 case enum_express_declaration.__SELECT:

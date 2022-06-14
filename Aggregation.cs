@@ -68,7 +68,7 @@ namespace RDFWrappers
             string elemType;
             string sdaiType;
 
-            Generator.Template template = GetTypeInfo(out aggrType, out nested, out elemType, out sdaiType);
+            Generator.Template template = GetAggregationInfo(typeDef, out aggrType, out nested, out elemType, out sdaiType);
 
             if (template != Generator.Template.None)
             {
@@ -77,7 +77,7 @@ namespace RDFWrappers
                     string aggrName = name;
                     if (aggrName == null || nest < nested)
                     {
-                        aggrName = GetTypeName(aggrType, nest, elemType);
+                        aggrName = MakeAggregationTypeName(aggrType, nest, elemType);
                     }
 
                     if (generator.m_knownAggregationTypes.Add(aggrName))
@@ -92,7 +92,7 @@ namespace RDFWrappers
                         }
                         else
                         {
-                            generator.m_replacements[Generator.KWD_SimpleType] = GetTypeName(aggrType, nest - 1, elemType);
+                            generator.m_replacements[Generator.KWD_SimpleType] = MakeAggregationTypeName(aggrType, nest - 1, elemType);
                             generator.WriteByTemplate(Generator.Template.AggregationOfAggregation);
                         }
                     }
@@ -100,7 +100,7 @@ namespace RDFWrappers
             }
         }
 
-        private string GetTypeName (string aggrType, int nesting, string elemType)
+        private string MakeAggregationTypeName (string aggrType, int nesting, string elemType)
         {
             var name = new StringBuilder();
 
@@ -123,7 +123,7 @@ namespace RDFWrappers
             return name.ToString();
         }
 
-        private Generator.Template GetTypeInfo(out string aggrType, out int nested, out string elemType, out string sdaiType)
+        private Generator.Template GetAggregationInfo(TypeDef typeDef, out string aggrType, out int nested, out string elemType, out string sdaiType)
         {
             Generator.Template template = Generator.Template.None;
 
@@ -147,7 +147,7 @@ namespace RDFWrappers
                     break;
 
                 default:
-                    Console.WriteLine("unsupported aggrType " + typeDef.aggrType.ToString());
+                    Console.WriteLine("unsupported aggrType " + typeDef.ToString());
                     return template;
             }
 
@@ -191,7 +191,7 @@ namespace RDFWrappers
             }
             else
             {
-                Console.WriteLine("typeDef not supported");
+                Console.WriteLine("not supported " + typeDef.ToString());
             }
 
             if (typeDef.nestedAggr)
@@ -204,20 +204,39 @@ namespace RDFWrappers
 
         private void WriteAttribute(string attrName, bool isInverse)
         {
-            string aggrType;
-            int nesting;
-            string elemType;
-            string sdaiType;
-            Generator.Template template = GetTypeInfo(out aggrType, out nesting, out elemType, out sdaiType);
+            string aggrTypeName = null;
+            int nesting = 0;
+            string elemType = null;
+            string sdaiType = null;
+            Generator.Template template = Generator.Template.None;
+
+            if (typeDef.aggrType != RDF.enum_express_aggr.__NONE)
+            {
+                //unnamed aggregation
+                string aggrType;
+                template = GetAggregationInfo(typeDef, out aggrType, out nesting, out elemType, out sdaiType);
+                if (template != Generator.Template.None)
+                    aggrTypeName = MakeAggregationTypeName(aggrType, nesting, elemType);
+            }
+            else if (RDF.ifcengine.engiGetDeclarationType (typeDef.domain)==RDF.enum_express_declaration.__DEFINED_TYPE)
+            {
+                //assume defined type 
+                var definedType = new ExpressDefinedType(typeDef.domain);
+                aggrTypeName = definedType.name;
+                string aggrType;
+                template = GetAggregationInfo(definedType, out aggrType, out nesting, out elemType, out sdaiType);
+            }
+            else
+            {
+                throw new ApplicationException("unsupprorted aggregation " + typeDef.ToString());
+            }
 
             if (template != Generator.Template.None)
             {
-                string aggrName = GetTypeName(aggrType, nesting, elemType);
-
-                if (generator.m_knownAggregationTypes.Contains(aggrName))
+                if (generator.m_knownAggregationTypes.Contains(aggrTypeName))
                 {
                     generator.m_replacements[Generator.KWD_ATTR_NAME] = attrName;
-                    generator.m_replacements[Generator.KWD_AggregationType] = aggrName;
+                    generator.m_replacements[Generator.KWD_AggregationType] = aggrTypeName;
                     generator.m_replacements[Generator.KWD_SimpleType] = elemType;
 
                     generator.WriteGetSet(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationSet, isInverse);

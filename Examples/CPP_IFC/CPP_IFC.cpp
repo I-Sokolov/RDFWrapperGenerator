@@ -192,7 +192,28 @@ int main()
     // Aggregations
     //
 
-    //double
+    //as defined type
+    auto site = IfcSite::Create(ifcModel);
+
+    IfcCompoundPlaneAngleMeasure longitude;
+    site.get_RefLongitude(longitude);
+    ASSERT(longitude.size() == 0);
+
+    longitude.push_back(54);
+    site.set_RefLongitude(longitude);
+
+    longitude.clear();
+    site.get_RefLongitude(longitude);
+    ASSERT(longitude.size() == 1 && longitude.front()==54);
+
+    int64_t rint[] = {3,4};
+    site.set_RefLongitude(rint, 2);
+
+    longitude.clear();
+    site.get_RefLongitude(longitude);
+    ASSERT(longitude.size() == 2 && longitude.front() == 3 && longitude.back() == 4);
+
+    //double unnamed
     auto point = IfcCartesianPoint::Create(ifcModel);
     
     ListOfIfcLengthMeasure coords; 

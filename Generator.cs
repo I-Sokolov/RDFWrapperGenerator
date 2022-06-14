@@ -472,22 +472,13 @@ namespace RDFWrappers
 
                 if (exportedAttributes.Add(attr.name))
                 {
-                    switch (attr.aggrType)
+                    if (attr.GetAggregationType() == RDF.enum_express_aggr.__NONE)
                     {
-                        case RDF.enum_express_aggr.__NONE:
-                            WriteSingeAttribute(attr);
-                            break;
-
-                        case RDF.enum_express_aggr.__ARRAY:
-                        case RDF.enum_express_aggr.__LIST:
-                        case RDF.enum_express_aggr.__SET:
-                        case RDF.enum_express_aggr.__BAG:
-                            Aggregation.WriteAttribute (this,attr);
-                            break;
-
-                        default:
-                            System.Diagnostics.Debug.Assert(false);
-                            break;
+                        WriteSingeAttribute(attr);
+                    }
+                    else
+                    {
+                        Aggregation.WriteAttribute(this, attr);
                     }
                 }
             }

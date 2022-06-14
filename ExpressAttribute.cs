@@ -67,95 +67,21 @@ namespace RDFWrappers
 
     override public string ToString()
         {
-            string str = name + ": ";
+            var str = new StringBuilder();
+                
+            str.Append (name + ": ");
 
             if (inverse)
             {
-                str += "inverse ";
+                str.Append ("inverse ");
             }
 
-            if (nestedAggr)
-            {
-                System.Diagnostics.Debug.Assert(aggrType != enum_express_aggr.__NONE);
-                str += "NESTED";
-            }
-
-            switch (aggrType)
-            {
-                case enum_express_aggr.__NONE:
-                    //scalar
-                    break;
-
-                case enum_express_aggr.__ARRAY:
-                case enum_express_aggr.__BAG:
-                case enum_express_aggr.__LIST:
-                case enum_express_aggr.__SET:
-                    str += aggrType.ToString() + "[" + cardinalityMin.ToString() + ".." + cardinalityMax.ToString() + "] OF ";
-                    break;
-
-                default:
-                    System.Diagnostics.Debug.Assert(false);
-                    break;
-            }
-
-            switch (attrType)
-            {
-                case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
-                    if (domain != 0)
-                    {
-                        str += ExpressSchema.GetNameOfDeclaration(domain);
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.Assert(false);
-                    }
-                    break;
-
-                case enum_express_attr_type.__ENUMERATION:
-                    System.Diagnostics.Debug.Assert(false); //never happens
-                    if (domain != 0)
-                    {
-                        str += "ENUM " + ExpressSchema.GetNameOfDeclaration(domain);
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.Assert(false);
-                    }
-                    break;
-
-                case enum_express_attr_type.__SELECT:
-                    System.Diagnostics.Debug.Assert(false); //never happens
-                    if (domain != 0)
-                    {
-                        str += "SELECT " + ExpressSchema.GetNameOfDeclaration(domain);
-                    }
-                    else
-                    {
-                        System.Diagnostics.Debug.Assert(false);
-                    }
-                    break;
-
-                case enum_express_attr_type.__BINARY:
-                case enum_express_attr_type.__BINARY_32:
-                case enum_express_attr_type.__BOOLEAN:
-                case enum_express_attr_type.__INTEGER:
-                case enum_express_attr_type.__LOGICAL:
-                case enum_express_attr_type.__NUMBER:
-                case enum_express_attr_type.__REAL:
-                case enum_express_attr_type.__STRING:
-                    str += attrType.ToString();
-                    System.Diagnostics.Debug.Assert(domain == 0);
-                    break;
-
-                default:
-                    System.Diagnostics.Debug.Assert(false);
-                    break;
-            }
+            str.Append (base.ToString());
 
             System.Diagnostics.Debug.Assert(definingEntity != 0);
-            str += " defined by " + DefiningEntity;
+            str.Append (" defined by " + DefiningEntity);
 
-            return str; 
+            return str.ToString (); 
         }
 
     }
