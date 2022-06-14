@@ -179,6 +179,32 @@ namespace NAMESPACE_NAME
         {
             sdaiPutAttrBN(m_instance, m_attrName, sdaiINSTANCE, (void*) inst);
         }
+
+        //
+        SdaiAggr getAggrValue(const char* typeName)
+        {
+            SdaiAggr ret = NULL;
+            void* adb = sdaiCreateEmptyADB();
+
+            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+                char* path = sdaiGetADBTypePath(adb, 0);
+                if (path && 0 == _stricmp(path, typeName)) {
+                    sdaiGetADBValue(adb, sdaiAGGR, &ret);
+                }
+            }
+
+            sdaiDeleteADB(adb);
+            return ret;
+        }
+
+        //
+        void setAggrValue(const char* typeName, SdaiAggr value)
+        {
+            void* adb = sdaiCreateADB(sdaiAGGR, value);
+            sdaiPutADBTypePath(adb, 1, typeName);
+            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
+            sdaiDeleteADB(adb);
+        }
     };
 
     /// <summary>
@@ -374,6 +400,17 @@ namespace NAMESPACE_NAME
     // 
 //## TEMPLATE: DefinedType
     typedef SimpleType DEFINED_TYPE_NAME;
+//## TEMPLATE: AggrgarionTypesBegin
+
+    //
+    // Unnamed aggregations
+    //
+//## AggregationOfSimple
+    typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationType;
+//## AggregationOfText
+    typedef AggregationOfText<std::string> Aggregationtype;
+//## AggregationOfAggregation
+    typedef AggregationOfAggregation<SimpleType> AggregationTYPE;
 //## TEMPLATE: EnumerationsBegin
 
     //
@@ -417,6 +454,14 @@ namespace NAMESPACE_NAME
         Nullable<ENUMERATION_NAME> select_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
 //## SelectEnumerationSet
         void select_ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; setEnumerationValue("TypeNameUpper", val); }
+//## SelectAggregationGet
+        void slect_AggregationType(AggregationType& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); lst.FromSdaiAggr(aggr); }
+//## SelectAggregationSet
+        void select_AggregationType(const AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
+//## SelectAggregationSetArraySimple
+        void select_AggregationType(const SimpleType arr[], size_t n) { SdaiAggr aggr = AggregationType::ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
+//## SelectAggregationSetArrayText
+        void select_AggregationType(const char* arr[], size_t n) { Aggregationtype::ToSdaiAggr(arr, n, m_instance, m_attrName); }
 //## SelectNested
         TYPE_NAME_accessor select_TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
 //## SelectGetAsDouble
@@ -431,17 +476,6 @@ namespace NAMESPACE_NAME
         SdaiInstance as_instance() { SdaiInstance val = NULL; sdaiGetAttrBN(m_instance, m_attrName, sdaiINSTANCE, &val); return val; }
 //## SelectAccessorEnd
     };
-//## TEMPLATE: AggrgarionTypesBegin
-
-    //
-    // Aggregations
-    //
-//## AggregationOfSimple
-    typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationType;
-//## AggregationOfText
-    typedef AggregationOfText<std::string> Aggregationtype;
-//## AggregationOfAggregation
-    typedef AggregationOfAggregation<SimpleType> AggregationTYPE;
 
 //## TEMPLATE: EntitiesBegin
     

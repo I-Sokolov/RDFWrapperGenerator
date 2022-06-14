@@ -274,6 +274,22 @@ int main()
     pointList.get_CoordList(coordListCheck);
     ASSERT(coordList == coordListCheck);
 
+    //
+    // Aggregation in select 
+    // 
+    auto prop = IfcPropertySingleValue::Create(ifcModel);
+
+    IfcComplexNumber cplxNum;
+    prop.get_NominalValue().select_IfcMeasureValue().slect_IfcComplexNumber(cplxNum);
+    ASSERT(cplxNum.size() == 0);
+
+    double cplx[] = {2.1, 1.5};
+    prop.set_NominalValue().select_IfcMeasureValue().select_IfcComplexNumber(cplx, 2);
+
+    prop.get_NominalValue().select_IfcMeasureValue().slect_IfcComplexNumber(cplxNum);
+    ASSERT(cplxNum.size() == 2 && cplxNum.front() == 2.1 && cplxNum.back() == 1.5);
+
+
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 
 

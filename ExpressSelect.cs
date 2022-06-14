@@ -197,7 +197,7 @@ namespace RDFWrappers
                     }
                     else
                     {
-                        Console.WriteLine("TODO SELECT accessor method: " + definedType.ToString());
+                        WriteAggrAccessorMethod(generator, definedType, bGet);
                     }
                     break;
 
@@ -269,6 +269,35 @@ namespace RDFWrappers
             generator.WriteByTemplate (tpl);
         }
 
+        private void WriteAggrAccessorMethod(Generator generator, ExpressDefinedType definedType, bool bGet)
+        {
+            if (definedType.name == "IfcBinary")
+                return;
+
+            string sdaiType = definedType.GetSdaiType();
+            string baseType = definedType.GetBaseCSType();
+
+            string elemType = baseType;
+            if (definedType.domain != 0 && !generator.m_cs)
+            {
+                elemType = ExpressSchema.GetNameOfDeclaration(definedType.domain);
+            }
+
+            generator.m_replacements[Generator.KWD_AggregationType] = definedType.name;
+            generator.m_replacements[Generator.KWD_SimpleType] = elemType;
+            generator.m_replacements[Generator.KWD_TextType] = elemType;
+            generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
+            generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
+
+            var tpl = bGet ? Generator.Template.SelectAggregationGet : Generator.Template.SelectAggregationSet;
+            generator.WriteByTemplate(tpl);
+
+            if (!bGet && !definedType.nestedAggr)
+            {
+                tpl = baseType == "string" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
+                generator.WriteByTemplate(tpl);
+            }
+        }
 
         private void WriteAccessorMethod(Generator generator, ExpressSelect selectType)
         {
