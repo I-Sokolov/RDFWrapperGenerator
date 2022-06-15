@@ -157,6 +157,10 @@ int main()
     txt = measureWithUnit.get_ValueComponent().select_IfcSimpleValue().select_IfcText();
     ASSERT(0==strcmp (txt, "my text"));
 
+    IfcComplexNumber complexVal;
+    measureWithUnit.get_ValueComponent().select_IfcMeasureValue().slect_IfcComplexNumber(complexVal);
+    ASSERT(complexVal.empty());
+
     as_double = measureWithUnit.get_ValueComponent().as_double();
     as_text = measureWithUnit.get_ValueComponent().as_text();
     as_int = measureWithUnit.get_ValueComponent().as_int();
