@@ -294,8 +294,17 @@ int main()
     ASSERT(cplxNum.size() == 2 && cplxNum.front() == 2.1 && cplxNum.back() == 1.5);
 
 
+    //
     //IndexedPolyCurve
+    //
+
     auto poly = IfcIndexedPolyCurve::Create(ifcModel);
+
+    ASSERT(poly.get_Points() == 0);
+
+    ListOfIfcSegmentIndexSelect segments;
+    poly.get_Segments(segments);
+    ASSERT(segments.empty());
 
     //2D points
     double rpt[]={
@@ -325,29 +334,80 @@ int main()
 
     //create segments list
     //
-    ListOfIfcSegmentIndexSelect segments;
+    segments.clear();
     
-    IfcSegmentIndexSelect seg1 (poly);//select needs to know entity
-    seg1.set_IfcLineIndex(line, 2);
-    segments.push_back(seg1);
+    IfcSegmentIndexSelect segment (poly);//select needs to know entity
+    segment.set_IfcLineIndex(line, 2);
+    segments.push_back(segment);
     
-    IfcSegmentIndexSelect seg2 (poly);
-    seg2.set_IfcArcIndex(arc,3);
-    segments.push_back(seg2);
-
-    //I can not reuse seg1 because do not clone ADB block when add to list.
-    //The code will change 1st segment, crasy effect
-    seg1.set_IfcArcIndex(arc, 3);
-    segments.push_back(seg1);
-
-    seg1.set_IfcLineIndex(line , 2);
-    segments.push_back(seg1);
+    segment.set_IfcArcIndex(arc,3);
+    segments.push_back(segment);
 
     //
     //
     poly.set_Segments(segments);
     poly.set_Points(points);
     poly.set_SelfIntersect(false);
+
+    //
+    // get and check
+    //
+    points = 0;
+    coordList.clear();
+    segments.clear();
+
+    points = IfcCartesianPointList2D(poly.get_Points()); //TODO isInstanceOf!
+    ASSERT(points != 0);
+
+    points.get_CoordList(coordList);
+    ASSERT(coordList.size() == 4);
+    i = 0;
+    for (auto& coord : coordList) {
+        ASSERT(coord.size() == 2);
+        ASSERT(coord.front() == rpt[2 * i] && coord.back() == rpt[2 * i + 1]);
+        i++;
+    }
+
+    poly.get_Segments(segments);
+    ASSERT(segments.size() == 2);
+    
+    IfcArcIndex arcInd;
+    IfcLineIndex lineInd;
+    segments.front().get_IfcArcIndex(arcInd);
+    segments.front().get_IfcLineIndex(lineInd);
+
+    ASSERT(arcInd.empty());
+    ASSERT(lineInd.size()==2 && lineInd.front()==0 && lineInd.back()==1);
+
+    arcInd.clear();
+    lineInd.clear();
+    segments.back().get_IfcArcIndex(arcInd);
+    segments.back().get_IfcLineIndex(lineInd);
+
+    ASSERT(arcInd.size()==3 && arcInd.front()==1 && arcInd.back()==3);
+    ASSERT(lineInd.empty());
+
+    //append line
+    lineInd.push_back(3);
+    lineInd.push_back(0);
+    segment.set_IfcLineIndex(lineInd);
+    segments.push_back(segment);
+
+    poly.set_Segments(segments);
+
+    //check now
+    segments.clear();
+    poly.get_Segments(segments);
+    ASSERT(segments.size() == 3);
+
+    segment = segments.back();
+    arcInd.clear();
+    lineInd.clear();
+    segment.get_IfcArcIndex(arcInd);
+    segment.get_IfcLineIndex(lineInd);
+
+    ASSERT(arcInd.empty());
+    ASSERT(lineInd.size() == 2 && lineInd.front() == 3 && lineInd.back() == 0);
 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 
