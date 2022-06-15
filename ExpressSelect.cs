@@ -100,16 +100,19 @@ namespace RDFWrappers
 
                     case enum_express_declaration.__DEFINED_TYPE:
                         var definedType = new ExpressDefinedType(variant);
-                        var cstype = definedType.GetBaseCSType();
-                        if (cstype!=null)
+                        if (definedType.GetAggregationType() == RDF.enum_express_aggr.__NONE)
                         {
-                            switch (cstype)
+                            var cstype = definedType.GetBaseCSType();
+                            if (cstype != null)
                             {
-                                case "double": ret.Add(Generator.Template.SelectGetAsDouble); break;
-                                case "Int64": ret.Add(Generator.Template.SelectGetAsInt); break;
-                                case "bool": ret.Add(Generator.Template.SelectGetAsBool); break;
-                                case "string": ret.Add(Generator.Template.SelectGetAsText); break;
-                                default: throw new ApplicationException("unexpected cs type " + cstype);
+                                switch (cstype)
+                                {
+                                    case "double": ret.Add(Generator.Template.SelectGetAsDouble); break;
+                                    case "Int64": ret.Add(Generator.Template.SelectGetAsInt); break;
+                                    case "bool": ret.Add(Generator.Template.SelectGetAsBool); break;
+                                    case "string": ret.Add(Generator.Template.SelectGetAsText); break;
+                                    default: throw new ApplicationException("unexpected cs type " + cstype);
+                                }
                             }
                         }
                         break;
