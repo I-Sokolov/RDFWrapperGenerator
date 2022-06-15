@@ -63,23 +63,64 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// Helper class to access SELET data
     /// </summary>
-    class SelectAccess
+    class SelectDataItem
     {
     protected:
+        //
         SdaiInstance m_instance;
-        const char* m_attrName;
+        const char*  m_attrName;
+        //
+    private:
+        void* m_adb;
 
     protected:
         //
-        SelectAccess(SdaiInstance instance, const char* attrName) { m_instance = instance; m_attrName = attrName; }
+        SelectDataItem(SdaiInstance instance, const char* attrName) { m_instance = instance; m_attrName = attrName; m_adb = 0; }
+        SelectDataItem(void* adb) { m_instance = 0; m_attrName = NULL;  m_adb = adb; }
 
+        virtual ~SelectDataItem() { ReleaseADB(); }
+
+    private:
+        void* GetADB()
+        {
+            if (m_adb) {
+                return m_adb;
+            }
+
+            if (m_instance && m_attrName) {
+                m_adb = sdaiCreateEmptyADB();
+                if (!sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &m_adb)) {
+                    sdaiDeleteADB(m_adb);
+                    m_adb = NULL;
+                }
+            }
+
+            return m_adb;
+        }
+
+        void ReleaseADB()
+        {
+            /*TODO free adb if (m_adb) sdaiDeleteADB(m_adb) */
+            m_adb = NULL;
+        }
+
+        void OnSetValue ()
+        {
+            if (m_instance && m_attrName) {
+                sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, m_adb);
+            }
+
+            sdaiDeleteADB(m_adb);
+            m_adb = NULL;
+        }
+
+    protected:
         //
         template <typename T> Nullable<T> getSimpleValue(const char* typeName, int_t sdaiType)
         {
             Nullable<T> ret;
-            void* adb = sdaiCreateEmptyADB();
 
-            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+            if (void* adb = GetADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
                     T val = (T) 0;
@@ -88,43 +129,40 @@ namespace NAMESPACE_NAME
                 }
             }
 
-            sdaiDeleteADB(adb);
             return ret;
         }
 
         //
         template <typename T> void setSimpleValue(const char* typeName, int_t sdaiType, T value)
         {
-            void* adb = sdaiCreateADB(sdaiType, &value);
-            sdaiPutADBTypePath(adb, 1, typeName);
-            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
-            sdaiDeleteADB(adb);
+            ReleaseADB();
+            m_adb = sdaiCreateADB(sdaiType, &value);
+            sdaiPutADBTypePath(m_adb, 1, typeName);
+            OnSetValue();
         }
 
         //
         const char* getTextValue(const char* typeName)
         {
-            const char* ret = NULL;
-            void* adb = sdaiCreateEmptyADB();
+            const char* ret = NULL;            
 
-            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+            if (void* adb = GetADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
                     sdaiGetADBValue(adb, sdaiSTRING, &ret);
                 }
             }
 
-            sdaiDeleteADB(adb);
             return ret;
         }
 
         //
         void setTextValue(const char* typeName, const char* value)
         {
-            void* adb = sdaiCreateADB(sdaiSTRING, value);
-            sdaiPutADBTypePath(adb, 1, typeName);
-            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
-            sdaiDeleteADB(adb);
+            ReleaseADB();
+            m_adb = sdaiCreateADB(sdaiSTRING, value);
+            sdaiPutADBTypePath(m_adb, 1, typeName);
+            OnSetValue();
         }
 
         //
@@ -132,9 +170,7 @@ namespace NAMESPACE_NAME
         {
             int ret = -1;
 
-            void* adb = sdaiCreateEmptyADB();
-
-            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+            if (void* adb = GetADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
                     const char* value = NULL;
@@ -143,25 +179,24 @@ namespace NAMESPACE_NAME
                 }
             }
 
-            sdaiDeleteADB(adb);
             return ret;
         }
 
         //
         void setEnumerationValue(const char* typeName, const char* value)
         {
-            void* adb = sdaiCreateADB(sdaiENUM, value);
-            sdaiPutADBTypePath(adb, 1, typeName);
-            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
-            sdaiDeleteADB(adb);
+            ReleaseADB();
+            m_adb = sdaiCreateADB(sdaiENUM, value);
+            sdaiPutADBTypePath(m_adb, 1, typeName);
+            OnSetValue();
         }
 
         //
         int64_t getEntityInstance(const char* typeName)
         {
+            assert(m_instance && m_attrName); //TODO
             int64_t ret = 0;
             int64_t inst = 0;
-
             if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINSTANCE, &inst)) {
                 SdaiEntity instType = sdaiGetInstanceType(inst);
                 SdaiModel model = engiGetEntityModel(instType);
@@ -175,8 +210,9 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void setEntityInstance(const char* typeName, int64_t inst)
+        void setEntityInstance(const char* /*typeName*/, int64_t inst)
         {
+            assert(m_instance && m_attrName); //TODO
             sdaiPutAttrBN(m_instance, m_attrName, sdaiINSTANCE, (void*) inst);
         }
 
@@ -184,26 +220,23 @@ namespace NAMESPACE_NAME
         SdaiAggr getAggrValue(const char* typeName)
         {
             SdaiAggr ret = NULL;
-            void* adb = sdaiCreateEmptyADB();
 
-            if (sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &adb)) {
+            if (void* adb = GetADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
                     sdaiGetADBValue(adb, sdaiAGGR, &ret);
                 }
             }
-
-            sdaiDeleteADB(adb);
             return ret;
         }
 
         //
         void setAggrValue(const char* typeName, SdaiAggr value)
         {
-            void* adb = sdaiCreateADB(sdaiAGGR, value);
-            sdaiPutADBTypePath(adb, 1, typeName);
-            sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, adb);
-            sdaiDeleteADB(adb);
+            ReleaseADB();
+            m_adb = sdaiCreateADB(sdaiAGGR, value);
+            sdaiPutADBTypePath(m_adb, 1, typeName);
+            OnSetValue();
         }
     };
 
@@ -434,10 +467,10 @@ namespace NAMESPACE_NAME
     // 
 //## TEMPLATE: SelectAccessorBegin
 
-    class TYPE_NAME_accessor : protected SelectAccess
+    class TYPE_NAME_accessor : protected SelectDataItem
     {
     public:
-        TYPE_NAME_accessor(SdaiInstance instance, const char* attrName) : SelectAccess(instance, attrName) {}
+        TYPE_NAME_accessor(SdaiInstance instance, const char* attrName) : SelectDataItem(instance, attrName) {}
 //## SelectSimpleGet
         Nullable<SimpleType> select_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
 //## SelectSimpleSet
