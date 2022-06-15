@@ -41,12 +41,12 @@ int main()
     descr = wall.get_Description();
     oh = wall.get_OwnerHistory();
     predType = wall.get_PredefinedType();
-    ASSERT(!strcmp(descr, "My wall description") 
-           && !strcmp(name, "Wall name") 
-           && !strcmp(guid, "7-7-7") 
-           && oh==ownerHistory
+    ASSERT(!strcmp(descr, "My wall description")
+           && !strcmp(name, "Wall name")
+           && !strcmp(guid, "7-7-7")
+           && oh == ownerHistory
            && predType.Value() == IfcWallTypeEnum_POLYGONAL
-    ) ;
+    );
 
 
 
@@ -72,8 +72,8 @@ int main()
     ASSERT(curve.get_Degree().IsNull());
     curve.set_Degree(5);
     ASSERT(curve.get_Degree().Value() == 5);
-  
-    
+
+
     //
     // SELECT tests
     //
@@ -109,10 +109,10 @@ int main()
 
     //set to numeric
     measureWithUnit.set_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure(0.5);
-    
+
     dval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure();
     ASSERT(dval.Value() == 0.5);
-    
+
     sval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcDescriptiveMeasure();
     ASSERT(sval == NULL);
 
@@ -124,17 +124,17 @@ int main()
     as_text = measureWithUnit.get_ValueComponent().as_text();
     as_int = measureWithUnit.get_ValueComponent().as_int();
     as_bool = measureWithUnit.get_ValueComponent().as_bool();
-    ASSERT(as_double.Value() == 0.5 && 0==strcmp(as_text, "0.500000") && as_int.Value()==0 && as_bool.IsNull());
+    ASSERT(as_double.Value() == 0.5 && 0 == strcmp(as_text, "0.500000") && as_int.Value() == 0 && as_bool.IsNull());
 
 
     //set DescriptiveMeasure
     measureWithUnit.set_ValueComponent().select_IfcMeasureValue().select_IfcDescriptiveMeasure("my descreptive measure");
-    
+
     dval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure();
     ASSERT(dval.IsNull());
 
     sval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcDescriptiveMeasure();
-    ASSERT(0==strcmp (sval, "my descreptive measure"));
+    ASSERT(0 == strcmp(sval, "my descreptive measure"));
 
     txt = measureWithUnit.get_ValueComponent().select_IfcSimpleValue().select_IfcText();
     ASSERT(txt == NULL);
@@ -143,7 +143,7 @@ int main()
     as_text = measureWithUnit.get_ValueComponent().as_text();
     as_int = measureWithUnit.get_ValueComponent().as_int();
     as_bool = measureWithUnit.get_ValueComponent().as_bool();
-    ASSERT(as_double.IsNull() && 0==strcmp(as_text, "my descreptive measure") && as_int.IsNull() && as_bool.IsNull());
+    ASSERT(as_double.IsNull() && 0 == strcmp(as_text, "my descreptive measure") && as_int.IsNull() && as_bool.IsNull());
 
     //set text
     measureWithUnit.set_ValueComponent().select_IfcSimpleValue().select_IfcText("my text");
@@ -155,7 +155,7 @@ int main()
     ASSERT(sval == NULL);
 
     txt = measureWithUnit.get_ValueComponent().select_IfcSimpleValue().select_IfcText();
-    ASSERT(0==strcmp (txt, "my text"));
+    ASSERT(0 == strcmp(txt, "my text"));
 
     IfcComplexNumber complexVal;
     measureWithUnit.get_ValueComponent().select_IfcMeasureValue().slect_IfcComplexNumber(complexVal);
@@ -171,7 +171,7 @@ int main()
     // entities select
     //
     auto actor = IfcActor::Create(ifcModel);
-    
+
     auto person = actor.get_TheActor().select_IfcPerson();
     auto organization = actor.get_TheActor().select_IfcOrganization();
     ASSERT(person == 0 && organization == 0);
@@ -181,7 +181,7 @@ int main()
 
     auto setPerson = IfcPerson::Create(ifcModel);
     setPerson.set_Identification("justApeson");
-    
+
     actor.set_TheActor().select_IfcPerson(setPerson);
     person = actor.get_TheActor().select_IfcPerson();
     ASSERT(setPerson == person);
@@ -208,7 +208,7 @@ int main()
 
     longitude.clear();
     site.get_RefLongitude(longitude);
-    ASSERT(longitude.size() == 1 && longitude.front()==54);
+    ASSERT(longitude.size() == 1 && longitude.front() == 54);
 
     int64_t rint[] = {3,4};
     site.set_RefLongitude(rint, 2);
@@ -219,13 +219,13 @@ int main()
 
     //double unnamed
     auto point = IfcCartesianPoint::Create(ifcModel);
-    
-    ListOfIfcLengthMeasure coords; 
+
+    ListOfIfcLengthMeasure coords;
     point.get_Coordinates(coords);
     ASSERT(coords.empty());
 
     double my2DPoint[] = {1.0,2.0}; //can use array to set
-    point.set_Coordinates(my2DPoint, 2); 
+    point.set_Coordinates(my2DPoint, 2);
 
     coords.clear();
     point.get_Coordinates(coords);
@@ -240,7 +240,7 @@ int main()
     person.get_MiddleNames(middleNames);
     ASSERT(middleNames.empty());
 
-    const char* DaliMiddleNames[] = {"Domingo", "Felipe", "Jacinto"};   
+    const char* DaliMiddleNames[] = {"Domingo", "Felipe", "Jacinto"};
     person.set_MiddleNames(DaliMiddleNames, 3);
 
     person.get_MiddleNames(middleNames);
@@ -254,9 +254,9 @@ int main()
     // LIST of LIST
     //
     auto pointList = IfcCartesianPointList3D::Create(ifcModel);
-    
+
     ListOfListOfIfcLengthMeasure coordList;
-    
+
     pointList.get_CoordList(coordList);
     ASSERT(coordList.empty());
 
@@ -273,7 +273,7 @@ int main()
     coordList.back().push_back(0);
 
     pointList.set_CoordList(coordList);
-    
+
     ListOfListOfIfcLengthMeasure coordListCheck;
     pointList.get_CoordList(coordListCheck);
     ASSERT(coordList == coordListCheck);
@@ -294,9 +294,62 @@ int main()
     ASSERT(cplxNum.size() == 2 && cplxNum.front() == 2.1 && cplxNum.back() == 1.5);
 
 
+    //IndexedPolyCurve
+    auto poly = IfcIndexedPolyCurve::Create(ifcModel);
+
+    //2D points
+    double rpt[]={
+        0,0,
+        1,0,
+        1,1,
+        0,1
+    };
+
+    //indexes of line and arc;
+    IfcPositiveInteger line[] = {0,1};
+    IfcPositiveInteger arc[] = {1,2,3};
+
+    //create points list
+    //
+    auto points = IfcCartesianPointList2D::Create(ifcModel);
+
+    ListOfListOfIfcLengthMeasure lstCoords; //TODO: helper method ListOfListOfT::FromArray (T* r, int NumRow, int NumCol);
+    for (int i = 0; i < 4; i++) {
+        lstCoords.push_back(ListOfIfcLengthMeasure());
+        for (int j = 0; j < 2; j++) {
+            lstCoords.back().push_back(rpt[2 * i + j]);
+        }
+    }   
+
+    points.set_CoordList(lstCoords);
+
+    //create segments list
+    //
+    ListOfIfcSegmentIndexSelect segments;
+    
+    IfcSegmentIndexSelect seg1 (poly);//select needs to know entity
+    seg1.set_IfcLineIndex(line, 2);
+    segments.push_back(seg1);
+    
+    IfcSegmentIndexSelect seg2 (poly);
+    seg2.set_IfcArcIndex(arc,3);
+    segments.push_back(seg2);
+
+    //I can not reuse seg1 because do not clone ADB block when add to list.
+    //The code will change 1st segment, crasy effect
+    seg1.set_IfcArcIndex(arc, 3);
+    segments.push_back(seg1);
+
+    seg1.set_IfcLineIndex(line , 2);
+    segments.push_back(seg1);
+
+    //
+    //
+    poly.set_Segments(segments);
+    poly.set_Points(points);
+    poly.set_SelfIntersect(false);
+
     sdaiSaveModelBN(ifcModel, "Test.ifc");
-
-
 
 #if 0
     IfcCartesianPointList3D pointList = IfcCartesianPointList3D::Create(ifcModel);
