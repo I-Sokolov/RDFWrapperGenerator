@@ -395,7 +395,7 @@ namespace NAMESPACE_NAME
         Entity(SdaiInstance instance, const char* entityName)
         {
             m_instance = instance;
-#ifdef _DEBUG
+#ifdef _DEBUGxx
             if (m_instance != 0 && entityName != NULL) {
                 SdaiEntity instType = sdaiGetInstanceType(m_instance);
                 SdaiModel model = engiGetEntityModel(instType);
@@ -454,7 +454,9 @@ namespace NAMESPACE_NAME
 //## AggregationOfText
     typedef AggregationOfText<std::string> Aggregationtype;
 //## AggregationOfAggregation
-    typedef AggregationOfAggregation<SimpleType> AggregationTYPE;
+    typedef AggregationOfAggregation<SimpleType> AggregationTYpe;
+//## AggregationOfSelect
+    typedef AggregationOfSelect<SimpleType> AggregationTYPE;
 //## TEMPLATE: EnumerationsBegin
 
     //
@@ -478,10 +480,10 @@ namespace NAMESPACE_NAME
     // 
 //## TEMPLATE: SelectAccessorBegin
 
-    class TYPE_NAME_accessor : protected Select
+    class TYPE_NAME_accessor : public Select
     {
     public:
-        TYPE_NAME_accessor(SdaiInstance instance, const char* attrName, void* adb = NULL) : Select(instance, attrName, adb) {}
+        TYPE_NAME_accessor(SdaiInstance instance, const char* attrName = NULL, void* adb = NULL) : Select(instance, attrName, adb) {}
 //## SelectSimpleGet
         Nullable<SimpleType> get_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
 //## SelectSimpleSet

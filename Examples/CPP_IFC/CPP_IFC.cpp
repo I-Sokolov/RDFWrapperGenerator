@@ -317,7 +317,6 @@ int main()
     //
     //IndexedPolyCurve
     //
-#if 0
     auto poly = IfcIndexedPolyCurve::Create(ifcModel);
 
     ASSERT(poly.get_Points() == 0);
@@ -376,7 +375,8 @@ int main()
     coordList.clear();
     segments.clear();
 
-    points = IfcCartesianPointList2D(poly.get_Points()); //TODO isInstanceOf!
+    auto pts = poly.get_Points();
+    points = IfcCartesianPointList2D(pts); //TODO isInstanceOf!
     ASSERT(points != 0);
 
     points.get_CoordList(coordList);
@@ -428,7 +428,9 @@ int main()
 
     ASSERT(arcInd.empty());
     ASSERT(lineInd.size() == 2 && lineInd.front() == 3 && lineInd.back() == 0);
-#endif
+
+    /// 
+    /// 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 
 #if 0

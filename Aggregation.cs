@@ -129,7 +129,7 @@ namespace RDFWrappers
 
             aggrType = null;
             elemType = null;
-            sdaiType = "";
+            sdaiType = null;
             nested = 0;
 
             switch (typeDef.aggrType)
@@ -187,7 +187,9 @@ namespace RDFWrappers
             }
             else if ((select = typeDef.IsSelect()) != null)
             {
-                //select.WriteAttribute(this, attr);
+                template = Generator.Template.AggregationOfSelect;
+                elemType = select.name;
+                sdaiType = null;
             }
             else
             {
@@ -240,7 +242,7 @@ namespace RDFWrappers
                     generator.m_replacements[Generator.KWD_SimpleType] = elemType;
 
                     generator.WriteGetSet(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationSet, isInverse);
-                    if (nesting == 0)
+                    if (nesting == 0 && sdaiType != null)
                     {
                         if (sdaiType == "sdaiSTRING")
                             generator.WriteByTemplate(Generator.Template.AttributeAggregationSetArrayText);

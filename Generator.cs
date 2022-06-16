@@ -53,6 +53,7 @@ namespace RDFWrappers
             AggregationOfSimple,
             AggregationOfText,
             AggregationOfAggregation,
+            AggregationOfSelect,
             EnumerationsBegin,
             EnumerationBegin,
             EnumerationElement,
