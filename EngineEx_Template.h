@@ -61,74 +61,44 @@ namespace NAMESPACE_NAME
 
 
     /// <summary>
-    /// Helper class to access SELET data
+    /// Helper class to handle and access SELECT instance data
     /// </summary>
-    class SelectDataItem
+    class Select
     {
     protected:
-        //
         SdaiInstance m_instance;
-        const char*  m_attrName;
-        //
-    private:
+        const char* m_attrName;
         void* m_adb;
 
+    public:
+        void* ADB() const { return m_adb; }
+
     protected:
-        //
-        SelectDataItem(SdaiInstance instance, const char* attrName) { m_instance = instance; m_attrName = attrName; m_adb = 0; }
-        SelectDataItem(void* adb) { m_instance = 0; m_attrName = NULL;  m_adb = adb; }
-
-        virtual ~SelectDataItem() { ReleaseADB(); }
-
-    private:
-        void* GetADB()
+        Select(SdaiInstance instance, const char* attrName = NULL, void* adb = NULL)
+            : m_instance(instance), m_attrName(attrName), m_adb(adb)
         {
-            if (m_adb) {
-                return m_adb;
-            }
-
-            if (m_instance && m_attrName) {
+            if (!m_adb && m_instance && m_attrName) {
                 m_adb = sdaiCreateEmptyADB();
                 if (!sdaiGetAttrBN(m_instance, m_attrName, sdaiADB, &m_adb)) {
                     sdaiDeleteADB(m_adb);
                     m_adb = NULL;
                 }
             }
-
-            return m_adb;
         }
 
-        void ReleaseADB()
-        {
-            /*TODO free adb if (m_adb) sdaiDeleteADB(m_adb) */
-            m_adb = NULL;
-        }
-
-        void OnSetValue ()
-        {
-            if (m_instance && m_attrName) {
-                sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, m_adb);
-            }
-
-            sdaiDeleteADB(m_adb);
-            m_adb = NULL;
-        }
-
-    protected:
         //
         template <typename T> Nullable<T> getSimpleValue(const char* typeName, int_t sdaiType)
         {
             Nullable<T> ret;
 
-            if (void* adb = GetADB()) {
-                char* path = sdaiGetADBTypePath(adb, 0);
+            if (m_adb) {
+                char* path = sdaiGetADBTypePath(m_adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
                     T val = (T) 0;
-                    sdaiGetADBValue(adb, sdaiType, &val);
+                    sdaiGetADBValue(m_adb, sdaiType, &val);
                     ret = val;
                 }
             }
-
             return ret;
         }
 
@@ -144,15 +114,14 @@ namespace NAMESPACE_NAME
         //
         const char* getTextValue(const char* typeName)
         {
-            const char* ret = NULL;            
+            const char* ret = NULL;
 
-            if (void* adb = GetADB()) {
-                char* path = sdaiGetADBTypePath(adb, 0);
+            if (m_adb) {
+                char* path = sdaiGetADBTypePath(m_adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
-                    sdaiGetADBValue(adb, sdaiSTRING, &ret);
+                    sdaiGetADBValue(m_adb, sdaiSTRING, &ret);
                 }
             }
-
             return ret;
         }
 
@@ -170,15 +139,14 @@ namespace NAMESPACE_NAME
         {
             int ret = -1;
 
-            if (void* adb = GetADB()) {
-                char* path = sdaiGetADBTypePath(adb, 0);
+            if (m_adb) {
+                char* path = sdaiGetADBTypePath(m_adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
                     const char* value = NULL;
-                    sdaiGetADBValue(adb, sdaiENUM, &value);
+                    sdaiGetADBValue(m_adb, sdaiENUM, &value);
                     ret = EnumerationNameToIndex(rEnumValues, value);
                 }
             }
-
             return ret;
         }
 
@@ -194,7 +162,8 @@ namespace NAMESPACE_NAME
         //
         int64_t getEntityInstance(const char* typeName)
         {
-            assert(m_instance && m_attrName); //TODO
+            assert(m_instance && m_attrName); //TODO how to keep instance in ADB
+
             int64_t ret = 0;
             int64_t inst = 0;
             if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINSTANCE, &inst)) {
@@ -205,14 +174,15 @@ namespace NAMESPACE_NAME
                     ret = inst;
                 }
             }
-
             return ret;
         }
 
         //
         void setEntityInstance(const char* /*typeName*/, int64_t inst)
         {
-            assert(m_instance && m_attrName); //TODO
+            assert(m_instance && m_attrName); //TODO how to keep instance in ADB
+
+            ReleaseADB();
             sdaiPutAttrBN(m_instance, m_attrName, sdaiINSTANCE, (void*) inst);
         }
 
@@ -221,10 +191,10 @@ namespace NAMESPACE_NAME
         {
             SdaiAggr ret = NULL;
 
-            if (void* adb = GetADB()) {
-                char* path = sdaiGetADBTypePath(adb, 0);
+            if (m_adb) {
+                char* path = sdaiGetADBTypePath(m_adb, 0);
                 if (path && 0 == _stricmp(path, typeName)) {
-                    sdaiGetADBValue(adb, sdaiAGGR, &ret);
+                    sdaiGetADBValue(m_adb, sdaiAGGR, &ret);
                 }
             }
             return ret;
@@ -237,6 +207,16 @@ namespace NAMESPACE_NAME
             m_adb = sdaiCreateADB(sdaiAGGR, value);
             sdaiPutADBTypePath(m_adb, 1, typeName);
             OnSetValue();
+        }
+
+    private:
+        void ReleaseADB() { m_adb = NULL; }
+
+        void OnSetValue()
+        {
+            if (m_instance && m_attrName) {
+                sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, m_adb);
+            }
         }
     };
 
@@ -252,12 +232,12 @@ namespace NAMESPACE_NAME
             SdaiAggr aggr = NULL;
             sdaiGetAttrBN(instance, attrName, sdaiAGGR, &aggr);
             if (aggr) {
-                FromSdaiAggr(aggr);
+                FromSdaiAggr(instance, aggr);
             }
         }
 
         //
-        virtual void FromSdaiAggr(SdaiAggr) = NULL;
+        virtual void FromSdaiAggr(SdaiInstance instance, SdaiAggr) = NULL;
     };
 
     /// <summary>
@@ -267,7 +247,7 @@ namespace NAMESPACE_NAME
     {
     public:
         //
-        virtual void FromSdaiAggr(SdaiAggr aggr) override
+        virtual void FromSdaiAggr(SdaiInstance /*instance*/, SdaiAggr aggr) override
         {
             int_t  cnt = sdaiGetMemberCount(aggr);
             for (int_t i = 0; i < cnt; i++) {
@@ -306,7 +286,7 @@ namespace NAMESPACE_NAME
     {
     public:
         //
-        virtual void FromSdaiAggr(SdaiAggr aggr) override
+        virtual void FromSdaiAggr(SdaiInstance /*instance*/, SdaiAggr aggr) override
         {
             int_t  cnt = sdaiGetMemberCount(aggr);
             for (int_t i = 0; i < cnt; i++) {
@@ -345,7 +325,7 @@ namespace NAMESPACE_NAME
     {
     public:
         //
-        void FromSdaiAggr(SdaiAggr aggr)
+        virtual void FromSdaiAggr(SdaiInstance instance, SdaiAggr aggr) override
         {
             int_t  cnt = sdaiGetMemberCount(aggr);
             for (int_t i = 0; i < cnt; i++) {
@@ -353,7 +333,7 @@ namespace NAMESPACE_NAME
                 engiGetAggrElement(aggr, i, sdaiAGGR, &nested);
                 if (nested) {
                     this->push_back(T());
-                    this->back().FromSdaiAggr(nested);
+                    this->back().FromSdaiAggr(instance, nested);
                 }
             }
         }
@@ -370,6 +350,37 @@ namespace NAMESPACE_NAME
             return aggr;
         }
     };
+    
+    template<typename T> class AggregationOfSelect : public Aggregation, public std::list<T>
+    {
+    public:
+        virtual void FromSdaiAggr(SdaiInstance instance, SdaiAggr aggr) override
+        {
+            int_t  cnt = sdaiGetMemberCount(aggr);
+            for (int_t i = 0; i < cnt; i++) {
+                void* adb = 0;
+                engiGetAggrElement(aggr, i, sdaiADB, &adb);
+                if (adb) {
+                    this->push_back(T(instance, NULL, adb));
+                }
+            }
+        }
+
+        //
+        SdaiAggr ToSdaiAggr(SdaiInstance instance, const char* attrName) const
+        {
+            SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
+            for (auto it = this->begin(); it != this->end(); it++) {
+                const T& val = *it;
+                void* adb = val.ADB();
+                if (adb) {
+                    sdaiAppend((int_t) aggr, sdaiADB, adb);
+                }
+            }
+            return aggr;
+        }
+    };
+
 
     /// <summary>
     /// Provides utility methods to interact with a generic entity instnace
@@ -467,36 +478,36 @@ namespace NAMESPACE_NAME
     // 
 //## TEMPLATE: SelectAccessorBegin
 
-    class TYPE_NAME_accessor : protected SelectDataItem
+    class TYPE_NAME_accessor : protected Select
     {
     public:
-        TYPE_NAME_accessor(SdaiInstance instance, const char* attrName) : SelectDataItem(instance, attrName) {}
+        TYPE_NAME_accessor(SdaiInstance instance, const char* attrName, void* adb = NULL) : Select(instance, attrName, adb) {}
 //## SelectSimpleGet
-        Nullable<SimpleType> select_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
+        Nullable<SimpleType> get_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
 //## SelectSimpleSet
-        void select_SimpleType(SimpleType value) { setSimpleValue("TypeNameUpper", sdaiTYPE, value); }
+        void set_SimpleType(SimpleType value) { setSimpleValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectTextGet
-        TextType select_TextType() { return getTextValue("TypeNameUpper"); }
+        TextType get_TextType() { return getTextValue("TypeNameUpper"); }
 //## SelectTextSet
-        void select_TextType(TextType value) { setTextValue("TypeNameUpper", value); }
+        void set_TextType(TextType value) { setTextValue("TypeNameUpper", value); }
 //## SelectEntityGet
-        REF_ENTITY select_REF_ENTITY();
+        REF_ENTITY get_REF_ENTITY();
 //## SelectEntitySet
-        void select_REF_ENTITY(REF_ENTITY inst);
+        void set_REF_ENTITY(REF_ENTITY inst);
 //## SelectEnumerationGet
-        Nullable<ENUMERATION_NAME> select_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
+        Nullable<ENUMERATION_NAME> get_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
 //## SelectEnumerationSet
-        void select_ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; setEnumerationValue("TypeNameUpper", val); }
+        void set_ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; setEnumerationValue("TypeNameUpper", val); }
 //## SelectAggregationGet
-        void slect_AggregationType(AggregationType& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); lst.FromSdaiAggr(aggr); }
+        void get_AggregationType(AggregationType& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); lst.FromSdaiAggr(m_instance, aggr); }
 //## SelectAggregationSet
-        void select_AggregationType(const AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
+        void set_AggregationType(const AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
 //## SelectAggregationSetArraySimple
-        void select_AggregationType(const SimpleType arr[], size_t n) { SdaiAggr aggr = AggregationType::ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
+        void set_AggregationType(const SimpleType arr[], size_t n) { SdaiAggr aggr = AggregationType::ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
 //## SelectAggregationSetArrayText
-        void select_AggregationType(const char* arr[], size_t n) { Aggregationtype::ToSdaiAggr(arr, n, m_instance, m_attrName); }
+        void set_AggregationType(const char* arr[], size_t n) { Aggregationtype::ToSdaiAggr(arr, n, m_instance, m_attrName); }
 //## SelectNested
-        TYPE_NAME_accessor select_TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName); }
+        TYPE_NAME_accessor nestedSelectAccess_TYPE_NAME() { return TYPE_NAME_accessor(m_instance, m_attrName, m_adb); }
 //## SelectGetAsDouble
         Nullable<double> as_double() { double val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiREAL, &val)) return val; else return Nullable<double>(); }
 //## SelectGetAsInt
@@ -559,7 +570,7 @@ namespace NAMESPACE_NAME
 //## AttributeEnumSet
         void set_ATTR_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
 //## AttributeSelectAccessor
-        TYPE_NAME_accessor getOrset_ATTR_NAME() { return TYPE_NAME_accessor(m_instance, "ATTR_NAME"); }
+        TYPE_NAME_accessor getOrset_ATTR_NAME() { return TYPE_NAME_accessor(m_instance, "ATTR_NAME", NULL); }
 //## AttributeAggregationGet
 
         void get_ATTr_NAME(AggregationType& lst) { lst.FromAttr (m_instance, "ATTR_NAME"); }
@@ -573,9 +584,9 @@ namespace NAMESPACE_NAME
     };
 
 //## SelectEntityGetImplementation
-    REF_ENTITY TYPE_NAME_accessor::select_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
+    REF_ENTITY TYPE_NAME_accessor::get_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
 //## SelectEntitySetImplementation
-    void TYPE_NAME_accessor::select_REF_ENTITY(REF_ENTITY inst) { setEntityInstance("TypeNameUpper", inst); }
+    void TYPE_NAME_accessor::set_REF_ENTITY(REF_ENTITY inst) { setEntityInstance("TypeNameUpper", inst); }
 //## AttributeEntityGetImplementation
     REF_ENTITY ENTITY_NAME::get_Attr_NAME() { SdaiInstance inst = 0; sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, &inst); return inst; }
 //## AttributeEntitySetImplementation

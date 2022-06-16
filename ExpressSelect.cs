@@ -130,13 +130,13 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_TYPE_NAME] = name;
 
             generator.m_replacements[Generator.KWD_GETSET] = "get";
-            generator.m_replacements[Generator.KWD_ACCESSOR] = "getter";
+            generator.m_replacements[Generator.KWD_ACCESSOR] = "_getter";
             generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
 
             if (!attr.inverse)
             {
                 generator.m_replacements[Generator.KWD_GETSET] = "set";
-                generator.m_replacements[Generator.KWD_ACCESSOR] = "setter";
+                generator.m_replacements[Generator.KWD_ACCESSOR] = "_setter";
                 generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
             }
 
@@ -158,18 +158,21 @@ namespace RDFWrappers
 
             generator.m_replacements[Generator.KWD_TYPE_NAME] = name;
 
-            foreach (var bGet in new bool[] { true, false })
+            foreach (var bGet in new bool?[] { null, true, false })
             {
-                generator.m_replacements[Generator.KWD_ACCESSOR] = bGet ? "getter" : "setter";
+                generator.m_replacements[Generator.KWD_ACCESSOR] = bGet.HasValue ? (bGet.Value ? "_getter" : "_setter") : "";
 
                 generator.WriteByTemplate(Generator.Template.SelectAccessorBegin);
 
                 foreach (var variant in GetVariants(false))
                 {
+                    if (!bGet.HasValue)
+                        generator.m_writer.WriteLine();
+
                     WriteAccessorMethod(generator, variant, bGet);
                 }
 
-                if (bGet)
+                if (bGet.HasValue && bGet.Value) //to implement for detached selects it needs implementation with m_adb
                 {
                     var astypes = CollectAsTypes();
                     if (astypes.Count > 0)
@@ -187,7 +190,7 @@ namespace RDFWrappers
 
         }
 
-        private void WriteAccessorMethod(Generator generator, ExpressHandle selectVariant, bool bGet)
+        private void WriteAccessorMethod(Generator generator, ExpressHandle selectVariant, bool? bGet)
         {
             var type = ifcengine.engiGetDeclarationType(selectVariant);
             switch (type)
@@ -206,7 +209,7 @@ namespace RDFWrappers
 
                 case enum_express_declaration.__SELECT:
                     var selectType = new ExpressSelect(selectVariant);
-                    WriteAccessorMethod(generator, selectType);
+                    WriteAccessorMethod(generator, selectType, bGet);
                     break;
 
                 case enum_express_declaration.__ENTITY:
@@ -225,32 +228,50 @@ namespace RDFWrappers
             }
         }
         
-        private void WriteAccessorMethod(Generator generator, ExpressEnumeraion enumType, bool bGet)
+        private void WriteAccessorMethod(Generator generator, ExpressEnumeraion enumType, bool? bGet)
         {
             generator.m_replacements[Generator.KWD_ENUMERATION_NAME] = enumType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = enumType.name.ToUpper();
 
-            generator.WriteByTemplate(bGet ? Generator.Template.SelectEnumerationGet : Generator.Template.SelectEnumerationSet);
-
-            //var impl = generator.StringByTemplate(bGet ? Generator.Template.SelectGetEntityImplementation : Generator.Template.SelectSetEntityImplementation);
-            //generator.m_implementations.Append(impl);
-
+            if (bGet.HasValue)
+            {
+                generator.WriteByTemplate(bGet.Value ? Generator.Template.SelectEnumerationGet : Generator.Template.SelectEnumerationSet);
+            }
+            else
+            {
+                generator.WriteByTemplate(Generator.Template.SelectEnumerationGet);
+                generator.WriteByTemplate(Generator.Template.SelectEnumerationSet);
+            }
         }
 
 
-        private void WriteAccessorMethod(Generator generator, ExpressEntity entityType, bool bGet)
+        private void WriteAccessorMethod(Generator generator, ExpressEntity entityType, bool? bGet)
         {
             generator.m_replacements[Generator.KWD_REF_ENTITY] = entityType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = entityType.name.ToUpper();
 
-            generator.WriteByTemplate(bGet ? Generator.Template.SelectEntityGet : Generator.Template.SelectEntitySet);
+            if (bGet.HasValue)
+            {
+                generator.WriteByTemplate(bGet.Value ? Generator.Template.SelectEntityGet : Generator.Template.SelectEntitySet);
 
-            var impl = generator.StringByTemplate(bGet ? Generator.Template.SelectEntityGetImplementation : Generator.Template.SelectEntitySetImplementation);
-            generator.m_implementations.Append(impl);
+                var impl = generator.StringByTemplate(bGet.Value ? Generator.Template.SelectEntityGetImplementation : Generator.Template.SelectEntitySetImplementation);
+                generator.m_implementations.Append(impl);
+            }
+            else
+            {
+                generator.WriteByTemplate(Generator.Template.SelectEntityGet);
+                generator.WriteByTemplate(Generator.Template.SelectEntitySet);
+
+                var impl = generator.StringByTemplate(Generator.Template.SelectEntityGetImplementation);
+                generator.m_implementations.Append(impl);
+
+                impl = generator.StringByTemplate(Generator.Template.SelectEntitySetImplementation);
+                generator.m_implementations.Append(impl);
+            }
         }
 
 
-        private void WriteAccessorMethod(Generator generator, ExpressDefinedType definedType, bool bGet)
+        private void WriteAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
         {
             if (definedType.name == "IfcBinary")
                 return;
@@ -263,16 +284,21 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
 
-            var tpl = Generator.Template.None;
-            if (bGet)
-                tpl = baseType == "string" ? Generator.Template.SelectTextGet : Generator.Template.SelectSimpleGet;
-            else
-                tpl = baseType == "string" ? Generator.Template.SelectTextSet : Generator.Template.SelectSimpleSet;
+            var tplGet = baseType == "string" ? Generator.Template.SelectTextGet : Generator.Template.SelectSimpleGet;
+            var tplSet = baseType == "string" ? Generator.Template.SelectTextSet : Generator.Template.SelectSimpleSet;
 
-            generator.WriteByTemplate (tpl);
+            if (bGet.HasValue)
+            {
+                generator.WriteByTemplate(bGet.Value ? tplGet : tplSet);
+            }
+            else
+            {
+                generator.WriteByTemplate(tplGet);
+                generator.WriteByTemplate(tplSet);
+            }
         }
 
-        private void WriteAggrAccessorMethod(Generator generator, ExpressDefinedType definedType, bool bGet)
+        private void WriteAggrAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
         {
             if (definedType.name == "IfcBinary")
                 return;
@@ -292,20 +318,30 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
 
-            var tpl = bGet ? Generator.Template.SelectAggregationGet : Generator.Template.SelectAggregationSet;
-            generator.WriteByTemplate(tpl);
-
-            if (!bGet && !definedType.nestedAggr)
+            if (bGet.HasValue)
             {
-                tpl = baseType == "string" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
+                var tpl = bGet.Value ? Generator.Template.SelectAggregationGet : Generator.Template.SelectAggregationSet;
+                generator.WriteByTemplate(tpl);
+            }
+            else
+            {
+                generator.WriteByTemplate(Generator.Template.SelectAggregationGet);
+                generator.WriteByTemplate(Generator.Template.SelectAggregationSet);
+            }
+
+            if (!(bGet.HasValue&& bGet.Value) && !definedType.nestedAggr)
+            {
+                var tpl = baseType == "string" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
                 generator.WriteByTemplate(tpl);
             }
         }
 
-        private void WriteAccessorMethod(Generator generator, ExpressSelect selectType)
+        private void WriteAccessorMethod(Generator generator, ExpressSelect selectType, bool? bGet)
         {
             var saveSelect = generator.m_replacements[Generator.KWD_TYPE_NAME];
             generator.m_replacements[Generator.KWD_TYPE_NAME] = selectType.name;
+
+            generator.m_replacements[Generator.KWD_nestedSelectAccess] = bGet.HasValue ? (bGet.Value ? "get" : "set") : "";
 
             generator.WriteByTemplate(Generator.Template.SelectNested);
 

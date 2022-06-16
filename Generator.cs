@@ -33,7 +33,8 @@ namespace RDFWrappers
         public const string KWD_ENUM_TYPE = "ENUMERATION_NAME";
         public const string KWD_ENUM_VALUES = "\"ENUMERATION_STRING_VALUES\"";
         public const string KWD_TYPE_NAME = "TYPE_NAME";
-        public const string KWD_ACCESSOR = "Accessor";
+        public const string KWD_ACCESSOR = "_accessor";
+        public const string KWD_nestedSelectAccess = "nestedSelectAccess";
         public const string KWD_GETSET = "getOrset";
         public const string KWD_AggregationType = "AggregationType";
 

@@ -84,7 +84,7 @@ int main()
     IfcMeasureWithUnit measureWithUnit = IfcMeasureWithUnit::Create(ifcModel);
 
     //numeric value (sequence notation)
-    Nullable<IfcAbsorbedDoseMeasure> dval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure();
+    Nullable<IfcAbsorbedDoseMeasure> dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     //Nullable<double> works also good
     ASSERT(dval.IsNull());
 
@@ -97,26 +97,33 @@ int main()
 
     //numeric value (alteranative notation)
     IfcMeasureValue_getter getMeasureValue(measureWithUnit, "ValueComponent");
-    dval = getMeasureValue.select_IfcRatioMeasure();
+    dval = getMeasureValue.get_IfcRatioMeasure();
+    ASSERT(dval.IsNull());
+
+    //can do even this... but it may be tricky - 
+    // !detached select will not follows instance changes, but changing it will change instance - gets a copy, in futire it works like setter
+    // see below detached select behaviour
+    IfcMeasureValue measureValue_detachedSelect (measureWithUnit, "ValueComponent");
+    dval = measureValue_detachedSelect.get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
 
     //text based value
-    IfcDescriptiveMeasure sval = getMeasureValue.select_IfcDescriptiveMeasure();
+    IfcDescriptiveMeasure sval = getMeasureValue.get_IfcDescriptiveMeasure();
     ASSERT(sval == NULL);
 
-    IfcText txt = measureWithUnit.get_ValueComponent().select_IfcSimpleValue().select_IfcText();
+    IfcText txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
     ASSERT(txt == NULL);
 
     //set to numeric
-    measureWithUnit.set_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure(0.5);
+    measureWithUnit.set_ValueComponent().set_IfcMeasureValue().set_IfcRatioMeasure(0.5);
 
-    dval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure();
+    dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     ASSERT(dval.Value() == 0.5);
 
-    sval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcDescriptiveMeasure();
+    sval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcDescriptiveMeasure();
     ASSERT(sval == NULL);
 
-    txt = measureWithUnit.get_ValueComponent().select_IfcSimpleValue().select_IfcText();
+    txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
     ASSERT(txt == NULL);
 
     //shortcuts methods
@@ -126,17 +133,30 @@ int main()
     as_bool = measureWithUnit.get_ValueComponent().as_bool();
     ASSERT(as_double.Value() == 0.5 && 0 == strcmp(as_text, "0.500000") && as_int.Value() == 0 && as_bool.IsNull());
 
+    //detached select behaviour
+    //detached select was not changed when instance changed
+    dval = measureValue_detachedSelect.get_IfcRatioMeasure();
+    ASSERT(dval.IsNull());
+    //but changing the detached select will change host instance
+    measureValue_detachedSelect.set_IfcAreaMeasure(2.7);
+    dval = measureValue_detachedSelect.get_IfcAreaMeasure();
+    ASSERT(dval.Value() == 2.7);
+    //instance was changed
+    dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
+    ASSERT(dval.IsNull());
+    dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcAreaMeasure();
+    ASSERT(dval.Value()==2.7);
 
     //set DescriptiveMeasure
-    measureWithUnit.set_ValueComponent().select_IfcMeasureValue().select_IfcDescriptiveMeasure("my descreptive measure");
+    measureWithUnit.set_ValueComponent().set_IfcMeasureValue().set_IfcDescriptiveMeasure("my descreptive measure");
 
-    dval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure();
+    dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
 
-    sval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcDescriptiveMeasure();
+    sval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcDescriptiveMeasure();
     ASSERT(0 == strcmp(sval, "my descreptive measure"));
 
-    txt = measureWithUnit.get_ValueComponent().select_IfcSimpleValue().select_IfcText();
+    txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
     ASSERT(txt == NULL);
 
     as_double = measureWithUnit.get_ValueComponent().as_double();
@@ -146,19 +166,19 @@ int main()
     ASSERT(as_double.IsNull() && 0 == strcmp(as_text, "my descreptive measure") && as_int.IsNull() && as_bool.IsNull());
 
     //set text
-    measureWithUnit.set_ValueComponent().select_IfcSimpleValue().select_IfcText("my text");
+    measureWithUnit.set_ValueComponent().set_IfcSimpleValue().set_IfcText("my text");
 
-    dval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcRatioMeasure();
+    dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
 
-    sval = measureWithUnit.get_ValueComponent().select_IfcMeasureValue().select_IfcDescriptiveMeasure();
+    sval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcDescriptiveMeasure();
     ASSERT(sval == NULL);
 
-    txt = measureWithUnit.get_ValueComponent().select_IfcSimpleValue().select_IfcText();
+    txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
     ASSERT(0 == strcmp(txt, "my text"));
 
     IfcComplexNumber complexVal;
-    measureWithUnit.get_ValueComponent().select_IfcMeasureValue().slect_IfcComplexNumber(complexVal);
+    measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcComplexNumber(complexVal);
     ASSERT(complexVal.empty());
 
     as_double = measureWithUnit.get_ValueComponent().as_double();
@@ -172,8 +192,8 @@ int main()
     //
     auto actor = IfcActor::Create(ifcModel);
 
-    auto person = actor.get_TheActor().select_IfcPerson();
-    auto organization = actor.get_TheActor().select_IfcOrganization();
+    auto person = actor.get_TheActor().get_IfcPerson();
+    auto organization = actor.get_TheActor().get_IfcOrganization();
     ASSERT(person == 0 && organization == 0);
 
     SdaiInstance instance = actor.get_TheActor().as_instance();
@@ -182,11 +202,11 @@ int main()
     auto setPerson = IfcPerson::Create(ifcModel);
     setPerson.set_Identification("justApeson");
 
-    actor.set_TheActor().select_IfcPerson(setPerson);
-    person = actor.get_TheActor().select_IfcPerson();
+    actor.set_TheActor().set_IfcPerson(setPerson);
+    person = actor.get_TheActor().get_IfcPerson();
     ASSERT(setPerson == person);
 
-    organization = actor.get_TheActor().select_IfcOrganization();
+    organization = actor.get_TheActor().get_IfcOrganization();
     ASSERT(organization == 0);
 
     instance = actor.get_TheActor().as_instance();
@@ -284,20 +304,20 @@ int main()
     auto prop = IfcPropertySingleValue::Create(ifcModel);
 
     IfcComplexNumber cplxNum;
-    prop.get_NominalValue().select_IfcMeasureValue().slect_IfcComplexNumber(cplxNum);
+    prop.get_NominalValue().get_IfcMeasureValue().get_IfcComplexNumber(cplxNum);
     ASSERT(cplxNum.size() == 0);
 
     double cplx[] = {2.1, 1.5};
-    prop.set_NominalValue().select_IfcMeasureValue().select_IfcComplexNumber(cplx, 2);
+    prop.set_NominalValue().set_IfcMeasureValue().set_IfcComplexNumber(cplx, 2);
 
-    prop.get_NominalValue().select_IfcMeasureValue().slect_IfcComplexNumber(cplxNum);
+    prop.get_NominalValue().get_IfcMeasureValue().get_IfcComplexNumber(cplxNum);
     ASSERT(cplxNum.size() == 2 && cplxNum.front() == 2.1 && cplxNum.back() == 1.5);
 
 
     //
     //IndexedPolyCurve
     //
-
+#if 0
     auto poly = IfcIndexedPolyCurve::Create(ifcModel);
 
     ASSERT(poly.get_Points() == 0);
@@ -408,7 +428,7 @@ int main()
 
     ASSERT(arcInd.empty());
     ASSERT(lineInd.size() == 2 && lineInd.front() == 3 && lineInd.back() == 0);
-
+#endif
     sdaiSaveModelBN(ifcModel, "Test.ifc");
 
 #if 0
