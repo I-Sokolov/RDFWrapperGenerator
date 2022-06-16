@@ -9,7 +9,7 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    class ExpressEnumeraion
+    public class ExpressEnumeraion
     {
         public string name { get { return ExpressSchema.GetNameOfDeclaration(inst); } }
         ExpressHandle inst;

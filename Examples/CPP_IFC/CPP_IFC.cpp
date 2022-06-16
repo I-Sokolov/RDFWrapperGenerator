@@ -73,7 +73,6 @@ int main()
     curve.set_Degree(5);
     ASSERT(curve.get_Degree().Value() == 5);
 
-
     //
     // SELECT tests
     //
@@ -211,6 +210,27 @@ int main()
 
     instance = actor.get_TheActor().as_instance();
     ASSERT(instance == person);
+
+    //
+    // LOGICAL VALUES
+    //
+
+    ASSERT(curve.get_ClosedCurve().IsNull());
+    curve.set_ClosedCurve(IfcLogical::Unknown);
+    ASSERT(curve.get_ClosedCurve().Value() == IfcLogical::Unknown);
+
+    auto ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
+    ASSERT(ifcLogical.IsNull());
+    measureWithUnit.set_ValueComponent().set_IfcSimpleValue().set_IfcLogical(IfcLogical::True);
+    ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
+    ASSERT(ifcLogical.Value() == IfcLogical::True);
+
+    auto relIntersect = IfcRelInterferesElements::Create(ifcModel);
+    ifcLogical = relIntersect.get_ImpliedOrder();
+    ASSERT(ifcLogical.IsNull());
+    relIntersect.set_ImpliedOrder(LOGICAL::False);
+    ifcLogical = relIntersect.get_ImpliedOrder();
+    ASSERT(ifcLogical.Value() == LOGICAL::False);
 
     //
     // Aggregations

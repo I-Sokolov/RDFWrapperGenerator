@@ -177,14 +177,14 @@ namespace RDFWrappers
                     Console.WriteLine("Unsupported type in aggregations " + elemType);
                 }
             }
-            else if (typeDef.IsEntityReference(out elemType))
+          /*  else if (typeDef.IsEntityReference(out elemType))
             {
                 //WriteEntityReference(attr, expressType);
             }
             else if (typeDef.IsEnumeration(out elemType))
             {
                 //WriteEnumAttribute(attr, expressType);
-            }
+            }*/
             else if ((select = typeDef.IsSelect()) != null)
             {
                 template = Generator.Template.AggregationOfSelect;
@@ -193,7 +193,7 @@ namespace RDFWrappers
             }
             else
             {
-                Console.WriteLine("not supported " + typeDef.ToString());
+               // Console.WriteLine("aggregation is not supported: " + typeDef.ToString());
             }
 
             if (typeDef.nestedAggr)

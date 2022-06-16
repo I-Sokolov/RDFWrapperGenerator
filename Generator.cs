@@ -24,6 +24,7 @@ namespace RDFWrappers
         public const string KWD_TextType = "TextType";
         public const string KWD_TypeNameUpper = "TypeNameUpper";
         public const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
+        public const string KWD_ENUMERATION_VALUES_ARRAY = "ENUMERATION_VALUES_ARRAY";
         public const string KWD_ENUMERATION_ELEMENT = "ENUMERATION_ELEMENT";
         public const string KWD_NUMBER = "1234";
         public const string KWD_ATTR_NAME = "ATTR_NAME";
@@ -208,7 +209,7 @@ namespace RDFWrappers
 
         private void WriteDefinedType(ExpressDefinedType definedType, HashSet<ExpressHandle> visitedTypes)
         {
-            if (!visitedTypes.Add (definedType.declaration))
+            if (!visitedTypes.Add(definedType.declaration))
             {
                 return;
             }
@@ -217,7 +218,7 @@ namespace RDFWrappers
             {
                 var referencedType = new ExpressDefinedType(definedType.domain);
                 WriteDefinedType(referencedType, visitedTypes);
-                if (!m_knownDefinedTyes.ContainsKey (referencedType.declaration))
+                if (!m_knownDefinedTyes.ContainsKey(referencedType.declaration))
                 {
                     Console.WriteLine("Defineded type {0} is not supported, because referenced type {1} is not supported", definedType.name, referencedType.name);
                     return;
@@ -225,10 +226,14 @@ namespace RDFWrappers
 
                 m_replacements[KWD_SimpleType] = referencedType.name;
             }
+            else if (definedType.attrType == RDF.enum_express_attr_type.__LOGICAL)
+            {
+                m_replacements[KWD_SimpleType] = "LOGICAL";
+            }
             else
             {
                 var csType = ExpressSchema.GetPrimitiveType(definedType.attrType);
-                if (csType==null)
+                if (csType == null)
                 {
                     Console.WriteLine("Defined type {0} is not supproted, because primitive type is {1}", definedType.name, definedType.attrType.ToString());
                     return;
@@ -237,6 +242,8 @@ namespace RDFWrappers
                 m_replacements[KWD_SimpleType] = csType;
             }
 
+            //
+            //
             if (definedType.aggrType == RDF.enum_express_aggr.__NONE)
             {
                 m_replacements[KWD_DEFINED_TYPE] = definedType.name;
@@ -245,7 +252,7 @@ namespace RDFWrappers
             else
             {
                 Aggregation.WriteDefinedType(this, definedType);
-           }
+            }
 
             m_knownDefinedTyes.Add(definedType.declaration, definedType.aggrType);
 
@@ -500,28 +507,57 @@ namespace RDFWrappers
             string expressType = null;
             string baseType = null;
             string sdaiType = null;
-            ExpressSelect select = null;
-
             if (attr.IsSimpleType(out expressType, out baseType, out sdaiType))
             {
                 WriteSimpleAttribute(attr, expressType, baseType, sdaiType);
+                return;
             }
-            else if (attr.IsEntityReference(out expressType))
+
+            ExpressDefinedType definedType = null;
+            ExpressEnumeraion enumeration = null;
+            ExpressSelect select = null;
+            string referncedEntity = null;
+
+            if ((definedType = attr.IsDefinedType()) != null)
             {
-                WriteEntityReference(attr, expressType);
+                WriteDefinedTypeAttribute(attr, definedType);
             }
-            else if (attr.IsEnumeration (out expressType))
+            else if (attr.IsEntityReference(out referncedEntity))
             {
-                WriteEnumAttribute(attr, expressType);
+                WriteEntityReference(attr, referncedEntity);
             }
-            else if ((select = attr.IsSelect ())!=null)
+            else if ((enumeration = attr.IsEnumeration()) != null)
+            {
+                WriteEnumAttribute(attr, enumeration.name, enumeration.name + "_");
+            }
+            else if ((select = attr.IsSelect()) != null)
             {
                 select.WriteAttribute(this, attr);
+            }
+            else if (attr.domain == 0 && attr.attrType == RDF.enum_express_attr_type.__LOGICAL)
+            {
+                WriteEnumAttribute(attr, "LOGICAL", "LOGICAL_VALUE_NAMES");
             }
             else
             {
                 Console.WriteLine(attr.name + " not supported");
             }
+        }
+
+        private void WriteDefinedTypeAttribute (ExpressAttribute attr, ExpressDefinedType dt)
+        {
+            switch (dt.attrType)
+            {
+                case RDF.enum_express_attr_type.__BINARY:
+                case RDF.enum_express_attr_type.__BINARY_32:
+                    return;
+
+                case RDF.enum_express_attr_type.__LOGICAL:
+                    WriteEnumAttribute(attr, dt.name, "LOGICAL_VALUE_NAMES");
+                    return;
+            }
+
+            Console.WriteLine(attr.name + " is not supporrted, defined type: " + dt.ToString());
         }
 
         private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
@@ -570,9 +606,10 @@ namespace RDFWrappers
         }
 
 
-        private void WriteEnumAttribute(ExpressAttribute attr, string domain)
+        private void WriteEnumAttribute(ExpressAttribute attr, string enumName, string enumValuesArrayName)
         {
-            m_replacements[KWD_ENUM_TYPE] = domain;
+            m_replacements[KWD_ENUM_TYPE] = enumName;
+            m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = enumValuesArrayName;
             WriteGetSet(Template.AttributeEnumGet, Template.AttributeEnumSet, attr.inverse);
         }
 

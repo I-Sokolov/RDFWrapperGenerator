@@ -44,6 +44,11 @@ namespace NAMESPACE_NAME
 
     //
     //
+    enum class LOGICAL { False=0, True, Unknown };
+    static const char* LOGICAL_VALUE_NAMES[] = {"F", "T", "U", NULL};
+
+    //
+    //
     static int EnumerationNameToIndex(const char* rEnumValues[], const char* value)
     {
         if (value) {
@@ -434,6 +439,7 @@ namespace NAMESPACE_NAME
     typedef SdaiEntity  REF_ENTITY;    
 
 #define sdaiTYPE  sdaiREAL
+#define ENUMERATION_VALUES_ARRAY ENUMERATION_NAME_
 
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
@@ -497,9 +503,9 @@ namespace NAMESPACE_NAME
 //## SelectEntitySet
         void set_REF_ENTITY(REF_ENTITY inst);
 //## SelectEnumerationGet
-        Nullable<ENUMERATION_NAME> get_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
+        Nullable<ENUMERATION_NAME> get_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
 //## SelectEnumerationSet
-        void set_ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; setEnumerationValue("TypeNameUpper", val); }
+        void set_ENUMERATION_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_VALUES_ARRAY[(int)value]; setEnumerationValue("TypeNameUpper", val); }
 //## SelectAggregationGet
         void get_AggregationType(AggregationType& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); lst.FromSdaiAggr(m_instance, aggr); }
 //## SelectAggregationSet
@@ -553,7 +559,7 @@ namespace NAMESPACE_NAME
         static ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = sdaiCreateInstanceBN(model, "ENTITY_NAME"); assert(inst); return inst; }        
 //## AttributeSimpleGet
 
-        Nullable<SimpleType> get_ATTR_NAME() { SimpleType val = 0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &val)) return val; else return Nullable<SimpleType>(); }
+        Nullable<SimpleType> get_ATTR_NAME() { SimpleType val = (SimpleType)0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &val)) return val; else return Nullable<SimpleType>(); }
 //## AttributeSimpleSet
         void set_ATTR_NAME(SimpleType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &value); }
 //## AttributeTextGet
@@ -568,9 +574,9 @@ namespace NAMESPACE_NAME
         void set_Attr_NAME(REF_ENTITY inst);
 //## AttributeEnumGet
 
-        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = getENUM("ATTR_NAME", ENUMERATION_NAME_); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
+        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = getENUM("ATTR_NAME", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
 //## AttributeEnumSet
-        void set_ATTR_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_NAME_[value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
+        void set_ATTR_NAME(ENUMERATION_NAME value) { const char* val = ENUMERATION_VALUES_ARRAY[(int)value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
 //## AttributeSelectAccessor
         TYPE_NAME_accessor getOrset_ATTR_NAME() { return TYPE_NAME_accessor(m_instance, "ATTR_NAME", NULL); }
 //## AttributeAggregationGet

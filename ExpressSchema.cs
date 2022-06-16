@@ -41,9 +41,6 @@ namespace RDFWrappers
                 case enum_express_attr_type.__INTEGER:
                     return "Int64";
 
-                case enum_express_attr_type.__LOGICAL:
-                    return "Int64";
-
                 case enum_express_attr_type.__NUMBER:
                     return "double";
 
@@ -58,6 +55,7 @@ namespace RDFWrappers
                     return null;
 
                 case enum_express_attr_type.__NONE:
+                case enum_express_attr_type.__LOGICAL:
                 case enum_express_attr_type.__ENUMERATION:
                 case enum_express_attr_type.__SELECT:
                 default:

@@ -100,7 +100,7 @@ namespace RDFWrappers
 
                     case enum_express_declaration.__DEFINED_TYPE:
                         var definedType = new ExpressDefinedType(variant);
-                        if (definedType.GetAggregationType() == RDF.enum_express_aggr.__NONE)
+                        if (definedType.GetAggregationType() == RDF.enum_express_aggr.__NONE && definedType.attrType != enum_express_attr_type.__LOGICAL)
                         {
                             var cstype = definedType.GetBaseCSType();
                             if (cstype != null)
@@ -227,11 +227,17 @@ namespace RDFWrappers
                     break;
             }
         }
-        
+
         private void WriteAccessorMethod(Generator generator, ExpressEnumeraion enumType, bool? bGet)
         {
-            generator.m_replacements[Generator.KWD_ENUMERATION_NAME] = enumType.name;
-            generator.m_replacements[Generator.KWD_TypeNameUpper] = enumType.name.ToUpper();
+            WriteAccessorEnumMethod(generator, enumType.name, enumType.name + "_", bGet);
+        }
+
+        private void WriteAccessorEnumMethod(Generator generator, string enumName, string enumValuesArray, bool? bGet)
+        { 
+            generator.m_replacements[Generator.KWD_ENUMERATION_NAME] = enumName;
+            generator.m_replacements[Generator.KWD_TypeNameUpper] = enumName.ToUpper();
+            generator.m_replacements[Generator.KWD_ENUMERATION_VALUES_ARRAY] = enumValuesArray;
 
             if (bGet.HasValue)
             {
@@ -273,9 +279,17 @@ namespace RDFWrappers
 
         private void WriteAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
         {
-            if (definedType.name == "IfcBinary")
-                return;
-            
+            switch (definedType.attrType)
+            {
+                case enum_express_attr_type.__BINARY:
+                case enum_express_attr_type.__BINARY_32:
+                    return;
+
+                case enum_express_attr_type.__LOGICAL:
+                    WriteAccessorEnumMethod(generator, definedType.name, "LOGICAL_VALUE_NAMES", bGet);
+                    return;
+            }
+
             string sdaiType = definedType.GetSdaiType();
             string baseType = definedType.GetBaseCSType();
 

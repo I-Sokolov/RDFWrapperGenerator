@@ -126,20 +126,31 @@ namespace RDFWrappers
             return false;
         }
 
-        public bool IsEnumeration(out string enumerationName)
+        public ExpressDefinedType IsDefinedType ()
         {
-            enumerationName = null;
+            if (domain != 0)
+            {
+                if (enum_express_declaration.__DEFINED_TYPE == ifcengine.engiGetDeclarationType(domain))
+                {
+                    var dt = new ExpressDefinedType(domain);
+                    return dt;
+                }
+            }
+            return null;
+        }
 
+        public ExpressEnumeraion IsEnumeration()
+        {
             if (attrType == enum_express_attr_type.__NONE)
             {
                 if (enum_express_declaration.__ENUM == ifcengine.engiGetDeclarationType(domain))
                 {
-                    enumerationName = ExpressSchema.GetNameOfDeclaration(domain);
-                    return true;
+                    var en = new ExpressEnumeraion(domain);
+                    return en;
                 }
             }
 
-            return false;
+            return null;
         }
 
         public ExpressSelect IsSelect()
