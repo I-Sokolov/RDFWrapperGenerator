@@ -220,7 +220,7 @@ namespace RDFWrappers
                 WriteDefinedType(referencedType, visitedTypes);
                 if (!m_knownDefinedTyes.ContainsKey(referencedType.declaration))
                 {
-                    Console.WriteLine("Defineded type {0} is not supported, because referenced type {1} is not supported", definedType.name, referencedType.name);
+                    Console.WriteLine("Defineded type {0} is not supported (referenced type {1})", definedType.name, referencedType.name);
                     return;
                 }
 
@@ -235,7 +235,7 @@ namespace RDFWrappers
                 var csType = ExpressSchema.GetPrimitiveType(definedType.attrType);
                 if (csType == null)
                 {
-                    Console.WriteLine("Defined type {0} is not supproted, because primitive type is {1}", definedType.name, definedType.attrType.ToString());
+                    Console.WriteLine("Defined type {0} is not supproted (primitive type is {1})", definedType.name, definedType.attrType.ToString());
                     return;
                 }
 
@@ -540,7 +540,7 @@ namespace RDFWrappers
             }
             else
             {
-                Console.WriteLine(attr.name + " not supported");
+                Console.WriteLine(attr.name + " is not supported");
             }
         }
 

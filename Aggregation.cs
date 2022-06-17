@@ -147,7 +147,7 @@ namespace RDFWrappers
                     break;
 
                 default:
-                    Console.WriteLine("unsupported aggrType " + typeDef.ToString());
+                    Console.WriteLine("unsupported aggregation type " + typeDef.ToString());
                     return template;
             }
 
@@ -177,11 +177,12 @@ namespace RDFWrappers
                     Console.WriteLine("Unsupported type in aggregations " + elemType);
                 }
             }
-          /*  else if (typeDef.IsEntityReference(out elemType))
+            else if (typeDef.IsEntityReference(out elemType))
             {
-                //WriteEntityReference(attr, expressType);
+                //TODO - must be
+                return Generator.Template.None;
             }
-            else if (typeDef.IsEnumeration(out elemType))
+            /*else if (typeDef.IsEnumeration(out elemType))
             {
                 //WriteEnumAttribute(attr, expressType);
             }*/
@@ -191,14 +192,15 @@ namespace RDFWrappers
                 elemType = select.name;
                 sdaiType = null;
             }
-            else
-            {
-               // Console.WriteLine("aggregation is not supported: " + typeDef.ToString());
-            }
 
             if (typeDef.nestedAggr)
             {
                 nested = 1;
+            }
+
+            if (template == Generator.Template.None)
+            {
+                Console.WriteLine("aggregation is not supported: " + typeDef.ToString());
             }
 
             return template;
