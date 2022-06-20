@@ -512,12 +512,12 @@ namespace NAMESPACE_NAME
     //
 //## EnumerationBegin
 
-    enum ENUMERATION_NAME
+    enum class ENUMERATION_NAME
     {
 //## EnumerationElement
-        ENUMERATION_NAME_ENUMERATION_ELEMENT=1234,
+        ENUMERATION_ELEMENT=1234,
 //## EnumerationEnd
-        ENUMERATION_NAME___unk = -1
+        ___unk = -1
     };
     static const char* ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
 

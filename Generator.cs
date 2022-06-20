@@ -288,8 +288,14 @@ namespace RDFWrappers
 
             int i = 0;
             var values = new StringBuilder();
-            foreach (var e in enumeraion.GetValues())
+            foreach (var _e in enumeraion.GetValues())
             {
+                string e = _e;
+                switch (e)
+                {
+                    case "NULL": e = "Null"; break;
+                }
+
                 m_replacements[KWD_ENUMERATION_ELEMENT] = e;
                 m_replacements[KWD_NUMBER] = i.ToString();
 

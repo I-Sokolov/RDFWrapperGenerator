@@ -34,7 +34,7 @@ int main()
     wall.set_Name("Wall name");
     wall.set_Description("My wall description");
     wall.set_OwnerHistory(ownerHistory);
-    wall.set_PredefinedType(IfcWallTypeEnum_POLYGONAL);
+    wall.set_PredefinedType(IfcWallTypeEnum::POLYGONAL);
 
     guid = wall.get_GlobalId();
     name = wall.get_Name();
@@ -45,7 +45,7 @@ int main()
            && !strcmp(name, "Wall name")
            && !strcmp(guid, "7-7-7")
            && oh == ownerHistory
-           && predType.Value() == IfcWallTypeEnum_POLYGONAL
+           && predType.Value() == IfcWallTypeEnum::POLYGONAL
     );
 
 
