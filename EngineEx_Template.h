@@ -165,12 +165,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        int64_t getEntityInstance(const char* typeName)
+        int_t getEntityInstance(const char* typeName)
         {
             assert(m_instance && m_attrName); //TODO how to keep instance in ADB
 
-            int64_t ret = 0;
-            int64_t inst = 0;
+            int_t ret = 0;
+            int_t inst = 0;
             if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINSTANCE, &inst)) {
                 SdaiEntity instType = sdaiGetInstanceType(inst);
                 SdaiModel model = engiGetEntityModel(instType);
@@ -183,7 +183,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void setEntityInstance(const char* /*typeName*/, int64_t inst)
+        void setEntityInstance(const char* /*typeName*/, int_t inst)
         {
             assert(m_instance && m_attrName); //TODO how to keep instance in ADB
 
@@ -429,7 +429,7 @@ namespace NAMESPACE_NAME
 
     /// <summary>
     /// Provides utility methods to interact with a generic entity instnace
-    /// You also can use object of this class instead of int64_t handle of the instance in any place where the handle is required
+    /// You also can use object of this class instead of int_t handle of the instance in any place where the handle is required
     /// </summary>
     class Entity
     {
@@ -561,7 +561,7 @@ namespace NAMESPACE_NAME
 //## SelectGetAsDouble
         Nullable<double> as_double() { double val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiREAL, &val)) return val; else return Nullable<double>(); }
 //## SelectGetAsInt
-        Nullable<int64_t> as_int() { int64_t val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINTEGER, &val)) return val; else return Nullable<int64_t>(); }
+        Nullable<int_t> as_int() { int_t val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINTEGER, &val)) return val; else return Nullable<int_t>(); }
 //## SelectGetAsBool
         Nullable<bool> as_bool() { bool val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiBOOLEAN, &val)) return val; else return Nullable<bool>(); }
 //## SelectGetAsText
@@ -581,7 +581,7 @@ namespace NAMESPACE_NAME
 
     /// <summary>
     /// Provides utility methods to interact with an instnace of OWL class ENTITY_NAME
-    /// You also can use object of this C++ class instead of int64_t handle of the OWL instance in any place where the handle is required
+    /// You also can use object of this C++ class instead of int_t handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ENTITY_NAME : public virtual /*PARENT_NAME*/Entity
     {

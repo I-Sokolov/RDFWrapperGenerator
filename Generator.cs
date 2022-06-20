@@ -135,7 +135,7 @@ namespace RDFWrappers
         public Generator (ExpressSchema schema, bool cs, string namespace_)
         {
             m_cs = cs;            
-            m_TInt64 = m_cs ? "Int64" : "int64_t";
+            m_TInt64 = m_cs ? "Int64" : "int_t";
             m_namespace = namespace_;
 
             m_schema = schema;
@@ -471,7 +471,7 @@ namespace RDFWrappers
                 code = code.Replace("const const", "const");
                 code = code.Replace("<const char*>", "<string>");
                 code = code.Replace("std::const char*", "std::string");
-                code = code.Replace("Int64", "int64_t");
+                code = code.Replace("Int64", "int_t");
             }
 
             return code;
