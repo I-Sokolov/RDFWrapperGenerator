@@ -67,7 +67,21 @@ namespace RDFWrappers
                         unique = unique != 0 ? true : false
                     };
 
-                    ret.Add(prop);
+                    //check duplications
+                    bool add = true;
+                    foreach (var a in ret)
+                    { 
+                        if (a.name == prop.name)
+                        {
+                            //Console.WriteLine("Duplicated attribute {0} for entity {1}", a.name, name);
+                            add = false;
+                            break;
+                        }
+                    }
+
+                    //
+                    if (add)
+                        ret.Add(prop);
                 }
             }
 
