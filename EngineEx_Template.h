@@ -326,6 +326,46 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
+    template <typename T> class AggregationOfInstance : public Aggregation, public std::list<T>
+    {
+    public:
+        //
+        virtual void FromSdaiAggr(SdaiInstance /*instance*/, SdaiAggr aggr) override
+        {
+            int_t  cnt = sdaiGetMemberCount(aggr);
+            for (int_t i = 0; i < cnt; i++) {
+                int_t val = 0;
+                engiGetAggrElement(aggr, i, sdaiINSTANCE, &val);
+                this->push_back(val);
+            }
+        }
+
+        //
+        SdaiAggr ToSdaiAggr(SdaiInstance instance, const char* attrName) const
+        {
+            SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
+            for (auto it = this->begin(); it != this->end(); it++) {
+                int_t val = *it;
+                sdaiAppend((int_t) aggr, sdaiINSTANCE, (void*)val);
+            }
+            return aggr;
+        }
+
+        //
+        static SdaiAggr ToSdaiAggr(const char* arr[], size_t cnt, SdaiInstance instance, const char* attrName)
+        {
+            AggregationOfText<T> lst;
+            for (size_t i = 0; i < cnt; i++) {
+                lst.push_back(arr[i]);
+            }
+            return lst.ToSdaiAggr(instance, attrName);
+        }
+    };
+
+
+    /// <summary>
+    /// 
+    /// </summary>
     template <typename T> class AggregationOfAggregation : public Aggregation, public std::list<T>
     {
     public:
@@ -459,8 +499,10 @@ namespace NAMESPACE_NAME
     typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationType;
 //## AggregationOfText
     typedef AggregationOfText<std::string> Aggregationtype;
+//## AggregationOfInstance
+    typedef AggregationOfInstance<SimpleType> AggregationTYpe;
 //## AggregationOfAggregation
-    typedef AggregationOfAggregation<SimpleType> AggregationTYpe;
+    typedef AggregationOfAggregation<SimpleType> AggregationTYPe;
 //## AggregationOfSelect
     typedef AggregationOfSelect<SimpleType> AggregationTYPE;
 //## TEMPLATE: EnumerationsBegin

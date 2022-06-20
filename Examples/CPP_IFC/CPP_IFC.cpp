@@ -449,6 +449,42 @@ int main()
     ASSERT(arcInd.empty());
     ASSERT(lineInd.size() == 2 && lineInd.front() == 3 && lineInd.back() == 0);
 
+    ///
+    /// Aggregation of instances
+    /// 
+    auto prodRepr = wall.get_Representation();
+    ASSERT(prodRepr == 0);
+
+    prodRepr = IfcProductDefinitionShape::Create(ifcModel);
+    wall.set_Representation(prodRepr);
+    ASSERT(wall.get_Representation() == prodRepr);
+
+    ListOfIfcRepresentation lstRep;
+    prodRepr.get_Representations(lstRep);
+    ASSERT(lstRep.empty());
+
+    auto repr = IfcShapeRepresentation::Create(ifcModel);
+    lstRep.push_back(repr);
+    prodRepr.set_Representations(lstRep);
+
+    lstRep.clear();
+    prodRepr.get_Representations(lstRep);
+    ASSERT(lstRep.size() == 1 && lstRep.front() == repr);
+
+    SetOfIfcRepresentationItem lstItems;
+    repr.get_Items(lstItems);
+    ASSERT(lstItems.size() == 0);
+
+    lstItems.push_back(poly);
+    lstItems.push_back(triangFaceSet);
+    lstItems.push_back(curve);
+    
+    repr.set_Items(lstItems);
+
+    lstItems.clear();
+    repr.get_Items(lstItems);
+    ASSERT(lstItems.size() == 3 && lstItems.front() == poly && lstItems.back() == curve);
+
     /// 
     /// 
     sdaiSaveModelBN(ifcModel, "Test.ifc");

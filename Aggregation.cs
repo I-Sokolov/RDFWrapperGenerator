@@ -179,8 +179,7 @@ namespace RDFWrappers
             }
             else if (typeDef.IsEntityReference(out elemType))
             {
-                //TODO - must be
-                return Generator.Template.None;
+                return Generator.Template.AggregationOfInstance;
             }
             /*else if (typeDef.IsEnumeration(out elemType))
             {
