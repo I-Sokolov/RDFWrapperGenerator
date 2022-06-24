@@ -18,12 +18,21 @@
     <ClCompile Include="CPP_IFC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CPP_AP242.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\EngineEx_Template.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bin\Debug\net5.0\IFC4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bin\Debug\net5.0\AP242.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

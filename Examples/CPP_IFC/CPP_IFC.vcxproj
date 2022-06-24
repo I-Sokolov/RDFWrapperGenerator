@@ -159,9 +159,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CPP_AP242.cpp">
+      <FunctionLevelLinking Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</FunctionLevelLinking>
+      <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
     <ClCompile Include="CPP_IFC.cpp" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\bin\Debug\net5.0\AP242.h" />
     <ClInclude Include="..\..\bin\Debug\net5.0\IFC4.h" />
     <ClInclude Include="..\..\EngineEx_Template.h" />
   </ItemGroup>
