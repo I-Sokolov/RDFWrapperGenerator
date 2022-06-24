@@ -51,10 +51,17 @@ namespace RDFWrappers
                 if (string.IsNullOrWhiteSpace (options.schema))
                 {
                     //options.schema = "ap242ed2_mim_lf_v1.101.exp";
-                    //options.schema = "IFC4_ADD2_TC1.exp";
-                    //options.schema = new SdaiSchema("AP242");
-                    options.schema = "IFC4";
+                    //options.schema = "..\\..\\..\\EXPRESS\\structural_frame_schema.exp";
+                    //options.schema = "..\\..\\..\\EXPRESS\\IFC2X3_TC1.exp";                    
+                    //options.schema = "..\\..\\..\\EXPRESS\\IFC4_ADD2_TC1.exp";
+                    //options.schema = "..\\..\\..\\EXPRESS\\IFC4x1.exp";
+                    //options.schema = "..\\..\\..\\EXPRESS\\IFC4x2.exp";
+                    //options.schema = "..\\..\\..\\EXPRESS\\IFC4x3.exp";
+                    //options.schema = "AP242";
+                    //options.schema = "IFC4";
                     //options.schema = "IFC2x3";
+                    //options.schema = "IFC4x3";
+                    options.schema = "CIS2";
                 }
 
                 string baseName = System.IO.Path.GetFileNameWithoutExtension (options.schema);

@@ -33,7 +33,7 @@ namespace RDFWrappers
         public const string KWD_REF_ENTITY = "REF_ENTITY";
         public const string KWD_ENUM_TYPE = "ENUMERATION_NAME";
         public const string KWD_ENUM_VALUES = "\"ENUMERATION_STRING_VALUES\"";
-        public const string KWD_TYPE_NAME = "TYPE_NAME";
+        public const string KWD_TYPE_NAME = "GEN_TYPE_NAME";
         public const string KWD_ACCESSOR = "_accessor";
         public const string KWD_nestedSelectAccess = "nestedSelectAccess";
         public const string KWD_GETSET = "getOrset";
@@ -50,16 +50,17 @@ namespace RDFWrappers
             ClassForwardDeclaration,
             DefinedTypesBegin,
             DefinedType,
-            AggrgarionTypesBegin,
-            AggregationOfSimple,
-            AggregationOfText,
-            AggregationOfInstance,
-            AggregationOfAggregation,
-            AggregationOfSelect,
             EnumerationsBegin,
             EnumerationBegin,
             EnumerationElement,
             EnumerationEnd,
+            AggrgarionTypesBegin,
+            AggregationOfSimple,
+            AggregationOfText,
+            AggregationOfInstance,
+            AggregationOfEnum,
+            AggregationOfAggregation,
+            AggregationOfSelect,
             SelectsBegin,
             SelectAccessorBegin,
             SelectSimpleGet,
@@ -112,14 +113,13 @@ namespace RDFWrappers
         /// 
         /// </summary>
         public bool m_cs; //cs or cpp
-        string m_TInt64;
         string m_namespace;
 
         public ExpressSchema m_schema;
 
         public StreamWriter m_writer;
 
-        Dictionary<ExpressHandle, RDF.enum_express_aggr> m_knownDefinedTyes = new Dictionary<ExpressHandle, RDF.enum_express_aggr>();
+        public Dictionary<ExpressHandle, RDF.enum_express_aggr> m_knownDefinedTyes = new Dictionary<ExpressHandle, RDF.enum_express_aggr>();
 
         public HashSet<string> m_knownAggregationTypes = new HashSet<string>();
 
@@ -135,7 +135,6 @@ namespace RDFWrappers
         public Generator (ExpressSchema schema, bool cs, string namespace_)
         {
             m_cs = cs;            
-            m_TInt64 = m_cs ? "Int64" : "int_t";
             m_namespace = namespace_;
 
             m_schema = schema;
@@ -162,9 +161,9 @@ namespace RDFWrappers
 
                 WriteForwardDeclarations();
 
-                WriteDefinedTypes();
-
                 WriteEnumerations();
+
+                WriteDefinedTypes();
 
                 WriteSelects();
 
@@ -186,7 +185,7 @@ namespace RDFWrappers
         {
             foreach (var cls in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
-                m_replacements[KWD_ENTITY_NAME] = cls.Key;
+                m_replacements[KWD_ENTITY_NAME] = ValidateIdentifier (cls.Key);
                 WriteByTemplate(Template.ClassForwardDeclaration);
             }
         }
@@ -217,15 +216,40 @@ namespace RDFWrappers
 
             if (definedType.domain != 0)
             {
-                var referencedType = new ExpressDefinedType(definedType.domain);
-                WriteDefinedType(referencedType, visitedTypes);
-                if (!m_knownDefinedTyes.ContainsKey(referencedType.declaration))
+                var referType = RDF.ifcengine.engiGetDeclarationType(definedType.domain);
+                var referTypeName = ExpressSchema.GetNameOfDeclaration(definedType.domain);
+
+                switch (referType)
                 {
-                    Console.WriteLine("Defineded type {0} is not supported (referenced type {1})", definedType.name, referencedType.name);
-                    return;
+                    case RDF.enum_express_declaration.__ENUM:
+                        Console.WriteLine("Defineded type {0} is not supported (referenced type ENUM {1})", definedType.name, referTypeName);
+                        return;
+
+                    case RDF.enum_express_declaration.__SELECT:
+                        Console.WriteLine("Defineded type {0} is not supported (referenced type SELECT {1})", definedType.name, referTypeName);
+                        return;
+
+                    case RDF.enum_express_declaration.__ENTITY:
+                        Console.WriteLine("Defineded type {0} is not supported (referenced type ENTITY {1})", definedType.name, referTypeName);
+                        return;
+
+                    case RDF.enum_express_declaration.__DEFINED_TYPE:
+                        {
+                            var referencedType = new ExpressDefinedType(definedType.domain);
+                            WriteDefinedType(referencedType, visitedTypes);
+                            if (!m_knownDefinedTyes.ContainsKey(referencedType.declaration))
+                            {
+                                Console.WriteLine("Defineded type {0} is not supported (referenced type {1})", definedType.name, referencedType.name);
+                                return;
+                            }
+                        }
+                        break;
+
+                    default:
+                        throw new ApplicationException("Unexpexted defined type domain " + referType.ToString());
                 }
 
-                m_replacements[KWD_SimpleType] = referencedType.name;
+                m_replacements[KWD_SimpleType] = referTypeName;
             }
             else if (definedType.attrType == RDF.enum_express_attr_type.__LOGICAL)
             {
@@ -289,12 +313,8 @@ namespace RDFWrappers
             int i = 0;
             var values = new StringBuilder();
             foreach (var _e in enumeraion.GetValues())
-            {
-                string e = _e;
-                switch (e)
-                {
-                    case "NULL": e = "Null"; break;
-                }
+            {               
+                string e = ValidateIdentifier (_e);
 
                 m_replacements[KWD_ENUMERATION_ELEMENT] = e;
                 m_replacements[KWD_NUMBER] = i.ToString();
@@ -388,7 +408,7 @@ namespace RDFWrappers
 
                 if (baseClass.Length != 0)
                 {
-                    baseClass += ", ";
+                    baseClass += ", public virtual ";
                 }
                 baseClass += ValidateIdentifier(parent.name);
 
@@ -465,14 +485,6 @@ namespace RDFWrappers
             {
                 code = code.Replace("string?", "string"); //warning CS8632: The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
             }
-            else
-            {
-                code = code.Replace("string", "const char*");
-                code = code.Replace("const const", "const");
-                code = code.Replace("<const char*>", "<string>");
-                code = code.Replace("std::const char*", "std::string");
-                code = code.Replace("Int64", "int_t");
-            }
 
             return code;
         }
@@ -488,7 +500,7 @@ namespace RDFWrappers
             var attribs = entity.GetAttributes();
             foreach (var attr in attribs)
             {
-                m_replacements[KWD_ATTR_NAME] = attr.name;
+                m_replacements[KWD_ATTR_NAME] =  ValidateIdentifier (attr.name);
 
                 if (exportedAttributes.Add(attr.name))
                 {
@@ -564,7 +576,7 @@ namespace RDFWrappers
                     return;
             }
 
-            Console.WriteLine(attr.name + " is not supporrted, defined type: " + dt.ToString());
+            Console.WriteLine("Attribute '" + attr.name + "' is not supporrted, defined type: " + dt.ToString() + ", defining entity " + ExpressSchema.GetNameOfDeclaration (attr.definingEntity));
         }
 
         private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
@@ -573,8 +585,8 @@ namespace RDFWrappers
             m_replacements[KWD_TextType] = m_replacements[KWD_SimpleType]; //just different words in template
             m_replacements[KWD_sdaiTYPE] = sdaiType;
 
-            Template tplGet = baseType == "string" ? Template.AttributeTextGet : Template.AttributeSimpleGet;
-            Template tplSet = baseType == "string" ? Template.AttributeTextSet : Template.AttributeSimpleSet;
+            Template tplGet = baseType == "TextData" ? Template.AttributeTextGet : Template.AttributeSimpleGet;
+            Template tplSet = baseType == "TextData" ? Template.AttributeTextSet : Template.AttributeSimpleSet;
 
             WriteGetSet(tplGet, tplSet, attr.inverse);
         }
@@ -685,11 +697,12 @@ namespace RDFWrappers
             }
         }
 
-        public static string ValidateIdentifier (string name)
+        public static string ValidateIdentifier(string name)
         {
+            string rename = name;
+
             using (var codeProvider = System.CodeDom.Compiler.CodeDomProvider.CreateProvider("C#"))
             {
-                
                 if (!codeProvider.IsValidIdentifier(name))
                 {
                     //does not work as expected, var id = codeProvider.CreateValidIdentifier(name);
@@ -705,24 +718,37 @@ namespace RDFWrappers
                         else
                         {
                             //replace
-                            builder.Append("_R");
+                            builder.Append("_");
                             builder.Append(((byte)ch).ToString());
-                            builder.Append("R_");
+                            builder.Append("_");
                         }
 
                         first = false;
                     }
 
-                    var id = builder.ToString();
+                    rename = builder.ToString();
 
-                    Console.WriteLine("!!!  {0} is not a valid identifier, changed to {1}", name, id);
-                    return id;
+                    if (!codeProvider.IsValidIdentifier(rename))
+                    {
+                        rename += "_";
+                        if (!codeProvider.IsValidIdentifier(rename))
+                        {
+                            throw new ApplicationException("Can not make a valid identifier from '" + name + "'");
+                        }
+                    }
                 }
-                else
+                else if (name == "NULL" || name == "union")
                 {
-                    return name;
+                    rename = name + "_";
                 }
             }
+
+            if (rename != name)
+            {
+                Console.WriteLine("!!!  '{0}' is not a valid identifier, changed to '{1}'", name, rename);
+            }
+
+            return rename;
         }
     }
 }

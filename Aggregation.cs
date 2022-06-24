@@ -88,6 +88,7 @@ namespace RDFWrappers
                         if (nest == 0)
                         {
                             generator.m_replacements[Generator.KWD_SimpleType] = elemType;
+                            generator.m_replacements[Generator.KWD_ENUM_TYPE] = elemType;
                             generator.WriteByTemplate(template);
                         }
                         else
@@ -153,6 +154,7 @@ namespace RDFWrappers
 
             string baseType = null;
             ExpressSelect select = null;
+            ExpressEnumeraion enumeration = null;
 
             if (typeDef.IsSimpleType(out elemType, out baseType, out sdaiType))
             {
@@ -163,7 +165,7 @@ namespace RDFWrappers
                         elemType = baseType;
                     }
 
-                    if (baseType == "string")
+                    if (baseType == "TextData")
                     {
                         template = Generator.Template.AggregationOfText;
                     }
@@ -181,10 +183,12 @@ namespace RDFWrappers
             {
                 return Generator.Template.AggregationOfInstance;
             }
-            /*else if (typeDef.IsEnumeration(out elemType))
+            else if ((enumeration = typeDef.IsEnumeration())!=null)
             {
-                //WriteEnumAttribute(attr, expressType);
-            }*/
+                elemType = enumeration.name;
+                sdaiType = "sdaiENUM";
+                template = Generator.Template.AggregationOfEnum;
+            }
             else if ((select = typeDef.IsSelect()) != null)
             {
                 template = Generator.Template.AggregationOfSelect;
@@ -253,65 +257,5 @@ namespace RDFWrappers
                 }
             }
         }
-
-#if not_now
-            if (attr.nestedAggr)
-            {
-                //TODO
-            }
-            else
-            {
-                string expressType = null;
-                string baseType = null;
-                string sdaiType = null;
-                ExpressSelect select = null;
-
-                if (attr.IsSimpleType(out expressType, out baseType, out sdaiType))
-                {
-                    WriteSimpleType(expressType, baseType, sdaiType);
-                }
-                else if (attr.IsEntityReference(out expressType))
-                {
-                    //WriteEntityReference(attr, expressType);
-                }
-                else if (attr.IsEnumeration(out expressType))
-                {
-                    //WriteEnumAttribute(attr, expressType);
-                }
-                else if ((select = attr.IsSelect()) != null)
-                {
-                    //select.WriteAttribute(this, attr);
-                }
-                else
-                {
-                    Console.WriteLine(attr.name + " not supported");
-                }
-            }
-        }
-
-        private string GetCAggrType()
-        {
-            switch (attr.aggrType)
-            {
-                case RDF.enum_express_aggr.__ARRAY: return "list";
-                case RDF.enum_express_aggr.__LIST: return "list";
-                case RDF.enum_express_aggr.__SET: return "set";
-            }
-            throw new ApplicationException ("unsupported aggrType " + attr.aggrType.ToString());
-        }
-
-        private void WriteSimpleType(string expressType, string baseType, string sdaiType)
-        {
-            generator.m_replacements[Generator.KWD_SimpleType] = (!generator.m_cs && expressType != null) ? expressType : baseType;
-            generator.m_replacements[Generator.KWD_TextType] = generator.m_replacements[Generator.KWD_SimpleType]; //just different words in template
-            generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
-            generator.m_replacements[Generator.KWD_AGGR_TYPE] = GetCAggrType();
-
-            //Generator.Template tplGet = (baseType == "string") ? Generator.Template.AggregationTextGet : Generator.Template.AggregationGetSimple;
-            //Generator.Template tplSet = (baseType == "string") ? Generator.Template.AggregationSetString : Generator.Template.AggregationSetSimple;
-
-            //generator.WriteGetSet(tplGet, tplSet, attr.inverse);
-        }
-#endif
     }
 }

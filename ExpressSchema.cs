@@ -39,7 +39,7 @@ namespace RDFWrappers
                     return "bool";
 
                 case enum_express_attr_type.__INTEGER:
-                    return "Int64";
+                    return "IntData";
 
                 case enum_express_attr_type.__NUMBER:
                     return "double";
@@ -48,7 +48,7 @@ namespace RDFWrappers
                     return "double";
 
                 case enum_express_attr_type.__STRING:
-                    return "string";
+                    return "TextData";
 
                 case enum_express_attr_type.__BINARY:
                 case enum_express_attr_type.__BINARY_32:
@@ -58,6 +58,8 @@ namespace RDFWrappers
                 case enum_express_attr_type.__LOGICAL:
                 case enum_express_attr_type.__ENUMERATION:
                 case enum_express_attr_type.__SELECT:
+                    return null;
+
                 default:
                     System.Diagnostics.Debug.Assert(false);
                     return null;

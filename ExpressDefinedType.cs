@@ -28,8 +28,17 @@ namespace RDFWrappers
         public string GetBaseCSType()
         {
             if (domain != 0)
-            { var refType = new ExpressDefinedType(domain);
-                return refType.GetBaseCSType();
+            {
+                var domainType = ifcengine.engiGetDeclarationType(domain);
+                if (domainType == enum_express_declaration.__DEFINED_TYPE)
+                {
+                    var refType = new ExpressDefinedType(domain);
+                    return refType.GetBaseCSType();
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {

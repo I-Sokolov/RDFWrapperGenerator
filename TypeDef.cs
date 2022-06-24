@@ -57,6 +57,8 @@ namespace RDFWrappers
                 domainTypeName = ExpressSchema.GetNameOfDeclaration(domainEntity);
             }
 
+            baseType = ExpressSchema.GetPrimitiveType(attrType);
+
             switch (attrType)
             {
                 case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
@@ -80,23 +82,19 @@ namespace RDFWrappers
                     return false;
 
                 case enum_express_attr_type.__BOOLEAN:
-                    baseType = "bool";
                     sdaiType = "sdaiBOOLEAN";
                     return true;
 
                 case enum_express_attr_type.__INTEGER:
-                    baseType = "Int64";
                     sdaiType = "sdaiINTEGER";
                     return true;
 
                 case enum_express_attr_type.__REAL:
                 case enum_express_attr_type.__NUMBER:
-                    baseType = "double";
                     sdaiType = "sdaiREAL";
                     return true;
 
                 case enum_express_attr_type.__STRING:
-                    baseType = "string";
                     sdaiType = "sdaiSTRING";
                     return true;
 
@@ -221,7 +219,6 @@ namespace RDFWrappers
                     break;
 
                 case enum_express_attr_type.__SELECT:
-                    System.Diagnostics.Debug.Assert(false); //never happens
                     if (domain != 0)
                     {
                         str.Append ("SELECT " + ExpressSchema.GetNameOfDeclaration(domain));

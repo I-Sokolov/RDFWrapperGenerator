@@ -108,9 +108,9 @@ namespace RDFWrappers
                                 switch (cstype)
                                 {
                                     case "double": ret.Add(Generator.Template.SelectGetAsDouble); break;
-                                    case "Int64": ret.Add(Generator.Template.SelectGetAsInt); break;
+                                    case "IntData": ret.Add(Generator.Template.SelectGetAsInt); break;
                                     case "bool": ret.Add(Generator.Template.SelectGetAsBool); break;
-                                    case "string": ret.Add(Generator.Template.SelectGetAsText); break;
+                                    case "TextData": ret.Add(Generator.Template.SelectGetAsText); break;
                                     default: throw new ApplicationException("unexpected cs type " + cstype);
                                 }
                             }
@@ -127,7 +127,7 @@ namespace RDFWrappers
         {
             generator.m_writer.WriteLine();
 
-            generator.m_replacements[Generator.KWD_TYPE_NAME] = name;
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = Generator.ValidateIdentifier (name);
 
             generator.m_replacements[Generator.KWD_GETSET] = "get";
             generator.m_replacements[Generator.KWD_ACCESSOR] = "_getter";
@@ -156,7 +156,7 @@ namespace RDFWrappers
                 (new ExpressSelect(nested)).WriteAccessors(generator, wroteSelects);
             }
 
-            generator.m_replacements[Generator.KWD_TYPE_NAME] = name;
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = Generator.ValidateIdentifier (name);
 
             foreach (var bGet in new bool?[] { null, true, false })
             {
@@ -196,14 +196,25 @@ namespace RDFWrappers
             switch (type)
             {
                 case enum_express_declaration.__DEFINED_TYPE:
-                    var definedType = new ExpressDefinedType(selectVariant);
-                    if (definedType.GetAggregationType() == enum_express_aggr.__NONE)
                     {
-                        WriteAccessorMethod(generator, definedType, bGet);
-                    }
-                    else
-                    {
-                        WriteAggrAccessorMethod(generator, definedType, bGet);
+                        enum_express_aggr aggrType;
+                        if (generator.m_knownDefinedTyes.TryGetValue(selectVariant, out aggrType))
+                        {
+                            var definedType = new ExpressDefinedType(selectVariant);
+                            if (aggrType == enum_express_aggr.__NONE)
+                            {
+                                System.Diagnostics.Trace.Assert(definedType.GetAggregationType() == enum_express_aggr.__NONE);
+                                WriteAccessorMethod(generator, definedType, bGet);
+                            }
+                            else
+                            {
+                                WriteAggrAccessorMethod(generator, definedType, bGet);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("SLECT " + name + " - DefinedType is not supported: " + ExpressSchema.GetNameOfDeclaration(selectVariant));
+                        }
                     }
                     break;
 
@@ -230,7 +241,8 @@ namespace RDFWrappers
 
         private void WriteAccessorMethod(Generator generator, ExpressEnumeraion enumType, bool? bGet)
         {
-            WriteAccessorEnumMethod(generator, enumType.name, enumType.name + "_", bGet);
+            var name = Generator.ValidateIdentifier(enumType.name);
+            WriteAccessorEnumMethod(generator, name, name + "_", bGet);
         }
 
         private void WriteAccessorEnumMethod(Generator generator, string enumName, string enumValuesArray, bool? bGet)
@@ -253,7 +265,7 @@ namespace RDFWrappers
 
         private void WriteAccessorMethod(Generator generator, ExpressEntity entityType, bool? bGet)
         {
-            generator.m_replacements[Generator.KWD_REF_ENTITY] = entityType.name;
+            generator.m_replacements[Generator.KWD_REF_ENTITY] = Generator.ValidateIdentifier (entityType.name);
             generator.m_replacements[Generator.KWD_TypeNameUpper] = entityType.name.ToUpper();
 
             if (bGet.HasValue)
@@ -298,8 +310,18 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
 
-            var tplGet = baseType == "string" ? Generator.Template.SelectTextGet : Generator.Template.SelectSimpleGet;
-            var tplSet = baseType == "string" ? Generator.Template.SelectTextSet : Generator.Template.SelectSimpleSet;
+            Generator.Template tplGet;
+            Generator.Template tplSet;
+            if (baseType == "TextData")
+            {
+                tplGet = Generator.Template.SelectTextGet;
+                tplSet = Generator.Template.SelectTextSet;
+            }
+            else 
+            {
+                tplGet = Generator.Template.SelectSimpleGet;
+                tplSet = Generator.Template.SelectSimpleSet;
+            }
 
             if (bGet.HasValue)
             {
@@ -345,7 +367,7 @@ namespace RDFWrappers
 
             if (!(bGet.HasValue&& bGet.Value) && !definedType.nestedAggr)
             {
-                var tpl = baseType == "string" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
+                var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
                 generator.WriteByTemplate(tpl);
             }
         }
