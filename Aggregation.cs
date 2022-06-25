@@ -111,20 +111,22 @@ namespace RDFWrappers
 
         private string MakeAggregationTypeName (enum_express_aggr aggrType, string elemType)
         {
+            bool camelCase = Char.IsUpper(elemType.First());
+
             var name = new StringBuilder();
 
             switch (aggrType)
             {
                 case enum_express_aggr.__ARRAY:
-                    name.Append("Array");
+                    name.Append(camelCase ? "Array" : "array");
                     break;
 
                 case enum_express_aggr.__LIST:
-                    name.Append("List");
+                    name.Append(camelCase ? "List" : "list");
                     break;
 
                 case RDF.enum_express_aggr.__SET:
-                    name.Append("Set");
+                    name.Append(camelCase ? "Set" : "set");
                     break;
 
                 default:
@@ -132,7 +134,10 @@ namespace RDFWrappers
                     return null;
             }
 
-            name.Append("Of");
+            if (camelCase)
+                name.Append("Of");
+            else
+                name.Append("_of_");
             
             name.Append(elemType);
 

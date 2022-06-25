@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ExpressSelect.cs~RF2b228197.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="EngineEx_Template.cs" />
     <EmbeddedResource Include="EngineEx_Template.h" />
   </ItemGroup>
