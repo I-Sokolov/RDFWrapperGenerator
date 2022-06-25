@@ -100,7 +100,7 @@ namespace RDFWrappers
 
                     case enum_express_declaration.__DEFINED_TYPE:
                         var definedType = new ExpressDefinedType(variant);
-                        if (definedType.GetAggregationType() == RDF.enum_express_aggr.__NONE && definedType.attrType != enum_express_attr_type.__LOGICAL)
+                        if (!definedType.IsAggregation () && definedType.attrType != enum_express_attr_type.__LOGICAL)
                         {
                             var cstype = definedType.GetBaseCSType();
                             if (cstype != null)
@@ -203,7 +203,7 @@ namespace RDFWrappers
                             var definedType = new ExpressDefinedType(selectVariant);
                             if (aggrType == enum_express_aggr.__NONE)
                             {
-                                System.Diagnostics.Trace.Assert(definedType.GetAggregationType() == enum_express_aggr.__NONE);
+                                System.Diagnostics.Trace.Assert(!definedType.IsAggregation ());
                                 WriteAccessorMethod(generator, definedType, bGet);
                             }
                             else
@@ -365,10 +365,16 @@ namespace RDFWrappers
                 generator.WriteByTemplate(Generator.Template.SelectAggregationSet);
             }
 
-            if (!(bGet.HasValue&& bGet.Value) && !definedType.nestedAggr)
+            if (!(bGet.HasValue && bGet.Value))
             {
-                var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
-                generator.WriteByTemplate(tpl);
+                enum_express_aggr aggr;
+                Int64 crdMin, crdMax, nestedAggr;
+                ifcengine.engiGetAggregation(definedType.aggregation, out aggr, out crdMin, out crdMax, out nestedAggr);
+                if (nestedAggr == 0)
+                {
+                    var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
+                    generator.WriteByTemplate(tpl);
+                }
             }
         }
 

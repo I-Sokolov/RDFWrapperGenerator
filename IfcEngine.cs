@@ -684,15 +684,15 @@ namespace RDF
 		public static extern int_t engiGetSelectElement(int_t select, int_t index);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinedType")]
-		public static extern enum_express_attr_type engiGetDefinedType(int_t definedType, out int_t referencedDeclaration, out enum_express_aggr aggr, out bool nestedAggr, out int_t cardinalityMin, out int_t cardinalityMax);
+		public static extern enum_express_attr_type engiGetDefinedType(int_t definedType, out int_t referencedDeclaration, out int_t aggregation);
 		
 		/// <summary>
-		///		engiGetEntityProperty                       (http://rdf.bg/ifcdoc/CS64/engiGetEntityProperty.html)
+		///		engiGetEntityProperty                       (http://rdf.bg/ifcdoc/CS64/engiGetEntityAttribute.html)
 		///
 		///	...
 		/// </summary>
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityProperty")]
-		public static extern byte engiGetEntityProperty
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttribute")]
+		public static extern byte engiGetEntityAttribute
 									(int_t entity,
 									int_t index,
 									out IntPtr propertyName,
@@ -700,13 +700,24 @@ namespace RDF
 									out byte inevrse,
 									out enum_express_attr_type attrType,
 									out int_t domainEntity,
-									out enum_express_aggr aggrType,
-									out byte nestedAggr,
-									out int_t cardinalityMin,
-									out int_t cardinalityMax,
+									out int_t aggrDescriptor,
 									out byte optional,
 									out byte unique
 								);
+
+		/// <summary>
+		///		engiGetAggregation                       (http://rdf.bg/ifcdoc/CS64/engiGetAttributeAggregation.html)
+		///
+		///	...
+		/// </summary>
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetAggregation")]
+		public static extern byte engiGetAggregation
+									(int_t aggrDescription,
+									out enum_express_aggr aggrType,
+									out int_t cardinalityMin,
+									out int_t cardinalityMax,
+									out int_t nextAggrDescription
+								   );
 
 		//
 		//  Instance Header API Calls

@@ -11,36 +11,35 @@ namespace RDFWrappers
 {
     public class TypeDef
     {
-        public enum_express_attr_type attrType;
-        
+        public enum_express_attr_type attrType;        
         public ExpressHandle domain;
 
-        public enum_express_aggr aggrType;
-        public bool nestedAggr;
-        public Int64 cardinalityMin;
-        public Int64 cardinalityMax;
+        public Int64 aggregation;
 
-        public enum_express_aggr GetAggregationType()
+        public bool IsAggregation()
         {
-            //direct/unnamed aggregation
-            if (aggrType != enum_express_aggr.__NONE)
+            if (aggregation != 0)
             {
-                return aggrType;
+                return true;
             }
 
-            //defined type aggregation
             if (domain != 0)
             {
-                if (enum_express_declaration.__DEFINED_TYPE == ifcengine.engiGetDeclarationType(domain))
+                if (ifcengine.engiGetDeclarationType (domain) == enum_express_declaration.__DEFINED_TYPE)
                 {
-                    var domainType = new ExpressDefinedType(domain);
-                    return domainType.GetAggregationType();
+                    ExpressHandle refer;
+                    Int64 aggr;
+                    ifcengine.engiGetDefinedType(domain, out refer, out aggr);
+                    if (aggr != 0)
+                    {
+                        return true;
+                    }
                 }
             }
 
-            return enum_express_aggr.__NONE;
+            return false;
         }
-
+        
         public bool IsSimpleType(out string domainType, out string baseType, out string sdaiType)
         {
             return IsSimpleType(attrType, domain, out domainType, out baseType, out sdaiType);
@@ -169,28 +168,13 @@ namespace RDFWrappers
         {
             var str = new StringBuilder();
 
-            if (nestedAggr)
+            while (aggregation != 0)
             {
-                System.Diagnostics.Debug.Assert(aggrType != enum_express_aggr.__NONE);
-                str.Append ("NESTED");
-            }
+                enum_express_aggr aggrType;
+                Int64 cardMin, cardMax;
+                ifcengine.engiGetAggregation(aggregation, out aggrType, out cardMin, out cardMax, out aggregation);
 
-            switch (aggrType)
-            {
-                case enum_express_aggr.__NONE:
-                    //scalar
-                    break;
-
-                case enum_express_aggr.__ARRAY:
-                case enum_express_aggr.__BAG:
-                case enum_express_aggr.__LIST:
-                case enum_express_aggr.__SET:
-                    str.Append (aggrType.ToString() + "[" + cardinalityMin.ToString() + ".." + cardinalityMax.ToString() + "] OF ");
-                    break;
-
-                default:
-                    System.Diagnostics.Debug.Assert(false);
-                    break;
+                str.Append(aggrType.ToString() + "[" + cardMin.ToString() + ".." + cardMax.ToString() + "] OF ");
             }
 
             switch (attrType)

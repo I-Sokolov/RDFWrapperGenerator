@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDF;
 
 namespace RDFWrappers
 {
@@ -16,13 +17,13 @@ namespace RDFWrappers
         {
             generator.WriteByTemplate(Generator.Template.AggrgarionTypesBegin);
 
-            foreach (var decl in generator.m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
+            foreach (var decl in generator.m_schema.m_declarations[enum_express_declaration.__ENTITY])
             {
                 var entity = new ExpressEntity(decl.Value);
 
                 foreach (var attr in entity.GetAttributes ())
                 {
-                    if (attr.aggrType != RDF.enum_express_aggr.__NONE)
+                    if (attr.aggregation != 0) //unnamed aggregation
                     {
                         var aggr = new Aggregation(generator, attr);
                         aggr.WriteType(null);
@@ -31,10 +32,10 @@ namespace RDFWrappers
             }
         }
 
-        public static void WriteDefinedType (Generator generator, ExpressDefinedType definedType)
+        public static enum_express_aggr WriteDefinedType (Generator generator, ExpressDefinedType definedType)
         {
             var aggr = new Aggregation(generator, definedType);
-            aggr.WriteType(definedType.name);
+            return aggr.WriteType(definedType.name);
         }
 
         /// <summary>
@@ -61,96 +62,89 @@ namespace RDFWrappers
         }
 
 
-        private void WriteType (string name)
+        enum_express_aggr WriteType (string name)
         {
-            string aggrType;
-            int nested;
             string elemType;
             string sdaiType;
 
-            Generator.Template template = GetAggregationInfo(typeDef, out aggrType, out nested, out elemType, out sdaiType);
+            Generator.Template template = GetAggregatedType(typeDef, out elemType, out sdaiType);
 
             if (template != Generator.Template.None)
             {
-                for (int nest = 0; nest <= nested; nest++)
+                enum_express_aggr aggrType = enum_express_aggr.__NONE;
+                var aggregation = typeDef.aggregation;
+                while (aggregation!=0)
                 {
+                    Int64 crdMin, crdMax;
+                    ifcengine.engiGetAggregation(aggregation, out aggrType, out crdMin, out crdMax, out aggregation);
+                 
                     string aggrName = name;
-                    if (aggrName == null || nest < nested)
+                    if (aggrName == null)
                     {
-                        aggrName = MakeAggregationTypeName(aggrType, nest, elemType);
+                        aggrName = MakeAggregationTypeName(aggrType, elemType);
+                    }
+                    if (aggrName == null)
+                    {
+                        return enum_express_aggr.__NONE;
                     }
 
                     if (generator.m_knownAggregationTypes.Add(aggrName))
                     {
                         generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
                         generator.m_replacements[Generator.KWD_AggregationType] = aggrName;
-
-                        if (nest == 0)
-                        {
-                            generator.m_replacements[Generator.KWD_SimpleType] = elemType;
-                            generator.m_replacements[Generator.KWD_ENUM_TYPE] = elemType;
-                            generator.WriteByTemplate(template);
-                        }
-                        else
-                        {
-                            generator.m_replacements[Generator.KWD_SimpleType] = MakeAggregationTypeName(aggrType, nest - 1, elemType);
-                            generator.WriteByTemplate(Generator.Template.AggregationOfAggregation);
-                        }
+                        generator.m_replacements[Generator.KWD_SimpleType] = elemType;
+                        generator.m_replacements[Generator.KWD_ENUM_TYPE] = elemType;
+                        generator.WriteByTemplate(template);
                     }
+
+                    //for outer aggregarion
+                    elemType = aggrName;
+                    name = null;
+                    template = Generator.Template.AggregationOfAggregation;
                 }
+
+                return aggrType;
             }
+
+            return enum_express_aggr.__NONE;
         }
 
-        private string MakeAggregationTypeName (string aggrType, int nesting, string elemType)
+        private string MakeAggregationTypeName (enum_express_aggr aggrType, string elemType)
         {
             var name = new StringBuilder();
 
-            for (; nesting >= 0; nesting--)
+            switch (aggrType)
             {
-                name.Append(aggrType);
-                name.Append("Of");
-            }
-
-            var ch = elemType.FirstOrDefault();
-            if (Char.IsLower (ch))
-            {
-                ch = Char.ToUpper(ch);
-            }
-
-            name.Append(ch);
-
-            name.Append(elemType.Substring(1));
-
-            return name.ToString();
-        }
-
-        private Generator.Template GetAggregationInfo(TypeDef typeDef, out string aggrType, out int nested, out string elemType, out string sdaiType)
-        {
-            Generator.Template template = Generator.Template.None;
-
-            aggrType = null;
-            elemType = null;
-            sdaiType = null;
-            nested = 0;
-
-            switch (typeDef.aggrType)
-            {
-                case RDF.enum_express_aggr.__ARRAY:
-                    aggrType = "Array";
+                case enum_express_aggr.__ARRAY:
+                    name.Append("Array");
                     break;
 
-                case RDF.enum_express_aggr.__LIST:
-                    aggrType = "List";
+                case enum_express_aggr.__LIST:
+                    name.Append("List");
                     break;
 
                 case RDF.enum_express_aggr.__SET:
-                    aggrType = "Set";
+                    name.Append("Set");
                     break;
 
                 default:
                     Console.WriteLine("unsupported aggregation type " + typeDef.ToString());
-                    return template;
+                    return null;
             }
+
+            name.Append("Of");
+            
+            name.Append(elemType);
+
+            return name.ToString();
+        }
+
+        private Generator.Template GetAggregatedType(TypeDef typeDef, out string elemType, out string sdaiType)
+        {
+            Generator.Template template = Generator.Template.None;
+
+            elemType = null;
+            sdaiType = null;
 
             string baseType = null;
             ExpressSelect select = null;
@@ -196,11 +190,6 @@ namespace RDFWrappers
                 sdaiType = null;
             }
 
-            if (typeDef.nestedAggr)
-            {
-                nested = 1;
-            }
-
             if (template == Generator.Template.None)
             {
                 Console.WriteLine("aggregation is not supported: " + typeDef.ToString());
@@ -212,26 +201,33 @@ namespace RDFWrappers
         private void WriteAttribute(string attrName, bool isInverse)
         {
             string aggrTypeName = null;
-            int nesting = 0;
+            bool nested = false;
             string elemType = null;
             string sdaiType = null;
             Generator.Template template = Generator.Template.None;
 
-            if (typeDef.aggrType != RDF.enum_express_aggr.__NONE)
+            if (typeDef.aggregation != 0)
             {
                 //unnamed aggregation
-                string aggrType;
-                template = GetAggregationInfo(typeDef, out aggrType, out nesting, out elemType, out sdaiType);
-                if (template != Generator.Template.None)
-                    aggrTypeName = MakeAggregationTypeName(aggrType, nesting, elemType);
+                template = GetAggregatedType(typeDef, out elemType, out sdaiType);
+                aggrTypeName = elemType;
+                for (var aggregation = typeDef.aggregation; aggregation != 0;)
+                {
+                    enum_express_aggr aggrType;
+                    Int64 crdMin, crdMax;
+                    ifcengine.engiGetAggregation(aggregation, out aggrType, out crdMin, out crdMax, out aggregation);
+                    aggrTypeName = MakeAggregationTypeName(aggrType, aggrTypeName);
+                    if (aggregation != 0)
+                    {
+                        nested = true;
+                    }
+                }
             }
             else if (RDF.ifcengine.engiGetDeclarationType (typeDef.domain)==RDF.enum_express_declaration.__DEFINED_TYPE)
             {
-                //assume defined type 
                 var definedType = new ExpressDefinedType(typeDef.domain);
                 aggrTypeName = definedType.name;
-                string aggrType;
-                template = GetAggregationInfo(definedType, out aggrType, out nesting, out elemType, out sdaiType);
+                template = GetAggregatedType(definedType, out elemType, out sdaiType);
             }
             else
             {
@@ -247,7 +243,7 @@ namespace RDFWrappers
                     generator.m_replacements[Generator.KWD_SimpleType] = elemType;
 
                     generator.WriteGetSet(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationSet, isInverse);
-                    if (nesting == 0 && sdaiType != null)
+                    if (!nested && sdaiType != null)
                     {
                         if (sdaiType == "sdaiSTRING")
                             generator.WriteByTemplate(Generator.Template.AttributeAggregationSetArrayText);

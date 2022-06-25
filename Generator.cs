@@ -269,17 +269,19 @@ namespace RDFWrappers
 
             //
             //
-            if (definedType.aggrType == RDF.enum_express_aggr.__NONE)
+            var aggr = RDF.enum_express_aggr.__NONE;
+
+            if (definedType.aggregation == 0)
             {
                 m_replacements[KWD_DEFINED_TYPE] = definedType.name;
                 WriteByTemplate(Template.DefinedType);
             }
             else
             {
-                Aggregation.WriteDefinedType(this, definedType);
+                aggr = Aggregation.WriteDefinedType(this, definedType);
             }
 
-            m_knownDefinedTyes.Add(definedType.declaration, definedType.aggrType);
+            m_knownDefinedTyes.Add(definedType.declaration, aggr);
 
             return;
         }
@@ -504,7 +506,7 @@ namespace RDFWrappers
 
                 if (exportedAttributes.Add(attr.name))
                 {
-                    if (attr.GetAggregationType() == RDF.enum_express_aggr.__NONE)
+                    if (!attr.IsAggregation ())
                     {
                         WriteSingeAttribute(attr);
                     }

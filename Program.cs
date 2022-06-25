@@ -58,10 +58,10 @@ namespace RDFWrappers
                     //options.schema = "..\\..\\..\\EXPRESS\\IFC4x2.exp";
                     //options.schema = "..\\..\\..\\EXPRESS\\IFC4x3.exp";
                     //options.schema = "AP242";
-                    //options.schema = "IFC4";
+                    options.schema = "IFC4";
                     //options.schema = "IFC2x3";
                     //options.schema = "IFC4x3";
-                    options.schema = "CIS2";
+                    //options.schema = "CIS2";
                 }
 
                 string baseName = System.IO.Path.GetFileNameWithoutExtension (options.schema);

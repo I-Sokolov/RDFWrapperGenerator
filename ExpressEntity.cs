@@ -33,19 +33,16 @@ namespace RDFWrappers
             for (int i = 0; i < nattr; i++)
             {
                 IntPtr ptrName = IntPtr.Zero;
-                Int64 definingEntity, domainEntity;
+                Int64 definingEntity, domainEntity, aggregation;
                 enum_express_attr_type attrType;
-                enum_express_aggr aggrType;
-                byte inverse, nestedAggr, optional, unique;
-                Int64 cardinalityMin, cardinalityMax;
+                byte inverse, optional, unique;
 
-                byte ok = ifcengine.engiGetEntityProperty
+                byte ok = ifcengine.engiGetEntityAttribute
                                 (inst, i,
                                 out ptrName,
                                 out definingEntity, out inverse,
                                 out attrType, out domainEntity,
-                                out aggrType, out nestedAggr,
-                                out cardinalityMin, out cardinalityMax,
+                                out aggregation,
                                 out optional, out unique
                                 );
                 System.Diagnostics.Debug.Assert(ok != 0);
@@ -59,10 +56,7 @@ namespace RDFWrappers
                         inverse = inverse != 0 ? true : false,
                         attrType = attrType,
                         domain = domainEntity,
-                        aggrType = aggrType,
-                        nestedAggr = nestedAggr != 0 ? true : false,
-                        cardinalityMin = cardinalityMin,
-                        cardinalityMax = cardinalityMax,
+                        aggregation = aggregation,
                         optional = optional != 0 ? true : false,
                         unique = unique != 0 ? true : false
                     };

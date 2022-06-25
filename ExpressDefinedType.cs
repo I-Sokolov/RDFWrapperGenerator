@@ -22,7 +22,7 @@ namespace RDFWrappers
 
             name = ExpressSchema.GetNameOfDeclaration(declaration);
 
-            attrType = ifcengine.engiGetDefinedType(declaration, out domain, out aggrType, out nestedAggr, out cardinalityMin, out cardinalityMax);
+            attrType = ifcengine.engiGetDefinedType(declaration, out domain, out aggregation);
         }
 
         public string GetBaseCSType()
