@@ -182,6 +182,9 @@ namespace RDFWrappers
                 case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
                     if (domain != 0)
                     {
+                        str.Append("REF:");
+                        str.Append(ifcengine.engiGetDeclarationType(domain));
+                        str.Append(':');
                         str.Append (ExpressSchema.GetNameOfDeclaration(domain));
                     }
                     else
@@ -194,7 +197,7 @@ namespace RDFWrappers
                     System.Diagnostics.Debug.Assert(false); //never happens
                     if (domain != 0)
                     {
-                        str.Append ("ENUM " + ExpressSchema.GetNameOfDeclaration(domain));
+                        str.Append ("ENUM:" + ExpressSchema.GetNameOfDeclaration(domain));
                     }
                     else
                     {
@@ -205,7 +208,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__SELECT:
                     if (domain != 0)
                     {
-                        str.Append ("SELECT " + ExpressSchema.GetNameOfDeclaration(domain));
+                        str.Append ("SELECT:" + ExpressSchema.GetNameOfDeclaration(domain));
                     }
                     else
                     {

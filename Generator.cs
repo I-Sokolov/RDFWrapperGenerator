@@ -561,7 +561,7 @@ namespace RDFWrappers
             }
             else
             {
-                Console.WriteLine(attr.name + " is not supported");
+                Console.WriteLine("Attribute is not supported: " + attr.ToString());
             }
         }
 
@@ -747,7 +747,7 @@ namespace RDFWrappers
 
             if (rename != name)
             {
-                Console.WriteLine("!!!  '{0}' is not a valid identifier, changed to '{1}'", name, rename);
+                //Console.WriteLine("!!!  '{0}' is not a valid identifier, changed to '{1}'", name, rename);
             }
 
             return rename;
