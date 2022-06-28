@@ -119,7 +119,7 @@ namespace RDFWrappers
 
         public StreamWriter m_writer;
 
-        public Dictionary<ExpressHandle, RDF.enum_express_aggr> m_knownDefinedTyes = new Dictionary<ExpressHandle, RDF.enum_express_aggr>();
+        public Dictionary<ExpressHandle, ExpressDefinedType.Foundation> m_writtenDefinedTyes = new Dictionary<ExpressHandle, ExpressDefinedType.Foundation>();
 
         public HashSet<string> m_knownAggregationTypes = new HashSet<string>();
 
@@ -203,87 +203,8 @@ namespace RDFWrappers
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
             {
                 var type = new ExpressDefinedType(decl.Value);
-                WriteDefinedType(type, visitedTypes);
+                type.WriteType(this, visitedTypes);
             }
-        }
-
-        private void WriteDefinedType(ExpressDefinedType definedType, HashSet<ExpressHandle> visitedTypes)
-        {
-            if (!visitedTypes.Add(definedType.declaration))
-            {
-                return;
-            }
-
-            if (definedType.domain != 0)
-            {
-                var referType = RDF.ifcengine.engiGetDeclarationType(definedType.domain);
-                var referTypeName = ExpressSchema.GetNameOfDeclaration(definedType.domain);
-
-                switch (referType)
-                {
-                    case RDF.enum_express_declaration.__ENUM:
-                        Console.WriteLine("Defineded type {0} is not supported (referenced type ENUM {1})", definedType.name, referTypeName);
-                        return;
-
-                    case RDF.enum_express_declaration.__SELECT:
-                        Console.WriteLine("Defineded type {0} is not supported (referenced type SELECT {1})", definedType.name, referTypeName);
-                        return;
-
-                    case RDF.enum_express_declaration.__ENTITY:
-                        Console.WriteLine("Defineded type {0} is not supported (referenced type ENTITY {1})", definedType.name, referTypeName);
-                        return;
-
-                    case RDF.enum_express_declaration.__DEFINED_TYPE:
-                        {
-                            var referencedType = new ExpressDefinedType(definedType.domain);
-                            WriteDefinedType(referencedType, visitedTypes);
-                            if (!m_knownDefinedTyes.ContainsKey(referencedType.declaration))
-                            {
-                                Console.WriteLine("Defineded type {0} is not supported (referenced type {1})", definedType.name, referencedType.name);
-                                return;
-                            }
-                        }
-                        break;
-
-                    default:
-                        throw new ApplicationException("Unexpexted defined type domain " + referType.ToString());
-                }
-
-                m_replacements[KWD_SimpleType] = referTypeName;
-            }
-            else if (definedType.attrType == RDF.enum_express_attr_type.__LOGICAL)
-            {
-                m_replacements[KWD_SimpleType] = "LOGICAL";
-            }
-            else
-            {
-                var csType = ExpressSchema.GetPrimitiveType(definedType.attrType);
-                if (csType == null)
-                {
-                    Console.WriteLine("Defined type {0} is not supproted (primitive type is {1})", definedType.name, definedType.attrType.ToString());
-                    return;
-                }
-
-                m_replacements[KWD_SimpleType] = csType;
-            }
-
-            //
-            //
-            var aggr = RDF.enum_express_aggr.__NONE;
-
-            if (definedType.aggregation == 0)
-            {
-                m_replacements[KWD_DEFINED_TYPE] = definedType.name;
-                WriteByTemplate(Template.DefinedType);
-            }
-            else
-            {
-                aggr = Aggregation.WriteDefinedType(this, definedType);
-            }
-
-            m_knownDefinedTyes.Add(definedType.declaration, aggr);
-
-            return;
         }
 
         /// <summary>
@@ -541,7 +462,7 @@ namespace RDFWrappers
 
             if ((definedType = attr.IsDefinedType()) != null)
             {
-                WriteDefinedTypeAttribute(attr, definedType);
+                definedType.WriteAttribute(this, attr);
             }
             else if (attr.IsEntityReference(out referncedEntity))
             {
@@ -563,22 +484,6 @@ namespace RDFWrappers
             {
                 Console.WriteLine("Attribute is not supported: " + attr.ToString());
             }
-        }
-
-        private void WriteDefinedTypeAttribute (ExpressAttribute attr, ExpressDefinedType dt)
-        {
-            switch (dt.attrType)
-            {
-                case RDF.enum_express_attr_type.__BINARY:
-                case RDF.enum_express_attr_type.__BINARY_32:
-                    return;
-
-                case RDF.enum_express_attr_type.__LOGICAL:
-                    WriteEnumAttribute(attr, dt.name, "LOGICAL_VALUE_NAMES");
-                    return;
-            }
-
-            Console.WriteLine("Attribute '" + attr.name + "' is not supporrted, defined type: " + dt.ToString() + ", defining entity " + ExpressSchema.GetNameOfDeclaration (attr.definingEntity));
         }
 
         private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
@@ -627,7 +532,7 @@ namespace RDFWrappers
         }
 
 
-        private void WriteEnumAttribute(ExpressAttribute attr, string enumName, string enumValuesArrayName)
+        public void WriteEnumAttribute(ExpressAttribute attr, string enumName, string enumValuesArrayName)
         {
             m_replacements[KWD_ENUM_TYPE] = enumName;
             m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = enumValuesArrayName;

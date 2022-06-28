@@ -9,8 +9,15 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    public class ExpressDefinedType :  TypeDef
+    public class ExpressDefinedType : TypeDef
     {
+        public class Foundation
+            {
+            public enum_express_declaration domainType = enum_express_declaration.__UNDEF; //Undef for primitive types, see attrType
+            public enum_express_attr_type attrType = enum_express_attr_type.__NONE;
+            public enum_express_aggr aggrType = enum_express_aggr.__NONE;
+            };
+
         public string                     name;
         public ExpressHandle              declaration;
 
@@ -57,6 +64,106 @@ namespace RDFWrappers
             {
                 return ExpressSchema.GetSdaiType(attrType);
             }
+        }
+
+        public Foundation WriteType(Generator generator, HashSet<ExpressHandle> visitedTypes)
+        {
+            if (!visitedTypes.Add(declaration))
+            {
+                Foundation f = null;
+                generator.m_writtenDefinedTyes.TryGetValue(declaration, out f);
+                return f; //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+            }
+
+            var foundation = new Foundation();
+            foundation.attrType = attrType;
+
+            if (domain != 0)
+            {
+                var referType = RDF.ifcengine.engiGetDeclarationType(domain);
+                var referTypeName = ExpressSchema.GetNameOfDeclaration(domain);
+
+                switch (referType)
+                {
+                    case RDF.enum_express_declaration.__ENUM:
+                        foundation = null;
+                        break;
+
+                    case RDF.enum_express_declaration.__SELECT:
+                        foundation = null;
+                        break;
+
+                    case RDF.enum_express_declaration.__ENTITY:
+                        foundation = null;
+                        break;
+
+                    case RDF.enum_express_declaration.__DEFINED_TYPE:
+                        var referencedType = new ExpressDefinedType(domain);
+                        var baseFoundation = referencedType.WriteType(generator, visitedTypes);
+                        foundation.aggrType = baseFoundation.aggrType;
+                        foundation.attrType = baseFoundation.attrType;
+                        foundation.domainType = baseFoundation.domainType;
+                        break;
+
+                    default:
+                        throw new ApplicationException("Unexpexted defined type domain " + referType.ToString());
+                }
+
+                if (foundation == null)
+                {
+                    Console.WriteLine("Can not write dfineded type {0} referenced to {1} {2}, unsupported foundation", name, referType.ToString(), referTypeName);
+                    return null;
+                }
+
+                generator.m_replacements[Generator.KWD_SimpleType] = referTypeName;
+            }
+            else if (attrType == RDF.enum_express_attr_type.__LOGICAL)
+            {
+                generator.m_replacements[Generator.KWD_SimpleType] = "LOGICAL";
+            }
+            else
+            {
+                var csType = ExpressSchema.GetPrimitiveType(attrType);
+                if (csType == null)
+                {
+                    Console.WriteLine("Defined type {0} is not supproted (primitive type is {1})", name, attrType.ToString());
+                    return null;
+                }
+
+                generator.m_replacements[Generator.KWD_SimpleType] = csType;
+            }
+
+            //
+            //
+            if (aggregation == 0)
+            {
+                generator.m_replacements[Generator.KWD_DEFINED_TYPE] = name;
+                generator.WriteByTemplate(Generator.Template.DefinedType);
+            }
+            else
+            {
+                foundation.aggrType = Aggregation.WriteDefinedType(generator, this);
+            }
+
+            generator.m_writtenDefinedTyes.Add(declaration, foundation);
+
+            return foundation;
+        }
+
+        public void WriteAttribute (Generator generator, ExpressAttribute attr)
+        {
+            switch (attrType)
+            {
+                case RDF.enum_express_attr_type.__BINARY:
+                case RDF.enum_express_attr_type.__BINARY_32:
+                    return;
+
+                case RDF.enum_express_attr_type.__LOGICAL:
+                    generator.WriteEnumAttribute(attr, name, "LOGICAL_VALUE_NAMES");
+                    return;
+            }
+
+            Console.WriteLine("Attribute '" + attr.name + "' is not supporrted, defined type: " + ToString() + ", defining entity " + ExpressSchema.GetNameOfDeclaration(attr.definingEntity));
         }
 
         public override string ToString()

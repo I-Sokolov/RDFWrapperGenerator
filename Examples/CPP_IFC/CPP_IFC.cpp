@@ -47,15 +47,6 @@ extern void IFC4_test()
            && predType.Value() == IfcWallTypeEnum::POLYGONAL
     );
 
-    //type casting check
-    IfcProduct product(wall);
-    assert(product != 0);
-    name = product.get_Name();
-    ASSERT(!strcmp(name, "Wall name"));
-
-    IfcBuilding building(wall);
-    assert(building == 0);
-
     auto profile = IfcRectangleProfileDef::Create(ifcModel);
     auto xdim = profile.get_XDim();
     auto ydim = profile.get_YDim();
@@ -78,6 +69,15 @@ extern void IFC4_test()
     ASSERT(curve.get_Degree().IsNull());
     curve.set_Degree(5);
     ASSERT(curve.get_Degree().Value() == 5);
+
+    //type casting check
+    IfcProduct product(wall);
+    assert(product != 0);
+    name = product.get_Name();
+    ASSERT(!strcmp(name, "Wall name"));
+
+    IfcBuilding building(wall);
+    assert(building == 0);
 
     //
     // SELECT tests

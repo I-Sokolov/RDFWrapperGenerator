@@ -193,29 +193,12 @@ namespace RDFWrappers
         private void WriteAccessorMethod(Generator generator, ExpressHandle selectVariant, bool? bGet)
         {
             var type = ifcengine.engiGetDeclarationType(selectVariant);
+
             switch (type)
             {
                 case enum_express_declaration.__DEFINED_TYPE:
-                    {
-                        enum_express_aggr aggrType;
-                        if (generator.m_knownDefinedTyes.TryGetValue(selectVariant, out aggrType))
-                        {
-                            var definedType = new ExpressDefinedType(selectVariant);
-                            if (aggrType == enum_express_aggr.__NONE)
-                            {
-                                System.Diagnostics.Trace.Assert(!definedType.IsAggregation ());
-                                WriteAccessorMethod(generator, definedType, bGet);
-                            }
-                            else
-                            {
-                                WriteAggrAccessorMethod(generator, definedType, bGet);
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("SLECT " + name + " - DefinedType is not supported: " + ExpressSchema.GetNameOfDeclaration(selectVariant));
-                        }
-                    }
+                    var definedType = new ExpressDefinedType(selectVariant);
+                    WriteAccessorMethod(generator, definedType, bGet);
                     break;
 
                 case enum_express_declaration.__SELECT:
@@ -291,17 +274,46 @@ namespace RDFWrappers
 
         private void WriteAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
         {
-            switch (definedType.attrType)
+            ExpressDefinedType.Foundation foundation = null;
+            if (!generator.m_writtenDefinedTyes.TryGetValue(definedType.declaration, out foundation))
+                foundation = null;
+            if (foundation == null)
             {
-                case enum_express_attr_type.__BINARY:
-                case enum_express_attr_type.__BINARY_32:
-                    return;
-
-                case enum_express_attr_type.__LOGICAL:
-                    WriteAccessorEnumMethod(generator, definedType.name, "LOGICAL_VALUE_NAMES", bGet);
-                    return;
+                Console.WriteLine("SLECT " + name + " - DefinedType is not supported: " + definedType.name);
+                return; //>>>>>>>>>>>>>>>>>>
             }
 
+
+            if (foundation.aggrType != enum_express_aggr.__NONE)
+            {
+                WriteAggrAccessorMethod(generator, definedType, bGet);
+            }
+            else
+            {
+                switch (foundation.domainType)
+                {
+                    case enum_express_declaration.__UNDEF: //based on primitive
+                        switch (foundation.attrType)
+                        {
+                            case enum_express_attr_type.__LOGICAL:
+                                WriteAccessorEnumMethod(generator, definedType.name, "LOGICAL_VALUE_NAMES", bGet);
+                                break;
+
+                            default:
+                                WriteSimpleAccessorMethod(generator, definedType, bGet);
+                                break;
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine("SLECT " + name + " - DefinedType " + definedType.name + " is " + foundation.domainType.ToString()); ;
+                        break;
+                }
+            }
+        }
+
+        private void WriteSimpleAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
+        {
             string sdaiType = definedType.GetSdaiType();
             string baseType = definedType.GetBaseCSType();
 
