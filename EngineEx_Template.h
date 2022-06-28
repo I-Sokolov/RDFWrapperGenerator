@@ -177,10 +177,7 @@ namespace NAMESPACE_NAME
             IntData ret = 0;
             IntData inst = 0;
             if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINSTANCE, &inst)) {
-                SdaiEntity instType = sdaiGetInstanceType(inst);
-                SdaiModel model = engiGetEntityModel(instType);
-                SdaiEntity requiredType = sdaiGetEntity(model, typeName);
-                if (instType == requiredType) {
+                if (sdaiIsKindOfBN (inst, typeName)){
                     ret = inst;
                 }
             }
@@ -188,12 +185,17 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void setEntityInstance(TextData /*typeName*/, IntData inst)
+        void setEntityInstance(TextData typeName, IntData inst)
         {
-            assert(m_instance && m_attrName); //TODO how to keep instance in ADB
+            if (sdaiIsKindOfBN(inst, typeName)) {
+                assert(m_instance && m_attrName); //TODO how to keep instance in ADB
 
-            ReleaseADB();
-            sdaiPutAttrBN(m_instance, m_attrName, sdaiINSTANCE, (void*) inst);
+                ReleaseADB();
+                sdaiPutAttrBN(m_instance, m_attrName, sdaiINSTANCE, (void*) inst);
+            }
+            else {
+                assert(0);
+            }
         }
 
         //
@@ -488,14 +490,12 @@ namespace NAMESPACE_NAME
         Entity(SdaiInstance instance, TextData entityName)
         {
             m_instance = instance;
-#ifdef _DEBUGxx
+
             if (m_instance != 0 && entityName != NULL) {
-                SdaiEntity instType = sdaiGetInstanceType(m_instance);
-                SdaiModel model = engiGetEntityModel(instType);
-                SdaiEntity entity = sdaiGetEntity(model, entityName);
-                assert(instType == entity);
+                if (!sdaiIsKindOfBN(m_instance, entityName)) {
+                    m_instance = 0;
+                }
             }
-#endif
         }
 
 

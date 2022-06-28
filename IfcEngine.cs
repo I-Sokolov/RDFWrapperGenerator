@@ -471,42 +471,42 @@ namespace RDF
 		public static extern int_t sdaiGetEntity(int_t model, byte[] entityName);
 
 		/// <summary>
-		///		engiGetEntityArgument                       (http://rdf.bg/ifcdoc/CS64/engiGetEntityArgument.html)
+		///		engiGetEntityAttribute                       (http://rdf.bg/ifcdoc/CS64/engiGetEntityAttribute.html)
 		///
 		///	...
 		/// </summary>
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityArgument")]
-		public static extern int_t engiGetEntityArgument(int_t entity, string argumentName);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttribute")]
+		public static extern int_t engiGetEntityAttribute(int_t entity, string argumentName);
 
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityArgument")]
-		public static extern int_t engiGetEntityArgument(int_t entity, byte[] argumentName);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttribute")]
+		public static extern int_t engiGetEntityAttribute(int_t entity, byte[] argumentName);
 
 		/// <summary>
-		///		engiGetEntityArgumentIndex                  (http://rdf.bg/ifcdoc/CS64/engiGetEntityArgumentIndex.html)
+		///		engiGetEntityAttributeIndex                  (http://rdf.bg/ifcdoc/CS64/engiGetEntityAttributeIndex.html)
 		///
 		///	...
 		/// </summary>
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityArgumentIndex")]
-		public static extern int_t engiGetEntityArgumentIndex(int_t entity, string argumentName);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttributeIndex")]
+		public static extern int_t engiGetEntityAttributeIndex(int_t entity, string argumentName);
 
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityArgumentIndex")]
-		public static extern int_t engiGetEntityArgumentIndex(int_t entity, byte[] argumentName);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttributeIndex")]
+		public static extern int_t engiGetEntityAttributeIndex(int_t entity, byte[] argumentName);
 
 		/// <summary>
-		///		engiGetEntityArgumentName                   (http://rdf.bg/ifcdoc/CS64/engiGetEntityArgumentName.html)
+		///		engiGetEntityAttributeName                   (http://rdf.bg/ifcdoc/CS64/engiGetEntityAttributeName.html)
 		///
-		///	This call can be used to retrieve the name of the n-th argument of the given entity. Arguments of parent entities are included in the index. Both direct and inverse arguments are included.
+		///	This call can be used to retrieve the name of the n-th argument of the given entity. Attributes of parent entities are included in the index. Both direct and inverse arguments are included.
 		/// </summary>
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityArgumentName")]
-		public static extern void engiGetEntityArgumentName(int_t entity, int_t index, int_t valueType, out IntPtr argumentName);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttributeName")]
+		public static extern void engiGetEntityAttributeName(int_t entity, int_t index, int_t valueType, out IntPtr argumentName);
 
 		/// <summary>
-		///		engiGetEntityArgumentType                   (http://rdf.bg/ifcdoc/CS64/engiGetEntityArgumentType.html)
+		///		engiGetEntityAttributeType                   (http://rdf.bg/ifcdoc/CS64/engiGetEntityAttributeType.html)
 		///
 		///	This call can be used to retrieve the type of the n-th argument of the given entity. In case of a select argument no relevant information is given by this call as it depends on the instance. Arguments of parent entities are included in the index. Both direct and inverse arguments are included.
 		/// </summary>
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityArgumentType")]
-		public static extern void engiGetEntityArgumentType(int_t entity, int_t index, out int_t argumentType);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttributeType")]
+		public static extern void engiGetEntityAttributeType(int_t entity, int_t index, out int_t argumentType);
 
 		/// <summary>
 		///		engiGetEntityCount                          (http://rdf.bg/ifcdoc/CS64/engiGetEntityCount.html)
@@ -552,20 +552,20 @@ namespace RDF
 		public static extern void engiGetEntityName(int_t entity, int_t valueType, out IntPtr entityName);
 
 		/// <summary>
-		///		engiGetEntityNoArguments                    (http://rdf.bg/ifcdoc/CS64/engiGetEntityNoArguments.html)
+		///		engiGetEntityNoAttributes                    (http://rdf.bg/ifcdoc/CS64/engiGetEntityNoAttributes.html)
 		///
 		///	This call returns the number of arguments, this includes the arguments of its (nested) parents and inverse argumnets.
 		/// </summary>
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityNoArguments")]
-		public static extern int_t engiGetEntityNoArguments(int_t entity);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityNoAttributes")]
+		public static extern int_t engiGetEntityNoAttributes(int_t entity);
 
 		/// <summary>
-		///		engiGetArgumentType                         (http://rdf.bg/ifcdoc/CS64/engiGetArgumentType.html)
+		///		engiGetAttributeType                         (http://rdf.bg/ifcdoc/CS64/engiGetAttributeType.html)
 		///
 		///	...
 		/// </summary>
-		[DllImport(IFCEngineDLL, EntryPoint = "engiGetArgumentType")]
-		public static extern int_t engiGetArgumentType(int_t argument);
+		[DllImport(IFCEngineDLL, EntryPoint = "engiGetAttributeType")]
+		public static extern int_t engiGetAttributeType(int_t Attribute);
 
 		/// <summary>
 		///		engiGetEntityParent                         (http://rdf.bg/ifcdoc/CS64/engiGetEntityParent.html)
@@ -726,7 +726,7 @@ namespace RDF
 		/// <summary>
 		///		SetSPFFHeader                               (http://rdf.bg/ifcdoc/CS64/SetSPFFHeader.html)
 		///
-		///	This call is an aggregate of several SetSPFFHeaderItem calls. In several cases the header can be set easily with this call. In case an argument is zero, this argument will not be updated, i.e. it will not be filled with 0.
+		///	This call is an aggregate of several SetSPFFHeaderItem calls. In several cases the header can be set easily with this call. In case an Attribute is zero, this Attribute will not be updated, i.e. it will not be filled with 0.
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "SetSPFFHeader")]
 		public static extern void SetSPFFHeader(int_t model, string description, string implementationLevel, string name, string timeStamp, string author, string organization, string preprocessorVersion, string originatingSystem, string authorization, string fileSchema);
@@ -1626,7 +1626,7 @@ namespace RDF
 		///		iterateOverInstances                        (http://rdf.bg/ifcdoc/CS64/iterateOverInstances.html)
 		///
 		///	This function interates over all available instances loaded in memory, it is the fastest way to find all instances.
-		///	Argument entity and entityName are both optional and if non-zero are filled with respectively the entity handle and entity name as char array.
+		///	Attribute entity and entityName are both optional and if non-zero are filled with respectively the entity handle and entity name as char array.
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "iterateOverInstances")]
 		public static extern int_t iterateOverInstances(int_t model, int_t instance, out int_t entity, out IntPtr entityName);
@@ -2357,7 +2357,7 @@ namespace RDF
 		/// <summary>
 		///		OrderedHandles                              (http://rdf.bg/gkdoc/CS64/OrderedHandles.html)
 		///
-		///	This call can be used in two ways. The optional arguments classCnt,
+		///	This call can be used in two ways. The optional Attributes classCnt,
 		///	propertyCnt and instanceCnt can be used to get the total amount of active classes,
 		///	properies and instances available within the model.
 		///
@@ -2368,7 +2368,7 @@ namespace RDF
 		///		4 - if set this will number all classes with possible values [1 .. instanceCnt]
 		///
 		///	Note: when enabling ordered handles be aware that classes, properties and instances
-		///		  can share the same handles, using the correct argument cannot be checked anymore
+		///		  can share the same handles, using the correct Attribute cannot be checked anymore
 		///		  by the library itself. This could result in crashes in case of incorrect assignments
 		///		  by the hosting application.
 		///	Note: internally there is no performance gain / loss. This is purely meant for situations
@@ -3130,7 +3130,7 @@ namespace RDF
 		/// <summary>
 		///		IsClass                                     (http://rdf.bg/gkdoc/CS64/IsClass.html)
 		///
-		///	Returns true if the argument owlClass is an actual active class in an active model. It returns false in all other cases,
+		///	Returns true if the Attribute owlClass is an actual active class in an active model. It returns false in all other cases,
 		///	i.e. this could mean the model is already closed, the class is inactive or removed or the session is closed.
 		///	It could also mean it represents a handle to another Thing, for example a property, instance or model.
 		/// </summary>
@@ -3464,7 +3464,7 @@ namespace RDF
 		/// <summary>
 		///		IsProperty                                  (http://rdf.bg/gkdoc/CS64/IsProperty.html)
 		///
-		///	Returns true if the argument rdfProperty is an actual active property in an active model. It returns false in all other cases,
+		///	Returns true if the Attribute rdfProperty is an actual active property in an active model. It returns false in all other cases,
 		///	i.e. this could mean the model is already closed, the property is inactive or removed or the session is closed.
 		///	It could also mean it represents a handle to another Thing, for example a class, instance or model.
 		/// </summary>
@@ -3921,7 +3921,7 @@ namespace RDF
 		/// <summary>
 		///		IsInstance                                  (http://rdf.bg/gkdoc/CS64/IsInstance.html)
 		///
-		///	Returns true if the argument owlInstance is an actual active property in an active model. It returns false in all other cases,
+		///	Returns true if the Attribute owlInstance is an actual active property in an active model. It returns false in all other cases,
 		///	i.e. this could mean the model is already closed, the instance is inactive or removed or the session is closed.
 		///	It could also mean it represents a handle to another Thing, for example a class, property or model.
 		/// </summary>
@@ -3937,7 +3937,7 @@ namespace RDF
 		///
 		///	This function prepares the content to be ready so the buffers can be filled.
 		///	It returns the minimum size the buffers should be. This is only the case
-		///	when the pointer is given, all arguments are allowed to be nullptr.
+		///	when the pointer is given, all Attributes are allowed to be nullptr.
 		///
 		///	Note: This function needs to be called directly before UpdateVertexBuffer(),
 		///		  UpdateIndexBuffer() and UpdateTransformationBuffer().
@@ -3959,7 +3959,7 @@ namespace RDF
 		///
 		///	This function prepares the content to be ready without filling the buffers
 		///	as done within CalculateInstance(). CalculateInstance calls this function as a start.
-		///	This function will also set the 'derived' values for the instance passed as argument.
+		///	This function will also set the 'derived' values for the instance passed as Attribute.
 		///	For example the coordinates values of a MultiplicationMatrix will be set if the array is
 		///	defined.
 		/// </summary>

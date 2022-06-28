@@ -29,7 +29,7 @@ namespace RDFWrappers
         {
             var ret = new List<ExpressAttribute>();
 
-            var nattr = ifcengine.engiGetEntityNoArguments(inst);
+            var nattr = ifcengine.engiGetEntityNoAttributes(inst);
             for (int i = 0; i < nattr; i++)
             {
                 IntPtr ptrName = IntPtr.Zero;
