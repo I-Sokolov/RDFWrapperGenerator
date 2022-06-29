@@ -21,7 +21,8 @@ namespace RDFWrappers
             {
                 var entity = new ExpressEntity(decl.Value);
 
-                foreach (var attr in entity.GetAttributes ())
+                var attrs = entity.GetAttributes();
+                foreach (var attr in attrs)
                 {
                     if (attr.aggregation != 0) //unnamed aggregation
                     {

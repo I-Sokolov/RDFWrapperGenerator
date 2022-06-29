@@ -3,10 +3,12 @@
 using namespace AP242;
 
 static void test_list3();
+static void test_multi_parent();
 
 extern void AP242_test()
 {
     test_list3();
+    test_multi_parent();
 }
 
 
@@ -80,6 +82,7 @@ static void test_list3()
     bspline_volume.set_weights_data(weights);
 
     sdaiSaveModelBN(model, "Test.ap");
+    sdaiCloseModel(model);
 
     /// 
     /// Now read
@@ -104,4 +107,59 @@ static void test_list3()
     }
     
     sdaiCloseModel(modelRead);
+}
+
+static void test_multi_parent()
+{
+    int_t  model = sdaiCreateModelBN(0, NULL, "AP242");
+    SetSPFFHeaderItem(model, 9, 0, sdaiSTRING, "AP242");
+    SetSPFFHeaderItem(model, 9, 1, sdaiSTRING, 0);
+
+    //engine test
+    int_t entity = sdaiGetEntity(model, "a3m_equivalence_criterion");
+    assert(entity);
+    assert(7 == engiGetEntityNoAttributes(entity));
+    const char* rAttr[] =
+        {"name","assessment_specification","comparing_element_types","compared_element_types","measured_data_type", "detected_difference_types","accuracy_types"};
+    const int_t rTypes[] =
+        {sdaiSTRING, sdaiINSTANCE, sdaiAGGR, sdaiAGGR, sdaiENUM, sdaiAGGR, sdaiAGGR};
+    for (int i = 0; i < 7; i++) {
+        const char* name = NULL;
+        engiGetEntityAttribute(entity, i, &name, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        assert(!strcmp(name, rAttr[i]));
+
+        int_t type = 0;
+        engiGetEntityArgumentType(entity, i, &type);
+        assert(type == rTypes[i]);
+    }
+    
+    //wrapper test
+    auto inst = a3m_equivalence_criterion_with_specified_elements::Create(model);
+    const char* NAME = "sey Name";
+    inst.set_name(NAME);
+
+    sdaiSaveModelBN(model, "Test.ap");
+    sdaiCloseModel(model);
+
+    /// Now read
+    /// 
+    auto modelRead = sdaiOpenModelBN(NULL, "Test.ap", "AP242");
+
+    entity = sdaiGetEntity(modelRead, "a3m_equivalence_criterion_with_specified_elements");// "a3m_equivalence_criterion");
+    assert(entity);
+
+    int_t* items = sdaiGetEntityExtent(modelRead, entity);
+    auto N_items = sdaiGetMemberCount(items);
+    assert(N_items == 1);
+    for (int_t i = 0; i < N_items; i++) {
+
+        int_t item = 0;
+        engiGetAggrElement(items, i, sdaiINSTANCE, &item);
+
+        auto name = a3m_equivalence_criterion(item).get_name();
+        assert(!strcmp(name, NAME));
+    }
+
+    sdaiCloseModel(modelRead);
+
 }

@@ -67,7 +67,7 @@ namespace RDFWrappers
                     { 
                         if (a.name == prop.name)
                         {
-                            //Console.WriteLine("Duplicated attribute {0} for entity {1}", a.name, name);
+                            //see AP242 abstract_variable  System.Diagnostics.Debug.Assert(false);
                             add = false;
                             break;
                         }
