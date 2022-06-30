@@ -78,8 +78,8 @@ namespace RDFWrappers
                 {
                     Int64 crdMin, crdMax;
                     ifcengine.engiGetAggregation(aggregation, out aggrType, out crdMin, out crdMax, out aggregation);
-                 
-                    string aggrName = name;
+
+                    string aggrName = (aggregation == 0) ? name : null; //use given name for outer aggregation
                     if (aggrName == null)
                     {
                         aggrName = MakeAggregationTypeName(aggrType, elemType);
@@ -216,24 +216,38 @@ namespace RDFWrappers
             {
                 //unnamed aggregation
                 template = GetAggregatedType(typeDef, out elemType, out sdaiType);
-                aggrTypeName = elemType;
-                for (var aggregation = typeDef.aggregation; aggregation != 0;)
+                if (template != Generator.Template.None)
                 {
-                    enum_express_aggr aggrType;
-                    Int64 crdMin, crdMax;
-                    ifcengine.engiGetAggregation(aggregation, out aggrType, out crdMin, out crdMax, out aggregation);
-                    aggrTypeName = MakeAggregationTypeName(aggrType, aggrTypeName);
-                    if (aggregation != 0)
+                    aggrTypeName = elemType;
+                    for (var aggregation = typeDef.aggregation; aggregation != 0;)
                     {
-                        nested = true;
+                        enum_express_aggr aggrType;
+                        Int64 crdMin, crdMax;
+                        ifcengine.engiGetAggregation(aggregation, out aggrType, out crdMin, out crdMax, out aggregation);
+                        aggrTypeName = MakeAggregationTypeName(aggrType, aggrTypeName);
+                        if (aggregation != 0)
+                        {
+                            nested = true;
+                        }
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Aggregated attribute is not supported " + attrName + ": " + typeDef.ToString());
                 }
             }
             else if (RDF.ifcengine.engiGetDeclarationType (typeDef.domain)==RDF.enum_express_declaration.__DEFINED_TYPE)
             {
-                var definedType = new ExpressDefinedType(typeDef.domain);
-                aggrTypeName = definedType.name;
-                template = GetAggregatedType(definedType, out elemType, out sdaiType);
+                if (generator.m_writtenDefinedTyes.ContainsKey(typeDef.domain))
+                {
+                    var definedType = new ExpressDefinedType(typeDef.domain);
+                    aggrTypeName = definedType.name;
+                    template = GetAggregatedType(definedType, out elemType, out sdaiType);
+                }
+                else
+                {
+                    Console.WriteLine("Aggregated attribute is not supported (defined type is not supported) " + attrName + ": " + typeDef.ToString());
+                }
             }
             else
             {

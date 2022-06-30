@@ -27,13 +27,8 @@ namespace RDFWrappers
             {
                 if (ifcengine.engiGetDeclarationType (domain) == enum_express_declaration.__DEFINED_TYPE)
                 {
-                    ExpressHandle refer;
-                    Int64 aggr;
-                    ifcengine.engiGetDefinedType(domain, out refer, out aggr);
-                    if (aggr != 0)
-                    {
-                        return true;
-                    }
+                    ExpressDefinedType refer = new ExpressDefinedType(domain);
+                    return refer.IsAggregation();
                 }
             }
 
@@ -168,11 +163,12 @@ namespace RDFWrappers
         {
             var str = new StringBuilder();
 
-            while (aggregation != 0)
+            Int64 aggr = aggregation;
+            while (aggr != 0)
             {
                 enum_express_aggr aggrType;
                 Int64 cardMin, cardMax;
-                ifcengine.engiGetAggregation(aggregation, out aggrType, out cardMin, out cardMax, out aggregation);
+                ifcengine.engiGetAggregation(aggr, out aggrType, out cardMin, out cardMax, out aggr);
 
                 str.Append(aggrType.ToString() + "[" + cardMin.ToString() + ".." + cardMax.ToString() + "] OF ");
             }

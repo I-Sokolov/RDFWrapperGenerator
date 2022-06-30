@@ -17,6 +17,8 @@ extern void IFC4_test()
 {
     int_t  ifcModel = sdaiCreateModelBN(0, NULL, "IFC4");
     ASSERT(ifcModel);
+    SetSPFFHeaderItem(ifcModel, 9, 0, sdaiSTRING, "IFC4");
+    SetSPFFHeaderItem(ifcModel, 9, 1, sdaiSTRING, 0);
 
     auto ownerHistory = IfcOwnerHistory::Create(ifcModel);
 
@@ -491,8 +493,69 @@ extern void IFC4_test()
     repr.get_Items(lstItems);
     ASSERT(lstItems.size() == 3 && lstItems.front() == poly && lstItems.back() == curve);
 
+    ///
+    /// Defined type aggregation of instance
+    auto relProps = IfcRelDefinesByProperties::Create(ifcModel);
+
+    SetOfIfcObjectDefinition relObj;
+    relProps.get_RelatedObjects(relObj);
+    ASSERT(relObj.empty());
+
+    relObj.push_back(wall);
+
+    relProps.set_RelatedObjects(relObj);
+    
+    relObj.clear();
+    relProps.get_RelatedObjects(relObj);
+    ASSERT(relObj.size() == 1 && relObj.front() == wall);
+
+    IfcPropertySetDefinitionSet psSet;
+    relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
+    ASSERT(psSet.size() == 0);
+
+    ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
+
+    auto emptyPset = IfcPropertySet::Create(ifcModel);
+    emptyPset.set_Name("Empty property set");
+
+    relProps.set_RelatingPropertyDefinition().set_IfcPropertySetDefinition(emptyPset);
+    ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == emptyPset);
+    relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
+    ASSERT(psSet.size() == 0);
+
+    psSet.push_back(emptyPset);
+    relProps.set_RelatingPropertyDefinition().set_IfcPropertySetDefinitionSet(psSet);
+    ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
+    psSet.clear();
+    relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
+    ASSERT(psSet.size() == 1 && psSet.front()==emptyPset);
+
     /// 
     /// 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
+    sdaiCloseModel(ifcModel);
 
+    ifcModel = sdaiOpenModelBN(NULL, "Test.ifc", "IFC4");
+
+    auto entityIfcRelDefinesByProperties = sdaiGetEntity(ifcModel, "IfcRelDefinesByProperties");
+    assert(entityIfcRelDefinesByProperties);
+
+    int_t* rels = sdaiGetEntityExtent(ifcModel, entityIfcRelDefinesByProperties);
+    auto N_rels = sdaiGetMemberCount(rels);
+    assert(N_rels == 1);
+    for (int_t i = 0; i < N_rels; i++) {
+
+        int_t rel = 0;
+        engiGetAggrElement(rels, i, sdaiINSTANCE, &rel);
+
+        auto get = IfcRelDefinesByProperties(rel).get_RelatingPropertyDefinition();
+        ASSERT(get.get_IfcPropertySetDefinition() == 0);
+        psSet.clear();
+        get.get_IfcPropertySetDefinitionSet(psSet);
+        ASSERT(psSet.size() == 1);
+        name = psSet.front().get_Name();
+        ASSERT(!strcmp (name, "Empty property set"));
+    }
+
+    sdaiCloseModel(ifcModel);
 }

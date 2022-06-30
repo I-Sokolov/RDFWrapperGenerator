@@ -13,8 +13,8 @@ namespace RDFWrappers
     {
         public class Foundation
             {
-            public enum_express_declaration domainType = enum_express_declaration.__UNDEF; //Undef for primitive types, see attrType
-            public enum_express_attr_type attrType = enum_express_attr_type.__NONE;
+            public enum_express_declaration domainType = enum_express_declaration.__UNDEF; //Undef for primitive types, see attrType 
+            public enum_express_attr_type attrType = enum_express_attr_type.__NONE;        
             public enum_express_aggr aggrType = enum_express_aggr.__NONE;
             };
 
@@ -37,14 +37,17 @@ namespace RDFWrappers
             if (domain != 0)
             {
                 var domainType = ifcengine.engiGetDeclarationType(domain);
-                if (domainType == enum_express_declaration.__DEFINED_TYPE)
+                switch (domainType)
                 {
-                    var refType = new ExpressDefinedType(domain);
-                    return refType.GetBaseCSType();
-                }
-                else
-                {
-                    return null;
+                    case enum_express_declaration.__DEFINED_TYPE:
+                        var refType = new ExpressDefinedType(domain);
+                        return refType.GetBaseCSType();
+
+                    case enum_express_declaration.__ENTITY:
+                        return "IntData";
+
+                    default:
+                        return null;
                 }
             }
             else
@@ -57,8 +60,25 @@ namespace RDFWrappers
         {
             if (domain != 0)
             {
-                var refType = new ExpressDefinedType(domain);
-                return refType.GetSdaiType();
+                var domainType = ifcengine.engiGetDeclarationType(domain);
+                switch (domainType)
+                {
+                    case enum_express_declaration.__ENTITY:
+                        return "sdaiINSTANCE";
+
+                    case enum_express_declaration.__ENUM:
+                        return "sdaiENUM";
+
+                    case enum_express_declaration.__SELECT:
+                        return null;
+
+                    case enum_express_declaration.__DEFINED_TYPE:
+                        var refType = new ExpressDefinedType(domain);
+                        return refType.GetSdaiType();
+
+                    default:
+                        throw new ApplicationException("unknonw express type " + domainType.ToString());
+                }
             }
             else
             {
@@ -80,8 +100,11 @@ namespace RDFWrappers
 
             if (domain != 0)
             {
-                var referType = RDF.ifcengine.engiGetDeclarationType(domain);
                 var referTypeName = ExpressSchema.GetNameOfDeclaration(domain);
+                generator.m_replacements[Generator.KWD_SimpleType] = referTypeName;
+
+                var referType = RDF.ifcengine.engiGetDeclarationType(domain);
+                foundation.domainType = referType;
 
                 switch (referType)
                 {
@@ -94,7 +117,6 @@ namespace RDFWrappers
                         break;
 
                     case RDF.enum_express_declaration.__ENTITY:
-                        foundation = null;
                         break;
 
                     case RDF.enum_express_declaration.__DEFINED_TYPE:
@@ -114,8 +136,6 @@ namespace RDFWrappers
                     Console.WriteLine("Can not write dfineded type {0} referenced to {1} {2}, unsupported foundation", name, referType.ToString(), referTypeName);
                     return null;
                 }
-
-                generator.m_replacements[Generator.KWD_SimpleType] = referTypeName;
             }
             else if (attrType == RDF.enum_express_attr_type.__LOGICAL)
             {

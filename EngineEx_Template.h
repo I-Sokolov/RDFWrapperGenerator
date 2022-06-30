@@ -281,13 +281,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        static SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
+        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
         {
-            AggregationOfSimple<T, sdaiType> lst;
             for (size_t i = 0; i < cnt; i++) {
-                lst.push_back(arr[i]);
+                this->push_back(arr[i]);
             }
-            return lst.ToSdaiAggr(instance, attrName);
+            return ToSdaiAggr(instance, attrName);
         }
     };
 
@@ -320,13 +319,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        static SdaiAggr ToSdaiAggr(TextData arr[], size_t cnt, SdaiInstance instance, TextData attrName)
+        SdaiAggr ToSdaiAggr(TextData arr[], size_t cnt, SdaiInstance instance, TextData attrName)
         {
-            AggregationOfText<T> lst;
             for (size_t i = 0; i < cnt; i++) {
-                lst.push_back(arr[i]);
+                this->push_back(arr[i]);
             }
-            return lst.ToSdaiAggr(instance, attrName);
+            return ToSdaiAggr(instance, attrName);
         }
     };
 
@@ -359,13 +357,20 @@ namespace NAMESPACE_NAME
         }
 
         //
-        static SdaiAggr ToSdaiAggr(TextData arr[], size_t cnt, SdaiInstance instance, TextData attrName)
+        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
         {
-            AggregationOfText<T> lst;
             for (size_t i = 0; i < cnt; i++) {
-                lst.push_back(arr[i]);
+                this->push_back(arr[i]);
             }
-            return lst.ToSdaiAggr(instance, attrName);
+            return ToSdaiAggr(instance, attrName);
+        }
+
+        SdaiAggr ToSdaiAggr(const IntData arr[], size_t cnt, SdaiInstance instance, TextData attrName)
+        {
+            for (size_t i = 0; i < cnt; i++) {
+                this->push_back(arr[i]);
+            }
+            return ToSdaiAggr(instance, attrName);
         }
     };
 
@@ -403,13 +408,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        static SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
+        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
         {
-            AggregationOfEnum<T, rEnumValues> lst;
             for (size_t i = 0; i < cnt; i++) {
-                lst.push_back(arr[i]);
+                this->push_back(arr[i]);
             }
-            return lst.ToSdaiAggr(instance, attrName);
+            return ToSdaiAggr(instance, attrName);
         }
     };
 
@@ -603,9 +607,9 @@ namespace NAMESPACE_NAME
 //## SelectAggregationSet
         void set_AggregationType(const AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
 //## SelectAggregationSetArraySimple
-        void set_AggregationType(const SimpleType arr[], size_t n) { SdaiAggr aggr = AggregationType::ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
+        void set_AggregationType(const SimpleType arr[], size_t n) { AggregationType lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
 //## SelectAggregationSetArrayText
-        void set_AggregationType(TextData arr[], size_t n) { Aggregationtype::ToSdaiAggr(arr, n, m_instance, m_attrName); }
+        void set_AggregationType(TextData arr[], size_t n) { Aggregationtype lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
 //## SelectNested
         GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return GEN_TYPE_NAME_accessor(m_instance, m_attrName, m_adb); }
 //## SelectGetAsDouble
@@ -677,9 +681,9 @@ namespace NAMESPACE_NAME
 //## AttributeAggregationSet
         void set_ATTr_NAME(const AggregationType& lst) { lst.ToSdaiAggr(m_instance, "ATTR_NAME"); }
 //## AttributeAggregationSetArraySimple
-        void set_ATTr_NAME(const SimpleType arr[], size_t n) { AggregationType::ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+        void set_ATTr_NAME(const SimpleType arr[], size_t n) { AggregationType lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
 //## AttributeAggregationSetArrayText
-        void set_ATTr_NAME(TextData arr[], size_t n) { Aggregationtype::ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+        void set_ATTr_NAME(TextData arr[], size_t n) { Aggregationtype lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
 //## EntityEnd
     };
 

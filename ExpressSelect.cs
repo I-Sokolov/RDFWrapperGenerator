@@ -286,7 +286,7 @@ namespace RDFWrappers
 
             if (foundation.aggrType != enum_express_aggr.__NONE)
             {
-                WriteAggrAccessorMethod(generator, definedType, bGet);
+                WriteAggrAccessorMethod(generator, definedType, foundation, bGet);
             }
             else
             {
@@ -346,11 +346,8 @@ namespace RDFWrappers
             }
         }
 
-        private void WriteAggrAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
-        {
-            if (definedType.name == "IfcBinary")
-                return;
-
+        private void WriteAggrAccessorMethod(Generator generator, ExpressDefinedType definedType, ExpressDefinedType.Foundation foundation, bool? bGet)
+        {                
             string sdaiType = definedType.GetSdaiType();
             string baseType = definedType.GetBaseCSType();
 
@@ -377,6 +374,7 @@ namespace RDFWrappers
                 generator.WriteByTemplate(Generator.Template.SelectAggregationSet);
             }
 
+            //set array methods
             if (!(bGet.HasValue && bGet.Value))
             {
                 enum_express_aggr aggr;
@@ -386,6 +384,12 @@ namespace RDFWrappers
                 {
                     var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
                     generator.WriteByTemplate(tpl);
+
+                    if (foundation.domainType == enum_express_declaration.__ENTITY)
+                    {
+                        generator.m_replacements[Generator.KWD_SimpleType] = "IntData";
+                        generator.WriteByTemplate(Generator.Template.SelectAggregationSetArraySimple);
+                    }
                 }
             }
         }
