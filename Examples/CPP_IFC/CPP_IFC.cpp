@@ -31,11 +31,11 @@ extern void IFC4_test()
     auto predType = wall.get_PredefinedType();
     ASSERT(!descr && !name && !guid && !oh && predType.IsNull());
 
-    wall.set_GlobalId("7-7-7");
-    wall.set_Name("Wall name");
-    wall.set_Description("My wall description");
-    wall.set_OwnerHistory(ownerHistory);
-    wall.set_PredefinedType(IfcWallTypeEnum::POLYGONAL);
+    wall.put_GlobalId("7-7-7");
+    wall.put_Name("Wall name");
+    wall.put_Description("My wall description");
+    wall.put_OwnerHistory(ownerHistory);
+    wall.put_PredefinedType(IfcWallTypeEnum::POLYGONAL);
 
     guid = wall.get_GlobalId();
     name = wall.get_Name();
@@ -53,8 +53,8 @@ extern void IFC4_test()
     auto xdim = profile.get_XDim();
     auto ydim = profile.get_YDim();
     ASSERT(xdim.IsNull() && ydim.IsNull());
-    profile.set_XDim(10000);
-    profile.set_YDim(80);
+    profile.put_XDim(10000);
+    profile.put_YDim(80);
     xdim = profile.get_XDim();
     ydim = profile.get_YDim();
     ASSERT(xdim.Value() == 10000 && ydim.Value() == 80);
@@ -63,13 +63,13 @@ extern void IFC4_test()
     IfcTriangulatedFaceSet triangFaceSet = IfcTriangulatedFaceSet::Create(ifcModel);
     auto closed = triangFaceSet.get_Closed();
     ASSERT(closed.IsNull());
-    triangFaceSet.set_Closed(false);
+    triangFaceSet.put_Closed(false);
     closed = triangFaceSet.get_Closed();
     ASSERT(!closed.Value());
 
     IfcBSplineCurve curve = IfcBSplineCurveWithKnots::Create(ifcModel);
     ASSERT(curve.get_Degree().IsNull());
-    curve.set_Degree(5);
+    curve.put_Degree(5);
     ASSERT(curve.get_Degree().Value() == 5);
 
     //type casting check
@@ -103,7 +103,7 @@ extern void IFC4_test()
     ASSERT(as_double.IsNull() && as_text == NULL && as_int.IsNull() && as_bool.IsNull());
 
     //numeric value (alteranative notation)
-    IfcMeasureValue_getter getMeasureValue(measureWithUnit, "ValueComponent");
+    IfcMeasureValue_get getMeasureValue(measureWithUnit, "ValueComponent");
     dval = getMeasureValue.get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
 
@@ -122,7 +122,7 @@ extern void IFC4_test()
     ASSERT(txt == NULL);
 
     //set to numeric
-    measureWithUnit.set_ValueComponent().set_IfcMeasureValue().set_IfcRatioMeasure(0.5);
+    measureWithUnit.put_ValueComponent().put_IfcMeasureValue().put_IfcRatioMeasure(0.5);
 
     dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     ASSERT(dval.Value() == 0.5);
@@ -145,7 +145,7 @@ extern void IFC4_test()
     dval = measureValue_detachedSelect.get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
     //but changing the detached select will change host instance
-    measureValue_detachedSelect.set_IfcAreaMeasure(2.7);
+    measureValue_detachedSelect.put_IfcAreaMeasure(2.7);
     dval = measureValue_detachedSelect.get_IfcAreaMeasure();
     ASSERT(dval.Value() == 2.7);
     //instance was changed
@@ -155,7 +155,7 @@ extern void IFC4_test()
     ASSERT(dval.Value()==2.7);
 
     //set DescriptiveMeasure
-    measureWithUnit.set_ValueComponent().set_IfcMeasureValue().set_IfcDescriptiveMeasure("my descreptive measure");
+    measureWithUnit.put_ValueComponent().put_IfcMeasureValue().put_IfcDescriptiveMeasure("my descreptive measure");
 
     dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
@@ -173,7 +173,7 @@ extern void IFC4_test()
     ASSERT(as_double.IsNull() && 0 == strcmp(as_text, "my descreptive measure") && as_int.IsNull() && as_bool.IsNull());
 
     //set text
-    measureWithUnit.set_ValueComponent().set_IfcSimpleValue().set_IfcText("my text");
+    measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcText("my text");
 
     dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
@@ -207,9 +207,9 @@ extern void IFC4_test()
     ASSERT(instance == 0);
 
     auto setPerson = IfcPerson::Create(ifcModel);
-    setPerson.set_Identification("justApeson");
+    setPerson.put_Identification("justApeson");
 
-    actor.set_TheActor().set_IfcPerson(setPerson);
+    actor.put_TheActor().put_IfcPerson(setPerson);
     person = actor.get_TheActor().get_IfcPerson();
     ASSERT(setPerson == person);
 
@@ -224,19 +224,19 @@ extern void IFC4_test()
     //
 
     ASSERT(curve.get_ClosedCurve().IsNull());
-    curve.set_ClosedCurve(IfcLogical::Unknown);
+    curve.put_ClosedCurve(IfcLogical::Unknown);
     ASSERT(curve.get_ClosedCurve().Value() == IfcLogical::Unknown);
 
     auto ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
     ASSERT(ifcLogical.IsNull());
-    measureWithUnit.set_ValueComponent().set_IfcSimpleValue().set_IfcLogical(IfcLogical::True);
+    measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcLogical(IfcLogical::True);
     ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
     ASSERT(ifcLogical.Value() == IfcLogical::True);
 
     auto relIntersect = IfcRelInterferesElements::Create(ifcModel);
     ifcLogical = relIntersect.get_ImpliedOrder();
     ASSERT(ifcLogical.IsNull());
-    relIntersect.set_ImpliedOrder(LOGICAL::False);
+    relIntersect.put_ImpliedOrder(LOGICAL::False);
     ifcLogical = relIntersect.get_ImpliedOrder();
     ASSERT(ifcLogical.Value() == LOGICAL::False);
 
@@ -252,14 +252,14 @@ extern void IFC4_test()
     ASSERT(longitude.size() == 0);
 
     longitude.push_back(54);
-    site.set_RefLongitude(longitude);
+    site.put_RefLongitude(longitude);
 
     longitude.clear();
     site.get_RefLongitude(longitude);
     ASSERT(longitude.size() == 1 && longitude.front() == 54);
 
     int64_t rint[] = {3,4};
-    site.set_RefLongitude(rint, 2);
+    site.put_RefLongitude(rint, 2);
 
     longitude.clear();
     site.get_RefLongitude(longitude);
@@ -273,14 +273,14 @@ extern void IFC4_test()
     ASSERT(coords.empty());
 
     double my2DPoint[] = {1.0,2.0}; //can use array to set
-    point.set_Coordinates(my2DPoint, 2);
+    point.put_Coordinates(my2DPoint, 2);
 
     coords.clear();
     point.get_Coordinates(coords);
     ASSERT(coords.size() == 2 && coords.front() == 1 && coords.back() == 2);
 
     coords.push_back(3);
-    point.set_Coordinates(coords); //can use sdt::list to set
+    point.put_Coordinates(coords); //can use sdt::list to set
     ASSERT(coords.size() == 3 && coords.front() == 1 && coords.back() == 3);
 
     //string
@@ -289,7 +289,7 @@ extern void IFC4_test()
     ASSERT(middleNames.empty());
 
     const char* DaliMiddleNames[] = {"Domingo", "Felipe", "Jacinto"};
-    person.set_MiddleNames(DaliMiddleNames, 3);
+    person.put_MiddleNames(DaliMiddleNames, 3);
 
     person.get_MiddleNames(middleNames);
     ASSERT(middleNames.size() == 3);
@@ -320,7 +320,7 @@ extern void IFC4_test()
     coordList.back().push_back(1);
     coordList.back().push_back(0);
 
-    pointList.set_CoordList(coordList);
+    pointList.put_CoordList(coordList);
 
     ListOfListOfIfcLengthMeasure coordListCheck;
     pointList.get_CoordList(coordListCheck);
@@ -336,7 +336,7 @@ extern void IFC4_test()
     ASSERT(cplxNum.size() == 0);
 
     double cplx[] = {2.1, 1.5};
-    prop.set_NominalValue().set_IfcMeasureValue().set_IfcComplexNumber(cplx, 2);
+    prop.put_NominalValue().put_IfcMeasureValue().put_IfcComplexNumber(cplx, 2);
 
     prop.get_NominalValue().get_IfcMeasureValue().get_IfcComplexNumber(cplxNum);
     ASSERT(cplxNum.size() == 2 && cplxNum.front() == 2.1 && cplxNum.back() == 1.5);
@@ -377,24 +377,24 @@ extern void IFC4_test()
         }
     }   
 
-    points.set_CoordList(lstCoords);
+    points.put_CoordList(lstCoords);
 
     //create segments list
     //
     segments.clear();
     
     IfcSegmentIndexSelect segment (poly);//select needs to know entity
-    segment.set_IfcLineIndex(line, 2);
+    segment.put_IfcLineIndex(line, 2);
     segments.push_back(segment);
     
-    segment.set_IfcArcIndex(arc,3);
+    segment.put_IfcArcIndex(arc,3);
     segments.push_back(segment);
 
     //
     //
-    poly.set_Segments(segments);
-    poly.set_Points(points);
-    poly.set_SelfIntersect(false);
+    poly.put_Segments(segments);
+    poly.put_Points(points);
+    poly.put_SelfIntersect(false);
 
     //
     // get and check
@@ -438,10 +438,10 @@ extern void IFC4_test()
     //append line
     lineInd.push_back(3);
     lineInd.push_back(0);
-    segment.set_IfcLineIndex(lineInd);
+    segment.put_IfcLineIndex(lineInd);
     segments.push_back(segment);
 
-    poly.set_Segments(segments);
+    poly.put_Segments(segments);
 
     //check now
     segments.clear();
@@ -464,7 +464,7 @@ extern void IFC4_test()
     ASSERT(prodRepr == 0);
 
     prodRepr = IfcProductDefinitionShape::Create(ifcModel);
-    wall.set_Representation(prodRepr);
+    wall.put_Representation(prodRepr);
     ASSERT(wall.get_Representation() == prodRepr);
 
     ListOfIfcRepresentation lstRep;
@@ -473,7 +473,7 @@ extern void IFC4_test()
 
     auto repr = IfcShapeRepresentation::Create(ifcModel);
     lstRep.push_back(repr);
-    prodRepr.set_Representations(lstRep);
+    prodRepr.put_Representations(lstRep);
 
     lstRep.clear();
     prodRepr.get_Representations(lstRep);
@@ -487,7 +487,7 @@ extern void IFC4_test()
     lstItems.push_back(triangFaceSet);
     lstItems.push_back(curve);
     
-    repr.set_Items(lstItems);
+    repr.put_Items(lstItems);
 
     lstItems.clear();
     repr.get_Items(lstItems);
@@ -503,7 +503,7 @@ extern void IFC4_test()
 
     relObj.push_back(wall);
 
-    relProps.set_RelatedObjects(relObj);
+    relProps.put_RelatedObjects(relObj);
     
     relObj.clear();
     relProps.get_RelatedObjects(relObj);
@@ -516,15 +516,15 @@ extern void IFC4_test()
     ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
 
     auto emptyPset = IfcPropertySet::Create(ifcModel);
-    emptyPset.set_Name("Empty property set");
+    emptyPset.put_Name("Empty property set");
 
-    relProps.set_RelatingPropertyDefinition().set_IfcPropertySetDefinition(emptyPset);
+    relProps.put_RelatingPropertyDefinition().put_IfcPropertySetDefinition(emptyPset);
     ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == emptyPset);
     relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
     ASSERT(psSet.size() == 0);
 
     psSet.push_back(emptyPset);
-    relProps.set_RelatingPropertyDefinition().set_IfcPropertySetDefinitionSet(psSet);
+    relProps.put_RelatingPropertyDefinition().put_IfcPropertySetDefinitionSet(psSet);
     ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
     psSet.clear();
     relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);

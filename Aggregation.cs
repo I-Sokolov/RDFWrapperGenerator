@@ -262,13 +262,13 @@ namespace RDFWrappers
                     generator.m_replacements[Generator.KWD_AggregationType] = aggrTypeName;
                     generator.m_replacements[Generator.KWD_SimpleType] = elemType;
 
-                    generator.WriteGetSet(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationSet, isInverse);
+                    generator.WriteGetPut(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationPut, isInverse);
                     if (!nested && sdaiType != null)
                     {
                         if (sdaiType == "sdaiSTRING")
-                            generator.WriteByTemplate(Generator.Template.AttributeAggregationSetArrayText);
+                            generator.WriteByTemplate(Generator.Template.AttributeAggregationPutArrayText);
                         else
-                            generator.WriteByTemplate(Generator.Template.AttributeAggregationSetArraySimple);
+                            generator.WriteByTemplate(Generator.Template.AttributeAggregationPutArraySimple);
                     }
                 }
             }

@@ -36,7 +36,7 @@ namespace RDFWrappers
         public const string KWD_TYPE_NAME = "GEN_TYPE_NAME";
         public const string KWD_ACCESSOR = "_accessor";
         public const string KWD_nestedSelectAccess = "nestedSelectAccess";
-        public const string KWD_GETSET = "getOrset";
+        public const string KWD_GETPUT = "getOrPut";
         public const string KWD_AggregationType = "AggregationType";
 
         /// <summary>
@@ -64,17 +64,17 @@ namespace RDFWrappers
             SelectsBegin,
             SelectAccessorBegin,
             SelectSimpleGet,
-            SelectSimpleSet,
+            SelectSimplePut,
             SelectTextGet,
-            SelectTextSet,
+            SelectTextPut,
             SelectEntityGet,
-            SelectEntitySet,
+            SelectEntityPut,
             SelectEnumerationGet,
-            SelectEnumerationSet,
+            SelectEnumerationPut,
             SelectAggregationGet,
-            SelectAggregationSet,
-            SelectAggregationSetArraySimple,
-            SelectAggregationSetArrayText,
+            SelectAggregationPut,
+            SelectAggregationPutArraySimple,
+            SelectAggregationPutArrayText,
             SelectNested,
             SelectGetAsDouble,
             SelectGetAsInt,
@@ -86,23 +86,23 @@ namespace RDFWrappers
             EntityBegin,
             EntityCreateMethod,
             AttributeSimpleGet,
-            AttributeSimpleSet,
+            AttributeSimplePut,
             AttributeTextGet,
-            AttributeTextSet,
+            AttributeTextPut,
             AttributeEntityGet,
-            AttributeEntitySet,
+            AttributeEntityPut,
             AttributeEnumGet,
-            AttributeEnumSet,
+            AttributeEnumPut,
             AttributeSelectAccessor,
             AttributeAggregationGet,
-            AttributeAggregationSet,
-            AttributeAggregationSetArraySimple,
-            AttributeAggregationSetArrayText,
+            AttributeAggregationPut,
+            AttributeAggregationPutArraySimple,
+            AttributeAggregationPutArrayText,
             EntityEnd,
             SelectEntityGetImplementation,
-            SelectEntitySetImplementation,
+            SelectEntityPutImplementation,
             AttributeEntityGetImplementation,
-            AttributeEntitySetImplementation,
+            AttributeEntityPutImplementation,
             EndFile
         }
 
@@ -493,18 +493,18 @@ namespace RDFWrappers
             m_replacements[KWD_sdaiTYPE] = sdaiType;
 
             Template tplGet = baseType == "TextData" ? Template.AttributeTextGet : Template.AttributeSimpleGet;
-            Template tplSet = baseType == "TextData" ? Template.AttributeTextSet : Template.AttributeSimpleSet;
+            Template tplPut = baseType == "TextData" ? Template.AttributeTextPut : Template.AttributeSimplePut;
 
-            WriteGetSet(tplGet, tplSet, attr.inverse);
+            WriteGetPut(tplGet, tplPut, attr.inverse);
         }
 
-        public void WriteGetSet(Template tplGet, Template tplSet, bool inverse)
+        public void WriteGetPut(Template tplGet, Template tplPut, bool inverse)
         {
-            var str = BuildGetSet(tplGet, tplSet, inverse);
+            var str = BuildGetPut(tplGet, tplPut, inverse);
             m_writer.Write(str);
         }
 
-        private string BuildGetSet (Template tplGet, Template tplSet, bool inverse)
+        private string BuildGetPut (Template tplGet, Template tplPut, bool inverse)
         {
             StringBuilder str = new StringBuilder();
 
@@ -513,7 +513,7 @@ namespace RDFWrappers
             
             if (!inverse)
             {
-                s = StringByTemplate(tplSet);
+                s = StringByTemplate(tplPut);
                 str.Append(s);
             }
 
@@ -525,9 +525,9 @@ namespace RDFWrappers
         {
             m_replacements[KWD_REF_ENTITY] = domain;
 
-            WriteGetSet(Template.AttributeEntityGet, Template.AttributeEntitySet, attr.inverse);
+            WriteGetPut(Template.AttributeEntityGet, Template.AttributeEntityPut, attr.inverse);
 
-            var impl = BuildGetSet(Template.AttributeEntityGetImplementation, Template.AttributeEntitySetImplementation, attr.inverse);
+            var impl = BuildGetPut(Template.AttributeEntityGetImplementation, Template.AttributeEntityPutImplementation, attr.inverse);
             m_implementations.Append(impl);
         }
 
@@ -536,7 +536,7 @@ namespace RDFWrappers
         {
             m_replacements[KWD_ENUM_TYPE] = enumName;
             m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = enumValuesArrayName;
-            WriteGetSet(Template.AttributeEnumGet, Template.AttributeEnumSet, attr.inverse);
+            WriteGetPut(Template.AttributeEnumGet, Template.AttributeEnumPut, attr.inverse);
         }
 
         /// <summary>

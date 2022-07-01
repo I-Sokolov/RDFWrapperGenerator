@@ -79,7 +79,7 @@ static void test_list3()
         }       
     }
 
-    bspline_volume.set_weights_data(weights);
+    bspline_volume.put_weights_data(weights);
 
     sdaiSaveModelBN(model, "Test.ap");
     sdaiCloseModel(model);
@@ -136,7 +136,7 @@ static void test_multi_parent()
     //wrapper test
     auto inst = a3m_equivalence_criterion_with_specified_elements::Create(model);
     const char* NAME = "sey Name";
-    inst.set_name(NAME);
+    inst.put_name(NAME);
 
     sdaiSaveModelBN(model, "Test.ap");
     sdaiCloseModel(model);

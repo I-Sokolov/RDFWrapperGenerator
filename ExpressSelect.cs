@@ -129,18 +129,18 @@ namespace RDFWrappers
 
             generator.m_replacements[Generator.KWD_TYPE_NAME] = Generator.ValidateIdentifier (name);
 
-            generator.m_replacements[Generator.KWD_GETSET] = "get";
-            generator.m_replacements[Generator.KWD_ACCESSOR] = "_getter";
+            generator.m_replacements[Generator.KWD_GETPUT] = "get";
+            generator.m_replacements[Generator.KWD_ACCESSOR] = "_get";
             generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
 
             if (!attr.inverse)
             {
-                generator.m_replacements[Generator.KWD_GETSET] = "set";
-                generator.m_replacements[Generator.KWD_ACCESSOR] = "_setter";
+                generator.m_replacements[Generator.KWD_GETPUT] = "put";
+                generator.m_replacements[Generator.KWD_ACCESSOR] = "_put";
                 generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
             }
 
-            generator.m_replacements.Remove(Generator.KWD_GETSET);
+            generator.m_replacements.Remove(Generator.KWD_GETPUT);
             generator.m_replacements.Remove(Generator.KWD_ACCESSOR);
         }
 
@@ -160,7 +160,7 @@ namespace RDFWrappers
 
             foreach (var bGet in new bool?[] { null, true, false })
             {
-                generator.m_replacements[Generator.KWD_ACCESSOR] = bGet.HasValue ? (bGet.Value ? "_getter" : "_setter") : "";
+                generator.m_replacements[Generator.KWD_ACCESSOR] = bGet.HasValue ? (bGet.Value ? "_get" : "_put") : "";
 
                 generator.WriteByTemplate(Generator.Template.SelectAccessorBegin);
 
@@ -236,12 +236,12 @@ namespace RDFWrappers
 
             if (bGet.HasValue)
             {
-                generator.WriteByTemplate(bGet.Value ? Generator.Template.SelectEnumerationGet : Generator.Template.SelectEnumerationSet);
+                generator.WriteByTemplate(bGet.Value ? Generator.Template.SelectEnumerationGet : Generator.Template.SelectEnumerationPut);
             }
             else
             {
                 generator.WriteByTemplate(Generator.Template.SelectEnumerationGet);
-                generator.WriteByTemplate(Generator.Template.SelectEnumerationSet);
+                generator.WriteByTemplate(Generator.Template.SelectEnumerationPut);
             }
         }
 
@@ -253,20 +253,20 @@ namespace RDFWrappers
 
             if (bGet.HasValue)
             {
-                generator.WriteByTemplate(bGet.Value ? Generator.Template.SelectEntityGet : Generator.Template.SelectEntitySet);
+                generator.WriteByTemplate(bGet.Value ? Generator.Template.SelectEntityGet : Generator.Template.SelectEntityPut);
 
-                var impl = generator.StringByTemplate(bGet.Value ? Generator.Template.SelectEntityGetImplementation : Generator.Template.SelectEntitySetImplementation);
+                var impl = generator.StringByTemplate(bGet.Value ? Generator.Template.SelectEntityGetImplementation : Generator.Template.SelectEntityPutImplementation);
                 generator.m_implementations.Append(impl);
             }
             else
             {
                 generator.WriteByTemplate(Generator.Template.SelectEntityGet);
-                generator.WriteByTemplate(Generator.Template.SelectEntitySet);
+                generator.WriteByTemplate(Generator.Template.SelectEntityPut);
 
                 var impl = generator.StringByTemplate(Generator.Template.SelectEntityGetImplementation);
                 generator.m_implementations.Append(impl);
 
-                impl = generator.StringByTemplate(Generator.Template.SelectEntitySetImplementation);
+                impl = generator.StringByTemplate(Generator.Template.SelectEntityPutImplementation);
                 generator.m_implementations.Append(impl);
             }
         }
@@ -315,7 +315,7 @@ namespace RDFWrappers
         private void WriteSimpleAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
         {
             string sdaiType = definedType.GetSdaiType();
-            string baseType = definedType.GetBaseCSType();
+            string baPutype = definedType.GetBaseCSType();
 
             generator.m_replacements[Generator.KWD_SimpleType] = definedType.name;
             generator.m_replacements[Generator.KWD_TextType] = definedType.name;
@@ -323,26 +323,26 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
 
             Generator.Template tplGet;
-            Generator.Template tplSet;
-            if (baseType == "TextData")
+            Generator.Template tplPut;
+            if (baPutype == "TextData")
             {
                 tplGet = Generator.Template.SelectTextGet;
-                tplSet = Generator.Template.SelectTextSet;
+                tplPut = Generator.Template.SelectTextPut;
             }
             else 
             {
                 tplGet = Generator.Template.SelectSimpleGet;
-                tplSet = Generator.Template.SelectSimpleSet;
+                tplPut = Generator.Template.SelectSimplePut;
             }
 
             if (bGet.HasValue)
             {
-                generator.WriteByTemplate(bGet.Value ? tplGet : tplSet);
+                generator.WriteByTemplate(bGet.Value ? tplGet : tplPut);
             }
             else
             {
                 generator.WriteByTemplate(tplGet);
-                generator.WriteByTemplate(tplSet);
+                generator.WriteByTemplate(tplPut);
             }
         }
 
@@ -365,16 +365,16 @@ namespace RDFWrappers
 
             if (bGet.HasValue)
             {
-                var tpl = bGet.Value ? Generator.Template.SelectAggregationGet : Generator.Template.SelectAggregationSet;
+                var tpl = bGet.Value ? Generator.Template.SelectAggregationGet : Generator.Template.SelectAggregationPut;
                 generator.WriteByTemplate(tpl);
             }
             else
             {
                 generator.WriteByTemplate(Generator.Template.SelectAggregationGet);
-                generator.WriteByTemplate(Generator.Template.SelectAggregationSet);
+                generator.WriteByTemplate(Generator.Template.SelectAggregationPut);
             }
 
-            //set array methods
+            //Put array methods
             if (!(bGet.HasValue && bGet.Value))
             {
                 enum_express_aggr aggr;
@@ -382,13 +382,13 @@ namespace RDFWrappers
                 ifcengine.engiGetAggregation(definedType.aggregation, out aggr, out crdMin, out crdMax, out nestedAggr);
                 if (nestedAggr == 0)
                 {
-                    var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationSetArrayText : Generator.Template.SelectAggregationSetArraySimple;
+                    var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationPutArrayText : Generator.Template.SelectAggregationPutArraySimple;
                     generator.WriteByTemplate(tpl);
 
                     if (foundation.domainType == enum_express_declaration.__ENTITY)
                     {
                         generator.m_replacements[Generator.KWD_SimpleType] = "IntData";
-                        generator.WriteByTemplate(Generator.Template.SelectAggregationSetArraySimple);
+                        generator.WriteByTemplate(Generator.Template.SelectAggregationPutArraySimple);
                     }
                 }
             }
@@ -399,7 +399,7 @@ namespace RDFWrappers
             var saveSelect = generator.m_replacements[Generator.KWD_TYPE_NAME];
             generator.m_replacements[Generator.KWD_TYPE_NAME] = selectType.name;
 
-            generator.m_replacements[Generator.KWD_nestedSelectAccess] = bGet.HasValue ? (bGet.Value ? "get" : "set") : "";
+            generator.m_replacements[Generator.KWD_nestedSelectAccess] = bGet.HasValue ? (bGet.Value ? "get" : "put") : "";
 
             generator.WriteByTemplate(Generator.Template.SelectNested);
 

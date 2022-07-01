@@ -190,7 +190,6 @@ namespace RDFWrappers
                     break;
 
                 case enum_express_attr_type.__ENUMERATION:
-                    System.Diagnostics.Debug.Assert(false); //never happens
                     if (domain != 0)
                     {
                         str.Append ("ENUM:" + ExpressSchema.GetNameOfDeclaration(domain));

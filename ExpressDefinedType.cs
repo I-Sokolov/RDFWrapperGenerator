@@ -109,7 +109,7 @@ namespace RDFWrappers
                 switch (referType)
                 {
                     case RDF.enum_express_declaration.__ENUM:
-                        foundation = null;
+                        Console.WriteLine("Enum based: " + name);
                         break;
 
                     case RDF.enum_express_declaration.__SELECT:
@@ -162,6 +162,7 @@ namespace RDFWrappers
             }
             else
             {
+                System.Diagnostics.Debug.Assert(foundation.domainType != enum_express_declaration.__ENUM); //not tested
                 foundation.aggrType = Aggregation.WriteDefinedType(generator, this);
             }
 

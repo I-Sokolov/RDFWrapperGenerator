@@ -113,12 +113,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        template <typename T> void setSimpleValue(TextData typeName, IntData sdaiType, T value)
+        template <typename T> void putSimpleValue(TextData typeName, IntData sdaiType, T value)
         {
             ReleaseADB();
             m_adb = sdaiCreateADB(sdaiType, &value);
             sdaiPutADBTypePath(m_adb, 1, typeName);
-            OnSetValue();
+            OnPutValue();
         }
 
         //
@@ -136,12 +136,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void setTextValue(TextData typeName, TextData value)
+        void putTextValue(TextData typeName, TextData value)
         {
             ReleaseADB();
             m_adb = sdaiCreateADB(sdaiSTRING, value);
             sdaiPutADBTypePath(m_adb, 1, typeName);
-            OnSetValue();
+            OnPutValue();
         }
 
         //
@@ -161,12 +161,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void setEnumerationValue(TextData typeName, TextData value)
+        void putEnumerationValue(TextData typeName, TextData value)
         {
             ReleaseADB();
             m_adb = sdaiCreateADB(sdaiENUM, value);
             sdaiPutADBTypePath(m_adb, 1, typeName);
-            OnSetValue();
+            OnPutValue();
         }
 
         //
@@ -185,7 +185,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void setEntityInstance(TextData typeName, IntData inst)
+        void putEntityInstance(TextData typeName, IntData inst)
         {
             if (sdaiIsKindOfBN(inst, typeName)) {
                 assert(m_instance && m_attrName); //TODO how to keep instance in ADB
@@ -213,18 +213,18 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void setAggrValue(TextData typeName, SdaiAggr value)
+        void putAggrValue(TextData typeName, SdaiAggr value)
         {
             ReleaseADB();
             m_adb = sdaiCreateADB(sdaiAGGR, value);
             sdaiPutADBTypePath(m_adb, 1, typeName);
-            OnSetValue();
+            OnPutValue();
         }
 
     private:
         void ReleaseADB() { m_adb = NULL; }
 
-        void OnSetValue()
+        void OnPutValue()
         {
             if (m_instance && m_attrName) {
                 sdaiPutAttrBN(m_instance, m_attrName, sdaiADB, m_adb);
@@ -588,28 +588,28 @@ namespace NAMESPACE_NAME
         GEN_TYPE_NAME_accessor(SdaiInstance instance, TextData attrName = NULL, void* adb = NULL) : Select(instance, attrName, adb) {}
 //## SelectSimpleGet
         Nullable<SimpleType> get_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
-//## SelectSimpleSet
-        void set_SimpleType(SimpleType value) { setSimpleValue("TypeNameUpper", sdaiTYPE, value); }
+//## SelectSimplePut
+        void put_SimpleType(SimpleType value) { putSimpleValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectTextGet
         TextType get_TextType() { return getTextValue("TypeNameUpper"); }
-//## SelectTextSet
-        void set_TextType(TextType value) { setTextValue("TypeNameUpper", value); }
+//## SelectTextPut
+        void put_TextType(TextType value) { putTextValue("TypeNameUpper", value); }
 //## SelectEntityGet
         REF_ENTITY get_REF_ENTITY();
-//## SelectEntitySet
-        void set_REF_ENTITY(REF_ENTITY inst);
+//## SelectEntityPut
+        void put_REF_ENTITY(REF_ENTITY inst);
 //## SelectEnumerationGet
         Nullable<ENUMERATION_NAME> get_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
-//## SelectEnumerationSet
-        void set_ENUMERATION_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; setEnumerationValue("TypeNameUpper", val); }
+//## SelectEnumerationPut
+        void put_ENUMERATION_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; putEnumerationValue("TypeNameUpper", val); }
 //## SelectAggregationGet
         void get_AggregationType(AggregationType& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); lst.FromSdaiAggr(m_instance, aggr); }
-//## SelectAggregationSet
-        void set_AggregationType(const AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
-//## SelectAggregationSetArraySimple
-        void set_AggregationType(const SimpleType arr[], size_t n) { AggregationType lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
-//## SelectAggregationSetArrayText
-        void set_AggregationType(TextData arr[], size_t n) { Aggregationtype lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); setAggrValue("TypeNameUpper", aggr); }
+//## SelectAggregationPut
+        void put_AggregationType(const AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
+//## SelectAggregationPutArraySimple
+        void put_AggregationType(const SimpleType arr[], size_t n) { AggregationType lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
+//## SelectAggregationPutArrayText
+        void put_AggregationType(TextData arr[], size_t n) { Aggregationtype lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
 //## SelectNested
         GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return GEN_TYPE_NAME_accessor(m_instance, m_attrName, m_adb); }
 //## SelectGetAsDouble
@@ -656,45 +656,45 @@ namespace NAMESPACE_NAME
 //## AttributeSimpleGet
 
         Nullable<SimpleType> get_ATTR_NAME() { SimpleType val = (SimpleType)0; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &val)) return val; else return Nullable<SimpleType>(); }
-//## AttributeSimpleSet
-        void set_ATTR_NAME(SimpleType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &value); }
+//## AttributeSimplePut
+        void put_ATTR_NAME(SimpleType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &value); }
 //## AttributeTextGet
 
        TextType get_attr_NAME() { TextType val = NULL; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, &val)) return val; else return NULL; }
-//## AttributeTextSet
-        void set_ATTR_NAME(TextType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, value); }
+//## AttributeTextPut
+        void put_ATTR_NAME(TextType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, value); }
 //## AttributeEntityGet
 
         REF_ENTITY get_Attr_NAME();
-//## AttributeEntitySet
-        void set_Attr_NAME(REF_ENTITY inst);
+//## AttributeEntityPut
+        void put_Attr_NAME(REF_ENTITY inst);
 //## AttributeEnumGet
 
         Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = getENUM("ATTR_NAME", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
-//## AttributeEnumSet
-        void set_ATTR_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
+//## AttributeEnumPut
+        void put_ATTR_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
 //## AttributeSelectAccessor
-        GEN_TYPE_NAME_accessor getOrset_ATTR_NAME() { return GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", NULL); }
+        GEN_TYPE_NAME_accessor getOrPut_ATTR_NAME() { return GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", NULL); }
 //## AttributeAggregationGet
 
         void get_ATTr_NAME(AggregationType& lst) { lst.FromAttr (m_instance, "ATTR_NAME"); }
-//## AttributeAggregationSet
-        void set_ATTr_NAME(const AggregationType& lst) { lst.ToSdaiAggr(m_instance, "ATTR_NAME"); }
-//## AttributeAggregationSetArraySimple
-        void set_ATTr_NAME(const SimpleType arr[], size_t n) { AggregationType lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
-//## AttributeAggregationSetArrayText
-        void set_ATTr_NAME(TextData arr[], size_t n) { Aggregationtype lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+//## AttributeAggregationPut
+        void put_ATTr_NAME(const AggregationType& lst) { lst.ToSdaiAggr(m_instance, "ATTR_NAME"); }
+//## AttributeAggregationPutArraySimple
+        void put_ATTr_NAME(const SimpleType arr[], size_t n) { AggregationType lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+//## AttributeAggregationPutArrayText
+        void put_ATTr_NAME(TextData arr[], size_t n) { Aggregationtype lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
 //## EntityEnd
     };
 
 //## SelectEntityGetImplementation
     REF_ENTITY GEN_TYPE_NAME_accessor::get_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
-//## SelectEntitySetImplementation
-    void GEN_TYPE_NAME_accessor::set_REF_ENTITY(REF_ENTITY inst) { setEntityInstance("TypeNameUpper", inst); }
+//## SelectEntityPutImplementation
+    void GEN_TYPE_NAME_accessor::put_REF_ENTITY(REF_ENTITY inst) { putEntityInstance("TypeNameUpper", inst); }
 //## AttributeEntityGetImplementation
     REF_ENTITY ENTITY_NAME::get_Attr_NAME() { SdaiInstance inst = 0; sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, &inst); return inst; }
-//## AttributeEntitySetImplementation
-    void ENTITY_NAME::set_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, (void*)i); }
+//## AttributeEntityPutImplementation
+    void ENTITY_NAME::put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, (void*)i); }
 //## TEMPLATE: EndFile template part
 
 }
