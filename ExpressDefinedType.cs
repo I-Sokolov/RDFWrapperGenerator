@@ -109,7 +109,6 @@ namespace RDFWrappers
                 switch (referType)
                 {
                     case RDF.enum_express_declaration.__ENUM:
-                        Console.WriteLine("Enum based: " + name);
                         break;
 
                     case RDF.enum_express_declaration.__SELECT:

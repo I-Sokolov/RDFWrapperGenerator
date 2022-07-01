@@ -81,6 +81,14 @@ static void test_list3()
 
     bspline_volume.put_weights_data(weights);
 
+    //bag
+    auto segment = composite_curve_segment::Create(model);
+
+    bag_of_composite_curve bag;
+    segment.get_using_curves(bag);
+    assert(bag.empty());
+
+    //
     sdaiSaveModelBN(model, "Test.ap");
     sdaiCloseModel(model);
 

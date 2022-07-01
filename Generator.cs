@@ -188,6 +188,23 @@ namespace RDFWrappers
                 m_replacements[KWD_ENTITY_NAME] = ValidateIdentifier (cls.Key);
                 WriteByTemplate(Template.ClassForwardDeclaration);
             }
+
+            m_writer.WriteLine();
+
+            foreach (var cls in m_schema.m_declarations[RDF.enum_express_declaration.__SELECT])
+            {
+                string name = ValidateIdentifier(cls.Key);
+
+                m_replacements[KWD_ENTITY_NAME] = name;
+                WriteByTemplate(Template.ClassForwardDeclaration);
+
+                m_replacements[KWD_ENTITY_NAME] = name + "_get";
+                WriteByTemplate(Template.ClassForwardDeclaration);
+
+                m_replacements[KWD_ENTITY_NAME] = name + "_put";
+                WriteByTemplate(Template.ClassForwardDeclaration);
+            }
+
         }
 
         /// <summary>

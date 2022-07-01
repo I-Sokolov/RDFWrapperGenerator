@@ -130,6 +130,10 @@ namespace RDFWrappers
                     name.Append(camelCase ? "Set" : "set");
                     break;
 
+                case RDF.enum_express_aggr.__BAG:
+                    name.Append(camelCase ? "Bag" : "bag");
+                    break;
+
                 default:
                     Console.WriteLine("unsupported aggregation type " + typeDef.ToString());
                     return null;
