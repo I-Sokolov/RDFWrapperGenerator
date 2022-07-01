@@ -380,7 +380,8 @@ namespace RDFWrappers
                 enum_express_aggr aggr;
                 Int64 crdMin, crdMax, nestedAggr;
                 ifcengine.engiGetAggregation(definedType.aggregation, out aggr, out crdMin, out crdMax, out nestedAggr);
-                if (nestedAggr == 0)
+                System.Diagnostics.Debug.Assert(nestedAggr == 0); //to test
+                if (nestedAggr == 0 && sdaiType != null)
                 {
                     var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationPutArrayText : Generator.Template.SelectAggregationPutArraySimple;
                     generator.WriteByTemplate(tpl);

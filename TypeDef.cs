@@ -11,7 +11,7 @@ namespace RDFWrappers
 {
     public class TypeDef
     {
-        public enum_express_attr_type attrType;        
+        public enum_express_attr_type attrType;
         public ExpressHandle domain;
 
         public Int64 aggregation;
@@ -25,7 +25,7 @@ namespace RDFWrappers
 
             if (domain != 0)
             {
-                if (ifcengine.engiGetDeclarationType (domain) == enum_express_declaration.__DEFINED_TYPE)
+                if (ifcengine.engiGetDeclarationType(domain) == enum_express_declaration.__DEFINED_TYPE)
                 {
                     ExpressDefinedType refer = new ExpressDefinedType(domain);
                     return refer.IsAggregation();
@@ -34,7 +34,7 @@ namespace RDFWrappers
 
             return false;
         }
-        
+
         public bool IsSimpleType(out string domainType, out string baseType, out string sdaiType)
         {
             return IsSimpleType(attrType, domain, out domainType, out baseType, out sdaiType);
@@ -133,7 +133,7 @@ namespace RDFWrappers
 
         public ExpressEnumeraion IsEnumeration()
         {
-            if (attrType == enum_express_attr_type.__NONE)
+            if (attrType == enum_express_attr_type.__NONE || attrType == enum_express_attr_type.__ENUMERATION)
             {
                 if (enum_express_declaration.__ENUM == ifcengine.engiGetDeclarationType(domain))
                 {
@@ -147,7 +147,7 @@ namespace RDFWrappers
 
         public ExpressSelect IsSelect()
         {
-            if (attrType == enum_express_attr_type.__NONE)
+            if (attrType == enum_express_attr_type.__NONE || attrType == enum_express_attr_type.__SELECT)
             {
                 if (enum_express_declaration.__SELECT == ifcengine.engiGetDeclarationType(domain))
                 {

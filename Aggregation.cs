@@ -78,6 +78,7 @@ namespace RDFWrappers
                 {
                     Int64 crdMin, crdMax;
                     ifcengine.engiGetAggregation(aggregation, out aggrType, out crdMin, out crdMax, out aggregation);
+                    System.Diagnostics.Debug.Assert(!(aggregation != 0 && name != null), "test nested aggregation for definded type"); 
 
                     string aggrName = (aggregation == 0) ? name : null; //use given name for outer aggregation
                     if (aggrName == null)
@@ -112,6 +113,7 @@ namespace RDFWrappers
 
         private string MakeAggregationTypeName (enum_express_aggr aggrType, string elemType)
         {
+            System.Diagnostics.Debug.Assert(elemType != null);
             bool camelCase = Char.IsUpper(elemType.First());
 
             var name = new StringBuilder();
@@ -159,6 +161,7 @@ namespace RDFWrappers
             string baseType = null;
             ExpressSelect select = null;
             ExpressEnumeraion enumeration = null;
+            ExpressDefinedType definedType = null;
 
             if (typeDef.IsSimpleType(out elemType, out baseType, out sdaiType))
             {
@@ -185,7 +188,8 @@ namespace RDFWrappers
             }
             else if (typeDef.IsEntityReference(out elemType))
             {
-                return Generator.Template.AggregationOfInstance;
+                template = Generator.Template.AggregationOfInstance;
+                sdaiType = "sdaiINSTANCE";
             }
             else if ((enumeration = typeDef.IsEnumeration())!=null)
             {
@@ -198,6 +202,34 @@ namespace RDFWrappers
                 template = Generator.Template.AggregationOfSelect;
                 elemType = select.name;
                 sdaiType = null;
+            }
+            else if ((definedType = typeDef.IsDefinedType())!=null)
+            {
+                ExpressDefinedType.Foundation foundation = null;
+                if (generator.m_writtenDefinedTyes.TryGetValue (definedType.declaration, out foundation))
+                {
+                    switch (foundation.domainType)
+                    {
+                        case enum_express_declaration.__ENTITY:
+                            template = Generator.Template.AggregationOfInstance;
+                            System.Diagnostics.Debug.Assert(false, "not tested"); 
+                            break;
+                        case enum_express_declaration.__ENUM:
+                            template = Generator.Template.AggregationOfEnum;
+                            System.Diagnostics.Debug.Assert(false, "not tested");
+                            break;
+                        case enum_express_declaration.__SELECT:
+                            template = Generator.Template.AggregationOfSelect;
+                            break;
+                        default:
+                            Console.WriteLine("Unexpected foundation type " + foundation.domainType.ToString() + " in aggregation of " + typeDef.ToString());
+                            System.Diagnostics.Debug.Assert(false);
+                            break;
+                    }
+
+                    elemType = definedType.name;
+                    sdaiType = definedType.GetSdaiType();
+                }
             }
 
             if (template == Generator.Template.None)

@@ -106,34 +106,13 @@ namespace RDFWrappers
                 var referType = RDF.ifcengine.engiGetDeclarationType(domain);
                 foundation.domainType = referType;
 
-                switch (referType)
+                if (referType == RDF.enum_express_declaration.__DEFINED_TYPE)
                 {
-                    case RDF.enum_express_declaration.__ENUM:
-                        break;
-
-                    case RDF.enum_express_declaration.__SELECT:
-                        foundation = null;
-                        break;
-
-                    case RDF.enum_express_declaration.__ENTITY:
-                        break;
-
-                    case RDF.enum_express_declaration.__DEFINED_TYPE:
-                        var referencedType = new ExpressDefinedType(domain);
-                        var baseFoundation = referencedType.WriteType(generator, visitedTypes);
-                        foundation.aggrType = baseFoundation.aggrType;
-                        foundation.attrType = baseFoundation.attrType;
-                        foundation.domainType = baseFoundation.domainType;
-                        break;
-
-                    default:
-                        throw new ApplicationException("Unexpexted defined type domain " + referType.ToString());
-                }
-
-                if (foundation == null)
-                {
-                    Console.WriteLine("Can not write dfineded type {0} referenced to {1} {2}, unsupported foundation", name, referType.ToString(), referTypeName);
-                    return null;
+                    var referencedType = new ExpressDefinedType(domain);
+                    var baseFoundation = referencedType.WriteType(generator, visitedTypes);
+                    foundation.aggrType = baseFoundation.aggrType;
+                    foundation.attrType = baseFoundation.attrType;
+                    foundation.domainType = baseFoundation.domainType;
                 }
             }
             else if (attrType == RDF.enum_express_attr_type.__LOGICAL)
