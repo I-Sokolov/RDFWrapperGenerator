@@ -208,7 +208,7 @@ namespace RDFWrappers
                 ExpressDefinedType.Foundation foundation = null;
                 if (generator.m_writtenDefinedTyes.TryGetValue (definedType.declaration, out foundation))
                 {
-                    switch (foundation.domainType)
+                    switch (foundation.declarationType)
                     {
                         case enum_express_declaration.__ENTITY:
                             template = Generator.Template.AggregationOfInstance;
@@ -222,7 +222,7 @@ namespace RDFWrappers
                             template = Generator.Template.AggregationOfSelect;
                             break;
                         default:
-                            Console.WriteLine("Unexpected foundation type " + foundation.domainType.ToString() + " in aggregation of " + typeDef.ToString());
+                            Console.WriteLine("Unexpected foundation type " + foundation.declarationType.ToString() + " in aggregation of " + typeDef.ToString());
                             System.Diagnostics.Debug.Assert(false);
                             break;
                     }

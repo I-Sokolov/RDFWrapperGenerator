@@ -280,12 +280,12 @@ namespace RDFWrappers
         /// </summary>
         private void WriteSelects ()
         {
-            var wroteSelects = new HashSet<ExpressHandle>();
+            var visitedSelects = new HashSet<ExpressHandle>();
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__SELECT])
             {
                 var sel = new ExpressSelect(decl.Value);
-                sel.WriteAccessors(this, wroteSelects);
+                sel.WriteAccessors(this, visitedSelects);
             }
         }
 

@@ -13,7 +13,7 @@ namespace RDFWrappers
     {
         public class Foundation
             {
-            public enum_express_declaration domainType = enum_express_declaration.__UNDEF; //Undef for primitive types, see attrType 
+            public enum_express_declaration declarationType = enum_express_declaration.__UNDEF; //Undef for primitive types, see attrType 
             public enum_express_attr_type attrType = enum_express_attr_type.__NONE;        
             public enum_express_aggr aggrType = enum_express_aggr.__NONE;
             };
@@ -98,13 +98,15 @@ namespace RDFWrappers
             var foundation = new Foundation();
             foundation.attrType = attrType;
 
+            var referTypeName = "";
+
             if (domain != 0)
             {
-                var referTypeName = ExpressSchema.GetNameOfDeclaration(domain);
+                referTypeName = ExpressSchema.GetNameOfDeclaration(domain);
                 generator.m_replacements[Generator.KWD_SimpleType] = referTypeName;
 
                 var referType = RDF.ifcengine.engiGetDeclarationType(domain);
-                foundation.domainType = referType;
+                foundation.declarationType = referType;
 
                 if (referType == RDF.enum_express_declaration.__DEFINED_TYPE)
                 {
@@ -112,7 +114,7 @@ namespace RDFWrappers
                     var baseFoundation = referencedType.WriteType(generator, visitedTypes);
                     foundation.aggrType = baseFoundation.aggrType;
                     foundation.attrType = baseFoundation.attrType;
-                    foundation.domainType = baseFoundation.domainType;
+                    foundation.declarationType = baseFoundation.declarationType;
                 }
             }
             else if (attrType == RDF.enum_express_attr_type.__LOGICAL)
@@ -137,10 +139,21 @@ namespace RDFWrappers
             {
                 generator.m_replacements[Generator.KWD_DEFINED_TYPE] = name;
                 generator.WriteByTemplate(Generator.Template.DefinedType);
+
+                if (foundation.declarationType == enum_express_declaration.__SELECT)
+                {
+                    generator.m_replacements[Generator.KWD_DEFINED_TYPE] = name + "_put";
+                    generator.m_replacements[Generator.KWD_SimpleType] = referTypeName + "_put";
+                    generator.WriteByTemplate(Generator.Template.DefinedType);
+
+                    generator.m_replacements[Generator.KWD_DEFINED_TYPE] = name + "_get";
+                    generator.m_replacements[Generator.KWD_SimpleType] = referTypeName + "_get";
+                    generator.WriteByTemplate(Generator.Template.DefinedType);
+                }
             }
             else
             {
-                System.Diagnostics.Debug.Assert(foundation.domainType != enum_express_declaration.__ENUM); //not tested
+                System.Diagnostics.Debug.Assert(foundation.declarationType != enum_express_declaration.__ENUM); //not tested
                 foundation.aggrType = Aggregation.WriteDefinedType(generator, this);
             }
 

@@ -13,15 +13,16 @@ namespace RDFWrappers
 {
     public class ExpressSelect
     {
-        public string name { get { return ExpressSchema.GetNameOfDeclaration(inst); } }
+        public string name;
         public ExpressHandle inst;
 
         public ExpressSelect(ExpressHandle inst)
         {
             this.inst = inst;
+            name = ExpressSchema.GetNameOfDeclaration(inst); 
         }
 
-        private HashSet<ExpressHandle> GetVariants(bool resolveNestedSelects)
+        private HashSet<ExpressHandle> GetVariants()
         {
             var ret = new HashSet<ExpressHandle>();
 
@@ -29,31 +30,17 @@ namespace RDFWrappers
             ExpressHandle variant;
             while (0 != (variant = ifcengine.engiGetSelectElement(inst, i++)))
             {
-                if (resolveNestedSelects && ifcengine.engiGetDeclarationType(variant) == enum_express_declaration.__SELECT)
+                if (!ret.Add(variant))
                 {
-                    var nestedSelect = new ExpressSelect(variant);
-                    var nestedVariants = nestedSelect.GetVariants(resolveNestedSelects);
-                    foreach (var v in nestedVariants)
-                    {
-                        if (!ret.Add(v))
-                        {
-                            throw new ApplicationException(string.Format("duplicated type {0} in SELECT {1}", ExpressSchema.GetNameOfDeclaration(v), name));
-                        }
-                    }
-                }
-                else
-                {
-                    if (!ret.Add(variant))
-                    {
-                        throw new ApplicationException(string.Format("duplicated type {0} in SELECT {1}", ExpressSchema.GetNameOfDeclaration(variant), name));
-                    }
+                    Console.WriteLine(string.Format("duplicated type {0} in SELECT {1}", ExpressSchema.GetNameOfDeclaration(variant), name));
+                    System.Diagnostics.Debug.Assert(false);
                 }
             }
 
             return ret;
         }
 
-        private List<ExpressHandle> GetNestedSelects()
+        private List<ExpressHandle> GetNestedSelects(Generator generator)
         {
             var ret = new List<ExpressHandle>();
 
@@ -61,7 +48,18 @@ namespace RDFWrappers
             ExpressHandle variant;
             while (0 != (variant = ifcengine.engiGetSelectElement(inst, i++)))
             {
-                if (ifcengine.engiGetDeclarationType(variant) == enum_express_declaration.__SELECT)
+                var decl = ifcengine.engiGetDeclarationType(variant);
+
+                if (decl == enum_express_declaration.__DEFINED_TYPE)
+                {
+                    ExpressDefinedType.Foundation foundation;
+                    if (generator.m_writtenDefinedTyes.TryGetValue (variant, out foundation))
+                    {
+                        decl = foundation.declarationType;
+                    }
+                }
+
+                if (decl == enum_express_declaration.__SELECT)
                 {
                     ret.Add(variant);
                 }
@@ -144,16 +142,38 @@ namespace RDFWrappers
             generator.m_replacements.Remove(Generator.KWD_ACCESSOR);
         }
 
-        public void WriteAccessors(Generator generator, HashSet<ExpressHandle> wroteSelects)
+        private void WriteNestedSelect (Generator generator, ExpressHandle declaration, HashSet<ExpressHandle> visitedSelects)
         {
-            if (!wroteSelects.Add(inst))
+            var declType = ifcengine.engiGetDeclarationType(declaration);
+            switch (declType)
+            {
+                case enum_express_declaration.__SELECT:
+                    (new ExpressSelect(declaration)).WriteAccessors(generator, visitedSelects);
+                    break;
+
+                case enum_express_declaration.__DEFINED_TYPE:
+                    var definedType = new ExpressDefinedType(declaration);
+                    WriteNestedSelect(generator, definedType.domain, visitedSelects);
+                    break;
+
+                default:
+                    Console.WriteLine("SELECT " + name + " has unexpected mested select of type " + declType.ToString());
+                    System.Diagnostics.Debug.Assert(false);
+                    break;
+            }
+
+        }
+
+        public void WriteAccessors(Generator generator, HashSet<ExpressHandle> visitedSelects)
+        {
+            if (!visitedSelects.Add(inst))
             {
                 return;
             }
 
-            foreach (var nested in GetNestedSelects())
+            foreach (var nested in GetNestedSelects(generator))
             {
-                (new ExpressSelect(nested)).WriteAccessors(generator, wroteSelects);
+                WriteNestedSelect(generator, nested, visitedSelects);
             }
 
             generator.m_replacements[Generator.KWD_TYPE_NAME] = Generator.ValidateIdentifier (name);
@@ -164,7 +184,7 @@ namespace RDFWrappers
 
                 generator.WriteByTemplate(Generator.Template.SelectAccessorBegin);
 
-                foreach (var variant in GetVariants(false))
+                foreach (var variant in GetVariants())
                 {
                     if (!bGet.HasValue)
                         generator.m_writer.WriteLine();
@@ -202,8 +222,8 @@ namespace RDFWrappers
                     break;
 
                 case enum_express_declaration.__SELECT:
-                    var selectType = new ExpressSelect(selectVariant);
-                    WriteAccessorMethod(generator, selectType, bGet);
+                    var selectName = ExpressSchema.GetNameOfDeclaration(selectVariant);
+                    WriteSelectAccessorMethod(generator, selectName, bGet);
                     break;
 
                 case enum_express_declaration.__ENTITY:
@@ -276,13 +296,10 @@ namespace RDFWrappers
         {
             ExpressDefinedType.Foundation foundation = null;
             if (!generator.m_writtenDefinedTyes.TryGetValue(definedType.declaration, out foundation))
-                foundation = null;
-            if (foundation == null)
             {
                 Console.WriteLine("SLECT " + name + " - DefinedType is not supported: " + definedType.name);
                 return; //>>>>>>>>>>>>>>>>>>
             }
-
 
             if (foundation.aggrType != enum_express_aggr.__NONE)
             {
@@ -290,7 +307,7 @@ namespace RDFWrappers
             }
             else
             {
-                switch (foundation.domainType)
+                switch (foundation.declarationType)
                 {
                     case enum_express_declaration.__UNDEF: //based on primitive
                         switch (foundation.attrType)
@@ -305,8 +322,12 @@ namespace RDFWrappers
                         }
                         break;
 
+                    case enum_express_declaration.__SELECT:
+                        WriteSelectAccessorMethod(generator, definedType.name, bGet);
+                        break;
+
                     default:
-                        Console.WriteLine("SLECT " + name + " - DefinedType " + definedType.name + " is " + foundation.domainType.ToString()); ;
+                        Console.WriteLine("SLECT " + name + " - DefinedType " + definedType.name + " is " + foundation.declarationType.ToString());
                         break;
                 }
             }
@@ -386,7 +407,7 @@ namespace RDFWrappers
                     var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationPutArrayText : Generator.Template.SelectAggregationPutArraySimple;
                     generator.WriteByTemplate(tpl);
 
-                    if (foundation.domainType == enum_express_declaration.__ENTITY)
+                    if (foundation.declarationType == enum_express_declaration.__ENTITY)
                     {
                         generator.m_replacements[Generator.KWD_SimpleType] = "IntData";
                         generator.WriteByTemplate(Generator.Template.SelectAggregationPutArraySimple);
@@ -395,10 +416,10 @@ namespace RDFWrappers
             }
         }
 
-        private void WriteAccessorMethod(Generator generator, ExpressSelect selectType, bool? bGet)
+        private void WriteSelectAccessorMethod(Generator generator, string selectName, bool? bGet)
         {
             var saveSelect = generator.m_replacements[Generator.KWD_TYPE_NAME];
-            generator.m_replacements[Generator.KWD_TYPE_NAME] = selectType.name;
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = selectName;
 
             generator.m_replacements[Generator.KWD_nestedSelectAccess] = bGet.HasValue ? (bGet.Value ? "get" : "put") : "";
 
@@ -414,7 +435,7 @@ namespace RDFWrappers
 
             str.AppendLine(string.Format("{0}:", name));
 
-            foreach (var variant in GetVariants(false))
+            foreach (var variant in GetVariants())
             {
                 var name = ExpressSchema.GetNameOfDeclaration(variant);
                 var type = ifcengine.engiGetDeclarationType(variant);

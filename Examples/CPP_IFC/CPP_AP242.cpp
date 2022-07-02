@@ -7,8 +7,8 @@ static void test_multi_parent();
 
 extern void AP242_test()
 {
-    test_list3();
     test_multi_parent();
+    test_list3();
 }
 
 
@@ -87,6 +87,22 @@ static void test_list3()
     bag_of_composite_curve bag;
     segment.get_using_curves(bag);
     assert(bag.empty());
+
+    //defined types on selects
+    auto equiv = equivalence_notable_instance::Create(model);
+    
+    list_of_equivalence_detected_difference_select lstCompared;
+    equiv.get_compared_elements(lstCompared);
+    assert(lstCompared.size() == 0);
+
+    auto vertexPoint = vertex_point::Create(model);
+    equivalence_detected_difference_select valCompared1 (equiv);
+    valCompared1._a3ms_inspected_equivalence_element_select().put_vertex_point(vertexPoint);
+    lstCompared.push_back(valCompared1);
+    equiv.put_compared_elements(lstCompared);
+
+    equiv.get_compared_elements(lstCompared);
+    assert(lstCompared.size() == 1);
 
     //
     sdaiSaveModelBN(model, "Test.ap");
