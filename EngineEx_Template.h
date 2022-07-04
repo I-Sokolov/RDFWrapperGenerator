@@ -139,8 +139,9 @@ namespace NAMESPACE_NAME
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
                     T val = (T) 0;
-                    sdaiGetADBValue(adb, sdaiType, &val);
-                    ret = val;
+                    if (sdaiGetADBValue(adb, sdaiType, &val)) {
+                        ret = val;
+                    }
                 }
             }
             return ret;
@@ -162,7 +163,9 @@ namespace NAMESPACE_NAME
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
-                    sdaiGetADBValue(adb, sdaiSTRING, &ret);
+                    if (!sdaiGetADBValue(adb, sdaiSTRING, &ret)){
+                        ret = NULL;
+                    }
                 }
             }
             return ret;
@@ -185,8 +188,9 @@ namespace NAMESPACE_NAME
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
                     TextData value = NULL;
-                    sdaiGetADBValue(adb, sdaiENUM, &value);
-                    ret = EnumerationNameToIndex(rEnumValues, value);
+                    if (sdaiGetADBValue(adb, sdaiENUM, &value)) {
+                        ret = EnumerationNameToIndex(rEnumValues, value);
+                    }
                 }
             }
             return ret;
@@ -207,9 +211,10 @@ namespace NAMESPACE_NAME
 
             if (void* adb = ADB()) {
                 IntData inst = 0;
-                sdaiGetADBValue(adb, sdaiINSTANCE, &inst);
-                if (typeName == NULL || sdaiIsKindOfBN(inst, typeName)) {
-                    ret = inst;
+                if (sdaiGetADBValue(adb, sdaiINSTANCE, &inst)) {
+                    if (typeName == NULL || sdaiIsKindOfBN(inst, typeName)) {
+                        ret = inst;
+                    }
                 }
             }
             return ret;
@@ -235,7 +240,9 @@ namespace NAMESPACE_NAME
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
-                    sdaiGetADBValue(adb, sdaiAGGR, &ret);
+                    if (!sdaiGetADBValue(adb, sdaiAGGR, &ret)) {
+                        ret = NULL;
+                    }
                 }
             }
             return ret;
