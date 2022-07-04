@@ -105,8 +105,32 @@ static void test_list3()
     lstCompared.clear();
     equiv.get_compared_elements(lstCompared);
     assert(lstCompared.size());
-    auto vertexPointName = lstCompared.front()._a3ms_inspected_equivalence_element_select().get_vertex_point().get_name();
-    assert(!strcmp(vertexPointName, "Test vertex point"));
+    auto test = lstCompared.front()._a3ms_inspected_equivalence_element_select().get_vertex_point().get_name();
+    assert(!strcmp(test, "Test vertex point"));
+
+    //
+    set_of_ir_usage_item lstUsageItems;
+    auto appliedUsageRights = applied_usage_right::Create(model);
+    appliedUsageRights.get_items(lstUsageItems);
+    assert(lstUsageItems.size() == 0);
+
+
+    auto usageItem = applied_classification_assignment::Create(model);
+    auto role = classification_role::Create(model);
+    role.put_name("Test role");
+    usageItem.put_role(role);    
+
+    lstUsageItems.push_back(ir_usage_item());
+    lstUsageItems.back().put_applied_classification_assignment(usageItem);
+
+    appliedUsageRights.put_items(lstUsageItems);
+
+    lstUsageItems.clear();
+    appliedUsageRights.get_items(lstUsageItems);
+    assert(lstUsageItems.size() == 1);
+    assert(lstUsageItems.back().get_action() == 0);
+    test = lstUsageItems.back().get_applied_classification_assignment().get_role().get_name();
+    assert(!strcmp(test, "Test role"));
 
     //
     sdaiSaveModelBN(model, "Test.ap");
