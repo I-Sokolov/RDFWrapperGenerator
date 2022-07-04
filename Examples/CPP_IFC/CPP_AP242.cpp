@@ -96,13 +96,17 @@ static void test_list3()
     assert(lstCompared.size() == 0);
 
     auto vertexPoint = vertex_point::Create(model);
-    equivalence_detected_difference_select valCompared1 (equiv);
+    vertexPoint.put_name("Test vertex point");
+    equivalence_detected_difference_select valCompared1;
     valCompared1._a3ms_inspected_equivalence_element_select().put_vertex_point(vertexPoint);
     lstCompared.push_back(valCompared1);
     equiv.put_compared_elements(lstCompared);
 
+    lstCompared.clear();
     equiv.get_compared_elements(lstCompared);
-    assert(lstCompared.size() == 1);
+    assert(lstCompared.size());
+    auto vertexPointName = lstCompared.front()._a3ms_inspected_equivalence_element_select().get_vertex_point().get_name();
+    assert(!strcmp(vertexPointName, "Test vertex point"));
 
     //
     sdaiSaveModelBN(model, "Test.ap");
