@@ -107,9 +107,7 @@ extern void IFC4_test()
     dval = getMeasureValue.get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
 
-    //can do even this... but it may be tricky - 
-    // !detached select will not follows instance changes, but changing it will change instance - gets a copy, in futire it works like setter
-    // see below detached select behaviour
+    // see below detached select test
     IfcMeasureValue measureValue_detachedSelect (measureWithUnit, "ValueComponent");
     dval = measureValue_detachedSelect.get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
@@ -141,9 +139,9 @@ extern void IFC4_test()
     ASSERT(as_double.Value() == 0.5 && 0 == strcmp(as_text, "0.500000") && as_int.Value() == 0 && as_bool.IsNull());
 
     //detached select behaviour
-    //detached select was not changed when instance changed
+    //detached select is also changed when instance changed
     dval = measureValue_detachedSelect.get_IfcRatioMeasure();
-    ASSERT(dval.IsNull());
+    ASSERT(dval.Value()==0.5);
     //but changing the detached select will change host instance
     measureValue_detachedSelect.put_IfcAreaMeasure(2.7);
     dval = measureValue_detachedSelect.get_IfcAreaMeasure();
