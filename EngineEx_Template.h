@@ -101,14 +101,16 @@ namespace NAMESPACE_NAME
         }
 
     protected:
-        Select(SdaiInstance instance, TextData attrName, void* adb = NULL)
+        Select(SdaiInstance instance, TextData attrName = NULL, void* adb = NULL)
             : m_instance(instance), m_attrName(attrName), m_adb(adb), m_outerSelect (NULL)
         {
+            assert(instance);
         }
 
         Select(Select* outer)
             : m_instance(NULL), m_attrName(NULL), m_adb(NULL), m_outerSelect(outer)
         {
+            assert(outer);
             if (m_outerSelect) {
                 m_instance = m_outerSelect->m_instance;
             }
@@ -609,8 +611,8 @@ namespace NAMESPACE_NAME
     class GEN_TYPE_NAME_accessor : public Select
     {
     public:
-        GEN_TYPE_NAME_accessor(SdaiInstance instance, TextData attrName, void* adb=NULL) : Select(instance, attrName, adb) {}
-        GEN_TYPE_NAME_accessor(Select* outer = NULL) : Select(outer) {}
+        GEN_TYPE_NAME_accessor(SdaiInstance instance, TextData attrName = NULL, void* adb=NULL) : Select(instance, attrName, adb) {}
+        GEN_TYPE_NAME_accessor(Select* outer) : Select(outer) {}
 //## SelectSimpleGet
         Nullable<SimpleType> get_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
 //## SelectSimplePut

@@ -97,7 +97,7 @@ static void test_list3()
 
     auto vertexPoint = vertex_point::Create(model);
     vertexPoint.put_name("Test vertex point");
-    equivalence_detected_difference_select valCompared1;
+    equivalence_detected_difference_select valCompared1 (equiv);
     valCompared1._a3ms_inspected_equivalence_element_select().put_vertex_point(vertexPoint);
     lstCompared.push_back(valCompared1);
     equiv.put_compared_elements(lstCompared);
@@ -120,7 +120,7 @@ static void test_list3()
     role.put_name("Test role");
     usageItem.put_role(role);    
 
-    lstUsageItems.push_back(ir_usage_item());
+    lstUsageItems.push_back(ir_usage_item(appliedUsageRights));
     lstUsageItems.back().put_applied_classification_assignment(usageItem);
 
     appliedUsageRights.put_items(lstUsageItems);

@@ -381,7 +381,7 @@ extern void IFC4_test()
     //
     segments.clear();
     
-    IfcSegmentIndexSelect segment;
+    IfcSegmentIndexSelect segment (poly);
     segment.put_IfcLineIndex(line, 2);
     segments.push_back(segment);
     
