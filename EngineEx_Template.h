@@ -77,11 +77,10 @@ namespace NAMESPACE_NAME
     {
     protected:
         SdaiInstance m_instance;
+        TextData m_attrName;
 
     private:
-        TextData m_attrName;
         void* m_adb;
-
         Select* m_outerSelect;
 
     public:
@@ -639,13 +638,13 @@ namespace NAMESPACE_NAME
 //## SelectNested
         GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return GEN_TYPE_NAME_accessor(this); }
 //## SelectGetAsDouble
-        Nullable<double> as_double() { return getSimpleValue<double>(NULL, sdaiREAL); }
+        Nullable<double> as_double() { double val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiREAL, &val)) return val; else return Nullable<double>(); }
 //## SelectGetAsInt
-        Nullable<IntData> as_int() { return getSimpleValue<IntData>(NULL, sdaiINTEGER); }
+        Nullable<IntData> as_int() { IntData val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINTEGER, &val)) return val; else return Nullable<IntData>(); }
 //## SelectGetAsBool
-        Nullable<bool> as_bool() { return getSimpleValue<bool>(NULL, sdaiBOOLEAN); }
+        Nullable<bool> as_bool() { bool val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiBOOLEAN, &val)) return val; else return Nullable<bool>(); }
 //## SelectGetAsText
-        TextData as_text() { return getTextValue(NULL); }
+        TextData as_text() { TextData val = NULL; sdaiGetAttrBN(m_instance, m_attrName, sdaiSTRING, &val); return val; }
 //## SelectGetAsEntity
         SdaiInstance as_instance() { return getEntityInstance(NULL); }
 //## SelectAccessorEnd
