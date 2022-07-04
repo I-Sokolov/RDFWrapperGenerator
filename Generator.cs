@@ -495,7 +495,7 @@ namespace RDFWrappers
             }
             else if (attr.domain == 0 && attr.attrType == RDF.enum_express_attr_type.__LOGICAL)
             {
-                WriteEnumAttribute(attr, "LOGICAL", "LOGICAL_VALUE_NAMES");
+                WriteEnumAttribute(attr, "LOGICAL_VALUE", "LOGICAL_VALUE_");
             }
             else
             {
@@ -549,10 +549,10 @@ namespace RDFWrappers
         }
 
 
-        public void WriteEnumAttribute(ExpressAttribute attr, string enumName, string enumValuesArrayName)
+        public void WriteEnumAttribute(ExpressAttribute attr, string enumName, string valuesArrayName)
         {
             m_replacements[KWD_ENUM_TYPE] = enumName;
-            m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = enumValuesArrayName;
+            m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = valuesArrayName;
             WriteGetPut(Template.AttributeEnumGet, Template.AttributeEnumPut, attr.inverse);
         }
 

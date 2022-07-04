@@ -191,10 +191,16 @@ namespace RDFWrappers
                 template = Generator.Template.AggregationOfInstance;
                 sdaiType = "sdaiINSTANCE";
             }
-            else if ((enumeration = typeDef.IsEnumeration())!=null)
+            else if ((enumeration = typeDef.IsEnumeration()) != null)
             {
                 elemType = enumeration.name;
                 sdaiType = "sdaiENUM";
+                template = Generator.Template.AggregationOfEnum;
+            }
+            else if (typeDef.domain == 0 && typeDef.attrType == RDF.enum_express_attr_type.__LOGICAL)
+            {
+                elemType = "LOGICAL_VALUE";
+                sdaiType = "sdaiLOGICAL";
                 template = Generator.Template.AggregationOfEnum;
             }
             else if ((select = typeDef.IsSelect()) != null)
@@ -203,16 +209,16 @@ namespace RDFWrappers
                 elemType = select.name;
                 sdaiType = null;
             }
-            else if ((definedType = typeDef.IsDefinedType())!=null)
+            else if ((definedType = typeDef.IsDefinedType()) != null)
             {
                 ExpressDefinedType.Foundation foundation = null;
-                if (generator.m_writtenDefinedTyes.TryGetValue (definedType.declaration, out foundation))
+                if (generator.m_writtenDefinedTyes.TryGetValue(definedType.declaration, out foundation))
                 {
                     switch (foundation.declarationType)
                     {
                         case enum_express_declaration.__ENTITY:
                             template = Generator.Template.AggregationOfInstance;
-                            System.Diagnostics.Debug.Assert(false, "not tested"); 
+                            System.Diagnostics.Debug.Assert(false, "not tested");
                             break;
                         case enum_express_declaration.__ENUM:
                             template = Generator.Template.AggregationOfEnum;

@@ -119,7 +119,7 @@ namespace RDFWrappers
             }
             else if (attrType == RDF.enum_express_attr_type.__LOGICAL)
             {
-                generator.m_replacements[Generator.KWD_SimpleType] = "LOGICAL";
+                generator.m_replacements[Generator.KWD_SimpleType] = "LOGICAL_VALUE";
             }
             else
             {
@@ -171,7 +171,7 @@ namespace RDFWrappers
                     return;
 
                 case RDF.enum_express_attr_type.__LOGICAL:
-                    generator.WriteEnumAttribute(attr, name, "LOGICAL_VALUE_NAMES");
+                    generator.WriteEnumAttribute(attr, name, "LOGICAL_VALUE_");
                     return;
             }
 

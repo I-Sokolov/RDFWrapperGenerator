@@ -133,6 +133,23 @@ static void test_list3()
     assert(!strcmp(test, "Test role"));
 
     //
+    ListOfLOGICAL_VALUE lstLogical;
+    auto listedLogical = listed_logical_data::Create(model);
+    listedLogical.get_values(lstLogical);
+    assert(lstLogical.size() == 0);
+
+    lstLogical.push_back(LOGICAL_VALUE::True);
+    lstLogical.push_back(LOGICAL_VALUE::False);
+    lstLogical.push_back(LOGICAL_VALUE::Unknown);
+
+    listedLogical.put_values(lstLogical);
+
+    lstLogical.clear();
+    listedLogical.get_values(lstLogical);
+    assert(lstLogical.size() == 3 && lstLogical.front() == LOGICAL_VALUE::True && lstLogical.back() == LOGICAL_VALUE::Unknown);
+
+
+    //
     sdaiSaveModelBN(model, "Test.ap");
     sdaiCloseModel(model);
 

@@ -49,8 +49,8 @@ namespace NAMESPACE_NAME
 
     //
     //
-    enum class LOGICAL { False=0, True, Unknown };
-    static TextData LOGICAL_VALUE_NAMES[] = {"F", "T", "U", NULL};
+    enum class LOGICAL_VALUE { False=0, True, Unknown };
+    static TextData LOGICAL_VALUE_[] = {"F", "T", "U", NULL};
 
     //
     //

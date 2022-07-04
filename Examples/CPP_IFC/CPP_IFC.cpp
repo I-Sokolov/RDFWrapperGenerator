@@ -236,9 +236,9 @@ extern void IFC4_test()
     auto relIntersect = IfcRelInterferesElements::Create(ifcModel);
     ifcLogical = relIntersect.get_ImpliedOrder();
     ASSERT(ifcLogical.IsNull());
-    relIntersect.put_ImpliedOrder(LOGICAL::False);
+    relIntersect.put_ImpliedOrder(LOGICAL_VALUE::False);
     ifcLogical = relIntersect.get_ImpliedOrder();
-    ASSERT(ifcLogical.Value() == LOGICAL::False);
+    ASSERT(ifcLogical.Value() == LOGICAL_VALUE::False);
 
     //
     // Aggregations
@@ -383,7 +383,7 @@ extern void IFC4_test()
     //
     segments.clear();
     
-    IfcSegmentIndexSelect segment (poly);//select needs to know entity
+    IfcSegmentIndexSelect segment;
     segment.put_IfcLineIndex(line, 2);
     segments.push_back(segment);
     

@@ -21,67 +21,23 @@ namespace RDFWrappers
         private string DefiningEntity { get { return ExpressSchema.GetNameOfDeclaration(definingEntity); } }
         //private string Domain { get { return ExpressSchema.GetNameOfDeclaration(domain); } }
 
-        /*
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string GetSdaiType()
-        {
-            switch (attrType)
-            {
-                case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
-                    return "sdaiINSTANCE";
-
-                case enum_express_attr_type.__ENUMERATION:
-                    return "sdaiENUM";
-
-                case enum_express_attr_type.__SELECT:
-                case enum_express_attr_type.__BINARY:
-                case enum_express_attr_type.__BINARY_32:
-                    System.Diagnostics.Debug.Assert(false);
-                    return null;
-
-                case enum_express_attr_type.__BOOLEAN:
-                    return "sdaiBOOLEAN";
-
-                case enum_express_attr_type.__INTEGER:
-                    return "sdaiINTEGER";
-
-                case enum_express_attr_type.__LOGICAL:
-                    return "sdaiLOGICAL";
-
-                case enum_express_attr_type.__REAL:
-                case enum_express_attr_type.__NUMBER:
-                    return "sdaiREAL";
-
-                case enum_express_attr_type.__STRING:
-                    return "sdaiSTRING";
-
-                default:
-                    System.Diagnostics.Debug.Assert(false);
-                    return null;
-            }
-        }
-        */
-
-    override public string ToString()
+        override public string ToString()
         {
             var str = new StringBuilder();
-                
-            str.Append (name + ": ");
+
+            str.Append(name + ": ");
 
             if (inverse)
             {
-                str.Append ("inverse ");
+                str.Append("inverse ");
             }
 
-            str.Append (base.ToString());
+            str.Append(base.ToString());
 
             System.Diagnostics.Debug.Assert(definingEntity != 0);
-            str.Append (" defined by " + DefiningEntity);
+            str.Append(" defined by " + DefiningEntity);
 
-            return str.ToString (); 
+            return str.ToString();
         }
 
     }

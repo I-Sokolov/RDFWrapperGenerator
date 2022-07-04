@@ -313,7 +313,7 @@ namespace RDFWrappers
                         switch (foundation.attrType)
                         {
                             case enum_express_attr_type.__LOGICAL:
-                                WriteAccessorEnumMethod(generator, definedType.name, "LOGICAL_VALUE_NAMES", bGet);
+                                WriteAccessorEnumMethod(generator, definedType.name, "LOGICAL_VALUE_", bGet);
                                 break;
 
                             default:
