@@ -167,15 +167,11 @@ namespace RDFWrappers
             Foundation foundation;
             if (!generator.m_writtenDefinedTyes.TryGetValue(declaration, out foundation))
             {
-                return; //defined type is not supported, message already done
+                return; //defined type is not supported, message for definded type already done
             }
 
             switch (attrType)
             {
-                case RDF.enum_express_attr_type.__BINARY:
-                case RDF.enum_express_attr_type.__BINARY_32:
-                    return;
-
                 case RDF.enum_express_attr_type.__LOGICAL:
                     generator.WriteEnumAttribute(attr, name, "LOGICAL_VALUE_");
                     return;

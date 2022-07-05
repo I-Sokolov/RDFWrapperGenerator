@@ -715,13 +715,13 @@ namespace NAMESPACE_NAME
     };
 
 //## SelectEntityGetImplementation
-    REF_ENTITY GEN_TYPE_NAME_accessor::get_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
+    inline REF_ENTITY GEN_TYPE_NAME_accessor::get_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
 //## SelectEntityPutImplementation
-    void GEN_TYPE_NAME_accessor::put_REF_ENTITY(REF_ENTITY inst) { putEntityInstance("TypeNameUpper", inst); }
+    inline void GEN_TYPE_NAME_accessor::put_REF_ENTITY(REF_ENTITY inst) { putEntityInstance("TypeNameUpper", inst); }
 //## AttributeEntityGetImplementation
-    REF_ENTITY ENTITY_NAME::get_Attr_NAME() { SdaiInstance inst = 0; sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, &inst); return inst; }
+    inline REF_ENTITY ENTITY_NAME::get_Attr_NAME() { SdaiInstance inst = 0; sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, &inst); return inst; }
 //## AttributeEntityPutImplementation
-    void ENTITY_NAME::put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, (void*)i); }
+    inline void ENTITY_NAME::put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst;  sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiINSTANCE, (void*)i); }
 //## TEMPLATE: EndFile template part
 
 }
