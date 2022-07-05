@@ -479,7 +479,7 @@ namespace RDFWrappers
 
             if ((definedType = attr.IsDefinedType()) != null)
             {
-                definedType.WriteAttribute(this, attr);
+                definedType.WriteSingleAttribute(this, attr);
             }
             else if (attr.IsEntityReference(out referncedEntity))
             {
@@ -491,7 +491,7 @@ namespace RDFWrappers
             }
             else if ((select = attr.IsSelect()) != null)
             {
-                select.WriteAttribute(this, attr);
+                WriteSelectAttribute(attr, select.name);
             }
             else if (attr.domain == 0 && attr.attrType == RDF.enum_express_attr_type.__LOGICAL)
             {
@@ -548,13 +548,47 @@ namespace RDFWrappers
             m_implementations.Append(impl);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="enumName"></param>
+        /// <param name="valuesArrayName"></param>
         public void WriteEnumAttribute(ExpressAttribute attr, string enumName, string valuesArrayName)
         {
             m_replacements[KWD_ENUM_TYPE] = enumName;
             m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = valuesArrayName;
             WriteGetPut(Template.AttributeEnumGet, Template.AttributeEnumPut, attr.inverse);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="attr"></param>
+        public void WriteSelectAttribute(ExpressAttribute attr, string selectName)
+        {
+            Generator generator = this;
+
+            generator.m_writer.WriteLine();
+
+            generator.m_replacements[Generator.KWD_TYPE_NAME] = Generator.ValidateIdentifier(selectName);
+
+            generator.m_replacements[Generator.KWD_GETPUT] = "get";
+            generator.m_replacements[Generator.KWD_ACCESSOR] = "_get";
+            generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
+
+            if (!attr.inverse)
+            {
+                generator.m_replacements[Generator.KWD_GETPUT] = "put";
+                generator.m_replacements[Generator.KWD_ACCESSOR] = "_put";
+                generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
+            }
+
+            generator.m_replacements.Remove(Generator.KWD_GETPUT);
+            generator.m_replacements.Remove(Generator.KWD_ACCESSOR);
+        }
+
 
         /// <summary>
         /// 

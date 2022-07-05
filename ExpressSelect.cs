@@ -121,26 +121,6 @@ namespace RDFWrappers
 
         }
 
-        public void WriteAttribute(Generator generator, ExpressAttribute attr)
-        {
-            generator.m_writer.WriteLine();
-
-            generator.m_replacements[Generator.KWD_TYPE_NAME] = Generator.ValidateIdentifier (name);
-
-            generator.m_replacements[Generator.KWD_GETPUT] = "get";
-            generator.m_replacements[Generator.KWD_ACCESSOR] = "_get";
-            generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
-
-            if (!attr.inverse)
-            {
-                generator.m_replacements[Generator.KWD_GETPUT] = "put";
-                generator.m_replacements[Generator.KWD_ACCESSOR] = "_put";
-                generator.WriteByTemplate(Generator.Template.AttributeSelectAccessor);
-            }
-
-            generator.m_replacements.Remove(Generator.KWD_GETPUT);
-            generator.m_replacements.Remove(Generator.KWD_ACCESSOR);
-        }
 
         private void WriteNestedSelect (Generator generator, ExpressHandle declaration, HashSet<ExpressHandle> visitedSelects)
         {

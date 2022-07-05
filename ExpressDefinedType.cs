@@ -162,8 +162,14 @@ namespace RDFWrappers
             return foundation;
         }
 
-        public void WriteAttribute (Generator generator, ExpressAttribute attr)
+        public void WriteSingleAttribute(Generator generator, ExpressAttribute attr)
         {
+            Foundation foundation;
+            if (!generator.m_writtenDefinedTyes.TryGetValue(declaration, out foundation))
+            {
+                return; //defined type is not supported, message already done
+            }
+
             switch (attrType)
             {
                 case RDF.enum_express_attr_type.__BINARY:
@@ -173,9 +179,13 @@ namespace RDFWrappers
                 case RDF.enum_express_attr_type.__LOGICAL:
                     generator.WriteEnumAttribute(attr, name, "LOGICAL_VALUE_");
                     return;
+
+                case enum_express_attr_type.__SELECT:
+                    generator.WriteSelectAttribute(attr, name);
+                    return;
             }
 
-            Console.WriteLine("Attribute '" + attr.name + "' is not supporrted, defined type: " + ToString() + ", defining entity " + ExpressSchema.GetNameOfDeclaration(attr.definingEntity));
+            Console.WriteLine("Attribute '" + attr.name + "' is not supported. Defined type: " + ToString() + " based on " + foundation.declarationType.ToString() + ", defining entity " + ExpressSchema.GetNameOfDeclaration(attr.definingEntity));
         }
 
         public override string ToString()
