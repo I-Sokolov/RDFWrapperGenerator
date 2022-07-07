@@ -38,12 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="engine.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="O:\DevArea\RDF\a.out\x64\Debug\ifcengine.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
