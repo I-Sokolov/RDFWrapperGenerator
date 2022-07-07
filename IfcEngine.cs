@@ -139,7 +139,39 @@ namespace RDF
 		}
 	}//COLOR
 
-    class ifcengine
+	public enum enum_express_declaration : byte
+	{
+		__UNDEF = 0,
+		__ENTITY,
+		__ENUM,
+		__SELECT,
+		__DEFINED_TYPE
+	};
+
+	public enum enum_express_attr_type : byte
+	{
+		__NONE = 0, //attribute type is defined by reference domain entity
+		__BINARY,
+		__BINARY_32,
+		__BOOLEAN,
+		__ENUMERATION,
+		__INTEGER,
+		__LOGICAL,
+		__NUMBER,
+		__REAL,
+		__SELECT,
+		__STRING
+	};
+
+	public enum enum_express_aggr : byte
+	{
+		__NONE = 0,
+		__ARRAY,
+		__BAG,
+		__LIST,
+		__SET
+	};
+	class ifcengine
     {
         public const int_t flagbit0 = 1;           // 2^^0    0000.0000..0000.0001
         public const int_t flagbit1 = 2;           // 2^^1    0000.0000..0000.0010
@@ -183,12 +215,6 @@ namespace RDF
         //
         //  File IO API Calls
         //
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate Int64 ReadCallBackFunction(IntPtr value);
-
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        public delegate void WriteCallBackFunction(IntPtr value, Int64 size);
 
 		/// <summary>
 		///		sdaiCreateModelBN                           (http://rdf.bg/ifcdoc/CS64/sdaiCreateModelBN.html)
@@ -446,7 +472,7 @@ namespace RDF
 		///	This call returns a type of the EXPRESS schema declarations from its handle.
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDeclarationType")]
-		public static extern int_t engiGetDeclarationType(int_t declaration);
+		public static extern enum_express_declaration engiGetDeclarationType(int_t declaration);
 
 		/// <summary>
 		///		engiGetEnumerationElement                   (http://rdf.bg/ifcdoc/CS64/engiGetEnumerationElement.html)
@@ -472,7 +498,7 @@ namespace RDF
 		///	This call returns a simple type for defined type handle and can inquire referenced type, if any
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetDefinedType")]
-		public static extern int_t engiGetDefinedType(int_t definedType, out int_t referencedDeclaration, out int_t aggregationDescriptor);
+		public static extern enum_express_attr_type engiGetDefinedType(int_t definedType, out int_t referencedDeclaration, out int_t aggregationDescriptor);
 
 		/// <summary>
 		///		sdaiGetEntity                               (http://rdf.bg/ifcdoc/CS64/sdaiGetEntity.html)
@@ -534,10 +560,10 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityArgumentName")]
 		public static extern void engiGetEntityArgumentName(int_t entity, int_t index, int_t valueType, out IntPtr argumentName);
 
-		public static string engiGetEntityArgumentName(int_t entity, int_t index, int_t valueType)
+		public static string engiGetEntityArgumentName(int_t entity, int_t index)
 		{
 			IntPtr argumentName = IntPtr.Zero;
-			RDF.engine.engiGetEntityArgumentName(int_tentity, int_tindex, int_tvalueType, out argumentName);
+			engiGetEntityArgumentName(entity, index, sdaiSTRING, out argumentName); //marshaline expects ANSI
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(argumentName);
 		}
 
@@ -592,10 +618,10 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityName")]
 		public static extern void engiGetEntityName(int_t entity, int_t valueType, out IntPtr entityName);
 
-		public static string engiGetEntityName(int_t entity, int_t valueType)
+		public static string engiGetEntityName(int_t entity)
 		{
 			IntPtr entityName = IntPtr.Zero;
-			RDF.engine.engiGetEntityName(int_tentity, int_tvalueType, out entityName);
+			engiGetEntityName(entity, sdaiSTRING, out entityName); //marshaline expects ANSI
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(entityName);
 		}
 
@@ -723,7 +749,7 @@ namespace RDF
 		public static string engiGetAttrDomain(int_t attribute)
 		{
 			IntPtr domainName = IntPtr.Zero;
-			RDF.engine.engiGetAttrDomain(int_tattribute, out domainName);
+			engiGetAttrDomain(attribute, out domainName);
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(domainName);
 		}
 
@@ -741,7 +767,7 @@ namespace RDF
 		public static string engiGetAttrDomainBN(int_t entity, byte[] attributeName)
 		{
 			IntPtr domainName = IntPtr.Zero;
-			RDF.engine.engiGetAttrDomainBN(int_tentity, byte[]attributeName, out domainName);
+			engiGetAttrDomainBN(entity, attributeName, out domainName);
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(domainName);
 		}
 
@@ -753,10 +779,10 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEnumerationValue")]
 		public static extern void engiGetEnumerationValue(int_t attribute, int_t index, int_t valueType, out IntPtr enumerationValue);
 
-		public static string engiGetEnumerationValue(int_t attribute, int_t index, int_t valueType)
+		public static string engiGetEnumerationValue(int_t attribute, int_t index)
 		{
 			IntPtr enumerationValue = IntPtr.Zero;
-			RDF.engine.engiGetEnumerationValue(int_tattribute, int_tindex, int_tvalueType, out enumerationValue);
+			engiGetEnumerationValue(attribute, index, sdaiSTRING, out enumerationValue); //marshaline expects ANSI
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(enumerationValue);
 		}
 
@@ -766,7 +792,7 @@ namespace RDF
 		///	...
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetEntityAttribute")]
-		public static extern byte engiGetEntityAttribute(int_t entity, int_t index, out IntPtr name, out int_t definingEntity, out byte inverse, ???? attrType, out int_t domainEntity, out int_t aggregationDescriptor, out byte optional, out byte unique);
+		public static extern byte engiGetEntityAttribute(int_t entity, int_t index, out IntPtr name, out int_t definingEntity, out byte inverse, out enum_express_attr_type attrType, out int_t domainEntity, out int_t aggregationDescriptor, out byte optional, out byte unique);
 
 		/// <summary>
 		///		engiGetAggregation                          (http://rdf.bg/ifcdoc/CS64/engiGetAggregation.html)
@@ -774,7 +800,7 @@ namespace RDF
 		///	...
 		/// </summary>
 		[DllImport(IFCEngineDLL, EntryPoint = "engiGetAggregation")]
-		public static extern void engiGetAggregation(int_t aggregationDescriptor, ???? aggrType, out int_t cardinalityMin, out int_t cardinalityMax, out int_t nextAggregationLevelDescriptor);
+		public static extern void engiGetAggregation(int_t aggregationDescriptor, out enum_express_aggr aggrType, out int_t cardinalityMin, out int_t cardinalityMax, out int_t nextAggregationLevelDescriptor);
 
         //
         //  Instance Header API Calls
@@ -852,7 +878,7 @@ namespace RDF
 		public static string sdaiGetADBTypePathx(int_t ADB, int_t typeNameNumber)
 		{
 			IntPtr path = IntPtr.Zero;
-			RDF.engine.sdaiGetADBTypePathx(int_tADB, int_ttypeNameNumber, out path);
+			sdaiGetADBTypePathx(ADB, typeNameNumber, out path);
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(path);
 		}
 
@@ -1411,6 +1437,9 @@ namespace RDF
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiPutAttrBN")]
 		public static extern void sdaiPutAttrBN(int_t instance, byte[] attributeName, int_t valueType, byte[] value);
 
+		[DllImport(IFCEngineDLL, EntryPoint = "sdaiPutAttrBN")]
+		public static extern void sdaiPutAttrBN(int_t instance, string attributeName, int_t valueType, string value);
+
 		/// <summary>
 		///		sdaiUnsetAttr                               (http://rdf.bg/ifcdoc/CS64/sdaiUnsetAttr.html)
 		///
@@ -1601,7 +1630,7 @@ namespace RDF
 		public static string internalGetXMLID(int_t instance)
 		{
 			IntPtr XMLID = IntPtr.Zero;
-			RDF.engine.internalGetXMLID(int_tinstance, out XMLID);
+			internalGetXMLID(instance, out XMLID);
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(XMLID);
 		}
 
@@ -1687,7 +1716,7 @@ namespace RDF
 		public static string xxxxGetAttrNameByIndex(int_t instance, int_t index)
 		{
 			IntPtr name = IntPtr.Zero;
-			RDF.engine.xxxxGetAttrNameByIndex(int_tinstance, int_tindex, out name);
+			xxxxGetAttrNameByIndex(instance, index, out name);
 			return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(name);
 		}
 

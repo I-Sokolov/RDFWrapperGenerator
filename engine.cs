@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace RDF
 {
+#if not_now
 	///	<summary>
 	///	ENGINE FORMAT SPECIFICATION
 	///	</summary>
@@ -133,8 +134,9 @@ namespace RDF
 			return	r;
 		}
 	}//COLOR
+#endif
 
-    class engine
+	class engine
     {
         public const Int64 OBJECTPROPERTY_TYPE             = 1;
         public const Int64 DATATYPEPROPERTY_TYPE_BOOLEAN   = 2;

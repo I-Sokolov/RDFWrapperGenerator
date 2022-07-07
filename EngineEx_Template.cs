@@ -65,9 +65,9 @@ using SimpleType = System.Double;
 
 //## GetSimpleAttribute
         
-        public SimpleType? get_ATTR_NAME() { SimpleType value; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, out value)) return value; else return null; } 
+        //public SimpleType? get_ATTR_NAME() { SimpleType value; if (0 != ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, out value)) return value; else return null; } 
 //## SetSimpleAttribute
-        public void set_ATTR_NAME(SimpleType value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, ref value); }
+        //public void set_ATTR_NAME(SimpleType value) { ifcengine.sdaiPutAttrBN (m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, ref value); }
 //## GetSimpleAttributeString
         
         public string get_attr_NAME() { return getString("ATTR_NAME"); } 
@@ -108,7 +108,7 @@ using SimpleType = System.Double;
         protected Entity(SdaiInstance instance, string entityName)
         {
             m_instance = instance;
-            System.Diagnostics.Debug.Assert(entityName == null/*do not check*/ || ifcengine.IsInstanceOfClass(instance, entityName));
+            //System.Diagnostics.Debug.Assert(entityName == null/*do not check*/ || ifcengine.sdaiIsKindOf(instance, entityName));
         }
 
 
