@@ -2,6 +2,7 @@
   "profiles": {
     "RDFWrappers": {
       "commandName": "Project",
+      "commandLineArgs": "--embedded",
       "nativeDebugging": true
     }
   }
