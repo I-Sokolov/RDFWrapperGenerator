@@ -9,7 +9,7 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    public class ExpressDefinedType : TypeDef
+    public class DefinedType : TypeDef
     {
         public class Foundation
             {
@@ -21,13 +21,13 @@ namespace RDFWrappers
         public string                     name;
         public ExpressHandle              declaration;
 
-        public ExpressDefinedType (ExpressHandle declaration)
+        public DefinedType (ExpressHandle declaration)
         {
             this.declaration = declaration;
 
             System.Diagnostics.Debug.Assert(ifcengine.engiGetDeclarationType(declaration) == enum_express_declaration.__DEFINED_TYPE);
 
-            name = ExpressSchema.GetNameOfDeclaration(declaration);
+            name = Schema.GetNameOfDeclaration(declaration);
 
             attrType = ifcengine.engiGetDefinedType(declaration, out domain, out aggregation);
         }
@@ -40,7 +40,7 @@ namespace RDFWrappers
                 switch (domainType)
                 {
                     case enum_express_declaration.__DEFINED_TYPE:
-                        var refType = new ExpressDefinedType(domain);
+                        var refType = new DefinedType(domain);
                         return refType.GetBaseCSType();
 
                     case enum_express_declaration.__ENTITY:
@@ -52,7 +52,7 @@ namespace RDFWrappers
             }
             else
             {
-                return ExpressSchema.GetPrimitiveType(attrType);
+                return Schema.GetPrimitiveType(attrType);
             }
         }
 
@@ -73,7 +73,7 @@ namespace RDFWrappers
                         return null;
 
                     case enum_express_declaration.__DEFINED_TYPE:
-                        var refType = new ExpressDefinedType(domain);
+                        var refType = new DefinedType(domain);
                         return refType.GetSdaiType();
 
                     default:
@@ -82,7 +82,7 @@ namespace RDFWrappers
             }
             else
             {
-                return ExpressSchema.GetSdaiType(attrType);
+                return Schema.GetSdaiType(attrType);
             }
         }
 
@@ -102,7 +102,7 @@ namespace RDFWrappers
 
             if (domain != 0)
             {
-                referTypeName = ExpressSchema.GetNameOfDeclaration(domain);
+                referTypeName = Schema.GetNameOfDeclaration(domain);
                 generator.m_replacements[Generator.KWD_SimpleType] = referTypeName;
 
                 var referType = RDF.ifcengine.engiGetDeclarationType(domain);
@@ -110,7 +110,7 @@ namespace RDFWrappers
 
                 if (referType == RDF.enum_express_declaration.__DEFINED_TYPE)
                 {
-                    var referencedType = new ExpressDefinedType(domain);
+                    var referencedType = new DefinedType(domain);
                     var baseFoundation = referencedType.WriteType(generator, visitedTypes);
                     foundation.aggrType = baseFoundation.aggrType;
                     foundation.attrType = baseFoundation.attrType;
@@ -123,7 +123,7 @@ namespace RDFWrappers
             }
             else
             {
-                var csType = ExpressSchema.GetPrimitiveType(attrType);
+                var csType = Schema.GetPrimitiveType(attrType);
                 if (csType == null)
                 {
                     Console.WriteLine("Defined type {0} is not supproted (primitive type is {1})", name, attrType.ToString());
@@ -162,7 +162,7 @@ namespace RDFWrappers
             return foundation;
         }
 
-        public void WriteSingleAttribute(Generator generator, ExpressAttribute attr)
+        public void WriteSingleAttribute(Generator generator, Attribute attr)
         {
             Foundation foundation;
             if (!generator.m_writtenDefinedTyes.TryGetValue(declaration, out foundation))
@@ -181,7 +181,7 @@ namespace RDFWrappers
                     return;
             }
 
-            Console.WriteLine("Attribute '" + attr.name + "' is not supported. Defined type: " + ToString() + " based on " + foundation.declarationType.ToString() + ", defining entity " + ExpressSchema.GetNameOfDeclaration(attr.definingEntity));
+            Console.WriteLine("Attribute '" + attr.name + "' is not supported. Defined type: " + ToString() + " based on " + foundation.declarationType.ToString() + ", defining entity " + Schema.GetNameOfDeclaration(attr.definingEntity));
         }
 
         public override string ToString()

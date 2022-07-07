@@ -19,7 +19,7 @@ namespace RDFWrappers
 
             foreach (var decl in generator.m_schema.m_declarations[enum_express_declaration.__ENTITY])
             {
-                var entity = new ExpressEntity(decl.Value);
+                var entity = new Entity(decl.Value);
 
                 var attrs = entity.GetAttributes();
                 foreach (var attr in attrs)
@@ -33,7 +33,7 @@ namespace RDFWrappers
             }
         }
 
-        public static enum_express_aggr WriteDefinedType (Generator generator, ExpressDefinedType definedType)
+        public static enum_express_aggr WriteDefinedType (Generator generator, DefinedType definedType)
         {
             var aggr = new Aggregation(generator, definedType);
             return aggr.WriteType(definedType.name);
@@ -44,7 +44,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="generator"></param>
         /// <param name="attr"></param>
-        public static void WriteAttribute (Generator generator, ExpressAttribute attr)
+        public static void WriteAttribute (Generator generator, Attribute attr)
         {
             var aggr = new Aggregation(generator, attr);
             aggr.WriteAttribute(attr.name, attr.inverse);
@@ -159,9 +159,9 @@ namespace RDFWrappers
             sdaiType = null;
 
             string baseType = null;
-            ExpressSelect select = null;
-            ExpressEnumeraion enumeration = null;
-            ExpressDefinedType definedType = null;
+            Select select = null;
+            Enumeraion enumeration = null;
+            DefinedType definedType = null;
 
             if (typeDef.IsSimpleType(out elemType, out baseType, out sdaiType))
             {
@@ -211,7 +211,7 @@ namespace RDFWrappers
             }
             else if ((definedType = typeDef.IsDefinedType()) != null)
             {
-                ExpressDefinedType.Foundation foundation = null;
+                DefinedType.Foundation foundation = null;
                 if (generator.m_writtenDefinedTyes.TryGetValue(definedType.declaration, out foundation))
                 {
                     switch (foundation.declarationType)
@@ -282,7 +282,7 @@ namespace RDFWrappers
             {
                 if (generator.m_writtenDefinedTyes.ContainsKey(typeDef.domain))
                 {
-                    var definedType = new ExpressDefinedType(typeDef.domain);
+                    var definedType = new DefinedType(typeDef.domain);
                     aggrTypeName = definedType.name;
                     template = GetAggregatedType(definedType, out elemType, out sdaiType);
                 }

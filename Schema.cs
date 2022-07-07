@@ -9,7 +9,7 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    public class ExpressSchema
+    public class Schema
     {
         /// <summary>
         /// 
@@ -114,7 +114,7 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <param name="schemaName"></param>
-        public ExpressSchema (string schemaName)
+        public Schema (string schemaName)
         {
             m_model = ifcengine.sdaiCreateModelBN(1, "", schemaName);
 
@@ -153,7 +153,7 @@ namespace RDFWrappers
             if (definedTypes != null)
                 foreach (var def in definedTypes)
                 {
-                    var type = new ExpressDefinedType(def.Value);
+                    var type = new DefinedType(def.Value);
                     Console.WriteLine (type.ToString());
                 }
 
@@ -162,7 +162,7 @@ namespace RDFWrappers
             if (enums != null)
                 foreach (var enm in enums)
                 {
-                    var e = new ExpressEnumeraion(enm.Value);
+                    var e = new Enumeraion(enm.Value);
                     Console.WriteLine (e.ToString());
                 }
 
@@ -171,7 +171,7 @@ namespace RDFWrappers
             if (sels != null)
                 foreach (var sel in sels)
                 {
-                    var s = new ExpressSelect(sel.Value); ;
+                    var s = new Select(sel.Value); ;
                     Console.WriteLine(s.ToString());
                 }
 
@@ -180,7 +180,7 @@ namespace RDFWrappers
             if (entities != null)
                 foreach (var entity in entities)
                 {
-                    var e = new ExpressEntity(entity.Value); ;
+                    var e = new Entity(entity.Value); ;
                     Console.WriteLine(e.ToString());
                 }
         }

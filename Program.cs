@@ -116,7 +116,7 @@ namespace RDFWrappers
             //
             // Main course
             //
-            var schema = new ExpressSchema(options.schema);
+            var schema = new Schema(options.schema);
 
             Console.WriteLine("....");
 

@@ -115,11 +115,11 @@ namespace RDFWrappers
         public bool m_cs; //cs or cpp
         string m_namespace;
 
-        public ExpressSchema m_schema;
+        public Schema m_schema;
 
         public StreamWriter m_writer;
 
-        public Dictionary<ExpressHandle, ExpressDefinedType.Foundation> m_writtenDefinedTyes = new Dictionary<ExpressHandle, ExpressDefinedType.Foundation>();
+        public Dictionary<ExpressHandle, DefinedType.Foundation> m_writtenDefinedTyes = new Dictionary<ExpressHandle, DefinedType.Foundation>();
 
         public HashSet<string> m_writtenAggregationTypes = new HashSet<string>();
 
@@ -132,7 +132,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="schema"></param>
         /// <param name="cs"></param>
-        public Generator (ExpressSchema schema, bool cs, string namespace_)
+        public Generator (Schema schema, bool cs, string namespace_)
         {
             m_cs = cs;            
             m_namespace = namespace_;
@@ -219,7 +219,7 @@ namespace RDFWrappers
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__DEFINED_TYPE])
             {
-                var type = new ExpressDefinedType(decl.Value);
+                var type = new DefinedType(decl.Value);
                 type.WriteType(this, visitedTypes);
             }
         }
@@ -234,7 +234,7 @@ namespace RDFWrappers
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENUM])
             {
-                var enumeration = new ExpressEnumeraion(decl.Value);
+                var enumeration = new Enumeraion(decl.Value);
                 WriteEnumeration(enumeration);
             }
         }
@@ -244,7 +244,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="enumeraion"></param>
-        private void WriteEnumeration(ExpressEnumeraion enumeraion)
+        private void WriteEnumeration(Enumeraion enumeraion)
         {
             m_replacements[KWD_ENUMERATION_NAME] = enumeraion.name;
 
@@ -284,7 +284,7 @@ namespace RDFWrappers
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__SELECT])
             {
-                var sel = new ExpressSelect(decl.Value);
+                var sel = new Select(decl.Value);
                 sel.WriteAccessors(this, visitedSelects);
             }
         }
@@ -301,7 +301,7 @@ namespace RDFWrappers
 
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENTITY])
             {
-                var entity = new ExpressEntity(decl.Value);
+                var entity = new Entity(decl.Value);
                 WriteEntity (entity, wroteEntities);
             }
         }
@@ -311,7 +311,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="entity"></param>
-        private void WriteEntity(ExpressEntity entity, HashSet<ExpressHandle> wroteEntities)
+        private void WriteEntity(Entity entity, HashSet<ExpressHandle> wroteEntities)
         {
             if (!wroteEntities.Add(entity.inst))
             {
@@ -342,7 +342,7 @@ namespace RDFWrappers
 
             foreach (var parentId in superTypes)
             {
-                var parent = new ExpressEntity(parentId);
+                var parent = new Entity(parentId);
 
                 WriteEntity(parent, wroteEntities);
 
@@ -385,7 +385,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="attributes"></param>
         /// <param name="entity"></param>
-        private void GetAttributeNames(HashSet<string> attributes, ExpressEntity entity)
+        private void GetAttributeNames(HashSet<string> attributes, Entity entity)
         {
             var attribs =  entity.GetAttributes();
             foreach (var a in attribs)
@@ -435,7 +435,7 @@ namespace RDFWrappers
         /// <param name="writer"></param>
         /// <param name="entity"></param>
         /// <param name="exportedAttributes"></param>
-        private void WriteAttributes(ExpressEntity entity, HashSet<string> exportedAttributes)
+        private void WriteAttributes(Entity entity, HashSet<string> exportedAttributes)
         {
             var attribs = entity.GetAttributes();
             foreach (var attr in attribs)
@@ -461,7 +461,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="attr"></param>
-        private void WriteSingeAttribute(ExpressAttribute attr)
+        private void WriteSingeAttribute(Attribute attr)
         {
             string expressType = null;
             string baseType = null;
@@ -472,9 +472,9 @@ namespace RDFWrappers
                 return;
             }
 
-            ExpressDefinedType definedType = null;
-            ExpressEnumeraion enumeration = null;
-            ExpressSelect select = null;
+            DefinedType definedType = null;
+            Enumeraion enumeration = null;
+            Select select = null;
             string referncedEntity = null;
 
             if ((definedType = attr.IsDefinedType()) != null)
@@ -503,7 +503,7 @@ namespace RDFWrappers
             }
         }
 
-        private void WriteSimpleAttribute(ExpressAttribute attr, string definedType, string baseType, string sdaiType)
+        private void WriteSimpleAttribute(Attribute attr, string definedType, string baseType, string sdaiType)
         {
             m_replacements[KWD_SimpleType] = (!m_cs && definedType !=null) ? definedType : baseType;
             m_replacements[KWD_TextType] = m_replacements[KWD_SimpleType]; //just different words in template
@@ -538,7 +538,7 @@ namespace RDFWrappers
         }
 
 
-        private void WriteEntityReference (ExpressAttribute attr, string domain)
+        private void WriteEntityReference (Attribute attr, string domain)
         {
             m_replacements[KWD_REF_ENTITY] = domain;
 
@@ -554,7 +554,7 @@ namespace RDFWrappers
         /// <param name="attr"></param>
         /// <param name="enumName"></param>
         /// <param name="valuesArrayName"></param>
-        public void WriteEnumAttribute(ExpressAttribute attr, string enumName, string valuesArrayName)
+        public void WriteEnumAttribute(Attribute attr, string enumName, string valuesArrayName)
         {
             m_replacements[KWD_ENUM_TYPE] = enumName;
             m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = valuesArrayName;
@@ -566,7 +566,7 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="name"></param>
         /// <param name="attr"></param>
-        public void WriteSelectAttribute(ExpressAttribute attr, string selectName)
+        public void WriteSelectAttribute(Attribute attr, string selectName)
         {
             Generator generator = this;
 

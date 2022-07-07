@@ -9,7 +9,7 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    public class ExpressAttribute : TypeDef
+    public class Attribute : TypeDef
     {
         public string name;
         public ExpressHandle definingEntity;
@@ -18,7 +18,7 @@ namespace RDFWrappers
         public bool unique;
 
 
-        private string DefiningEntity { get { return ExpressSchema.GetNameOfDeclaration(definingEntity); } }
+        private string DefiningEntity { get { return Schema.GetNameOfDeclaration(definingEntity); } }
         //private string Domain { get { return ExpressSchema.GetNameOfDeclaration(domain); } }
 
         override public string ToString()

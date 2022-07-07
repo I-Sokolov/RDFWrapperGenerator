@@ -9,14 +9,14 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    class ExpressEntity
+    class Entity
     {
         public string name;
         public ExpressHandle inst;
 
-        public ExpressEntity(ExpressHandle inst)
+        public Entity(ExpressHandle inst)
         {
-            this.name = ExpressSchema.GetNameOfDeclaration (inst);
+            this.name = Schema.GetNameOfDeclaration (inst);
             this.inst = inst;
         }
 
@@ -25,9 +25,9 @@ namespace RDFWrappers
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<ExpressAttribute> GetAttributes()
+        public List<Attribute> GetAttributes()
         {
-            var ret = new List<ExpressAttribute>();
+            var ret = new List<Attribute>();
 
             var nattr = ifcengine.engiGetEntityNoAttributes(inst);
             for (int i = 0; i < nattr; i++)
@@ -49,7 +49,7 @@ namespace RDFWrappers
 
                 if (ok != 0)
                 {
-                    var prop = new ExpressAttribute
+                    var prop = new Attribute
                     {
                         name = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptrName),
                         definingEntity = definingEntity,
@@ -106,7 +106,7 @@ namespace RDFWrappers
 
             foreach (var parent in GetSupertypes())
             {
-                str.Append (string.Format(" {0}", ExpressSchema.GetNameOfDeclaration(parent)));
+                str.Append (string.Format(" {0}", Schema.GetNameOfDeclaration(parent)));
             }
             str.AppendLine() ;
 

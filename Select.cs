@@ -11,15 +11,15 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    public class ExpressSelect
+    public class Select
     {
         public string name;
         public ExpressHandle inst;
 
-        public ExpressSelect(ExpressHandle inst)
+        public Select(ExpressHandle inst)
         {
             this.inst = inst;
-            name = ExpressSchema.GetNameOfDeclaration(inst); 
+            name = Schema.GetNameOfDeclaration(inst); 
         }
 
         private HashSet<ExpressHandle> GetVariants()
@@ -32,7 +32,7 @@ namespace RDFWrappers
             {
                 if (!ret.Add(variant))
                 {
-                    Console.WriteLine(string.Format("duplicated type {0} in SELECT {1}", ExpressSchema.GetNameOfDeclaration(variant), name));
+                    Console.WriteLine(string.Format("duplicated type {0} in SELECT {1}", Schema.GetNameOfDeclaration(variant), name));
                     System.Diagnostics.Debug.Assert(false);
                 }
             }
@@ -52,7 +52,7 @@ namespace RDFWrappers
 
                 if (decl == enum_express_declaration.__DEFINED_TYPE)
                 {
-                    ExpressDefinedType.Foundation foundation;
+                    DefinedType.Foundation foundation;
                     if (generator.m_writtenDefinedTyes.TryGetValue (variant, out foundation))
                     {
                         decl = foundation.declarationType;
@@ -89,7 +89,7 @@ namespace RDFWrappers
                         break;
 
                     case enum_express_declaration.__SELECT:
-                        var nestedSelect = new ExpressSelect(variant);
+                        var nestedSelect = new Select(variant);
                         foreach (var nestedType in nestedSelect.CollectAsTypes())
                         {
                             ret.Add(nestedType);
@@ -97,7 +97,7 @@ namespace RDFWrappers
                         break;
 
                     case enum_express_declaration.__DEFINED_TYPE:
-                        var definedType = new ExpressDefinedType(variant);
+                        var definedType = new DefinedType(variant);
                         if (!definedType.IsAggregation () && definedType.attrType != enum_express_attr_type.__LOGICAL)
                         {
                             var cstype = definedType.GetBaseCSType();
@@ -128,11 +128,11 @@ namespace RDFWrappers
             switch (declType)
             {
                 case enum_express_declaration.__SELECT:
-                    (new ExpressSelect(declaration)).WriteAccessors(generator, visitedSelects);
+                    (new Select(declaration)).WriteAccessors(generator, visitedSelects);
                     break;
 
                 case enum_express_declaration.__DEFINED_TYPE:
-                    var definedType = new ExpressDefinedType(declaration);
+                    var definedType = new DefinedType(declaration);
                     WriteNestedSelect(generator, definedType.domain, visitedSelects);
                     break;
 
@@ -197,22 +197,22 @@ namespace RDFWrappers
             switch (type)
             {
                 case enum_express_declaration.__DEFINED_TYPE:
-                    var definedType = new ExpressDefinedType(selectVariant);
+                    var definedType = new DefinedType(selectVariant);
                     WriteAccessorMethod(generator, definedType, bGet);
                     break;
 
                 case enum_express_declaration.__SELECT:
-                    var selectName = ExpressSchema.GetNameOfDeclaration(selectVariant);
+                    var selectName = Schema.GetNameOfDeclaration(selectVariant);
                     WriteSelectAccessorMethod(generator, selectName, bGet);
                     break;
 
                 case enum_express_declaration.__ENTITY:
-                    var entityType = new ExpressEntity(selectVariant);
+                    var entityType = new Entity(selectVariant);
                     WriteAccessorMethod(generator, entityType, bGet);
                     break;
 
                 case enum_express_declaration.__ENUM:
-                    var enumType = new ExpressEnumeraion(selectVariant);
+                    var enumType = new Enumeraion(selectVariant);
                     WriteAccessorMethod(generator, enumType, bGet);
                     break;
 
@@ -222,7 +222,7 @@ namespace RDFWrappers
             }
         }
 
-        private void WriteAccessorMethod(Generator generator, ExpressEnumeraion enumType, bool? bGet)
+        private void WriteAccessorMethod(Generator generator, Enumeraion enumType, bool? bGet)
         {
             var name = Generator.ValidateIdentifier(enumType.name);
             WriteAccessorEnumMethod(generator, name, name + "_", bGet);
@@ -246,7 +246,7 @@ namespace RDFWrappers
         }
 
 
-        private void WriteAccessorMethod(Generator generator, ExpressEntity entityType, bool? bGet)
+        private void WriteAccessorMethod(Generator generator, Entity entityType, bool? bGet)
         {
             generator.m_replacements[Generator.KWD_REF_ENTITY] = Generator.ValidateIdentifier (entityType.name);
             generator.m_replacements[Generator.KWD_TypeNameUpper] = entityType.name.ToUpper();
@@ -272,9 +272,9 @@ namespace RDFWrappers
         }
 
 
-        private void WriteAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
+        private void WriteAccessorMethod(Generator generator, DefinedType definedType, bool? bGet)
         {
-            ExpressDefinedType.Foundation foundation = null;
+            DefinedType.Foundation foundation = null;
             if (!generator.m_writtenDefinedTyes.TryGetValue(definedType.declaration, out foundation))
             {
                 Console.WriteLine("SLECT " + name + " - DefinedType is not supported: " + definedType.name);
@@ -313,7 +313,7 @@ namespace RDFWrappers
             }
         }
 
-        private void WriteSimpleAccessorMethod(Generator generator, ExpressDefinedType definedType, bool? bGet)
+        private void WriteSimpleAccessorMethod(Generator generator, DefinedType definedType, bool? bGet)
         {
             string sdaiType = definedType.GetSdaiType();
             string baPutype = definedType.GetBaseCSType();
@@ -347,7 +347,7 @@ namespace RDFWrappers
             }
         }
 
-        private void WriteAggrAccessorMethod(Generator generator, ExpressDefinedType definedType, ExpressDefinedType.Foundation foundation, bool? bGet)
+        private void WriteAggrAccessorMethod(Generator generator, DefinedType definedType, DefinedType.Foundation foundation, bool? bGet)
         {                
             string sdaiType = definedType.GetSdaiType();
             string baseType = definedType.GetBaseCSType();
@@ -355,7 +355,7 @@ namespace RDFWrappers
             string elemType = baseType;
             if (definedType.domain != 0 && !generator.m_cs)
             {
-                elemType = ExpressSchema.GetNameOfDeclaration(definedType.domain);
+                elemType = Schema.GetNameOfDeclaration(definedType.domain);
             }
 
             generator.m_replacements[Generator.KWD_AggregationType] = definedType.name;
@@ -417,7 +417,7 @@ namespace RDFWrappers
 
             foreach (var variant in GetVariants())
             {
-                var name = ExpressSchema.GetNameOfDeclaration(variant);
+                var name = Schema.GetNameOfDeclaration(variant);
                 var type = ifcengine.engiGetDeclarationType(variant);
 
                 str.AppendLine(string.Format("        {0} {1}", name, type.ToString()));

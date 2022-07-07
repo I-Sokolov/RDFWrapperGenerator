@@ -27,7 +27,7 @@ namespace RDFWrappers
             {
                 if (ifcengine.engiGetDeclarationType(domain) == enum_express_declaration.__DEFINED_TYPE)
                 {
-                    ExpressDefinedType refer = new ExpressDefinedType(domain);
+                    DefinedType refer = new DefinedType(domain);
                     return refer.IsAggregation();
                 }
             }
@@ -48,17 +48,17 @@ namespace RDFWrappers
 
             if (domainEntity != 0)
             {
-                domainTypeName = ExpressSchema.GetNameOfDeclaration(domainEntity);
+                domainTypeName = Schema.GetNameOfDeclaration(domainEntity);
             }
 
-            baseType = ExpressSchema.GetPrimitiveType(attrType);
+            baseType = Schema.GetPrimitiveType(attrType);
 
             switch (attrType)
             {
                 case enum_express_attr_type.__NONE: //attribute type is defined by reference domain entity
                     if (enum_express_declaration.__DEFINED_TYPE == ifcengine.engiGetDeclarationType(domainEntity))
                     {
-                        var domainType = new ExpressDefinedType(domainEntity);
+                        var domainType = new DefinedType(domainEntity);
                         string skip;
                         bool ret = IsSimpleType(domainType.attrType, domainType.domain, out skip, out baseType, out sdaiType);
                         return ret;
@@ -111,33 +111,33 @@ namespace RDFWrappers
             {
                 if (enum_express_declaration.__ENTITY == ifcengine.engiGetDeclarationType(domain))
                 {
-                    entityName = ExpressSchema.GetNameOfDeclaration(domain);
+                    entityName = Schema.GetNameOfDeclaration(domain);
                     return true;
                 }
             }
             return false;
         }
 
-        public ExpressDefinedType IsDefinedType ()
+        public DefinedType IsDefinedType ()
         {
             if (domain != 0)
             {
                 if (enum_express_declaration.__DEFINED_TYPE == ifcengine.engiGetDeclarationType(domain))
                 {
-                    var dt = new ExpressDefinedType(domain);
+                    var dt = new DefinedType(domain);
                     return dt;
                 }
             }
             return null;
         }
 
-        public ExpressEnumeraion IsEnumeration()
+        public Enumeraion IsEnumeration()
         {
             if (attrType == enum_express_attr_type.__NONE || attrType == enum_express_attr_type.__ENUMERATION)
             {
                 if (enum_express_declaration.__ENUM == ifcengine.engiGetDeclarationType(domain))
                 {
-                    var en = new ExpressEnumeraion(domain);
+                    var en = new Enumeraion(domain);
                     return en;
                 }
             }
@@ -145,13 +145,13 @@ namespace RDFWrappers
             return null;
         }
 
-        public ExpressSelect IsSelect()
+        public Select IsSelect()
         {
             if (attrType == enum_express_attr_type.__NONE || attrType == enum_express_attr_type.__SELECT)
             {
                 if (enum_express_declaration.__SELECT == ifcengine.engiGetDeclarationType(domain))
                 {
-                    var sel = new ExpressSelect(domain);
+                    var sel = new Select(domain);
                     return sel;
                 }
             }
@@ -181,7 +181,7 @@ namespace RDFWrappers
                         str.Append("REF:");
                         str.Append(ifcengine.engiGetDeclarationType(domain));
                         str.Append(':');
-                        str.Append (ExpressSchema.GetNameOfDeclaration(domain));
+                        str.Append (Schema.GetNameOfDeclaration(domain));
                     }
                     else
                     {
@@ -192,7 +192,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__ENUMERATION:
                     if (domain != 0)
                     {
-                        str.Append ("ENUM:" + ExpressSchema.GetNameOfDeclaration(domain));
+                        str.Append ("ENUM:" + Schema.GetNameOfDeclaration(domain));
                     }
                     else
                     {
@@ -203,7 +203,7 @@ namespace RDFWrappers
                 case enum_express_attr_type.__SELECT:
                     if (domain != 0)
                     {
-                        str.Append ("SELECT:" + ExpressSchema.GetNameOfDeclaration(domain));
+                        str.Append ("SELECT:" + Schema.GetNameOfDeclaration(domain));
                     }
                     else
                     {
@@ -223,7 +223,7 @@ namespace RDFWrappers
                     if(domain != 0)
                     {
                         str.Append("<-");
-                        str.Append(ExpressSchema.GetNameOfDeclaration(domain));
+                        str.Append(Schema.GetNameOfDeclaration(domain));
                     }
                     break;
 

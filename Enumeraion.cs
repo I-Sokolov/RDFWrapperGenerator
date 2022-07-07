@@ -9,12 +9,12 @@ using ExpressHandle = System.Int64;
 
 namespace RDFWrappers
 {
-    public class ExpressEnumeraion
+    public class Enumeraion
     {
-        public string name { get { return ExpressSchema.GetNameOfDeclaration(inst); } }
+        public string name { get { return Schema.GetNameOfDeclaration(inst); } }
         ExpressHandle inst;
 
-        public ExpressEnumeraion(ExpressHandle inst)
+        public Enumeraion(ExpressHandle inst)
         {
             this.inst = inst;
         }
