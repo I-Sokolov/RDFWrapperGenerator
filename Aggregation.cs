@@ -90,7 +90,7 @@ namespace RDFWrappers
                         return enum_express_aggr.__NONE;
                     }
 
-                    if (generator.m_knownAggregationTypes.Add(aggrName))
+                    if (generator.m_writtenAggregationTypes.Add(aggrName))
                     {
                         generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
                         generator.m_replacements[Generator.KWD_AggregationType] = aggrName;
@@ -298,7 +298,7 @@ namespace RDFWrappers
 
             if (template != Generator.Template.None)
             {
-                if (generator.m_knownAggregationTypes.Contains(aggrTypeName))
+                if (generator.m_writtenAggregationTypes.Contains(aggrTypeName))
                 {
                     generator.m_replacements[Generator.KWD_ATTR_NAME] = attrName;
                     generator.m_replacements[Generator.KWD_AggregationType] = aggrTypeName;

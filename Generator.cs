@@ -121,7 +121,7 @@ namespace RDFWrappers
 
         public Dictionary<ExpressHandle, ExpressDefinedType.Foundation> m_writtenDefinedTyes = new Dictionary<ExpressHandle, ExpressDefinedType.Foundation>();
 
-        public HashSet<string> m_knownAggregationTypes = new HashSet<string>();
+        public HashSet<string> m_writtenAggregationTypes = new HashSet<string>();
 
         Dictionary<Template, string> m_template = new Dictionary<Template, string>();
 
@@ -655,20 +655,38 @@ namespace RDFWrappers
             }
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private static HashSet<string> m_additionalKeywords = new HashSet<string>();
+
+        private static void InitAdditionalKeywords ()
+        {
+            m_additionalKeywords.Add("NULL");
+            m_additionalKeywords.Add("CONST");
+            m_additionalKeywords.Add("union");
+        }
+
         public static string ValidateIdentifier(string name)
         {
+            if (m_additionalKeywords.Count == 0)
+            {
+                InitAdditionalKeywords();
+            }
+
             string rename = name;
 
             using (var codeProvider = System.CodeDom.Compiler.CodeDomProvider.CreateProvider("C#"))
             {
-                if (!codeProvider.IsValidIdentifier(name))
+                if (!codeProvider.IsValidIdentifier(rename))
                 {
                     //does not work as expected, var id = codeProvider.CreateValidIdentifier(name);
                     bool first = true;
                     var builder = new System.Text.StringBuilder();
-                    foreach (var ch in name)
+                    foreach (var ch in rename)
                     {
-                        if (first && char.IsLetter(ch) || !first && char.IsLetterOrDigit(ch))
+                        if (first && char.IsLetter(ch) || !first && char.IsLetterOrDigit(ch) || ch=='_')
                         {
                             //fits
                             builder.Append(ch);
@@ -695,10 +713,11 @@ namespace RDFWrappers
                         }
                     }
                 }
-                else if (name == "NULL" || name == "union")
-                {
-                    rename = name + "_";
-                }
+            }
+
+            if (m_additionalKeywords.Contains (rename))
+            {
+                rename = rename + "_";
             }
 
             if (rename != name)
