@@ -52,7 +52,7 @@ namespace RDFWrappers
 
                 case enum_express_attr_type.__BINARY:
                 case enum_express_attr_type.__BINARY_32:
-                    return null;
+                    return "TextData";
 
                 case enum_express_attr_type.__NONE:
                 case enum_express_attr_type.__LOGICAL:
@@ -88,7 +88,7 @@ namespace RDFWrappers
 
                 case enum_express_attr_type.__BINARY:
                 case enum_express_attr_type.__BINARY_32:
-                    return null;
+                    return "sdaiBINARY";
 
                 case enum_express_attr_type.__NONE:
                 case enum_express_attr_type.__ENUMERATION:

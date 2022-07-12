@@ -316,7 +316,7 @@ namespace RDFWrappers
         private void WriteSimpleAccessorMethod(Generator generator, DefinedType definedType, bool? bGet)
         {
             string sdaiType = definedType.GetSdaiType();
-            string baPutype = definedType.GetBaseCSType();
+            string baseType = definedType.GetBaseCSType();
 
             generator.m_replacements[Generator.KWD_SimpleType] = definedType.name;
             generator.m_replacements[Generator.KWD_TextType] = definedType.name;
@@ -325,7 +325,7 @@ namespace RDFWrappers
 
             Generator.Template tplGet;
             Generator.Template tplPut;
-            if (baPutype == "TextData")
+            if (baseType == "TextData")
             {
                 tplGet = Generator.Template.SelectTextGet;
                 tplPut = Generator.Template.SelectTextPut;

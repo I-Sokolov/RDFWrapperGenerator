@@ -6,7 +6,6 @@
 
 #include    <assert.h>
 #include    <list>
-#include    <set>
 #include    <string>
 
 #include	"ifcengine.h"
@@ -157,14 +156,14 @@ namespace NAMESPACE_NAME
         }
 
         //
-        TextData getTextValue(TextData typeName)
+        TextData getTextValue(TextData typeName, IntData sdaiType)
         {
             TextData ret = NULL;
 
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
-                    if (!sdaiGetADBValue(adb, sdaiSTRING, &ret)){
+                    if (!sdaiGetADBValue(adb, sdaiType, &ret)){
                         ret = NULL;
                     }
                 }
@@ -173,9 +172,9 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void putTextValue(TextData typeName, TextData value)
+        void putTextValue(TextData typeName, IntData sdaiType, TextData value)
         {
-            void* adb = sdaiCreateADB(sdaiSTRING, value);
+            void* adb = sdaiCreateADB(sdaiType, value);
             sdaiPutADBTypePath(adb, 1, typeName);
             SetADB(adb);
         }
@@ -319,7 +318,7 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    template <typename T> class AggregationOfText : public Aggregation, public std::list<T>
+    template <typename T, IntData sdaiType> class AggregationOfText : public Aggregation, public std::list<std::string>
     {
     public:
         //
@@ -328,7 +327,7 @@ namespace NAMESPACE_NAME
             IntData  cnt = sdaiGetMemberCount(aggr);
             for (IntData i = 0; i < cnt; i++) {
                 TextData val = 0;
-                engiGetAggrElement(aggr, i, sdaiSTRING, &val);
+                engiGetAggrElement(aggr, i, sdaiType, &val);
                 this->push_back(val);
             }
         }
@@ -339,13 +338,13 @@ namespace NAMESPACE_NAME
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto it = this->begin(); it != this->end(); it++) {
                 TextData val = it->c_str();
-                sdaiAppend((IntData) aggr, sdaiSTRING, val);
+                sdaiAppend((IntData) aggr, sdaiType, val);
             }
             return aggr;
         }
 
         //
-        SdaiAggr ToSdaiAggr(TextData arr[], size_t cnt, SdaiInstance instance, TextData attrName)
+        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
         {
             for (size_t i = 0; i < cnt; i++) {
                 this->push_back(arr[i]);
@@ -552,7 +551,7 @@ namespace NAMESPACE_NAME
 //## TemplateUtilityTypes    - this section just to make templates syntax correc
 
     typedef double      SimpleType;
-    typedef TextData TextType;
+    typedef TextData    TextType;
     typedef int         SelectType;
     typedef SdaiEntity  REF_ENTITY;    
 
@@ -592,7 +591,7 @@ namespace NAMESPACE_NAME
 //## AggregationOfSimple
     typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationType;
 //## AggregationOfText
-    typedef AggregationOfText<std::string> Aggregationtype;
+    typedef AggregationOfText<TextType, sdaiTYPE> Aggregationtype;
 //## AggregationOfInstance
     typedef AggregationOfInstance<SimpleType> AggregationTYpe;
 //## AggregationOfEnum
@@ -618,9 +617,9 @@ namespace NAMESPACE_NAME
 //## SelectSimplePut
         void put_SimpleType(SimpleType value) { putSimpleValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectTextGet
-        TextType get_TextType() { return getTextValue("TypeNameUpper"); }
+        TextType get_TextType() { return getTextValue("TypeNameUpper", sdaiTYPE); }
 //## SelectTextPut
-        void put_TextType(TextType value) { putTextValue("TypeNameUpper", value); }
+        void put_TextType(TextType value) { putTextValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectEntityGet
         REF_ENTITY get_REF_ENTITY();
 //## SelectEntityPut
@@ -636,7 +635,7 @@ namespace NAMESPACE_NAME
 //## SelectAggregationPutArraySimple
         void put_AggregationType(const SimpleType arr[], size_t n) { AggregationType lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
 //## SelectAggregationPutArrayText
-        void put_AggregationType(TextData arr[], size_t n) { Aggregationtype lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
+        void put_AggregationType(TextType arr[], size_t n) { Aggregationtype lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
 //## SelectNested
         GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return GEN_TYPE_NAME_accessor(this); }
 //## SelectGetAsDouble
@@ -687,9 +686,9 @@ namespace NAMESPACE_NAME
         void put_ATTR_NAME(SimpleType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &value); }
 //## AttributeTextGet
 
-       TextType get_attr_NAME() { TextType val = NULL; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, &val)) return val; else return NULL; }
+        TextType get_attr_NAME() { TextType val = NULL; if (sdaiGetAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, &val)) return val; else return NULL; }
 //## AttributeTextPut
-        void put_ATTR_NAME(TextType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiSTRING, value); }
+        void put_ATTR_NAME(TextType value) { sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiTYPE, value); }
 //## AttributeEntityGet
 
         REF_ENTITY get_Attr_NAME();
@@ -710,7 +709,7 @@ namespace NAMESPACE_NAME
 //## AttributeAggregationPutArraySimple
         void put_ATTr_NAME(const SimpleType arr[], size_t n) { AggregationType lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
 //## AttributeAggregationPutArrayText
-        void put_ATTr_NAME(TextData arr[], size_t n) { Aggregationtype lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+        void put_ATTr_NAME(TextType arr[], size_t n) { Aggregationtype lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
 //## EntityEnd
     };
 

@@ -71,9 +71,12 @@ namespace RDFWrappers
                 case enum_express_attr_type.__LOGICAL:
                 case enum_express_attr_type.__ENUMERATION:
                 case enum_express_attr_type.__SELECT:
+                    return false;
+
                 case enum_express_attr_type.__BINARY:
                 case enum_express_attr_type.__BINARY_32:
-                    return false;
+                    sdaiType = "sdaiBINARY";
+                    return true;
 
                 case enum_express_attr_type.__BOOLEAN:
                     sdaiType = "sdaiBOOLEAN";

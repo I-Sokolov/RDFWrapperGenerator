@@ -95,6 +95,7 @@ namespace RDFWrappers
                         generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
                         generator.m_replacements[Generator.KWD_AggregationType] = aggrName;
                         generator.m_replacements[Generator.KWD_SimpleType] = elemType;
+                        generator.m_replacements[Generator.KWD_TextType] = elemType;
                         generator.m_replacements[Generator.KWD_ENUM_TYPE] = elemType;
                         generator.WriteByTemplate(template);
                     }
@@ -303,6 +304,7 @@ namespace RDFWrappers
                     generator.m_replacements[Generator.KWD_ATTR_NAME] = attrName;
                     generator.m_replacements[Generator.KWD_AggregationType] = aggrTypeName;
                     generator.m_replacements[Generator.KWD_SimpleType] = elemType;
+                    generator.m_replacements[Generator.KWD_TextType] = elemType;
 
                     generator.WriteGetPut(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationPut, isInverse);
                     if (!nested && sdaiType != null)
