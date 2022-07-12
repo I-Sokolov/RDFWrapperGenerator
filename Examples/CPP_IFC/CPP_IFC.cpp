@@ -528,25 +528,6 @@ extern void IFC4_test()
     relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
     ASSERT(psSet.size() == 1 && psSet.front()==emptyPset);
 
-    //
-    // binary data
-    //
-
-    auto blobTexture = IfcBlobTexture::Create(ifcModel);
-    blobTexture.put_RepeatS(true);
-    blobTexture.put_RepeatT(true);
-    blobTexture.put_RasterFormat("PNG");
-    blobTexture.put_Mode("MODULATE");
-
-    IfcBinary rasterCode = "100111";
-    assert(blobTexture.get_RasterCode() == NULL);
-    blobTexture.put_RasterCode(rasterCode);    
-    assert(0 == strcmp(blobTexture.get_RasterCode(), rasterCode));
-
-
-
-    //IfcPixelTexture
-
     /// 
     /// 
     sdaiSaveModelBN(ifcModel, "Test.ifc");
@@ -572,17 +553,6 @@ extern void IFC4_test()
         ASSERT(psSet.size() == 1);
         name = psSet.front().get_Name();
         ASSERT(!strcmp (name, "Empty property set"));
-    }
-
-    //read binaries
-    auto entityBlobTexture = sdaiGetEntity(ifcModel, "IfcBlobTexture");
-    auto blobTextureAggr = sdaiGetEntityExtent(ifcModel, entityBlobTexture);
-    auto N = sdaiGetMemberCount(blobTextureAggr);
-    for (int_t i = 0; i < N; i++) {
-        int_t inst = 0;
-        engiGetAggrElement(blobTextureAggr, i, sdaiINSTANCE, &inst);
-        auto code = IfcBlobTexture(inst).get_RasterCode();
-        assert(0 == strcmp(code, rasterCode));
     }
 
     sdaiCloseModel(ifcModel);
