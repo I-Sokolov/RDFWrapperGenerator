@@ -3,7 +3,7 @@
 
 using namespace IFC4;
 
-extern void CheckBinaries()
+extern void TestBinaries()
 {
 #define NC 4
     char rasterCode[NC * 1024 * 4 + 2];

@@ -27,7 +27,7 @@
     <ClCompile Include="HelloWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CheckBinaries.cpp">
+    <ClCompile Include="TestBinaries.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

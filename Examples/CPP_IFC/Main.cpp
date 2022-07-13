@@ -2,7 +2,7 @@
 extern void IFC4_test();
 extern void AP242_test();
 extern void HelloWall();
-extern void CheckBinaries();
+extern void TestBinaries();
 
 extern int main()
 {
@@ -12,7 +12,7 @@ extern int main()
 
     HelloWall();
 
-    CheckBinaries();
+    TestBinaries();
 
     return 0;
 }
