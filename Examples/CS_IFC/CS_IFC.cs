@@ -13,6 +13,8 @@ namespace CS_IFC
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            IfcBlobTextureExample.Run();
+#if NOT_NOW
             var ifcModel = ifcengine.sdaiOpenModelBN(0, (string)null, "IFC4");
 
             var ownerHistory = IfcOwnerHistory.Create(ifcModel);
@@ -70,7 +72,7 @@ namespace CS_IFC
 
 
             ifcengine.sdaiSaveModelBN(ifcModel, "test.cs.ifc");
-
+#endif
         }
     }
 }
