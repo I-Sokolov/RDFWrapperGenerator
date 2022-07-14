@@ -131,6 +131,20 @@ extern void IFC4_test()
     txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
     ASSERT(txt == NULL);
 
+    //check type methodt
+    if (measureWithUnit.get_ValueComponent().get_IfcMeasureValue().is_IfcAreaMeasure()) {
+        assert(false);
+    }
+    else if (!measureWithUnit.get_ValueComponent().get_IfcMeasureValue().is_IfcRatioMeasure()) {
+        assert(false);
+    }
+    else if (measureWithUnit.get_ValueComponent().get_IfcSimpleValue().is_IfcText()) {
+        assert(false);
+    }
+    else if (measureWithUnit.get_ValueComponent().get_IfcMeasureValue().is_IfcComplexNumber()) {
+        assert(false);
+    }
+
     //shortcuts methods
     as_double = measureWithUnit.get_ValueComponent().as_double();
     as_text = measureWithUnit.get_ValueComponent().as_text();
@@ -172,6 +186,8 @@ extern void IFC4_test()
 
     //set text
     measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcText("my text");
+
+    ASSERT(measureWithUnit.get_ValueComponent().get_IfcSimpleValue().is_IfcText());
 
     dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
     ASSERT(dval.IsNull());
@@ -216,6 +232,9 @@ extern void IFC4_test()
 
     instance = actor.get_TheActor().as_instance();
     ASSERT(instance == person);
+
+    ASSERT(actor.get_TheActor().is_IfcPerson());
+    ASSERT(!actor.get_TheActor().is_IfcOrganization());
 
     //
     // LOGICAL VALUES

@@ -255,6 +255,31 @@ namespace NAMESPACE_NAME
             sdaiPutADBTypePath(adb, 1, typeName);
             SetADB(adb);
         }
+
+        //
+        bool IsADBType(TextData typeName)
+        {
+            if (void* adb = ADB()) {
+                char* path = sdaiGetADBTypePath(adb, 0);
+                if (0 == _stricmp(path, typeName)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool IsADBEntity(TextData typeName)
+        {
+            if (void* adb = ADB()) {
+                IntData inst = 0;
+                if (sdaiGetADBValue(adb, sdaiINSTANCE, &inst)) {
+                    if (sdaiIsKindOfBN(inst, typeName)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     };
 
     /// <summary>
@@ -613,22 +638,27 @@ namespace NAMESPACE_NAME
         GEN_TYPE_NAME_accessor(SdaiInstance instance, TextData attrName = NULL, void* adb=NULL) : Select(instance, attrName, adb) {}
         GEN_TYPE_NAME_accessor(Select* outer) : Select(outer) {}
 //## SelectSimpleGet
+        bool is_SimpleType() { return IsADBType("TypeNameUpper"); }
         Nullable<SimpleType> get_SimpleType() { return getSimpleValue<SimpleType>("TypeNameUpper", sdaiTYPE); }
 //## SelectSimplePut
         void put_SimpleType(SimpleType value) { putSimpleValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectTextGet
+        bool is_TextType() { return IsADBType("TypeNameUpper"); }
         TextType get_TextType() { return getTextValue("TypeNameUpper", sdaiTYPE); }
 //## SelectTextPut
         void put_TextType(TextType value) { putTextValue("TypeNameUpper", sdaiTYPE, value); }
 //## SelectEntityGet
+        bool is_REF_ENTITY() {return IsADBEntity("REF_ENTITY");}
         REF_ENTITY get_REF_ENTITY();
 //## SelectEntityPut
         void put_REF_ENTITY(REF_ENTITY inst);
 //## SelectEnumerationGet
+        bool is_ENUMERATION_NAME() { return IsADBType("TypeNameUpper"); }
         Nullable<ENUMERATION_NAME> get_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
 //## SelectEnumerationPut
         void put_ENUMERATION_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; putEnumerationValue("TypeNameUpper", val); }
 //## SelectAggregationGet
+        bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
         void get_AggregationType(AggregationType& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); lst.FromSdaiAggr(m_instance, aggr); }
 //## SelectAggregationPut
         void put_AggregationType(AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
