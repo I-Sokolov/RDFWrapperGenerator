@@ -309,10 +309,7 @@ namespace RDFWrappers
                     generator.WriteGetPut(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationPut, isInverse);
                     if (!nested && sdaiType != null)
                     {
-                        if (sdaiType == "sdaiSTRING")
-                            generator.WriteByTemplate(Generator.Template.AttributeAggregationPutArrayText);
-                        else
-                            generator.WriteByTemplate(Generator.Template.AttributeAggregationPutArraySimple);
+                        generator.WriteByTemplate(Generator.Template.AttributeAggregationPutArray);
                     }
                 }
             }

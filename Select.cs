@@ -384,14 +384,8 @@ namespace RDFWrappers
                 System.Diagnostics.Debug.Assert(nestedAggr == 0); //to test
                 if (nestedAggr == 0 && sdaiType != null)
                 {
-                    var tpl = baseType == "TextData" ? Generator.Template.SelectAggregationPutArrayText : Generator.Template.SelectAggregationPutArraySimple;
+                    var tpl = Generator.Template.SelectAggregationPutArray;
                     generator.WriteByTemplate(tpl);
-
-                    if (foundation.declarationType == enum_express_declaration.__ENTITY)
-                    {
-                        generator.m_replacements[Generator.KWD_SimpleType] = "IntData";
-                        generator.WriteByTemplate(Generator.Template.SelectAggregationPutArraySimple);
-                    }
                 }
             }
         }

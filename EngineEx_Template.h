@@ -16,7 +16,13 @@ namespace NAMESPACE_NAME
     ///
     typedef const char* TextData;
     typedef int_t       IntData;
-
+    
+    class StringData : public std::string
+    {
+    public:
+        StringData(TextData str) : std::string(str) {}
+        operator const char* () const { return c_str(); }
+    };
 
     /// <summary>
     /// 
@@ -283,244 +289,227 @@ namespace NAMESPACE_NAME
     };
 
     /// <summary>
-    /// 
+    /// Aggregations templates
     /// </summary>
-    class Aggregation
+    /// 
+     
+    template <typename TArrayElem, typename TList> void ArrayToList(TArrayElem arrayElems[], IntData numOfElems, TList& lst)
+    {
+        for (IntData i = 0; i < numOfElems; i++) {
+            lst.push_back(arrayElems[i]);
+        }
+    }
+
+    template <typename TList> class AggrSerializer
     {
     public:
         //
-        void FromAttr(SdaiInstance instance, TextData attrName)
+        void FromAttr(TList& lst, SdaiInstance instance, TextData attrName)
         {
             SdaiAggr aggr = NULL;
             sdaiGetAttrBN(instance, attrName, sdaiAGGR, &aggr);
             if (aggr) {
-                FromSdaiAggr(instance, aggr);
+                FromSdaiAggr(lst, instance, aggr);
             }
         }
 
         //
-        virtual void FromSdaiAggr(SdaiInstance instance, SdaiAggr) = NULL;
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance inst, SdaiAggr aggr) = 0;
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) = 0;
     };
 
     /// <summary>
     /// 
     /// </summary>
-    template <typename T, IntData sdaiType> class AggregationOfSimple : public Aggregation, public std::list<T>
+    template <typename TList, typename TElem, IntData sdaiType> class AggrSerializerSimple : public AggrSerializer<TList>
     {
     public:
+        AggrSerializerSimple()
+        {
+            assert(sdaiType == sdaiINTEGER || sdaiType == sdaiREAL || sdaiType == sdaiBOOLEAN);
+        }
+
         //
-        virtual void FromSdaiAggr(SdaiInstance /*instance*/, SdaiAggr aggr) override
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance /*unused*/, SdaiAggr aggr) override
         {
             IntData  cnt = sdaiGetMemberCount(aggr);
             for (IntData i = 0; i < cnt; i++) {
-                T val = 0;
+                TElem val = 0;
                 engiGetAggrElement(aggr, i, sdaiType, &val);
-                this->push_back(val);
+                lst.push_back(val);
             }
         }
 
         //
-        SdaiAggr ToSdaiAggr(SdaiInstance instance, TextData attrName)
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
-            for (auto it = this->begin(); it != this->end(); it++) {
-                T val = *it;
+            for (auto const& v : lst) {
+                TElem val = v;
                 sdaiAppend((IntData) aggr, sdaiType, &val);
             }
             return aggr;
         }
-
-        //
-        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
-        {
-            for (size_t i = 0; i < cnt; i++) {
-                this->push_back(arr[i]);
-            }
-            return ToSdaiAggr(instance, attrName);
-        }
     };
 
     /// <summary>
     /// 
     /// </summary>
-    template <typename T, IntData sdaiType> class AggregationOfText : public Aggregation, public std::list<std::string>
+    template <typename TList, typename TElem, IntData sdaiType> class AggrSerializerText : public AggrSerializer<TList>
     {
     public:
-        //
-        virtual void FromSdaiAggr(SdaiInstance /*instance*/, SdaiAggr aggr) override
+        AggrSerializerText()
+        {
+            assert(sdaiType == sdaiSTRING || sdaiType == sdaiBINARY);
+        }
+
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance /*unused*/, SdaiAggr aggr) override
         {
             IntData  cnt = sdaiGetMemberCount(aggr);
             for (IntData i = 0; i < cnt; i++) {
-                TextData val = 0;
+                TextData val;
                 engiGetAggrElement(aggr, i, sdaiType, &val);
-                this->push_back(val);
+                lst.push_back(val);
             }
         }
 
-        //
-        SdaiAggr ToSdaiAggr(SdaiInstance instance, TextData attrName)
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
-            for (auto it = this->begin(); it != this->end(); it++) {
-                TextData val = it->c_str();
-                sdaiAppend((IntData) aggr, sdaiType, val);
+            for (auto& val : lst) {
+                TextData v = val;
+                sdaiAppend((IntData) aggr, sdaiType, v);
             }
             return aggr;
         }
 
-        //
-        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
-        {
-            for (size_t i = 0; i < cnt; i++) {
-                this->push_back(arr[i]);
-            }
-            return ToSdaiAggr(instance, attrName);
-        }
     };
 
     /// <summary>
     /// 
     /// </summary>
-    template <typename T> class AggregationOfInstance : public Aggregation, public std::list<T>
+    template <typename TList, typename TElem> class AggrSerializerInstance : public AggrSerializer <TList>
     {
     public:
         //
-        virtual void FromSdaiAggr(SdaiInstance /*instance*/, SdaiAggr aggr) override
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance /*unused*/, SdaiAggr aggr) override
         {
             IntData  cnt = sdaiGetMemberCount(aggr);
             for (IntData i = 0; i < cnt; i++) {
-                IntData val = 0;
+                int_t val = 0;
                 engiGetAggrElement(aggr, i, sdaiINSTANCE, &val);
-                this->push_back(val);
-            }
-        }
-
-        //
-        SdaiAggr ToSdaiAggr(SdaiInstance instance, TextData attrName)
-        {
-            SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
-            for (auto it = this->begin(); it != this->end(); it++) {
-                IntData val = *it;
-                sdaiAppend((IntData) aggr, sdaiINSTANCE, (void*)val);
-            }
-            return aggr;
-        }
-
-        //
-        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
-        {
-            for (size_t i = 0; i < cnt; i++) {
-                this->push_back(arr[i]);
-            }
-            return ToSdaiAggr(instance, attrName);
-        }
-
-        SdaiAggr ToSdaiAggr(const IntData arr[], size_t cnt, SdaiInstance instance, TextData attrName)
-        {
-            for (size_t i = 0; i < cnt; i++) {
-                this->push_back(arr[i]);
-            }
-            return ToSdaiAggr(instance, attrName);
-        }
-    };
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    template <typename T, TextData* rEnumValues> class AggregationOfEnum : public Aggregation, public std::list<T>
-    {
-    public:
-        //
-        virtual void FromSdaiAggr(SdaiInstance /*instance*/, SdaiAggr aggr) override
-        {
-            IntData  cnt = sdaiGetMemberCount(aggr);
-            for (IntData i = 0; i < cnt; i++) {
-                TextData value = 0;
-                engiGetAggrElement(aggr, i, sdaiENUM, &value);
-                int val = EnumerationNameToIndex(rEnumValues, value);
-                if (val >= 0) {
-                    this->push_back((T)val);
+                TElem elem(val);
+                if (val) {
+                    lst.push_back(val);
                 }
             }
         }
 
         //
-        SdaiAggr ToSdaiAggr(SdaiInstance instance, TextData attrName)
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
-            for (auto it = this->begin(); it != this->end(); it++) {
-                T val = *it;
-                TextData value = rEnumValues[(int)val];
-                sdaiAppend((IntData) aggr, sdaiENUM, value);
+            for (auto& val : lst) {
+                int_t v = val;
+                sdaiAppend((IntData) aggr, sdaiINSTANCE, (void*) v);
             }
             return aggr;
         }
+    };
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    template <typename TList, typename TElem, TextData* rEnumValues, IntData sdaiType> class AggrSerializerEnum : public AggrSerializer<TList>
+    {
+    public:
+        AggrSerializerEnum()
+        {
+            assert(sdaiType == sdaiENUM || sdaiType == sdaiLOGICAL);
+        }
 
         //
-        SdaiAggr ToSdaiAggr(const T arr[], size_t cnt, SdaiInstance instance, TextData attrName)
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance /*instance*/, SdaiAggr aggr) override
         {
-            for (size_t i = 0; i < cnt; i++) {
-                this->push_back(arr[i]);
+            IntData  cnt = sdaiGetMemberCount(aggr);
+            for (IntData i = 0; i < cnt; i++) {
+                TextData value = NULL;
+                engiGetAggrElement(aggr, i, sdaiENUM, &value);
+                int val = EnumerationNameToIndex(rEnumValues, value);
+                if (val >= 0) {
+                    lst.push_back((TElem)val);
+                }
             }
-            return ToSdaiAggr(instance, attrName);
+        }
+
+        //
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
+        {
+            SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
+            for (auto const& val : lst) {
+                TextData value = rEnumValues[(IntData)val];
+                sdaiAppend((IntData) aggr, sdaiENUM, value);
+            }
+            return aggr;
         }
     };
 
     /// <summary>
     /// 
     /// </summary>
-    template <typename T> class AggregationOfAggregation : public Aggregation, public std::list<T>
+    template <typename TList, typename TNestedAggr, typename TNestedSerializer> class AggrSerializerAggr : public AggrSerializer<TList>
     {
     public:
         //
-        virtual void FromSdaiAggr(SdaiInstance instance, SdaiAggr aggr) override
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance instance, SdaiAggr aggr) override
         {
             IntData  cnt = sdaiGetMemberCount(aggr);
             for (IntData i = 0; i < cnt; i++) {
                 SdaiAggr nested = 0;
                 engiGetAggrElement(aggr, i, sdaiAGGR, &nested);
                 if (nested) {
-                    this->push_back(T());
-                    this->back().FromSdaiAggr(instance, nested);
+                    lst.push_back(TNestedAggr());
+                    TNestedSerializer nestedSerializer;
+                    nestedSerializer.FromSdaiAggr(lst.back(), instance, nested);
                 }
             }
         }
 
         //
-        SdaiAggr ToSdaiAggr(SdaiInstance instance, TextData attrName)
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
-            for (auto it = this->begin(); it != this->end(); it++) {
-                T& val = *it;
-                SdaiAggr nested = val.ToSdaiAggr(instance, NULL);
+            for (TNestedAggr& val : lst) {
+                TNestedSerializer nestedSerializer;
+                SdaiAggr nested = nestedSerializer.ToSdaiAggr(val, instance, NULL);
                 sdaiAppend((IntData) aggr, sdaiAGGR, nested);
             }
             return aggr;
         }
     };
     
-    template<typename T> class AggregationOfSelect : public Aggregation, public std::list<T>
+    template<typename TList, typename TElem> class AggrSerializerSelect : public AggrSerializer<TList>
     {
     public:
-        virtual void FromSdaiAggr(SdaiInstance instance, SdaiAggr aggr) override
+        //
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance instance, SdaiAggr aggr) override
         {
             IntData  cnt = sdaiGetMemberCount(aggr);
             for (IntData i = 0; i < cnt; i++) {
                 void* adb = 0;
                 engiGetAggrElement(aggr, i, sdaiADB, &adb);
                 if (adb) {
-                    this->push_back(T(instance, NULL, adb));
+                    lst.push_back(TElem(instance, NULL, adb));
                 }
             }
         }
 
         //
-        SdaiAggr ToSdaiAggr(SdaiInstance instance, TextData attrName)
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
-            for (auto it = this->begin(); it != this->end(); it++) {
-                T& val = *it;
+            for (auto& val : lst) {
                 void* adb = val.ADB();
                 if (adb) {
                     sdaiAppend((IntData) aggr, sdaiADB, adb);
@@ -579,6 +568,7 @@ namespace NAMESPACE_NAME
     typedef TextData    TextType;
     typedef int         SelectType;
     typedef SdaiEntity  REF_ENTITY;    
+    template <typename TList> class SimpleTypeSerializer {};
 
 #define sdaiTYPE  sdaiREAL
 #define ENUMERATION_VALUES_ARRAY ENUMERATION_NAME_
@@ -614,17 +604,23 @@ namespace NAMESPACE_NAME
     // Unnamed aggregations
     //
 //## AggregationOfSimple
-    typedef AggregationOfSimple<SimpleType, sdaiTYPE> AggregationType;
+    typedef std::list<SimpleType> AggregationType;
+    template <typename TList> class AggregationTypeSerializer : public AggrSerializerSimple<TList, SimpleType, sdaiTYPE> {};
 //## AggregationOfText
-    typedef AggregationOfText<TextType, sdaiTYPE> Aggregationtype;
+    typedef std::list<StringData> Aggregationtype;
+    template <typename TList> class AggregationtypeSerializer : public AggrSerializerText<Aggregationtype, TextType, sdaiTYPE> {};
 //## AggregationOfInstance
-    typedef AggregationOfInstance<SimpleType> AggregationTYpe;
+    typedef std::list<SimpleType> AggregationTYpe; 
+    template <typename TList> class AggregationTYpeSerializer : public AggrSerializerInstance<TList, SimpleType> {};
 //## AggregationOfEnum
-    typedef AggregationOfEnum<ENUMERATION_NAME, ENUMERATION_NAME_> AggregationTyPe;
+    typedef std::list<ENUMERATION_NAME> AggregationTyPe;
+    template <typename TList> class AggregationTyPeSerializer : public AggrSerializerEnum<TList, ENUMERATION_NAME, ENUMERATION_NAME_, sdaiTYPE> {};
 //## AggregationOfAggregation
-    typedef AggregationOfAggregation<SimpleType> AggregationTYPe;
+    typedef std::list<SimpleType> AggregationTYPe;
+    template <typename TList> class AggregationTYPeSerializer : public AggrSerializerAggr<TList, SimpleType, SimpleTypeSerializer<SimpleType>> {};
 //## AggregationOfSelect
-    typedef AggregationOfSelect<SimpleType> AggregationTYPE;
+    typedef std::list<SimpleType> AggregationTYPE;
+    template <typename TList> class AggregationTYPESerializer : public AggrSerializerSelect<TList, SimpleType> {};
 //## SelectsBegin
 
     //
@@ -635,7 +631,7 @@ namespace NAMESPACE_NAME
     class GEN_TYPE_NAME_accessor : public Select
     {
     public:
-        GEN_TYPE_NAME_accessor(SdaiInstance instance, TextData attrName = NULL, void* adb=NULL) : Select(instance, attrName, adb) {}
+        GEN_TYPE_NAME_accessor(SdaiInstance instance = 0, TextData attrName = NULL, void* adb = NULL) : Select(instance, attrName, adb) {}
         GEN_TYPE_NAME_accessor(Select* outer) : Select(outer) {}
 //## SelectSimpleGet
         bool is_SimpleType() { return IsADBType("TypeNameUpper"); }
@@ -659,13 +655,27 @@ namespace NAMESPACE_NAME
         void put_ENUMERATION_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; putEnumerationValue("TypeNameUpper", val); }
 //## SelectAggregationGet
         bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
-        void get_AggregationType(AggregationType& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); lst.FromSdaiAggr(m_instance, aggr); }
+        //you can use AggregationType as parameter
+        template <typename TList> void get_AggregationType(TList& lst) 
+        { 
+            SdaiAggr aggr = getAggrValue("TypeNameUpper"); 
+            AggregationTypeSerializer<TList> sr; 
+            sr.FromSdaiAggr(lst, m_instance, aggr); 
+        }
 //## SelectAggregationPut
-        void put_AggregationType(AggregationType& lst) { SdaiAggr aggr = lst.ToSdaiAggr(m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
-//## SelectAggregationPutArraySimple
-        void put_AggregationType(const SimpleType arr[], size_t n) { AggregationType lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
-//## SelectAggregationPutArrayText
-        void put_AggregationType(TextType arr[], size_t n) { Aggregationtype lst; SdaiAggr aggr = lst.ToSdaiAggr(arr, n, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
+        template <typename TList> void put_AggregationType(TList& lst) 
+        { 
+            AggregationTypeSerializer<TList> sr;
+            SdaiAggr aggr = sr.ToSdaiAggr(lst, m_instance, NULL); 
+            putAggrValue("TypeNameUpper", aggr); 
+        }
+//## SelectAggregationPutArray
+        template <typename TArrayElem> void put_AggregationType(TArrayElem arr[], size_t n) 
+        {
+            AggregationType lst;
+            ArrayToList(arr, n, lst);
+            put_AggregationType(lst);
+        }
 //## SelectNested
         GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return GEN_TYPE_NAME_accessor(this); }
 //## SelectGetAsDouble
@@ -733,13 +743,25 @@ namespace NAMESPACE_NAME
         GEN_TYPE_NAME_accessor getOrPut_ATTR_NAME() { return GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", NULL); }
 //## AttributeAggregationGet
 
-        void get_ATTr_NAME(AggregationType& lst) { lst.FromAttr (m_instance, "ATTR_NAME"); }
+        //you may use AggregationType as TList
+        template <typename TList> void get_ATTr_NAME(TList& lst)
+        {
+            AggregationTypeSerializer<TList> sr;
+            sr.FromAttr(lst, m_instance, "ATTR_NAME");
+        }
 //## AttributeAggregationPut
-        void put_ATTr_NAME(AggregationType& lst) { lst.ToSdaiAggr(m_instance, "ATTR_NAME"); }
-//## AttributeAggregationPutArraySimple
-        void put_ATTr_NAME(const SimpleType arr[], size_t n) { AggregationType lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
-//## AttributeAggregationPutArrayText
-        void put_ATTr_NAME(TextType arr[], size_t n) { Aggregationtype lst; lst.ToSdaiAggr(arr, n, m_instance, "ATTR_NAME"); }
+        template <typename TList> void put_ATTr_NAME(TList& lst)
+        {
+            AggregationTypeSerializer<TList> sr;
+            sr.ToSdaiAggr(lst, m_instance, "ATTR_NAME");
+        }
+//## AttributeAggregationPutArray
+        template <typename TArrayElem> void put_ATTr_NAME(TArrayElem arr[], size_t n) 
+        {
+            AggregationType lst;
+            ArrayToList(arr, n, lst);
+            put_ATTr_NAME(lst);
+        }
 //## EntityEnd
     };
 

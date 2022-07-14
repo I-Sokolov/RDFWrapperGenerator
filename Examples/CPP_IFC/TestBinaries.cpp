@@ -55,7 +55,7 @@ extern void TestBinaries()
     
     lstBin.clear();
     pixelTexture.get_Pixel(lstBin);
-    assert(lstBin.size() == 2 && !strcmp(lstBin.front().c_str(), rasterCode) && !strcmp(lstBin.back().c_str(), rasterCode));
+    assert(lstBin.size() == 2 && !strcmp(lstBin.front(), rasterCode) && !strcmp(lstBin.back(), rasterCode));
 
     //
     //select
@@ -103,7 +103,7 @@ extern void TestBinaries()
         engiGetAggrElement(pixelTextureAggr, i, sdaiINSTANCE, &inst);
         ListOfIfcBinary lstBin;
         IfcPixelTexture(inst).get_Pixel(lstBin);
-        assert(lstBin.size() == 2 && !strcmp(lstBin.front().c_str(), rasterCode) && !strcmp(lstBin.back().c_str(), rasterCode));
+        assert(lstBin.size() == 2 && !strcmp(lstBin.front(), rasterCode) && !strcmp(lstBin.back(), rasterCode));
     }
 
     auto entityValue = sdaiGetEntity(ifcModel, "IfcAppliedValue");

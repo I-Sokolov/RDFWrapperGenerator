@@ -312,7 +312,7 @@ extern void IFC4_test()
     ASSERT(middleNames.size() == 3);
     int i = 0;
     for (auto m : middleNames) {
-        ASSERT(0 == strcmp(m.c_str(), DaliMiddleNames[i++]));
+        ASSERT(0 == strcmp(m, DaliMiddleNames[i++]));
     }
 
     //
