@@ -173,7 +173,7 @@ namespace RDFWrappers
                         elemType = baseType;
                     }
 
-                    if (baseType == "TextData")
+                    if (baseType == "TextValue")
                     {
                         template = Generator.Template.AggregationOfText;
                     }

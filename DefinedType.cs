@@ -44,7 +44,7 @@ namespace RDFWrappers
                         return refType.GetBaseCSType();
 
                     case enum_express_declaration.__ENTITY:
-                        return "IntData";
+                        return "IntValue";
 
                     default:
                         return null;

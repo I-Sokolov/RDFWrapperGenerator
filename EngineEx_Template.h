@@ -14,20 +14,19 @@
 namespace NAMESPACE_NAME
 {
     ///
-    typedef const char* TextData;
-    typedef int_t       IntData;
+    typedef const char* TextValue;
+    typedef int_t       IntValue;
     
-    class StringData : public std::string
+    class StringValue : public std::string
     {
     public:
-        StringData(TextData str) : std::string(str) {}
+        StringValue(TextValue str) : std::string(str) {}
         operator const char* () const { return c_str(); }
     };
 
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     template <typename T> class Nullable
     {
     protected:
@@ -55,25 +54,21 @@ namespace NAMESPACE_NAME
     //
     //
     enum class LOGICAL_VALUE { False=0, True, Unknown };
-    static TextData LOGICAL_VALUE_[] = {"F", "T", "U", NULL};
+    static TextValue LOGICAL_VALUE_[] = {"F", "T", "U", NULL};
 
     //
     //
-    static int EnumerationNameToIndex(TextData rEnumValues[], TextData value)
+    static int EnumerationNameToIndex(TextValue rEnumValues[], TextValue value)
     {
         if (value) {
-
             for (int i = 0; rEnumValues[i]; i++) {
                 if (0 == _stricmp(value, rEnumValues[i])) {
                     return i;
                 }
             }
         }
-
         return -1;
     }
-
-
 
     /// <summary>
     /// Helper class to handle and access SELECT instance data
@@ -82,7 +77,7 @@ namespace NAMESPACE_NAME
     {
     protected:
         SdaiInstance m_instance;
-        TextData m_attrName;
+        TextValue m_attrName;
 
     private:
         void* m_adb;
@@ -102,11 +97,12 @@ namespace NAMESPACE_NAME
                     m_adb = NULL;
                 }
             }
+
             return m_adb; 
         }
 
     protected:
-        Select(SdaiInstance instance, TextData attrName = NULL, void* adb = NULL)
+        Select(SdaiInstance instance, TextValue attrName = NULL, void* adb = NULL)
             : m_instance(instance), m_attrName(attrName), m_adb(adb), m_outerSelect (NULL)
         {
             assert(instance);
@@ -137,10 +133,9 @@ namespace NAMESPACE_NAME
         }
 
         //
-        template <typename T> Nullable<T> getSimpleValue(TextData typeName, IntData sdaiType)
+        template <typename T> Nullable<T> getSimpleValue(TextValue typeName, IntValue sdaiType)
         {
-            Nullable<T> ret;
-            
+            Nullable<T> ret;            
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
@@ -154,7 +149,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        template <typename T> void putSimpleValue(TextData typeName, IntData sdaiType, T value)
+        template <typename T> void putSimpleValue(TextValue typeName, IntValue sdaiType, T value)
         {
             void* adb = sdaiCreateADB(sdaiType, &value);
             sdaiPutADBTypePath(adb, 1, typeName);
@@ -162,10 +157,9 @@ namespace NAMESPACE_NAME
         }
 
         //
-        TextData getTextValue(TextData typeName, IntData sdaiType)
+        TextValue getTextValue(TextValue typeName, IntValue sdaiType)
         {
-            TextData ret = NULL;
-
+            TextValue ret = NULL;
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
@@ -178,7 +172,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void putTextValue(TextData typeName, IntData sdaiType, TextData value)
+        void putTextValue(TextValue typeName, IntValue sdaiType, TextValue value)
         {
             void* adb = sdaiCreateADB(sdaiType, value);
             sdaiPutADBTypePath(adb, 1, typeName);
@@ -186,14 +180,13 @@ namespace NAMESPACE_NAME
         }
 
         //
-        int getEnumerationValue(TextData typeName, TextData rEnumValues[])
+        int getEnumerationValue(TextValue typeName, TextValue rEnumValues[])
         {
             int ret = -1;
-
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
-                    TextData value = NULL;
+                    TextValue value = NULL;
                     if (sdaiGetADBValue(adb, sdaiENUM, &value)) {
                         ret = EnumerationNameToIndex(rEnumValues, value);
                     }
@@ -203,7 +196,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void putEnumerationValue(TextData typeName, TextData value)
+        void putEnumerationValue(TextValue typeName, TextValue value)
         {
             void* adb = sdaiCreateADB(sdaiENUM, value);
             sdaiPutADBTypePath(adb, 1, typeName);
@@ -211,12 +204,11 @@ namespace NAMESPACE_NAME
         }
 
         //
-        IntData getEntityInstance(TextData typeName)
+        IntValue getEntityInstance(TextValue typeName)
         {
-            IntData ret = 0;
-
+            IntValue ret = 0;
             if (void* adb = ADB()) {
-                IntData inst = 0;
+                IntValue inst = 0;
                 if (sdaiGetADBValue(adb, sdaiINSTANCE, &inst)) {
                     if (typeName == NULL || sdaiIsKindOfBN(inst, typeName)) {
                         ret = inst;
@@ -227,7 +219,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void putEntityInstance(TextData typeName, IntData inst)
+        void putEntityInstance(TextValue typeName, IntValue inst)
         {
             if (inst==0 || sdaiIsKindOfBN(inst, typeName)) {
                 void* adb = sdaiCreateADB(sdaiINSTANCE, (void*)inst);
@@ -239,10 +231,9 @@ namespace NAMESPACE_NAME
         }
 
         //
-        SdaiAggr getAggrValue(TextData typeName)
+        SdaiAggr getAggrValue(TextValue typeName)
         {
             SdaiAggr ret = NULL;
-
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
                 if (typeName == NULL || path && 0 == _stricmp(path, typeName)) {
@@ -255,7 +246,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void putAggrValue(TextData typeName, SdaiAggr value)
+        void putAggrValue(TextValue typeName, SdaiAggr value)
         {
             void* adb = sdaiCreateADB(sdaiAGGR, value);
             sdaiPutADBTypePath(adb, 1, typeName);
@@ -263,7 +254,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        bool IsADBType(TextData typeName)
+        bool IsADBType(TextValue typeName)
         {
             if (void* adb = ADB()) {
                 char* path = sdaiGetADBTypePath(adb, 0);
@@ -274,10 +265,10 @@ namespace NAMESPACE_NAME
             return false;
         }
 
-        bool IsADBEntity(TextData typeName)
+        bool IsADBEntity(TextValue typeName)
         {
             if (void* adb = ADB()) {
-                IntData inst = 0;
+                IntValue inst = 0;
                 if (sdaiGetADBValue(adb, sdaiINSTANCE, &inst)) {
                     if (sdaiIsKindOfBN(inst, typeName)) {
                         return true;
@@ -293,9 +284,9 @@ namespace NAMESPACE_NAME
     /// </summary>
     /// 
      
-    template <typename TArrayElem, typename TList> void ArrayToList(TArrayElem arrayElems[], IntData numOfElems, TList& lst)
+    template <typename TArrayElem, typename TList> void ArrayToList(TArrayElem arrayElems[], IntValue numOfElems, TList& lst)
     {
-        for (IntData i = 0; i < numOfElems; i++) {
+        for (IntValue i = 0; i < numOfElems; i++) {
             lst.push_back(arrayElems[i]);
         }
     }
@@ -304,7 +295,7 @@ namespace NAMESPACE_NAME
     {
     public:
         //
-        void FromAttr(TList& lst, SdaiInstance instance, TextData attrName)
+        void FromAttr(TList& lst, SdaiInstance instance, TextValue attrName)
         {
             SdaiAggr aggr = NULL;
             sdaiGetAttrBN(instance, attrName, sdaiAGGR, &aggr);
@@ -315,25 +306,22 @@ namespace NAMESPACE_NAME
 
         //
         virtual void FromSdaiAggr(TList& lst, SdaiInstance inst, SdaiAggr aggr) = 0;
-        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) = 0;
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) = 0;
     };
 
     /// <summary>
     /// 
     /// </summary>
-    template <typename TList, typename TElem, IntData sdaiType> class AggrSerializerSimple : public AggrSerializer<TList>
+    template <typename TList, typename TElem, IntValue sdaiType> class AggrSerializerSimple : public AggrSerializer<TList>
     {
     public:
-        AggrSerializerSimple()
-        {
-            assert(sdaiType == sdaiINTEGER || sdaiType == sdaiREAL || sdaiType == sdaiBOOLEAN);
-        }
+        AggrSerializerSimple() { assert(sdaiType == sdaiINTEGER || sdaiType == sdaiREAL || sdaiType == sdaiBOOLEAN); }
 
         //
         virtual void FromSdaiAggr(TList& lst, SdaiInstance /*unused*/, SdaiAggr aggr) override
         {
-            IntData  cnt = sdaiGetMemberCount(aggr);
-            for (IntData i = 0; i < cnt; i++) {
+            IntValue  cnt = sdaiGetMemberCount(aggr);
+            for (IntValue i = 0; i < cnt; i++) {
                 TElem val = 0;
                 engiGetAggrElement(aggr, i, sdaiType, &val);
                 lst.push_back(val);
@@ -341,12 +329,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto const& v : lst) {
                 TElem val = v;
-                sdaiAppend((IntData) aggr, sdaiType, &val);
+                sdaiAppend((IntValue) aggr, sdaiType, &val);
             }
             return aggr;
         }
@@ -355,30 +343,27 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    template <typename TList, typename TElem, IntData sdaiType> class AggrSerializerText : public AggrSerializer<TList>
+    template <typename TList, typename TElem, IntValue sdaiType> class AggrSerializerText : public AggrSerializer<TList>
     {
     public:
-        AggrSerializerText()
-        {
-            assert(sdaiType == sdaiSTRING || sdaiType == sdaiBINARY);
-        }
+        AggrSerializerText() { assert(sdaiType == sdaiSTRING || sdaiType == sdaiBINARY); }
 
         virtual void FromSdaiAggr(TList& lst, SdaiInstance /*unused*/, SdaiAggr aggr) override
         {
-            IntData  cnt = sdaiGetMemberCount(aggr);
-            for (IntData i = 0; i < cnt; i++) {
-                TextData val;
+            IntValue  cnt = sdaiGetMemberCount(aggr);
+            for (IntValue i = 0; i < cnt; i++) {
+                TextValue val;
                 engiGetAggrElement(aggr, i, sdaiType, &val);
                 lst.push_back(val);
             }
         }
 
-        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto& val : lst) {
-                TextData v = val;
-                sdaiAppend((IntData) aggr, sdaiType, v);
+                TextValue v = val;
+                sdaiAppend((IntValue) aggr, sdaiType, v);
             }
             return aggr;
         }
@@ -394,8 +379,8 @@ namespace NAMESPACE_NAME
         //
         virtual void FromSdaiAggr(TList& lst, SdaiInstance /*unused*/, SdaiAggr aggr) override
         {
-            IntData  cnt = sdaiGetMemberCount(aggr);
-            for (IntData i = 0; i < cnt; i++) {
+            IntValue  cnt = sdaiGetMemberCount(aggr);
+            for (IntValue i = 0; i < cnt; i++) {
                 int_t val = 0;
                 engiGetAggrElement(aggr, i, sdaiINSTANCE, &val);
                 TElem elem(val);
@@ -406,12 +391,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto& val : lst) {
                 int_t v = val;
-                sdaiAppend((IntData) aggr, sdaiINSTANCE, (void*) v);
+                sdaiAppend((IntValue) aggr, sdaiINSTANCE, (void*) v);
             }
             return aggr;
         }
@@ -421,20 +406,17 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    template <typename TList, typename TElem, TextData* rEnumValues, IntData sdaiType> class AggrSerializerEnum : public AggrSerializer<TList>
+    template <typename TList, typename TElem, TextValue* rEnumValues, IntValue sdaiType> class AggrSerializerEnum : public AggrSerializer<TList>
     {
     public:
-        AggrSerializerEnum()
-        {
-            assert(sdaiType == sdaiENUM || sdaiType == sdaiLOGICAL);
-        }
+        AggrSerializerEnum() { assert(sdaiType == sdaiENUM || sdaiType == sdaiLOGICAL); }
 
         //
         virtual void FromSdaiAggr(TList& lst, SdaiInstance /*instance*/, SdaiAggr aggr) override
         {
-            IntData  cnt = sdaiGetMemberCount(aggr);
-            for (IntData i = 0; i < cnt; i++) {
-                TextData value = NULL;
+            IntValue  cnt = sdaiGetMemberCount(aggr);
+            for (IntValue i = 0; i < cnt; i++) {
+                TextValue value = NULL;
                 engiGetAggrElement(aggr, i, sdaiENUM, &value);
                 int val = EnumerationNameToIndex(rEnumValues, value);
                 if (val >= 0) {
@@ -444,12 +426,12 @@ namespace NAMESPACE_NAME
         }
 
         //
-        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto const& val : lst) {
-                TextData value = rEnumValues[(IntData)val];
-                sdaiAppend((IntData) aggr, sdaiENUM, value);
+                TextValue value = rEnumValues[(IntValue)val];
+                sdaiAppend((IntValue) aggr, sdaiENUM, value);
             }
             return aggr;
         }
@@ -464,8 +446,8 @@ namespace NAMESPACE_NAME
         //
         virtual void FromSdaiAggr(TList& lst, SdaiInstance instance, SdaiAggr aggr) override
         {
-            IntData  cnt = sdaiGetMemberCount(aggr);
-            for (IntData i = 0; i < cnt; i++) {
+            IntValue  cnt = sdaiGetMemberCount(aggr);
+            for (IntValue i = 0; i < cnt; i++) {
                 SdaiAggr nested = 0;
                 engiGetAggrElement(aggr, i, sdaiAGGR, &nested);
                 if (nested) {
@@ -477,13 +459,13 @@ namespace NAMESPACE_NAME
         }
 
         //
-        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (TNestedAggr& val : lst) {
                 TNestedSerializer nestedSerializer;
                 SdaiAggr nested = nestedSerializer.ToSdaiAggr(val, instance, NULL);
-                sdaiAppend((IntData) aggr, sdaiAGGR, nested);
+                sdaiAppend((IntValue) aggr, sdaiAGGR, nested);
             }
             return aggr;
         }
@@ -495,8 +477,8 @@ namespace NAMESPACE_NAME
         //
         virtual void FromSdaiAggr(TList& lst, SdaiInstance instance, SdaiAggr aggr) override
         {
-            IntData  cnt = sdaiGetMemberCount(aggr);
-            for (IntData i = 0; i < cnt; i++) {
+            IntValue  cnt = sdaiGetMemberCount(aggr);
+            for (IntValue i = 0; i < cnt; i++) {
                 void* adb = 0;
                 engiGetAggrElement(aggr, i, sdaiADB, &adb);
                 if (adb) {
@@ -506,13 +488,13 @@ namespace NAMESPACE_NAME
         }
 
         //
-        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextData attrName) override
+        virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) override
         {
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto& val : lst) {
                 void* adb = val.ADB();
                 if (adb) {
-                    sdaiAppend((IntData) aggr, sdaiADB, adb);
+                    sdaiAppend((IntValue) aggr, sdaiADB, adb);
                 }
             }
             return aggr;
@@ -522,7 +504,7 @@ namespace NAMESPACE_NAME
 
     /// <summary>
     /// Provides utility methods to interact with a generic entity instnace
-    /// You also can use object of this class instead of IntData handle of the instance in any place where the handle is required
+    /// You also can use object of this class instead of IntValue handle of the instance in any place where the handle is required
     /// </summary>
     class Entity
     {
@@ -530,7 +512,7 @@ namespace NAMESPACE_NAME
         SdaiInstance m_instance;
 
     public:
-        Entity(SdaiInstance instance, TextData entityName)
+        Entity(SdaiInstance instance, TextValue entityName)
         {
             m_instance = instance;
 
@@ -550,9 +532,9 @@ namespace NAMESPACE_NAME
     protected:
         //
         //
-        int getENUM(TextData attrName, TextData rEnumValues[])
+        int getENUM(TextValue attrName, TextValue rEnumValues[])
         {
-            TextData value = NULL;
+            TextValue value = NULL;
             sdaiGetAttrBN(m_instance, attrName, sdaiENUM, (void*) &value);
             return EnumerationNameToIndex(rEnumValues, value);
         }
@@ -565,7 +547,7 @@ namespace NAMESPACE_NAME
 //## TemplateUtilityTypes    - this section just to make templates syntax correc
 
     typedef double      SimpleType;
-    typedef TextData    TextType;
+    typedef TextValue    TextType;
     typedef int         SelectType;
     typedef SdaiEntity  REF_ENTITY;    
     template <typename TList> class SimpleTypeSerializer {};
@@ -596,7 +578,7 @@ namespace NAMESPACE_NAME
 //## EnumerationEnd
         ___unk = -1
     };
-    static TextData ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
+    static TextValue ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
 
 //## TEMPLATE: AggrgarionTypesBegin
 
@@ -607,7 +589,7 @@ namespace NAMESPACE_NAME
     typedef std::list<SimpleType> AggregationType;
     template <typename TList> class AggregationTypeSerializer : public AggrSerializerSimple<TList, SimpleType, sdaiTYPE> {};
 //## AggregationOfText
-    typedef std::list<StringData> Aggregationtype;
+    typedef std::list<StringValue> Aggregationtype;
     template <typename TList> class AggregationtypeSerializer : public AggrSerializerText<Aggregationtype, TextType, sdaiTYPE> {};
 //## AggregationOfInstance
     typedef std::list<SimpleType> AggregationTYpe; 
@@ -631,7 +613,7 @@ namespace NAMESPACE_NAME
     class GEN_TYPE_NAME_accessor : public Select
     {
     public:
-        GEN_TYPE_NAME_accessor(SdaiInstance instance = 0, TextData attrName = NULL, void* adb = NULL) : Select(instance, attrName, adb) {}
+        GEN_TYPE_NAME_accessor(SdaiInstance instance = 0, TextValue attrName = NULL, void* adb = NULL) : Select(instance, attrName, adb) {}
         GEN_TYPE_NAME_accessor(Select* outer) : Select(outer) {}
 //## SelectSimpleGet
         bool is_SimpleType() { return IsADBType("TypeNameUpper"); }
@@ -652,40 +634,30 @@ namespace NAMESPACE_NAME
         bool is_ENUMERATION_NAME() { return IsADBType("TypeNameUpper"); }
         Nullable<ENUMERATION_NAME> get_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
 //## SelectEnumerationPut
-        void put_ENUMERATION_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; putEnumerationValue("TypeNameUpper", val); }
+        void put_ENUMERATION_NAME(ENUMERATION_NAME value) { TextValue val = ENUMERATION_VALUES_ARRAY[(int)value]; putEnumerationValue("TypeNameUpper", val); }
 //## SelectAggregationGet
         bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
-        //you can use AggregationType as parameter
-        template <typename TList> void get_AggregationType(TList& lst) 
-        { 
-            SdaiAggr aggr = getAggrValue("TypeNameUpper"); 
-            AggregationTypeSerializer<TList> sr; 
-            sr.FromSdaiAggr(lst, m_instance, aggr); 
-        }
+
+        //TList may be AggregationType or list of converible elements
+        template <typename TList> void get_AggregationType(TList& lst) { SdaiAggr aggr = getAggrValue("TypeNameUpper"); AggregationTypeSerializer<TList> sr; sr.FromSdaiAggr(lst, m_instance, aggr); }
 //## SelectAggregationPut
-        template <typename TList> void put_AggregationType(TList& lst) 
-        { 
-            AggregationTypeSerializer<TList> sr;
-            SdaiAggr aggr = sr.ToSdaiAggr(lst, m_instance, NULL); 
-            putAggrValue("TypeNameUpper", aggr); 
-        }
+
+        //TList may be AggregationType or list of converible elements
+        template <typename TList> void put_AggregationType(TList& lst) { AggregationTypeSerializer<TList> sr; SdaiAggr aggr = sr.ToSdaiAggr(lst, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
 //## SelectAggregationPutArray
-        template <typename TArrayElem> void put_AggregationType(TArrayElem arr[], size_t n) 
-        {
-            AggregationType lst;
-            ArrayToList(arr, n, lst);
-            put_AggregationType(lst);
-        }
+
+        //TArrayElem[] may be SimpleType[] or array of convertible elements
+        template <typename TArrayElem> void put_AggregationType(TArrayElem arr[], size_t n) { AggregationType lst; ArrayToList(arr, n, lst); put_AggregationType(lst); }
 //## SelectNested
         GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return GEN_TYPE_NAME_accessor(this); }
 //## SelectGetAsDouble
         Nullable<double> as_double() { double val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiREAL, &val)) return val; else return Nullable<double>(); }
 //## SelectGetAsInt
-        Nullable<IntData> as_int() { IntData val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINTEGER, &val)) return val; else return Nullable<IntData>(); }
+        Nullable<IntValue> as_int() { IntValue val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINTEGER, &val)) return val; else return Nullable<IntValue>(); }
 //## SelectGetAsBool
         Nullable<bool> as_bool() { bool val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiBOOLEAN, &val)) return val; else return Nullable<bool>(); }
 //## SelectGetAsText
-        TextData as_text() { TextData val = NULL; sdaiGetAttrBN(m_instance, m_attrName, sdaiSTRING, &val); return val; }
+        TextValue as_text() { TextValue val = NULL; sdaiGetAttrBN(m_instance, m_attrName, sdaiSTRING, &val); return val; }
 //## SelectGetAsEntity
         SdaiInstance as_instance() { return getEntityInstance(NULL); }
 //## SelectAccessorEnd
@@ -701,7 +673,7 @@ namespace NAMESPACE_NAME
 
     /// <summary>
     /// Provides utility methods to interact with an instnace of OWL class ENTITY_NAME
-    /// You also can use object of this C++ class instead of IntData handle of the OWL instance in any place where the handle is required
+    /// You also can use object of this C++ class instead of IntValue handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ENTITY_NAME : public virtual /*PARENT_NAME*/Entity
     {
@@ -710,7 +682,7 @@ namespace NAMESPACE_NAME
         /// Constructs object of this C++ class that wraps existing instance
         /// </summary>
         /// <param name="instance">An instance to interact with</param>
-        ENTITY_NAME(SdaiInstance instance = NULL, TextData entityName = NULL)
+        ENTITY_NAME(SdaiInstance instance = NULL, TextValue entityName = NULL)
             : Entity(instance, entityName ? entityName : "ENTITY_NAME")
         {}
 
@@ -738,30 +710,21 @@ namespace NAMESPACE_NAME
 
         Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = getENUM("ATTR_NAME", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
 //## AttributeEnumPut
-        void put_ATTR_NAME(ENUMERATION_NAME value) { TextData val = ENUMERATION_VALUES_ARRAY[(int)value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
+        void put_ATTR_NAME(ENUMERATION_NAME value) { TextValue val = ENUMERATION_VALUES_ARRAY[(int)value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
 //## AttributeSelectAccessor
         GEN_TYPE_NAME_accessor getOrPut_ATTR_NAME() { return GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", NULL); }
 //## AttributeAggregationGet
 
-        //you may use AggregationType as TList
-        template <typename TList> void get_ATTr_NAME(TList& lst)
-        {
-            AggregationTypeSerializer<TList> sr;
-            sr.FromAttr(lst, m_instance, "ATTR_NAME");
-        }
+        //TList may be AggregationType or list of converible elements
+        template <typename TList> void get_ATTr_NAME(TList& lst) { AggregationTypeSerializer<TList> sr; sr.FromAttr(lst, m_instance, "ATTR_NAME"); }
 //## AttributeAggregationPut
-        template <typename TList> void put_ATTr_NAME(TList& lst)
-        {
-            AggregationTypeSerializer<TList> sr;
-            sr.ToSdaiAggr(lst, m_instance, "ATTR_NAME");
-        }
+
+        //TList may be AggregationType or list of converible elements
+        template <typename TList> void put_ATTr_NAME(TList& lst) { AggregationTypeSerializer<TList> sr;  sr.ToSdaiAggr(lst, m_instance, "ATTR_NAME"); }
 //## AttributeAggregationPutArray
-        template <typename TArrayElem> void put_ATTr_NAME(TArrayElem arr[], size_t n) 
-        {
-            AggregationType lst;
-            ArrayToList(arr, n, lst);
-            put_ATTr_NAME(lst);
-        }
+        
+        //TArrayElem[] may be SimpleType[] or array of convertible elements
+        template <typename TArrayElem> void put_ATTr_NAME(TArrayElem arr[], size_t n) { AggregationType lst; ArrayToList(arr, n, lst); put_ATTr_NAME(lst); }
 //## EntityEnd
     };
 

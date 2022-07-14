@@ -39,7 +39,7 @@ namespace RDFWrappers
                     return "bool";
 
                 case enum_express_attr_type.__INTEGER:
-                    return "IntData";
+                    return "IntValue";
 
                 case enum_express_attr_type.__NUMBER:
                     return "double";
@@ -48,11 +48,9 @@ namespace RDFWrappers
                     return "double";
 
                 case enum_express_attr_type.__STRING:
-                    return "TextData";
-
                 case enum_express_attr_type.__BINARY:
                 case enum_express_attr_type.__BINARY_32:
-                    return "TextData";
+                    return "TextValue";
 
                 case enum_express_attr_type.__NONE:
                 case enum_express_attr_type.__LOGICAL:

@@ -106,9 +106,9 @@ namespace RDFWrappers
                                 switch (cstype)
                                 {
                                     case "double": ret.Add(Generator.Template.SelectGetAsDouble); break;
-                                    case "IntData": ret.Add(Generator.Template.SelectGetAsInt); break;
+                                    case "IntValue": ret.Add(Generator.Template.SelectGetAsInt); break;
                                     case "bool": ret.Add(Generator.Template.SelectGetAsBool); break;
-                                    case "TextData": ret.Add(Generator.Template.SelectGetAsText); break;
+                                    case "TextValue": ret.Add(Generator.Template.SelectGetAsText); break;
                                     default: throw new ApplicationException("unexpected cs type " + cstype);
                                 }
                             }
@@ -325,7 +325,7 @@ namespace RDFWrappers
 
             Generator.Template tplGet;
             Generator.Template tplPut;
-            if (baseType == "TextData")
+            if (baseType == "TextValue")
             {
                 tplGet = Generator.Template.SelectTextGet;
                 tplPut = Generator.Template.SelectTextPut;
