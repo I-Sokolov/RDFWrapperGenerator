@@ -307,7 +307,7 @@ namespace RDFWrappers
                     generator.m_replacements[Generator.KWD_TextType] = elemType;
 
                     generator.WriteGetPut(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationPut, isInverse);
-                    if (!nested && sdaiType != null)
+                    if (!nested && sdaiType != null && !isInverse)
                     {
                         generator.WriteByTemplate(Generator.Template.AttributeAggregationPutArray);
                     }
