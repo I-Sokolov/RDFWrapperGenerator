@@ -3,6 +3,8 @@ extern void IFC4_test();
 extern void AP242_test();
 extern void HelloWall();
 extern void TestBinaries();
+extern void GuideExamples();
+
 
 extern int main()
 {
@@ -13,6 +15,8 @@ extern int main()
     HelloWall();
 
     TestBinaries();
+
+    GuideExamples();
 
     return 0;
 }

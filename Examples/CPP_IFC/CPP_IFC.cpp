@@ -275,6 +275,10 @@ extern void IFC4_test()
     site.get_RefLongitude(longitude);
     ASSERT(longitude.size() == 1 && longitude.front() == 54);
 
+    std::list<int_t> lstInt;
+    site.get_RefLongitude(lstInt);
+    ASSERT(lstInt.size() == 1 && lstInt.front() == 54);
+
     int64_t rint[] = {3,4};
     site.put_RefLongitude(rint, 2);
 

@@ -613,7 +613,7 @@ namespace NAMESPACE_NAME
     class GEN_TYPE_NAME_accessor : public Select
     {
     public:
-        GEN_TYPE_NAME_accessor(SdaiInstance instance = 0, TextValue attrName = NULL, void* adb = NULL) : Select(instance, attrName, adb) {}
+        GEN_TYPE_NAME_accessor(SdaiInstance instance, TextValue attrName = NULL, void* adb = NULL) : Select(instance, attrName, adb) {}
         GEN_TYPE_NAME_accessor(Select* outer) : Select(outer) {}
 //## SelectSimpleGet
         bool is_SimpleType() { return IsADBType("TypeNameUpper"); }
