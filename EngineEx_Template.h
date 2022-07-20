@@ -1,5 +1,5 @@
 //
-// Helper classes (C++ wrappers)
+// Early-binding C++ API for SDAI (C++ wrappers)
 //
 #ifndef __RDF_LTD__NAMESPACE_NAME_H
 #define __RDF_LTD__NAMESPACE_NAME_H
@@ -14,6 +14,9 @@
 namespace NAMESPACE_NAME
 {
     ///
+    typedef int_t SdaiModel;
+    typedef int_t SdaiInstance;
+
     typedef const char* TextValue;
     typedef int_t       IntValue;
     
@@ -204,11 +207,11 @@ namespace NAMESPACE_NAME
         }
 
         //
-        IntValue getEntityInstance(TextValue typeName)
+        SdaiInstance getEntityInstance(TextValue typeName)
         {
-            IntValue ret = 0;
-            if (void* adb = ADB()) {
-                IntValue inst = 0;
+            SdaiInstance ret = 0;
+            if (auto adb = ADB()) {
+                SdaiInstance inst = 0;
                 if (sdaiGetADBValue(adb, sdaiINSTANCE, &inst)) {
                     if (typeName == NULL || sdaiIsKindOfBN(inst, typeName)) {
                         ret = inst;
@@ -219,10 +222,10 @@ namespace NAMESPACE_NAME
         }
 
         //
-        void putEntityInstance(TextValue typeName, IntValue inst)
+        void putEntityInstance(TextValue typeName, SdaiInstance inst)
         {
             if (inst==0 || sdaiIsKindOfBN(inst, typeName)) {
-                void* adb = sdaiCreateADB(sdaiINSTANCE, (void*)inst);
+                auto adb = sdaiCreateADB(sdaiINSTANCE, (void*)inst);
                 SetADB(adb);
             }
             else {
@@ -379,9 +382,9 @@ namespace NAMESPACE_NAME
         //
         virtual void FromSdaiAggr(TList& lst, SdaiInstance /*unused*/, SdaiAggr aggr) override
         {
-            IntValue  cnt = sdaiGetMemberCount(aggr);
+            auto  cnt = sdaiGetMemberCount(aggr);
             for (IntValue i = 0; i < cnt; i++) {
-                int_t val = 0;
+                SdaiInstance val = 0;
                 engiGetAggrElement(aggr, i, sdaiINSTANCE, &val);
                 TElem elem(val);
                 if (val) {
@@ -393,9 +396,9 @@ namespace NAMESPACE_NAME
         //
         virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) override
         {
-            SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
+            auto aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto& val : lst) {
-                int_t v = val;
+                SdaiInstance v = val;
                 sdaiAppend((IntValue) aggr, sdaiINSTANCE, (void*) v);
             }
             return aggr;
@@ -417,7 +420,7 @@ namespace NAMESPACE_NAME
             IntValue  cnt = sdaiGetMemberCount(aggr);
             for (IntValue i = 0; i < cnt; i++) {
                 TextValue value = NULL;
-                engiGetAggrElement(aggr, i, sdaiENUM, &value);
+                engiGetAggrElement(aggr, i, sdaiType, &value);
                 int val = EnumerationNameToIndex(rEnumValues, value);
                 if (val >= 0) {
                     lst.push_back((TElem)val);
@@ -431,7 +434,7 @@ namespace NAMESPACE_NAME
             SdaiAggr aggr = sdaiCreateAggrBN(instance, attrName);
             for (auto const& val : lst) {
                 TextValue value = rEnumValues[(IntValue)val];
-                sdaiAppend((IntValue) aggr, sdaiENUM, value);
+                sdaiAppend((IntValue) aggr, sdaiType, value);
             }
             return aggr;
         }
@@ -546,10 +549,10 @@ namespace NAMESPACE_NAME
     //
 //## TemplateUtilityTypes    - this section just to make templates syntax correc
 
-    typedef double      SimpleType;
-    typedef TextValue    TextType;
-    typedef int         SelectType;
-    typedef SdaiEntity  REF_ENTITY;    
+    typedef double        SimpleType;
+    typedef TextValue     TextType;
+    typedef int           SelectType;
+    typedef int_t         REF_ENTITY;    
     template <typename TList> class SimpleTypeSerializer {};
 
 #define sdaiTYPE  sdaiREAL
