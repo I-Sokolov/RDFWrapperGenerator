@@ -583,7 +583,7 @@ namespace NAMESPACE_NAME
     };
     static TextValue ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
 
-//## TEMPLATE: AggrgarionTypesBegin
+//## TEMPLATE: AggregationTypesBegin
 
     //
     // Unnamed aggregations

@@ -54,7 +54,7 @@ namespace RDFWrappers
             EnumerationBegin,
             EnumerationElement,
             EnumerationEnd,
-            AggrgarionTypesBegin,
+            AggregationTypesBegin,
             AggregationOfSimple,
             AggregationOfText,
             AggregationOfInstance,

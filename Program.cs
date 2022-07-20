@@ -131,6 +131,10 @@ namespace RDFWrappers
                 Console.WriteLine("Generate C++ header file " + options.hFile);
                 Generator cppgen = new Generator(schema, false, options.Namespace);
                 cppgen.WriteWrapper(options.hFile);
+
+                Console.WriteLine("Generate C# code " + options.hFile);
+                Generator csgen = new Generator(schema, true, options.Namespace);
+                cppgen.WriteWrapper(options.csFile);
             }
             else
             {
