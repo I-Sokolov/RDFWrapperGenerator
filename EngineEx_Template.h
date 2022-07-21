@@ -506,8 +506,8 @@ namespace NAMESPACE_NAME
 
 
     /// <summary>
-    /// Provides utility methods to interact with a generic entity instnace
-    /// You also can use object of this class instead of IntValue handle of the instance in any place where the handle is required
+    /// Provides utility methods to interact with a generic SDAI instnace
+    /// You also can use object of this class instead of SdaiInstance handle in any place where the handle is required
     /// </summary>
     class Entity
     {
@@ -675,14 +675,14 @@ namespace NAMESPACE_NAME
 //## TEMPLATE: EntityBegin
 
     /// <summary>
-    /// Provides utility methods to interact with an instnace of OWL class ENTITY_NAME
+    /// Provides utility methods to interact with an instnace of ENTITY_NAME
     /// You also can use object of this C++ class instead of IntValue handle of the OWL instance in any place where the handle is required
     /// </summary>
     class ENTITY_NAME : public virtual /*PARENT_NAME*/Entity
     {
     public:
         /// <summary>
-        /// Constructs object of this C++ class that wraps existing instance
+        /// Constructs object of this C++ class that wraps existing SdaiInstance of ENTITY_NAME
         /// </summary>
         /// <param name="instance">An instance to interact with</param>
         ENTITY_NAME(SdaiInstance instance = NULL, TextValue entityName = NULL)

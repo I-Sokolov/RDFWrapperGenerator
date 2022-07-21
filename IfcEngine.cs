@@ -173,7 +173,9 @@ namespace RDF
 	};
 	class ifcengine
     {
-        public const int_t flagbit0 = 1;           // 2^^0    0000.0000..0000.0001
+		public const int sdaiTYPE = 0; //C++ API generator specific
+
+		public const int_t flagbit0 = 1;           // 2^^0    0000.0000..0000.0001
         public const int_t flagbit1 = 2;           // 2^^1    0000.0000..0000.0010
         public const int_t flagbit2 = 4;           // 2^^2    0000.0000..0000.0100
         public const int_t flagbit3 = 8;           // 2^^3    0000.0000..0000.1000

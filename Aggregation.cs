@@ -15,7 +15,7 @@ namespace RDFWrappers
         /// <param name="generator"></param>
         public static void WriteAttributesTypes (Generator generator)
         {
-            generator.WriteByTemplate(Generator.Template.AggrgarionTypesBegin);
+            generator.WriteByTemplate(Generator.Template.AggregationTypesBegin);
 
             foreach (var decl in generator.m_schema.m_declarations[enum_express_declaration.__ENTITY])
             {
