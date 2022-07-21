@@ -701,7 +701,8 @@ namespace NAMESPACE_NAME
     public class AggregationTypeSerializer : AggrSerializerInstance<SimpleType> { };
     //## AggregationOfEnum
     public class AggregationTyPe : List<Enums.ENUMERATION_NAME> { };
-    public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
+    //TODO public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
+    public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiENUM) { } };
     //## AggregationOfAggregation
     public class AggregationTYPe : List<SimpleType> { };
     public class AggregationTYPeSerializer : AggrSerializerAggr<SimpleType, SimpleTypeSerializer> { };
