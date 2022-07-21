@@ -982,6 +982,9 @@ namespace RDF
 		public static extern int_t sdaiGetAttrBN(int_t instance, string attributeName, int_t valueType, out double value);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetAttrBN")]
+		public static extern int_t sdaiGetAttrBN(int_t instance, string attributeName, int_t valueType, out bool value);
+
+		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetAttrBN")]
 		public static extern int_t sdaiGetAttrBN(int_t instance, string attributeName, int_t valueType, out IntPtr value);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetAttrBN")]

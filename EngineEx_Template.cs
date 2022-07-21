@@ -363,170 +363,132 @@ namespace NAMESPACE_NAME
     /// 
     public interface IAggrSerializerObj
     {
-        public abstract void FromSdaiAggrObj(IList lst, SdaiInstance inst, SdaiAggr aggr);
-        public abstract SdaiAggr ToSdaiAggrObj(IEnumerable lst, SdaiInstance instance, TextValue attrName);
+        public abstract IList FromSdaiAggrUntyped(SdaiInstance inst, SdaiAggr aggr);
+        public abstract SdaiAggr ToSdaiAggr(IEnumerable lst, SdaiInstance instance, TextValue attrName);
 
     }
 
-    public abstract class AggrSerializer<TElem> : IAggrSerializerObj
+    public abstract class AggrSerializer<TElem> : IAggrSerializerObj //TODO do we need these classes public?
     {
         //
-        public abstract void FromSdaiAggr(IList<TElem> lst, SdaiInstance inst, SdaiAggr aggr);
-        public abstract SdaiAggr ToSdaiAggr(IEnumerable<TElem> lst, SdaiInstance instance, TextValue attrName);
-
-        //
-        public void FromAttr(IList<TElem> lst, SdaiInstance instance, TextValue attrName)
+        public List<TElem> FromAttr(SdaiInstance instance, TextValue attrName)
         {
             SdaiAggr aggr = 0;
             ifcengine.sdaiGetAttrBN(instance, attrName, ifcengine.sdaiAGGR, out aggr);
-            if (aggr!=0)
-            {
-                FromSdaiAggr(lst, instance, aggr);
-            }
+            return FromSdaiAggr(instance, aggr);
         }
 
-        void IAggrSerializerObj.FromSdaiAggrObj(IList lst, SdaiInstance inst, SdaiAggr aggr)
+        //
+        public List<TElem> FromSdaiAggr(SdaiInstance inst, SdaiAggr aggr)
         {
-            var lst2 = new List<TElem>();
-            FromSdaiAggr(lst2, inst, aggr);
-            foreach (var elem in lst2)
+            var ret = new List<TElem>();
+            IntValue cnt = ifcengine.sdaiGetMemberCount(aggr);
+            for (IntValue i = 0; i < cnt; i++)
             {
-                lst.Add(elem);
+                TElem elem;
+                if (GetAggrElement(inst, aggr, i, out elem))
+                {
+                    ret.Add(elem);
+                }
             }
+            return ret;
         }
 
-        SdaiAggr IAggrSerializerObj.ToSdaiAggrObj(IEnumerable lst, long instance, string attrName)
+        public SdaiAggr ToSdaiAggr(IEnumerable<TElem> lst, SdaiInstance instance, TextValue attrName)
         {
-            var lst2 = new List<TElem>();
-            foreach (var elem in lst)
+            SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
+            foreach (var v in lst)
             {
-                lst2.Add((TElem)elem);
+                AppendAggrElement(instance, aggr, v);
             }
-            return ToSdaiAggr(lst2, instance, attrName);
+            return aggr;
+        }
+
+        public SdaiAggr ToSdaiAggr(IEnumerable lst, SdaiInstance instance, TextValue attrName)
+        {
+            SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
+            foreach (var v in lst)
+            {
+                AppendAggrElement(instance, aggr, (TElem)v);
+            }
+            return aggr;
+        }
+
+        protected abstract bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TElem elem);
+        protected abstract void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, TElem elem);
+
+        IList IAggrSerializerObj.FromSdaiAggrUntyped(SdaiInstance inst, SdaiAggr aggr)
+        {
+            return FromSdaiAggr (inst, aggr);
         }
     }
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializer_IntVal : AggrSerializer<IntValue>
+    public class AggrSerializer_IntValue<TElem> : AggrSerializer<IntValue>
     {
-        //
-        public override void FromSdaiAggr(IList<IntValue> lst, SdaiInstance unused, SdaiAggr aggr)
+        protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out IntValue elem)
         {
-            IntValue cnt = ifcengine.sdaiGetMemberCount(aggr);
-            for (IntValue i = 0; i < cnt; i++) {
-                IntValue val;
-                ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiINTEGER, out val);
-                lst.Add(val);
-            }
+            ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiINTEGER, out elem);
+            return true;
         }
-
-        //
-        public override SdaiAggr ToSdaiAggr(IEnumerable<IntValue> lst, SdaiInstance instance, TextValue attrName)
+        protected override void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue elem)
         {
-            SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
-            foreach (var v in lst)
-            {
-                IntValue val = v;
-                ifcengine.sdaiAppend(aggr, ifcengine.sdaiINTEGER, ref val);
-            }
-            return aggr;
+            ifcengine.sdaiAppend(aggr, ifcengine.sdaiINTEGER, ref elem);
         }
     };
 
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializer_double : AggrSerializer<double>
+    public class AggrSerializer_double<TElem> : AggrSerializer<double>
     {
-        //
-        public override void FromSdaiAggr(IList<double> lst, SdaiInstance unused, SdaiAggr aggr)
+        protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out double elem)
         {
-            IntValue cnt = ifcengine.sdaiGetMemberCount(aggr);
-            for (IntValue i = 0; i < cnt; i++)
-            {
-                double val;
-                ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiREAL, out val);
-                lst.Add(val);
-            }
+            ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiREAL, out elem);
+            return true;
         }
-
-        //
-        public override SdaiAggr ToSdaiAggr(IEnumerable<double> lst, SdaiInstance instance, TextValue attrName)
+        protected override void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, double elem)
         {
-            SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
-            foreach (var v in lst)
-            {
-                double val = v;
-                ifcengine.sdaiAppend(aggr, ifcengine.sdaiREAL, ref val);
-            }
-            return aggr;
+            ifcengine.sdaiAppend(aggr, ifcengine.sdaiREAL, ref elem);
         }
     };
 
-    public class AggrSerializerText : AggrSerializer<TextValue>
-{
+    public class AggrSerializerText<TElem> : AggrSerializer<TextValue>
+    {
         private IntValue m_sdaiType;
 
-        public AggrSerializerText(IntValue sdaiType) 
+        public AggrSerializerText(IntValue sdaiType)
         {
             Debug.Assert(sdaiType == ifcengine.sdaiSTRING || sdaiType == ifcengine.sdaiBINARY);
             m_sdaiType = sdaiType;
         }
-
-        public override void FromSdaiAggr(IList<TextValue> lst, SdaiInstance unused, SdaiAggr aggr)
+        protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TextValue elem)
         {
-            var cnt = ifcengine.sdaiGetMemberCount(aggr);
-            for (IntValue i = 0; i < cnt; i++)
-            {
-                IntPtr ptr = IntPtr.Zero;
-                ifcengine.engiGetAggrElement(aggr, i, m_sdaiType, out ptr);
-                var value = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
-                if (value != null)
-                    lst.Add(value);
-            }
+            IntPtr ptr = IntPtr.Zero;
+            ifcengine.engiGetAggrElement(aggr, i, m_sdaiType, out ptr);
+            elem = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
+            return (elem != null);
         }
-
-        public override SdaiAggr ToSdaiAggr(IEnumerable<TextValue> lst, SdaiInstance instance, TextValue attrName)
+        protected override void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, TextValue elem)
         {
-            SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
-            foreach (var val in lst)
-            {
-                ifcengine.sdaiAppend((IntValue)aggr, m_sdaiType, val);
-            }
-            return aggr;
+            ifcengine.sdaiAppend(aggr, m_sdaiType, elem);
         }
-
     };
 
-    public class AggrSerializerInstance : AggrSerializer<SdaiInstance>
+    public class AggrSerializerInstance<TElem> : AggrSerializer<TElem> where TElem : new() //TODO where TElem : Entity
     {
-        //
-        public override void FromSdaiAggr(IList<SdaiInstance> lst, SdaiInstance unused, SdaiAggr aggr)
+        protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TElem elem)
         {
-            var cnt = ifcengine.sdaiGetMemberCount(aggr);
-            for (IntValue i = 0; i < cnt; i++)
-            {
-                SdaiInstance val = 0;
-                ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiINSTANCE, out val);
-                //TElem elem(val);
-                if (val != 0)
-                {
-                    lst.Add(val);
-                }
-            }
+            SdaiInstance val = 0;
+            ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiINSTANCE, out val);
+            elem = new TElem(); //TODO val;
+            return (val != 0);
         }
-
-        //
-        public override SdaiAggr ToSdaiAggr(IEnumerable<SdaiInstance> lst, SdaiInstance instance, TextValue attrName)
+        protected override void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, TElem elem)
         {
-            var aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
-            foreach (var val in lst)
-            {
-                SdaiInstance v = val;
-                ifcengine.sdaiAppend((IntValue)aggr, ifcengine.sdaiINSTANCE, v);
-            }
-            return aggr;
+            SdaiInstance v = 0; //TODO elem;
+            ifcengine.sdaiAppend(aggr, ifcengine.sdaiINSTANCE, v);
         }
     };
 
@@ -546,111 +508,93 @@ public class AggrSerializerEnum<TEnum> : AggrSerializer<TEnum> where TEnum : str
         }
 
         //
-        public override void FromSdaiAggr(IList<TEnum> lst, SdaiInstance unused, SdaiAggr aggr)
+        protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TEnum elem)
         {
-            var cnt = ifcengine.sdaiGetMemberCount(aggr);
-            for (IntValue i = 0; i < cnt; i++)
+            IntPtr ptr = IntPtr.Zero;
+            ifcengine.engiGetAggrElement(aggr, i, m_sdaiType, out ptr);
+            var value = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
+            var ind = EnumIndex.FromString(value, m_EnumValues);
+            var val = EnumValue<TEnum>.FromIndex(ind);
+            if (val.HasValue)
             {
-                IntPtr ptr = IntPtr.Zero;
-                ifcengine.engiGetAggrElement(aggr, i, m_sdaiType, out ptr);
-                var value = System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr);
-                var ind = EnumIndex.FromString(value, m_EnumValues);
-                var val = EnumValue<TEnum>.FromIndex(ind);
-                if (val.HasValue)
-                {
-                    lst.Add(val.Value);
-                }
+                elem = val.Value;
+                return true;
+            }
+            else
+            {
+                elem = EnumValue<TEnum>.FromIndex(0).Value;
+                return false;
             }
         }
-
-        //
-        public override SdaiAggr ToSdaiAggr(IEnumerable<TEnum> lst, SdaiInstance instance, TextValue attrName)
+        protected override void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, TEnum elem)
         {
-            SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
-            foreach (var val in lst) {
-                var value = EnumString<TEnum>.FromValue (val, m_EnumValues);
-                ifcengine.sdaiAppend((IntValue)aggr, m_sdaiType, value);
-            }
-            return aggr;
+            var value = EnumString<TEnum>.FromValue(elem, m_EnumValues);
+            ifcengine.sdaiAppend(aggr, m_sdaiType, value);
         }
 
         /// <summary>
         /// 
         /// </summary>
         public class AggrSerializerAggr<TNestedAggr, TNestedSerializer> : AggrSerializer<TNestedAggr>
-                        where TNestedAggr : IList, new ()
-                        where TNestedSerializer : IAggrSerializerObj, new()
+                        where TNestedAggr : IEnumerable
+                        where TNestedSerializer :IAggrSerializerObj, new()
         {
-            public override void FromSdaiAggr(IList<TNestedAggr> lst, SdaiInstance instance, SdaiAggr aggr)
+            protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TNestedAggr elem)
             {
-                var cnt = ifcengine.sdaiGetMemberCount(aggr);
-                for (IntValue i = 0; i < cnt; i++)
-                {
-                    SdaiAggr nested = 0;
-                    ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiAGGR, out nested);
-                    if (nested != 0)
-                    {
-                        var nestedAggr = new TNestedAggr();
-                        lst.Add(nestedAggr);
-
-                        var nestedSerializer = new TNestedSerializer();
-                        nestedSerializer.FromSdaiAggrObj(nestedAggr, instance, nested);
-                    }
-                }
-            }
-
-            //
-            public override SdaiAggr ToSdaiAggr(IEnumerable<TNestedAggr> lst, SdaiInstance instance, TextValue attrName)
-            {
-                SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
-                foreach (var val in lst)
+                SdaiAggr nested = 0;
+                ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiAGGR, out nested);
+                if (nested != 0)
                 {
                     var nestedSerializer = new TNestedSerializer();
-                    SdaiAggr nested = nestedSerializer.ToSdaiAggrObj(val, instance, null);
-                    ifcengine.sdaiAppend(aggr, ifcengine.sdaiAGGR, nested);
+                    elem = (TNestedAggr)nestedSerializer.FromSdaiAggrUntyped(inst, nested);
+                    return true;
                 }
-                return aggr;
+                else 
+                {
+                    elem = default(TNestedAggr);
+                    return false;
+                }
+            }
+            protected override void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, TNestedAggr elem)
+            {
+                var nestedSerializer = new TNestedSerializer();
+                SdaiAggr nested = nestedSerializer.ToSdaiAggr(elem, inst, null);
+                ifcengine.sdaiAppend(aggr, ifcengine.sdaiAGGR, nested);
             }
         };
 
         public class AggrSerializerSelect<TSelect> : AggrSerializer<TSelect> where TSelect : Select, new()
         {
-            public override void FromSdaiAggr(IList<TSelect> lst, SdaiInstance instance, SdaiAggr aggr)
+            protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TSelect elem)
             {
-                var cnt = ifcengine.sdaiGetMemberCount(aggr);
-                for (IntValue i = 0; i < cnt; i++)
+                IntValue adb = 0;
+                ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiADB, out adb);
+                if (adb != 0)
                 {
-                    IntValue adb = 0;
-                    ifcengine.engiGetAggrElement(aggr, i, ifcengine.sdaiADB, out adb);
-                    if (adb != 0)
-                    {
-                        var select = new TSelect();
-                        select.Init(instance, null, adb);
-                        lst.Add(select);
-                    }
+                    elem = new TSelect();
+                    elem.Init(inst, null, adb);
+                    return true;
+                }
+                else
+                {
+                    elem = null;
+                    return false;
                 }
             }
-
-            //
-            public override SdaiAggr ToSdaiAggr(IEnumerable<TSelect> lst, SdaiInstance instance, TextValue attrName)
+            protected override void AppendAggrElement(SdaiInstance inst, SdaiAggr aggr, TSelect elem)
             {
-                SdaiAggr aggr = ifcengine.sdaiCreateAggrBN(instance, attrName);
-                foreach (var val in lst)
+                var adb = elem.ADB();
+                if (adb != 0)
                 {
-                    var adb = val.ADB();
-                    if (adb != 0)
-                    {
-                        ifcengine.sdaiAppend((IntValue)aggr, ifcengine.sdaiADB, adb);
-                    }
+                    ifcengine.sdaiAppend((IntValue)aggr, ifcengine.sdaiADB, adb);
                 }
-                return aggr;
             }
         };
 //## TEMPLATE: TemplateUtilityTypes
 
 public class SimpleType : List<object> {};
 public class SImpleType : Select {};
-public class SimpleTypeSerializer : AggrSerializer_double {};
+public class SimpleTypeSerializer : AggrSerializer_double<double> {};
         public struct REF_ENTITY 
         { 
             REF_ENTITY(SdaiInstance inst) { }
@@ -688,13 +632,13 @@ public class SimpleTypeSerializer : AggrSerializer_double {};
     //
 //## AggregationOfSimple
     public class AggregationType : List<SimpleType> { };
-    public class AggregationTypeSerializer : AggrSerializer_double {};
+    public class AggregationTypeSerializer : AggrSerializer_double<SimpleType> {};
 //## AggregationOfText
     public class Aggregationtype : List<TextValue> {};
-    public class AggregationtypeSerializer : AggrSerializerText { public AggregationtypeSerializer() : base(ifcengine.sdaiTYPE) {} };
+    public class AggregationtypeSerializer : AggrSerializerText<TextValue> { public AggregationtypeSerializer() : base(ifcengine.sdaiTYPE) {} };
 //## AggregationOfInstance
     public class AggregationTYpe : List<SimpleType> {};
-    public class AggregationTYpeSerializer : AggrSerializerInstance {};
+    public class AggregationTYpeSerializer : AggrSerializerInstance<SimpleType> {};
 //## AggregationOfEnum
     public class AggregationTyPe : List<Enums.ENUMERATION_NAME> {};
     public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
@@ -712,52 +656,49 @@ public class SimpleTypeSerializer : AggrSerializer_double {};
         //## TEMPLATE: SelectAccessorBegin
 
         public class GEN_TYPE_NAME_accessor : Select
-    {
-        public GEN_TYPE_NAME_accessor(SdaiInstance instance, TextValue attrName = null, IntValue adb = 0) : base(instance, attrName, adb) { }
-        public GEN_TYPE_NAME_accessor(Select outer) : base(outer) { }
-        //## SelectSimpleGet
-        public bool is_SimpleType() { return IsADBType("TypeNameUpper"); }
-        public double? get_double() { return get_double("TypeNameUpper", ifcengine.sdaiTYPE); }
-        //## SelectSimplePut
-        public void put_double(double value) { put_double("TypeNameUpper", ifcengine.sdaiTYPE, value); }
-        //## SelectTextGet
-        public bool is_TextType() { return IsADBType("TypeNameUpper"); }
-        public TextValue get_TextType() { return getTextValue("TypeNameUpper", ifcengine.sdaiTYPE); }
-        //## SelectTextPut
-        public void put_TextType(TextValue value) { putTextValue("TypeNameUpper", ifcengine.sdaiTYPE, value); }
-        //## SelectEntityGet
-        public bool is_REF_ENTITY() { return IsADBEntity("REF_ENTITY"); }
-        public REF_ENTITY get_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
+        {
+            public GEN_TYPE_NAME_accessor(SdaiInstance instance, TextValue attrName = null, IntValue adb = 0) : base(instance, attrName, adb) { }
+            public GEN_TYPE_NAME_accessor(Select outer) : base(outer) { }
+            //## SelectSimpleGet
+            public bool is_SimpleType() { return IsADBType("TypeNameUpper"); }
+            public double? get_double() { return get_double("TypeNameUpper", ifcengine.sdaiTYPE); }
+            //## SelectSimplePut
+            public void put_double(double value) { put_double("TypeNameUpper", ifcengine.sdaiTYPE, value); }
+            //## SelectTextGet
+            public bool is_TextType() { return IsADBType("TypeNameUpper"); }
+            public TextValue get_TextType() { return getTextValue("TypeNameUpper", ifcengine.sdaiTYPE); }
+            //## SelectTextPut
+            public void put_TextType(TextValue value) { putTextValue("TypeNameUpper", ifcengine.sdaiTYPE, value); }
+            //## SelectEntityGet
+            public bool is_REF_ENTITY() { return IsADBEntity("REF_ENTITY"); }
+            public REF_ENTITY get_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
             //## SelectEntityPut
             public void put_REF_ENTITY(REF_ENTITY inst) { putEntityInstance("TypeNameUpper", inst); }
             //## SelectEnumerationGet
             public bool is_ENUMERATION_NAME() { return IsADBType("TypeNameUpper"); }
-        public Enums.ENUMERATION_NAME? get_ENUMERATION_NAME() { int ind = getEnumerationIndex("TypeNameUpper", Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
-        //## SelectEnumerationPut
-        public void put_ENUMERATION_NAME(Enums.ENUMERATION_NAME value) { TextValue val = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); putEnumerationValue("TypeNameUpper", val); }
-        //## SelectAggregationGet
-        public bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
-        public IEnumerable<SimpleType> get_AggregationType() { SdaiAggr aggr = getAggrValue("TypeNameUpper"); AggregationTypeSerializer sr; sr.FromSdaiAggr(lst, m_instance, aggr); }
-        //## SelectAggregationPut
-        public void put_AggregationType(IEnumerable<SimpleType> lst) { AggregationTypeSerializer<TList> sr; SdaiAggr aggr = sr.ToSdaiAggr(lst, m_instance, NULL); putAggrValue("TypeNameUpper", aggr); }
-        //## SelectAggregationPutArray
-
-        //TArrayElem[] may be SimpleType[] or array of convertible elements
-        template<typename TArrayElem> void put_AggregationType(TArrayElem arr[], size_t n) { AggregationType lst; ArrayToList(arr, n, lst); put_AggregationType(lst); }
-        //## SelectNested
-        GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return GEN_TYPE_NAME_accessor(this); }
-        //## SelectGetAsDouble
-        Nullable<double> as_double() { double val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiREAL, &val)) return val; else return Nullable<double>(); }
-        //## SelectGetAsInt
-        Nullable<IntValue> as_int() { IntValue val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiINTEGER, &val)) return val; else return Nullable<IntValue>(); }
-        //## SelectGetAsBool
-        Nullable<bool> as_bool() { bool val = 0; if (sdaiGetAttrBN(m_instance, m_attrName, sdaiBOOLEAN, &val)) return val; else return Nullable<bool>(); }
-        //## SelectGetAsText
-        TextValue as_text() { TextValue val = NULL; sdaiGetAttrBN(m_instance, m_attrName, sdaiSTRING, &val); return val; }
-        //## SelectGetAsEntity
-        SdaiInstance as_instance() { return getEntityInstance(NULL); }
-        //## SelectAccessorEnd
-    };
+            public Enums.ENUMERATION_NAME? get_ENUMERATION_NAME() { int ind = getEnumerationIndex("TypeNameUpper", Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
+            //## SelectEnumerationPut
+            public void put_ENUMERATION_NAME(Enums.ENUMERATION_NAME value) { TextValue val = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); putEnumerationValue("TypeNameUpper", val); }
+            //## SelectAggregationGet
+            public bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
+            public AggregationType get_AggregationType() { SdaiAggr aggr = getAggrValue("TypeNameUpper"); return (AggregationType)(object)(new AggregationTypeSerializer()).FromSdaiAggr(m_instance, aggr); }
+            //## SelectAggregationPut
+            public void put_AggregationType(IEnumerable<SimpleType> lst) { SdaiAggr aggr = (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, null); putAggrValue("TypeNameUpper", aggr); }
+            //## SelectAggregationPutArray
+            //## SelectNested
+            GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return new GEN_TYPE_NAME_accessor(this); }
+            //## SelectGetAsDouble
+            double? as_double() { double val = 0; if (ifcengine.sdaiGetAttrBN(m_instance, m_attrName, ifcengine.sdaiREAL, out val) != 0) return val; else return null; }
+            //## SelectGetAsInt
+            IntValue? as_int() { IntValue val = 0; if (ifcengine.sdaiGetAttrBN(m_instance, m_attrName, ifcengine.sdaiINTEGER, out val) != 0) return val; else return null; }
+            //## SelectGetAsBool
+            bool? as_bool() { bool val = false; if (ifcengine.sdaiGetAttrBN(m_instance, m_attrName, ifcengine.sdaiBOOLEAN, out val) != 0) return val; else return null; }
+            //## SelectGetAsText
+            TextValue as_text() { IntPtr ptr = IntPtr.Zero; ifcengine.sdaiGetAttrBN(m_instance, m_attrName, ifcengine.sdaiSTRING, out ptr); return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(ptr); }
+            //## SelectGetAsEntity
+            SdaiInstance as_instance() { return getEntityInstance(null); }
+            //## SelectAccessorEnd
+        };
 
     //## TEMPLATE: BeginEntities
 
