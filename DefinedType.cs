@@ -173,7 +173,7 @@ namespace RDFWrappers
             switch (attrType)
             {
                 case RDF.enum_express_attr_type.__LOGICAL:
-                    generator.WriteEnumAttribute(attr, name, "LOGICAL_VALUE_");
+                    generator.WriteEnumAttribute(attr, name, "LOGICAL_VALUE", "LOGICAL_VALUE_");
                     return;
 
                 case enum_express_attr_type.__SELECT:

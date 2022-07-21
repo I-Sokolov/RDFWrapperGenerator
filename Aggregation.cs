@@ -65,10 +65,11 @@ namespace RDFWrappers
 
         enum_express_aggr WriteType (string name)
         {
-            string elemType;
+            string elemIfcType;
+            string elemApiType;
             string sdaiType;
 
-            Generator.Template template = GetAggregatedType(typeDef, out elemType, out sdaiType);
+            Generator.Template template = GetAggregatedType(typeDef, out elemIfcType, out elemApiType, out sdaiType);
 
             if (template != Generator.Template.None)
             {
@@ -83,7 +84,7 @@ namespace RDFWrappers
                     string aggrName = (aggregation == 0) ? name : null; //use given name for outer aggregation
                     if (aggrName == null)
                     {
-                        aggrName = MakeAggregationTypeName(aggrType, elemType);
+                        aggrName = MakeAggregationTypeName(aggrType, elemIfcType);
                     }
                     if (aggrName == null)
                     {
@@ -94,14 +95,18 @@ namespace RDFWrappers
                     {
                         generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
                         generator.m_replacements[Generator.KWD_AggregationType] = aggrName;
-                        generator.m_replacements[Generator.KWD_SimpleType] = elemType;
-                        generator.m_replacements[Generator.KWD_TextType] = elemType;
-                        generator.m_replacements[Generator.KWD_ENUM_TYPE] = elemType;
+                        generator.m_replacements[Generator.KWD_SimpleType] = elemApiType;
+                        generator.m_replacements[Generator.KWD_TextType] = elemApiType;
+                        generator.m_replacements[Generator.KWD_ENUMERATION_NAME] = elemApiType;
+                        generator.m_replacements[Generator.KWD_REF_ENTITY] = elemApiType;
+                        generator.m_replacements[Generator.KWD_TYPE_NAME] = elemApiType;
+                        generator.m_replacements[Generator.KWD_TypeNameIFC] = elemIfcType;
                         generator.WriteByTemplate(template);
                     }
 
                     //for outer aggregarion
-                    elemType = aggrName;
+                    elemIfcType = aggrName;
+                    elemApiType = aggrName;
                     name = null;
                     template = Generator.Template.AggregationOfAggregation;
                 }
@@ -152,11 +157,12 @@ namespace RDFWrappers
             return name.ToString();
         }
 
-        private Generator.Template GetAggregatedType(TypeDef typeDef, out string elemType, out string sdaiType)
+        private Generator.Template GetAggregatedType(TypeDef typeDef, out string elemIfcType, out string elemApiType, out string sdaiType)
         {
             Generator.Template template = Generator.Template.None;
 
-            elemType = null;
+            elemIfcType = null;
+            elemApiType = null;
             sdaiType = null;
 
             string baseType = null;
@@ -164,13 +170,22 @@ namespace RDFWrappers
             Enumeraion enumeration = null;
             DefinedType definedType = null;
 
-            if (typeDef.IsSimpleType(out elemType, out baseType, out sdaiType))
+            if (typeDef.IsSimpleType(out elemIfcType, out baseType, out sdaiType))
             {
                 if (baseType != null)
                 {
-                    if (generator.m_cs || elemType == null)
+                    if (generator.m_cs || elemIfcType == null)
                     {
-                        elemType = baseType;
+                        elemApiType = baseType;
+                    }
+                    else
+                    {
+                        elemApiType = elemIfcType;
+                    }
+
+                    if (elemIfcType == null)
+                    {
+                        elemIfcType = baseType;
                     }
 
                     if (baseType == "TextValue")
@@ -184,30 +199,34 @@ namespace RDFWrappers
                 }
                 else
                 {
-                    Console.WriteLine("Unsupported type in aggregations " + elemType);
+                    Console.WriteLine("Unsupported type in aggregations " + elemIfcType);
                 }
             }
-            else if (typeDef.IsEntityReference(out elemType))
+            else if (typeDef.IsEntityReference(out elemIfcType))
             {
                 template = Generator.Template.AggregationOfInstance;
+                elemApiType = elemIfcType;
                 sdaiType = "sdaiINSTANCE";
             }
             else if ((enumeration = typeDef.IsEnumeration()) != null)
             {
-                elemType = enumeration.name;
+                elemIfcType = enumeration.name;
+                elemApiType = elemIfcType;
                 sdaiType = "sdaiENUM";
                 template = Generator.Template.AggregationOfEnum;
             }
             else if (typeDef.domain == 0 && typeDef.attrType == RDF.enum_express_attr_type.__LOGICAL)
             {
-                elemType = "LOGICAL_VALUE";
+                elemIfcType = "LOGICAL_VALUE";
+                elemApiType = elemIfcType;
                 sdaiType = "sdaiLOGICAL";
                 template = Generator.Template.AggregationOfEnum;
             }
             else if ((select = typeDef.IsSelect()) != null)
             {
                 template = Generator.Template.AggregationOfSelect;
-                elemType = select.name;
+                elemIfcType = select.name;
+                elemApiType = elemIfcType;
                 sdaiType = null;
             }
             else if ((definedType = typeDef.IsDefinedType()) != null)
@@ -234,7 +253,15 @@ namespace RDFWrappers
                             break;
                     }
 
-                    elemType = definedType.name;
+                    elemIfcType = definedType.name;
+                    if (generator.m_cs)
+                    {
+                        elemApiType = definedType.GetBaseCSType();
+                    }
+                    else
+                    {
+                        elemApiType = elemIfcType;
+                    }
                     sdaiType = definedType.GetSdaiType();
                 }
             }
@@ -251,17 +278,18 @@ namespace RDFWrappers
         {
             string aggrTypeName = null;
             bool nested = false;
-            string elemType = null;
+            string elemIfcType = null;
+            string elemApiType = null;
             string sdaiType = null;
             Generator.Template template = Generator.Template.None;
 
             if (typeDef.aggregation != 0)
             {
                 //unnamed aggregation
-                template = GetAggregatedType(typeDef, out elemType, out sdaiType);
+                template = GetAggregatedType(typeDef, out elemIfcType, out elemApiType, out sdaiType);
                 if (template != Generator.Template.None)
                 {
-                    aggrTypeName = elemType;
+                    aggrTypeName = elemIfcType;
                     for (var aggregation = typeDef.aggregation; aggregation != 0;)
                     {
                         enum_express_aggr aggrType;
@@ -270,6 +298,8 @@ namespace RDFWrappers
                         aggrTypeName = MakeAggregationTypeName(aggrType, aggrTypeName);
                         if (aggregation != 0)
                         {
+                            elemApiType = aggrTypeName;
+                            elemIfcType = aggrTypeName;
                             nested = true;
                         }
                     }
@@ -285,7 +315,7 @@ namespace RDFWrappers
                 {
                     var definedType = new DefinedType(typeDef.domain);
                     aggrTypeName = definedType.name;
-                    template = GetAggregatedType(definedType, out elemType, out sdaiType);
+                    template = GetAggregatedType(definedType, out elemIfcType, out elemApiType, out sdaiType);
                 }
                 else
                 {
@@ -303,8 +333,10 @@ namespace RDFWrappers
                 {
                     generator.m_replacements[Generator.KWD_ATTR_NAME] = attrName;
                     generator.m_replacements[Generator.KWD_AggregationType] = aggrTypeName;
-                    generator.m_replacements[Generator.KWD_SimpleType] = elemType;
-                    generator.m_replacements[Generator.KWD_TextType] = elemType;
+                    generator.m_replacements[Generator.KWD_SimpleType] = elemApiType;
+                    generator.m_replacements[Generator.KWD_TextType] = elemApiType;
+                    generator.m_replacements[Generator.KWD_REF_ENTITY] = elemApiType;
+                    generator.m_replacements[Generator.KWD_TypeNameIFC] = elemIfcType;
 
                     generator.WriteGetPut(Generator.Template.AttributeAggregationGet, Generator.Template.AttributeAggregationPut, isInverse);
                     if (!nested && sdaiType != null && !isInverse)

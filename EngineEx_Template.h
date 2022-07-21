@@ -552,7 +552,8 @@ namespace NAMESPACE_NAME
     typedef double        SimpleType;
     typedef TextValue     TextType;
     typedef int           SelectType;
-    typedef int_t         REF_ENTITY;    
+    typedef int_t         REF_ENTITY;   
+    typedef int_t         TypeNameIFC;
     template <typename TList> class SimpleTypeSerializer {};
 
 #define sdaiTYPE  sdaiREAL
@@ -582,7 +583,7 @@ namespace NAMESPACE_NAME
         ___unk = -1
     };
     static TextValue ENUMERATION_NAME_[] = {"ENUMERATION_STRING_VALUES", NULL};
-
+//## TEMPLATE: EnumerationsEnd
 //## TEMPLATE: AggregationTypesBegin
 
     //
@@ -635,10 +636,10 @@ namespace NAMESPACE_NAME
 //## SelectEntityPut
         void put_REF_ENTITY(REF_ENTITY inst);
 //## SelectEnumerationGet
-        bool is_ENUMERATION_NAME() { return IsADBType("TypeNameUpper"); }
-        Nullable<ENUMERATION_NAME> get_ENUMERATION_NAME() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME) v; else return Nullable<ENUMERATION_NAME>(); }
+        bool is_TypeNameIFC() { return IsADBType("TypeNameUpper"); }
+        Nullable<TypeNameIFC> get_TypeNameIFC() { int v = getEnumerationValue("TypeNameUpper", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (TypeNameIFC) v; else return Nullable<TypeNameIFC>(); }
 //## SelectEnumerationPut
-        void put_ENUMERATION_NAME(ENUMERATION_NAME value) { TextValue val = ENUMERATION_VALUES_ARRAY[(int)value]; putEnumerationValue("TypeNameUpper", val); }
+        void put_TypeNameIFC(TypeNameIFC value) { TextValue val = ENUMERATION_VALUES_ARRAY[(int)value]; putEnumerationValue("TypeNameUpper", val); }
 //## SelectAggregationGet
         bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
 
@@ -712,9 +713,9 @@ namespace NAMESPACE_NAME
         void put_Attr_NAME(REF_ENTITY inst);
 //## AttributeEnumGet
 
-        Nullable<ENUMERATION_NAME> get_ATtr_NAME() { int v = getENUM("ATTR_NAME", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (ENUMERATION_NAME)v; else return Nullable<ENUMERATION_NAME>(); }
+        Nullable<TypeNameIFC> get_ATtr_NAME() { int v = getENUM("ATTR_NAME", ENUMERATION_VALUES_ARRAY); if (v >= 0) return (TypeNameIFC)v; else return Nullable<TypeNameIFC>(); }
 //## AttributeEnumPut
-        void put_ATTR_NAME(ENUMERATION_NAME value) { TextValue val = ENUMERATION_VALUES_ARRAY[(int)value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
+        void put_ATTR_NAME(TypeNameIFC value) { TextValue val = ENUMERATION_VALUES_ARRAY[(int)value]; sdaiPutAttrBN(m_instance, "ATTR_NAME", sdaiENUM, val); }
 //## AttributeSelectAccessor
         GEN_TYPE_NAME_accessor getOrPut_ATTR_NAME() { return GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", NULL); }
 //## AttributeAggregationGet

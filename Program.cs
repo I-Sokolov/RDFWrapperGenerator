@@ -14,12 +14,12 @@ namespace RDFWrappers
             [CommandLine.Option("schema", HelpText = "Generate wrapper for by EXPRESS file path or schema name")]
             public string schema { get; set; }
 
-            [CommandLine.Option("cs", HelpText = "Pathnamte of c# file to be generated. Default is schema file name.")]
+            [CommandLine.Option("cs", HelpText = "Pathnamte of c# file to be generate, or '0' to suppress c# generation. Default is schema file name.")]
             public string csFile { get; set; }
 
-            [CommandLine.Option('h', HelpText = "Pathname of c++ header file to be generated. Default is schema file name.")]
+            [CommandLine.Option('h', HelpText = "Pathname of c++ header file to be generated, or '0' to suppress c++ generation. Default is schema file name.")]
             public string hFile { get; set; }
-
+            
             [CommandLine.Option("namespace", HelpText = "Namespase. Default is schema file name.")]
             public string Namespace { get; set; }
 
@@ -120,21 +120,35 @@ namespace RDFWrappers
 
             Console.WriteLine("....");
 
+            ///
+            ///
             if (options.printSchema)
             {
                 schema.ToConsole();
                 Console.WriteLine();
             }
 
-            if (!string.IsNullOrWhiteSpace(options.hFile))
+            ///
+            ///
+            if (!string.IsNullOrWhiteSpace(options.hFile) && options.hFile != "0")
             {
                 Console.WriteLine("Generate C++ header file " + options.hFile);
                 Generator cppgen = new Generator(schema, false, options.Namespace);
                 cppgen.WriteWrapper(options.hFile);
+            }
+            else
+            {
+                Console.WriteLine("Options says do not create C++ header file");
+            }
+            System.Console.WriteLine();
 
-                Console.WriteLine("Generate C# code " + options.hFile);
+            ///
+            ///
+            if (!string.IsNullOrWhiteSpace(options.hFile) && options.csFile != "0")
+            {
+                Console.WriteLine("Generate C# code " + options.csFile);
                 Generator csgen = new Generator(schema, true, options.Namespace);
-                cppgen.WriteWrapper(options.csFile);
+                csgen.WriteWrapper(options.csFile);
             }
             else
             {

@@ -22,6 +22,7 @@ namespace RDFWrappers
         public const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
         public const string KWD_SimpleType = "SimpleType";
         public const string KWD_TextType = "TextType";
+        public const string KWD_TypeNameIFC = "TypeNameIFC";
         public const string KWD_TypeNameUpper = "TypeNameUpper";
         public const string KWD_ENUMERATION_NAME = "ENUMERATION_NAME";
         public const string KWD_ENUMERATION_VALUES_ARRAY = "ENUMERATION_VALUES_ARRAY";
@@ -31,7 +32,6 @@ namespace RDFWrappers
         public const string KWD_sdaiTYPE = "sdaiTYPE";
         public const string KWD_asType = "asTYPE";
         public const string KWD_REF_ENTITY = "REF_ENTITY";
-        public const string KWD_ENUM_TYPE = "ENUMERATION_NAME";
         public const string KWD_ENUM_VALUES = "\"ENUMERATION_STRING_VALUES\"";
         public const string KWD_TYPE_NAME = "GEN_TYPE_NAME";
         public const string KWD_ACCESSOR = "_accessor";
@@ -54,6 +54,7 @@ namespace RDFWrappers
             EnumerationBegin,
             EnumerationElement,
             EnumerationEnd,
+            EnumerationsEnd,
             AggregationTypesBegin,
             AggregationOfSimple,
             AggregationOfText,
@@ -235,6 +236,8 @@ namespace RDFWrappers
                 var enumeration = new Enumeraion(decl.Value);
                 WriteEnumeration(enumeration);
             }
+
+            WriteByTemplate(Template.EnumerationsEnd);
         }
 
         /// <summary>
@@ -485,7 +488,7 @@ namespace RDFWrappers
             }
             else if ((enumeration = attr.IsEnumeration()) != null)
             {
-                WriteEnumAttribute(attr, enumeration.name, enumeration.name + "_");
+                WriteEnumAttribute(attr, enumeration.name, enumeration.name, enumeration.name + "_");
             }
             else if ((select = attr.IsSelect()) != null)
             {
@@ -493,7 +496,7 @@ namespace RDFWrappers
             }
             else if (attr.domain == 0 && attr.attrType == RDF.enum_express_attr_type.__LOGICAL)
             {
-                WriteEnumAttribute(attr, "LOGICAL_VALUE", "LOGICAL_VALUE_");
+                WriteEnumAttribute(attr, "LOGICAL_VALUE", "LOGICAL_VALUE", "LOGICAL_VALUE_");
             }
             else
             {
@@ -552,10 +555,12 @@ namespace RDFWrappers
         /// <param name="attr"></param>
         /// <param name="enumName"></param>
         /// <param name="valuesArrayName"></param>
-        public void WriteEnumAttribute(Attribute attr, string enumName, string valuesArrayName)
+        public void WriteEnumAttribute(Attribute attr, string ifcTypeName, string enumName, string valuesArrayName)
         {
-            m_replacements[KWD_ENUM_TYPE] = enumName;
-            m_replacements[KWD_ENUMERATION_VALUES_ARRAY] = valuesArrayName;
+            m_replacements[Generator.KWD_ENUMERATION_NAME] = enumName;
+            m_replacements[Generator.KWD_TypeNameIFC] = ifcTypeName;
+            m_replacements[Generator.KWD_TypeNameUpper] = ifcTypeName.ToUpper();
+            m_replacements[Generator.KWD_ENUMERATION_VALUES_ARRAY] = valuesArrayName;
             WriteGetPut(Template.AttributeEnumGet, Template.AttributeEnumPut, attr.inverse);
         }
 

@@ -225,13 +225,14 @@ namespace RDFWrappers
         private void WriteAccessorMethod(Generator generator, Enumeraion enumType, bool? bGet)
         {
             var name = Generator.ValidateIdentifier(enumType.name);
-            WriteAccessorEnumMethod(generator, name, name + "_", bGet);
+            WriteAccessorEnumMethod(generator, name, name, name + "_", bGet);
         }
 
-        private void WriteAccessorEnumMethod(Generator generator, string enumName, string enumValuesArray, bool? bGet)
+        private void WriteAccessorEnumMethod(Generator generator, string ifcTypeName, string enumName, string enumValuesArray, bool? bGet)
         { 
             generator.m_replacements[Generator.KWD_ENUMERATION_NAME] = enumName;
-            generator.m_replacements[Generator.KWD_TypeNameUpper] = enumName.ToUpper();
+            generator.m_replacements[Generator.KWD_TypeNameIFC] = ifcTypeName;
+            generator.m_replacements[Generator.KWD_TypeNameUpper] = ifcTypeName.ToUpper();
             generator.m_replacements[Generator.KWD_ENUMERATION_VALUES_ARRAY] = enumValuesArray;
 
             if (bGet.HasValue)
@@ -249,6 +250,7 @@ namespace RDFWrappers
         private void WriteAccessorMethod(Generator generator, Entity entityType, bool? bGet)
         {
             generator.m_replacements[Generator.KWD_REF_ENTITY] = Generator.ValidateIdentifier (entityType.name);
+            generator.m_replacements[Generator.KWD_TypeNameIFC] = entityType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = entityType.name.ToUpper();
 
             if (bGet.HasValue)
@@ -293,7 +295,7 @@ namespace RDFWrappers
                         switch (foundation.attrType)
                         {
                             case enum_express_attr_type.__LOGICAL:
-                                WriteAccessorEnumMethod(generator, definedType.name, "LOGICAL_VALUE_", bGet);
+                                WriteAccessorEnumMethod(generator, definedType.name, "LOGICAL_VALUE", "LOGICAL_VALUE_", bGet);
                                 break;
 
                             default:
@@ -321,6 +323,7 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_SimpleType] = definedType.name;
             generator.m_replacements[Generator.KWD_TextType] = definedType.name;
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
+            generator.m_replacements[Generator.KWD_TypeNameIFC] = definedType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
 
             Generator.Template tplGet;
@@ -353,15 +356,20 @@ namespace RDFWrappers
             string baseType = definedType.GetBaseCSType();
 
             string elemType = baseType;
-            if (definedType.domain != 0 && !generator.m_cs)
+            if (definedType.domain != 0)
             {
-                elemType = Schema.GetNameOfDeclaration(definedType.domain);
+                if (!generator.m_cs || ifcengine.engiGetDeclarationType(definedType.domain) != enum_express_declaration.__DEFINED_TYPE)
+                {
+                    elemType = Schema.GetNameOfDeclaration(definedType.domain);
+                }
             }
 
             generator.m_replacements[Generator.KWD_AggregationType] = definedType.name;
             generator.m_replacements[Generator.KWD_SimpleType] = elemType;
             generator.m_replacements[Generator.KWD_TextType] = elemType;
+            generator.m_replacements[Generator.KWD_REF_ENTITY] = elemType;
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
+            generator.m_replacements[Generator.KWD_TypeNameIFC] = definedType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
 
             if (bGet.HasValue)
