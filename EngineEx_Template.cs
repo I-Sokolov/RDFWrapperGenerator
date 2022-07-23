@@ -207,10 +207,32 @@ namespace NAMESPACE_NAME
             }
             return ret;
         }
+        protected bool? get_bool(TextValue typeName, IntValue sdaiType)
+        {
+            Debug.Assert(sdaiType == ifcengine.sdaiBOOLEAN);
+            bool? ret = null;
+            var adb = ADB();
+            if (CheckADBType(adb, typeName))
+            {
+                bool val = false;
+                if (ifcengine.sdaiGetADBValue(adb, sdaiType, out val) != 0)
+                {
+                    ret = val;
+                }
+            }
+            return ret;
+        }
 
         //
         protected void put_double(TextValue typeName, IntValue sdaiType, double value)
         {
+            var adb = ifcengine.sdaiCreateADB(sdaiType, ref value);
+            ifcengine.sdaiPutADBTypePath(adb, 1, typeName);
+            SetADB(adb);
+        }
+        protected void put_bool(TextValue typeName, IntValue sdaiType, bool value)
+        {
+            Debug.Assert(sdaiType == ifcengine.sdaiBOOLEAN);
             var adb = ifcengine.sdaiCreateADB(sdaiType, ref value);
             ifcengine.sdaiPutADBTypePath(adb, 1, typeName);
             SetADB(adb);
@@ -617,7 +639,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         public static implicit operator SdaiInstance(Entity instance) => instance.m_instance;
 
-        protected TextValue getString(TextValue attrName, Int64 sdaiType)
+        protected TextValue get_string(TextValue attrName, IntValue sdaiType)
         {
             IntPtr ptr = IntPtr.Zero;
             if (0 != ifcengine.sdaiGetAttrBN(m_instance, attrName, sdaiType, out ptr))
@@ -629,6 +651,30 @@ namespace NAMESPACE_NAME
             {
                 return null;
             }
+        }
+        public double? get_double(TextValue attrName, IntValue sdaiType)
+        {
+            double val = 0; 
+            if (ifcengine.sdaiGetAttrBN(m_instance, attrName, sdaiType, out val) != 0) 
+                return val; 
+            else 
+                return null; 
+        }
+        public IntValue? get_IntValue(TextValue attrName, IntValue sdaiType)
+        {
+            IntValue val = 0;
+            if (ifcengine.sdaiGetAttrBN(m_instance, attrName, sdaiType, out val) != 0)
+                return val;
+            else
+                return null;
+        }
+        public bool? get_bool(TextValue attrName, IntValue sdaiType)
+        {
+            bool val = false;
+            if (ifcengine.sdaiGetAttrBN(m_instance, attrName, sdaiType, out val) != 0)
+                return val;
+            else
+                return null;
         }
 
         /// <summary>
@@ -812,12 +858,12 @@ namespace NAMESPACE_NAME
         public static new ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst != 0); return inst; }
         //## AttributeSimpleGet
 
-        public double? get_ATTR_NAME() { double val = 0; if (ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, out val) != 0) return val; else return null; }
+        public double? get_ATTR_NAME() { return get_double("ATTR_NAME", ifcengine.sdaiTYPE);}
         //## AttributeSimplePut
         public void put_ATTR_NAME(double value) { ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, ref value); }
         //## AttributeTextGet
 
-        public TextValue get_attr_NAME() { return getString("ATTR_NAME", ifcengine.sdaiTYPE); }
+        public TextValue get_attr_NAME() { return get_string("ATTR_NAME", ifcengine.sdaiTYPE); }
         //## AttributeTextPut
         public void put_ATTR_NAME(TextValue value) { ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, value); }
         //## AttributeEntityGet
@@ -827,7 +873,7 @@ namespace NAMESPACE_NAME
         public void put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst; ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, i); }
         //## AttributeEnumGet
 
-        public Enums.ENUMERATION_NAME? get_ATtr_NAME() { var str = getString("ATTR_NAME", ifcengine.sdaiENUM); var ind = EnumIndex.FromString(str, Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
+        public Enums.ENUMERATION_NAME? get_ATtr_NAME() { var str = get_string("ATTR_NAME", ifcengine.sdaiENUM); var ind = EnumIndex.FromString(str, Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
         //## AttributeEnumPut
         public void put_ATTR_NAME(Enums.ENUMERATION_NAME value) { var str = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiENUM, str); }
         //## AttributeSelectAccessor

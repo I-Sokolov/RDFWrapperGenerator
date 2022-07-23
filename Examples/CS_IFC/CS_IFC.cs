@@ -14,7 +14,7 @@ namespace CS_IFC
     {
         private static void ASSERT(bool c)
         {
-            Debug.Assert(c);
+            Debug.ASSERT(c);
         }
 
         public static void IFC4_test()
@@ -52,39 +52,39 @@ namespace CS_IFC
                    && oh == ownerHistory
                    && predType.Value == Enums.IfcWallTypeEnum.POLYGONAL
             );
-#if NOT_NOW
+
             var profile = IfcRectangleProfileDef.Create(ifcModel);
             var xdim = profile.get_XDim();
             var ydim = profile.get_YDim();
-            ASSERT(xdim.IsNull() && ydim.IsNull());
+            ASSERT(xdim == null && ydim == null);
             profile.put_XDim(10000);
             profile.put_YDim(80);
             xdim = profile.get_XDim();
             ydim = profile.get_YDim();
-            ASSERT(xdim.Value() == 10000 && ydim.Value() == 80);
+            ASSERT(xdim.Value == 10000 && ydim.Value == 80);
 
 
             IfcTriangulatedFaceSet triangFaceSet = IfcTriangulatedFaceSet.Create(ifcModel);
             var closed = triangFaceSet.get_Closed();
-            ASSERT(closed.IsNull());
+            ASSERT(closed==null);
             triangFaceSet.put_Closed(false);
             closed = triangFaceSet.get_Closed();
-            ASSERT(!closed.Value());
+            ASSERT(!closed.Value);
 
             IfcBSplineCurve curve = IfcBSplineCurveWithKnots.Create(ifcModel);
-            ASSERT(curve.get_Degree().IsNull());
+            ASSERT(!curve.get_Degree().HasValue);
             curve.put_Degree(5);
-            ASSERT(curve.get_Degree().Value() == 5);
+            ASSERT(curve.get_Degree().Value == 5);
 
             //type casting check
             IfcProduct product(wall);
-            assert(product != 0);
+            ASSERT(product != 0);
             name = product.get_Name();
             ASSERT(!strcmp(name, "Wall name"));
 
             IfcBuilding building(wall);
-            assert(building == 0);
-
+            ASSERT(building == 0);
+#if NOT_NOW
             //
             // SELECT tests
             //
@@ -138,19 +138,19 @@ namespace CS_IFC
             //check type methodt
             if (measureWithUnit.get_ValueComponent().get_IfcMeasureValue().is_IfcAreaMeasure())
             {
-                assert(false);
+                ASSERT(false);
             }
             else if (!measureWithUnit.get_ValueComponent().get_IfcMeasureValue().is_IfcRatioMeasure())
             {
-                assert(false);
+                ASSERT(false);
             }
             else if (measureWithUnit.get_ValueComponent().get_IfcSimpleValue().is_IfcText())
             {
-                assert(false);
+                ASSERT(false);
             }
             else if (measureWithUnit.get_ValueComponent().get_IfcMeasureValue().is_IfcComplexNumber())
             {
-                assert(false);
+                ASSERT(false);
             }
 
             //shortcuts methods
@@ -571,11 +571,11 @@ namespace CS_IFC
             ifcModel = sdaiOpenModelBN(NULL, "Test.ifc", "IFC4");
 
             var entityIfcRelDefinesByProperties = sdaiGetEntity(ifcModel, "IfcRelDefinesByProperties");
-            assert(entityIfcRelDefinesByProperties);
+            ASSERT(entityIfcRelDefinesByProperties);
 
             int_t* rels = sdaiGetEntityExtent(ifcModel, entityIfcRelDefinesByProperties);
             var N_rels = sdaiGetMemberCount(rels);
-            assert(N_rels == 1);
+            ASSERT(N_rels == 1);
             for (int_t i = 0; i < N_rels; i++)
             {
 

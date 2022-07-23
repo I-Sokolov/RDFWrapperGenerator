@@ -896,6 +896,9 @@ namespace RDF
 		public static extern int_t sdaiGetADBValue(int_t ADB, int_t valueType, out double value);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetADBValue")]
+		public static extern int_t sdaiGetADBValue(int_t ADB, int_t valueType, out bool value);
+
+		[DllImport(IFCEngineDLL, EntryPoint = "sdaiGetADBValue")]
 		public static extern int_t sdaiGetADBValue(int_t ADB, int_t valueType, out IntPtr value);
 
 		/// <summary>
@@ -1304,6 +1307,9 @@ namespace RDF
 		public static extern int_t sdaiCreateADB(int_t valueType, ref double value);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiCreateADB")]
+		public static extern int_t sdaiCreateADB(int_t valueType, ref bool value);
+
+		[DllImport(IFCEngineDLL, EntryPoint = "sdaiCreateADB")]
 		public static extern int_t sdaiCreateADB(int_t valueType, ref IntPtr value);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiCreateADB")]
@@ -1426,6 +1432,8 @@ namespace RDF
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiPutAttrBN")]
 		public static extern void sdaiPutAttrBN(int_t instance, string attributeName, int_t valueType, ref double value);
+		[DllImport(IFCEngineDLL, EntryPoint = "sdaiPutAttrBN")]
+		public static extern void sdaiPutAttrBN(int_t instance, string attributeName, int_t valueType, ref bool value);
 
 		[DllImport(IFCEngineDLL, EntryPoint = "sdaiPutAttrBN")]
 		public static extern void sdaiPutAttrBN(int_t instance, string attributeName, int_t valueType, ref IntPtr value);

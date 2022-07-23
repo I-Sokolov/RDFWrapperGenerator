@@ -508,12 +508,15 @@ namespace RDFWrappers
         {
             m_replacements[KWD_SimpleType] = (!m_cs && definedType !=null) ? definedType : baseType;
             m_replacements[KWD_TextType] = m_replacements[KWD_SimpleType]; //just different words in template
+            m_replacements["double"] = baseType; 
             m_replacements[KWD_sdaiTYPE] = sdaiType;
 
             Template tplGet = baseType == "TextValue" ? Template.AttributeTextGet : Template.AttributeSimpleGet;
             Template tplPut = baseType == "TextValue" ? Template.AttributeTextPut : Template.AttributeSimplePut;
 
             WriteGetPut(tplGet, tplPut, attr.inverse);
+
+            m_replacements.Remove("double");
         }
 
         public void WriteGetPut(Template tplGet, Template tplPut, bool inverse)
