@@ -16,6 +16,9 @@ namespace NAMESPACE_NAME
     using IntValue = Int64;
     using TextValue = String;
 
+    using SimpleType = Double; //## IGNORE
+    using BaseCType = Double; //## IGNORE
+
     /// <summary>
     /// 
     /// </summary>
@@ -96,7 +99,7 @@ namespace NAMESPACE_NAME
             if (m_adb == 0 && m_instance != 0 && m_attrName != null)
             {
                 m_adb = ifcengine.sdaiCreateEmptyADB();
-                if (0 != ifcengine.sdaiGetAttrBN(m_instance, m_attrName, ifcengine.sdaiADB, out m_adb))
+                if (0 == ifcengine.sdaiGetAttrBN(m_instance, m_attrName, ifcengine.sdaiADB, out m_adb))
                 {
                     ifcengine.sdaiDeleteADB(m_adb);
                     m_adb = 0;
@@ -170,6 +173,8 @@ namespace NAMESPACE_NAME
 
         //
         //
+        protected BaseCType? get_BaseCType(TextValue typeName, IntValue sdaiType) { return null; } //## IGNORE
+        protected void put_BaseCType(TextValue typeName, IntValue sdaiType, BaseCType value) { } //## IGNORE
         protected IntValue? get_IntValue(TextValue typeName, IntValue sdaiType)
         {
             IntValue? ret = null;
@@ -379,10 +384,11 @@ namespace NAMESPACE_NAME
 
     }
 
-    public abstract class AggrSerializer<TElem> : IAggrSerializerObj //TODO do we need these classes public?
+    public abstract class AggrSerializer<TElem, TList> : IAggrSerializerObj //TODO do we need these classes public?
+        where TList : List<TElem>, new()
     {
         //
-        public List<TElem> FromAttr(SdaiInstance instance, TextValue attrName)
+        public TList FromAttr(SdaiInstance instance, TextValue attrName)
         {
             SdaiAggr aggr = 0;
             ifcengine.sdaiGetAttrBN(instance, attrName, ifcengine.sdaiAGGR, out aggr);
@@ -390,9 +396,9 @@ namespace NAMESPACE_NAME
         }
 
         //
-        public List<TElem> FromSdaiAggr(SdaiInstance inst, SdaiAggr aggr)
+        public TList FromSdaiAggr(SdaiInstance inst, SdaiAggr aggr)
         {
-            var ret = new List<TElem>();
+            var ret = new TList();
             IntValue cnt = ifcengine.sdaiGetMemberCount(aggr);
             for (IntValue i = 0; i < cnt; i++)
             {
@@ -436,7 +442,8 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializer_IntValue<TElem> : AggrSerializer<IntValue>
+    public class AggrSerializer_IntValue<TElem, TList> : AggrSerializer<IntValue, TList> 
+        where TList : List<IntValue>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out IntValue elem)
         {
@@ -452,7 +459,8 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializer_double<TElem> : AggrSerializer<double>
+    public class AggrSerializer_double<TElem, TList> : AggrSerializer<double, TList> 
+        where TList : List<double>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out double elem)
         {
@@ -465,7 +473,8 @@ namespace NAMESPACE_NAME
         }
     };
 
-    public class AggrSerializerText<TElem> : AggrSerializer<TextValue>
+    public class AggrSerializerText<TElem, TList> : AggrSerializer<TextValue, TList> 
+        where TList : List<TextValue>, new()
     {
         private IntValue m_sdaiType;
 
@@ -487,7 +496,9 @@ namespace NAMESPACE_NAME
         }
     };
 
-    public class AggrSerializerInstance<TElem> : AggrSerializer<TElem> where TElem : Entity, new()
+    public class AggrSerializerInstance<TElem, TList> : AggrSerializer<TElem, TList> 
+        where TElem : Entity, new() 
+        where TList : List<TElem>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TElem elem)
         {
@@ -507,7 +518,9 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializerEnum<TEnum> : AggrSerializer<TEnum> where TEnum : struct, Enum
+    public class AggrSerializerEnum<TEnum, TList> : AggrSerializer<TEnum, TList> 
+        where TEnum : struct, Enum 
+        where TList : List<TEnum>, new()
     {
         private IntValue m_sdaiType;
         private TextValue[] m_EnumValues;
@@ -547,9 +560,10 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializerAggr<TNestedAggr, TNestedSerializer> : AggrSerializer<TNestedAggr>
+    public class AggrSerializerAggr<TNestedAggr, TNestedSerializer, TList> : AggrSerializer<TNestedAggr, TList>
                     where TNestedAggr : IEnumerable
                     where TNestedSerializer : IAggrSerializerObj, new()
+                    where TList : List<TNestedAggr>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TNestedAggr elem)
         {
@@ -575,7 +589,9 @@ namespace NAMESPACE_NAME
         }
     };
 
-    public class AggrSerializerSelect<TSelect> : AggrSerializer<TSelect> where TSelect : Select, new()
+    public class AggrSerializerSelect<TSelect, TList> : AggrSerializer<TSelect, TList> 
+        where TSelect : Select, new()
+        where TList: List<TSelect>, new ()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TSelect elem)
         {
@@ -639,6 +655,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         public static implicit operator SdaiInstance(Entity instance) => instance.m_instance;
 
+        protected BaseCType? get_BaseCType (TextValue attrName, IntValue sdaiType) { return null; } //##IGNORE
         protected TextValue get_string(TextValue attrName, IntValue sdaiType)
         {
             IntPtr ptr = IntPtr.Zero;
@@ -703,20 +720,6 @@ namespace NAMESPACE_NAME
             return m_instance.GetHashCode();
         }
     }
-
-    //## TEMPLATE: TemplateUtilityTypes
-
-    public class SimpleType : List<object> { };
-    public class SImpleType : Select { public SImpleType() : base(0) {} };
-    public class SimpleTypeSerializer : AggrSerializer_double<double> { };
-    public class REF_ENTITY : Entity
-    {
-        public REF_ENTITY() : base(0) { }
-        public REF_ENTITY(SdaiInstance inst) : base (inst) { } 
-        public static implicit operator REF_ENTITY(SdaiInstance value) { return new REF_ENTITY(value); }
-        public static implicit operator SdaiInstance(REF_ENTITY value) { return 0; }
-        protected override TextValue EntityName () { return "unknown, this class is not for usage"; } 
-    };
     //## TEMPLATE: ClassForwardDeclaration
     //## TEMPLATE: DefinedTypesBegin
     //## TEMPLATE: DefinedType
@@ -747,26 +750,34 @@ namespace NAMESPACE_NAME
     //
     // Unnamed aggregations
     //
-    public class AggrSerializer_SimpleType<SimpleType> { }
+    public class AggrSerializer_SimpleType<SimpleType, ListType> : IAggrSerializerObj //## IGNORE
+    { //## IGNORE
+        public IList FromSdaiAggrUntyped(long inst, long aggr) { throw new NotImplementedException(); } //## IGNORE
+        public long ToSdaiAggr(IEnumerable lst, long instance, string attrName) { throw new NotImplementedException(); } //## IGNORE 
+    }  //## IGNORE
     //## AggregationOfSimple
     public class AggregationTYpe : List<SimpleType> { }
-    public class AggregationTYpeSerializer : AggrSerializer_SimpleType<SimpleType> { }
+    public class AggregationTYpeSerializer : AggrSerializer_SimpleType<SimpleType, AggregationTYpe> { }
     //## AggregationOfText
     public class Aggregationtype : List<TextValue> { }
-    public class AggregationtypeSerializer : AggrSerializerText<TextValue> { public AggregationtypeSerializer() : base(ifcengine.sdaiTYPE) { } }
+    public class AggregationtypeSerializer : AggrSerializerText<TextValue, Aggregationtype> { public AggregationtypeSerializer() : base(ifcengine.sdaiTYPE) { } }
     //## AggregationOfInstance
-    public class AggregationType : List<SimpleType> { }
-    public class AggregationTypeSerializer : AggrSerializerInstance<REF_ENTITY> { }
+    public class REF_ENTITY : Entity { public REF_ENTITY(SdaiInstance ints) : base(0) { } public REF_ENTITY() : base(0) { } protected override string EntityName() { return null; } } //## IGNORE
+    public class AggregationType : List<REF_ENTITY> { }
+    public class AggregationTypeSerializer : AggrSerializerInstance<REF_ENTITY, AggregationType> { }
     //## AggregationOfEnum
     public class AggregationTyPe : List<Enums.ENUMERATION_NAME> { }
-    //TODO public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
-    public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiENUM) { } };
+    //TODO public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
+    public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiENUM) { } };
     //## AggregationOfAggregation
-    public class AggregationTYPe : List<SimpleType> { }
-    public class AggregationTYPeSerializer : AggrSerializerAggr<SimpleType, SimpleTypeSerializer> { }
+    public class SIMpleType : List<SimpleType> { }  //## IGNORE
+    public class SIMpleTypeSerializer : AggrSerializer_SimpleType<SimpleType, AggregationTYpe> { } //## IGNORE
+    public class AggregationTYPe : List<SIMpleType> { }
+    public class AggregationTYPeSerializer : AggrSerializerAggr<SIMpleType, SIMpleTypeSerializer, AggregationTYPe> { }
     //## AggregationOfSelect
-    public class AggregationTYPE : List<SimpleType> { }
-    public class AggregationTYPESerializer : AggrSerializerSelect<SImpleType> { }
+    public class SImpleType : Select { public SImpleType () : base(null) { } } //## IGNORE
+    public class AggregationTYPE : List<SImpleType> { }
+    public class AggregationTYPESerializer : AggrSerializerSelect<SImpleType, AggregationTYPE> { }
     //## SelectsBegin
 
     //
@@ -786,9 +797,9 @@ namespace NAMESPACE_NAME
 
         //## SelectSimpleGet
         public bool is_TypeNameIfc() { return IsADBType("TypeNameUpper"); }
-        public double? get_TypeNameifc() { return get_double("TypeNameUpper", ifcengine.sdaiTYPE); }
+        public BaseCType? get_TypeNameifc() { return get_BaseCType("TypeNameUpper", ifcengine.sdaiTYPE); }
         //## SelectSimplePut
-        public void put_TypeNameIfc (double value) { put_double("TypeNameUpper", ifcengine.sdaiTYPE, value); }
+        public void put_TypeNameIfc (BaseCType value) { put_BaseCType("TypeNameUpper", ifcengine.sdaiTYPE, value); }
         //## SelectTextGet
         public bool is_TypeNameIFC() { return IsADBType("TypeNameUpper"); }
         public TextValue get_TypeNameIFC() { return getTextValue("TypeNameUpper", ifcengine.sdaiTYPE); }
@@ -796,7 +807,7 @@ namespace NAMESPACE_NAME
         public void put_TypeNameIFC(TextValue value) { putTextValue("TypeNameUpper", ifcengine.sdaiTYPE, value); }
         //## SelectEntityGet
         public bool is_REF_ENTITY() { return IsADBEntity("REF_ENTITY"); }
-        public REF_ENTITY get_REF_ENTITY() { return getEntityInstance("TypeNameUpper"); }
+        public REF_ENTITY get_REF_ENTITY() { return new REF_ENTITY (getEntityInstance("TypeNameUpper")); }
         //## SelectEntityPut
         public void put_REF_ENTITY(REF_ENTITY inst) { putEntityInstance("TypeNameUpper", inst); }
         //## SelectEnumerationGet
@@ -806,7 +817,7 @@ namespace NAMESPACE_NAME
         public void put_TypeNAmeIFC(Enums.ENUMERATION_NAME value) { TextValue val = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); putEnumerationValue("TypeNameUpper", val); }
         //## SelectAggregationGet
         public bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
-        public List<REF_ENTITY> get_AggregationType() { SdaiAggr aggr = getAggrValue("TypeNameUpper"); return (new AggregationTypeSerializer()).FromSdaiAggr(m_instance, aggr); }
+        public AggregationType get_AggregationType() { SdaiAggr aggr = getAggrValue("TypeNameUpper"); return (new AggregationTypeSerializer()).FromSdaiAggr(m_instance, aggr); }
         //## SelectAggregationPut
         public void put_AggregationType(IEnumerable<REF_ENTITY> lst) { SdaiAggr aggr = (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, null); putAggrValue("TypeNameUpper", aggr); }
         public void put_AggregationType(IEnumerable lst) { SdaiAggr aggr = (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, null); putAggrValue("TypeNameUpper", aggr); }
@@ -858,9 +869,9 @@ namespace NAMESPACE_NAME
         public static new ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst != 0); return inst; }
         //## AttributeSimpleGet
 
-        public double? get_ATTR_NAME() { return get_double("ATTR_NAME", ifcengine.sdaiTYPE);}
+        public BaseCType? get_ATTR_NAME() { return get_BaseCType("ATTR_NAME", ifcengine.sdaiTYPE);}
         //## AttributeSimplePut
-        public void put_ATTR_NAME(double value) { ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, ref value); }
+        public void put_ATTR_NAME(BaseCType value) { ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, ref value); }
         //## AttributeTextGet
 
         public TextValue get_attr_NAME() { return get_string("ATTR_NAME", ifcengine.sdaiTYPE); }
@@ -868,7 +879,7 @@ namespace NAMESPACE_NAME
         public void put_ATTR_NAME(TextValue value) { ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, value); }
         //## AttributeEntityGet
 
-        public REF_ENTITY get_Attr_NAME() { SdaiInstance inst = 0; ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, out inst); return inst; }
+        public REF_ENTITY get_Attr_NAME() { SdaiInstance inst = 0; ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, out inst); return new REF_ENTITY (inst); }
         //## AttributeEntityPut
         public void put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst; ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, i); }
         //## AttributeEnumGet

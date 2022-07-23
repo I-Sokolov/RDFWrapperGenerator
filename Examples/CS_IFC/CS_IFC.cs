@@ -14,7 +14,7 @@ namespace CS_IFC
     {
         private static void ASSERT(bool c)
         {
-            Debug.ASSERT(c);
+            Debug.Assert(c);
         }
 
         public static void IFC4_test()
@@ -77,14 +77,14 @@ namespace CS_IFC
             ASSERT(curve.get_Degree().Value == 5);
 
             //type casting check
-            IfcProduct product(wall);
+            var product = new IfcProduct (wall);
             ASSERT(product != 0);
             name = product.get_Name();
-            ASSERT(!strcmp(name, "Wall name"));
+            ASSERT(name == "Wall name");
 
-            IfcBuilding building(wall);
+            IfcBuilding building = new IfcBuilding(wall);
             ASSERT(building == 0);
-#if NOT_NOW
+
             //
             // SELECT tests
             //
@@ -95,45 +95,45 @@ namespace CS_IFC
             IfcMeasureWithUnit measureWithUnit = IfcMeasureWithUnit.Create(ifcModel);
 
             //numeric value (sequence notation)
-            Nullable<IfcAbsorbedDoseMeasure> dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
+            double? dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
             //Nullable<double> works also good
-            ASSERT(dval.IsNull());
+            ASSERT(!dval.HasValue);
 
             //shortcuts methods
             var as_double = measureWithUnit.get_ValueComponent().as_double();
             var as_text = measureWithUnit.get_ValueComponent().as_text();
             var as_int = measureWithUnit.get_ValueComponent().as_int();
             var as_bool = measureWithUnit.get_ValueComponent().as_bool();
-            ASSERT(as_double.IsNull() && as_text == NULL && as_int.IsNull() && as_bool.IsNull());
+            ASSERT(!as_double.HasValue && as_text == null && as_int == null && as_bool == null);
 
             //numeric value (alteranative notation)
-            IfcMeasureValue_get getMeasureValue(measureWithUnit, "ValueComponent");
+            var getMeasureValue = new IfcMeasureValue_get(measureWithUnit, "ValueComponent");
             dval = getMeasureValue.get_IfcRatioMeasure();
-            ASSERT(dval.IsNull());
+            ASSERT(dval == null);
 
             // see below detached select test
-            IfcMeasureValue measureValue_detachedSelect(measureWithUnit, "ValueComponent");
+            var measureValue_detachedSelect = new IfcMeasureValue(measureWithUnit, "ValueComponent");
             dval = measureValue_detachedSelect.get_IfcRatioMeasure();
-            ASSERT(dval.IsNull());
+            ASSERT(!dval.HasValue);
 
             //text based value
-            IfcDescriptiveMeasure sval = getMeasureValue.get_IfcDescriptiveMeasure();
-            ASSERT(sval == NULL);
+            string sval = getMeasureValue.get_IfcDescriptiveMeasure();
+            ASSERT(sval == null);
 
-            IfcText txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
-            ASSERT(txt == NULL);
+            string txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
+            ASSERT(txt == null);
 
             //set to numeric
             measureWithUnit.put_ValueComponent().put_IfcMeasureValue().put_IfcRatioMeasure(0.5);
 
             dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
-            ASSERT(dval.Value() == 0.5);
+            ASSERT(dval.Value == 0.5);
 
             sval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcDescriptiveMeasure();
-            ASSERT(sval == NULL);
+            ASSERT(sval == null);
 
             txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
-            ASSERT(txt == NULL);
+            ASSERT(txt == null);
 
             //check type methodt
             if (measureWithUnit.get_ValueComponent().get_IfcMeasureValue().is_IfcAreaMeasure())
@@ -158,39 +158,39 @@ namespace CS_IFC
             as_text = measureWithUnit.get_ValueComponent().as_text();
             as_int = measureWithUnit.get_ValueComponent().as_int();
             as_bool = measureWithUnit.get_ValueComponent().as_bool();
-            ASSERT(as_double.Value() == 0.5 && 0 == strcmp(as_text, "0.500000") && as_int.Value() == 0 && as_bool.IsNull());
+            ASSERT(as_double.Value == 0.5 && as_text == "0.500000" && as_int.Value == 0 && !as_bool.HasValue);
 
             //detached select behaviour
             //detached select is also changed when instance changed
             dval = measureValue_detachedSelect.get_IfcRatioMeasure();
-            ASSERT(dval.Value() == 0.5);
+            ASSERT(dval! == 0.5);
             //but changing the detached select will change host instance
             measureValue_detachedSelect.put_IfcAreaMeasure(2.7);
             dval = measureValue_detachedSelect.get_IfcAreaMeasure();
-            ASSERT(dval.Value() == 2.7);
+            ASSERT(dval.Value == 2.7);
             //instance was changed
             dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
-            ASSERT(dval.IsNull());
+            ASSERT(dval == null);
             dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcAreaMeasure();
-            ASSERT(dval.Value() == 2.7);
+            ASSERT(dval! == 2.7);
 
             //set DescriptiveMeasure
             measureWithUnit.put_ValueComponent().put_IfcMeasureValue().put_IfcDescriptiveMeasure("my descreptive measure");
 
             dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
-            ASSERT(dval.IsNull());
+            ASSERT(dval==null);
 
             sval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcDescriptiveMeasure();
-            ASSERT(0 == strcmp(sval, "my descreptive measure"));
+            ASSERT(sval == "my descreptive measure");
 
             txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
-            ASSERT(txt == NULL);
+            ASSERT(txt == null);
 
             as_double = measureWithUnit.get_ValueComponent().as_double();
             as_text = measureWithUnit.get_ValueComponent().as_text();
             as_int = measureWithUnit.get_ValueComponent().as_int();
             as_bool = measureWithUnit.get_ValueComponent().as_bool();
-            ASSERT(as_double.IsNull() && 0 == strcmp(as_text, "my descreptive measure") && as_int.IsNull() && as_bool.IsNull());
+            ASSERT(as_double == null && (as_text == "my descreptive measure") && as_int == null && as_bool==null) ;
 
             //set text
             measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcText("my text");
@@ -198,24 +198,23 @@ namespace CS_IFC
             ASSERT(measureWithUnit.get_ValueComponent().get_IfcSimpleValue().is_IfcText());
 
             dval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcRatioMeasure();
-            ASSERT(dval.IsNull());
+            ASSERT(dval==null);
 
             sval = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcDescriptiveMeasure();
-            ASSERT(sval == NULL);
+            ASSERT(sval == null);
 
             txt = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcText();
-            ASSERT(0 == strcmp(txt, "my text"));
+            ASSERT(txt== "my text");
 
-            IfcComplexNumber complexVal;
-            measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcComplexNumber(complexVal);
-            ASSERT(complexVal.empty());
+            IfcComplexNumber complexVal = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcComplexNumber();
+            ASSERT(complexVal.Count==0);
 
             as_double = measureWithUnit.get_ValueComponent().as_double();
             as_text = measureWithUnit.get_ValueComponent().as_text();
             as_int = measureWithUnit.get_ValueComponent().as_int();
             as_bool = measureWithUnit.get_ValueComponent().as_bool();
-            ASSERT(as_double.IsNull() && 0 == strcmp(as_text, "my text") && as_int.IsNull() && as_bool.IsNull());
-
+            ASSERT(as_double==null && (as_text == "my text") && as_int==null && as_bool==null);
+#if NOT_NOW
             //
             // entities select
             //

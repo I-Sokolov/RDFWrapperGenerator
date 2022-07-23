@@ -15,11 +15,13 @@ namespace RDFWrappers
         /// 
         /// </summary>
         const string KWD_PREPROC = "//##";
+        const string KWD_IGNORE = "IGNORE";
 
         public const string KWD_NAMESPACE = "NAMESPACE_NAME";
         public const string KWD_ENTITY_NAME = "ENTITY_NAME";
         public const string KWD_BASE_CLASS = "/*PARENT_NAME*/Entity";
         public const string KWD_DEFINED_TYPE = "DEFINED_TYPE_NAME";
+        public const string KWD_BaseCType = "BaseCType";
         public const string KWD_SimpleType = "SimpleType";
         public const string KWD_TextType = "TextType";
         public const string KWD_TypeNameIFC = "TypeNameIFC";
@@ -46,7 +48,6 @@ namespace RDFWrappers
         { 
             None,
             BeginFile,
-            TemplateUtilityTypes,
             ClassForwardDeclaration,
             DefinedTypesBegin,
             DefinedType,
@@ -506,17 +507,15 @@ namespace RDFWrappers
 
         private void WriteSimpleAttribute(Attribute attr, string definedType, string baseType, string sdaiType)
         {
-            m_replacements[KWD_SimpleType] = (!m_cs && definedType !=null) ? definedType : baseType;
+            m_replacements[KWD_SimpleType] = (definedType !=null) ? definedType : baseType;
             m_replacements[KWD_TextType] = m_replacements[KWD_SimpleType]; //just different words in template
-            m_replacements["double"] = baseType; 
             m_replacements[KWD_sdaiTYPE] = sdaiType;
+            m_replacements[KWD_BaseCType] = baseType;
 
             Template tplGet = baseType == "TextValue" ? Template.AttributeTextGet : Template.AttributeSimpleGet;
             Template tplPut = baseType == "TextValue" ? Template.AttributeTextPut : Template.AttributeSimplePut;
 
             WriteGetPut(tplGet, tplPut, attr.inverse);
-
-            m_replacements.Remove("double");
         }
 
         public void WriteGetPut(Template tplGet, Template tplPut, bool inverse)
@@ -620,10 +619,18 @@ namespace RDFWrappers
                     {
                         nline++;
 
+
                         if (line.Contains(KWD_PREPROC))
                         {
-                            part++;
-                            Verify(line.Contains(part.ToString()), string.Format("Expected line {0} contains '{1}' substing while parsing template fle {2}", nline, part.ToString(), templateName));
+                            if (line.Contains(KWD_IGNORE))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                part++;
+                                Verify(line.Contains(part.ToString()), string.Format("Expected line {0} contains '{1}' substing while parsing template fle {2}", nline, part.ToString(), templateName));
+                            }
                         }
                         else
                         {

@@ -325,7 +325,7 @@ namespace RDFWrappers
             generator.m_replacements[Generator.KWD_sdaiTYPE] = sdaiType;
             generator.m_replacements[Generator.KWD_TypeNameIFC] = definedType.name;
             generator.m_replacements[Generator.KWD_TypeNameUpper] = definedType.name.ToUpper();
-            generator.m_replacements["double"] = baseType;
+            generator.m_replacements[Generator.KWD_BaseCType] = baseType;
 
             Generator.Template tplGet;
             Generator.Template tplPut;
@@ -349,8 +349,6 @@ namespace RDFWrappers
                 generator.WriteByTemplate(tplGet);
                 generator.WriteByTemplate(tplPut);
             }
-
-            generator.m_replacements.Remove("double");
         }
 
         private void WriteAggrAccessorMethod(Generator generator, DefinedType definedType, DefinedType.Foundation foundation, bool? bGet)

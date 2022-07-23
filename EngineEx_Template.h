@@ -547,21 +547,18 @@ namespace NAMESPACE_NAME
     //
     // Entities forward declarations
     //
-//## TemplateUtilityTypes    - this section just to make templates syntax correc
-
-    typedef double        SimpleType;
-    typedef TextValue     TextType;
-    typedef int           SelectType;
-    typedef int_t         REF_ENTITY;   
-    typedef int_t         TypeNameIFC;
-    template <typename TList> class SimpleTypeSerializer {};
-
-#define sdaiTYPE  sdaiREAL
-#define ENUMERATION_VALUES_ARRAY ENUMERATION_NAME_
 
 //## TEMPLATE: ClassForwardDeclaration
     class ENTITY_NAME;
 //## TEMPLATE: DefinedTypesBegin
+#define sdaiTYPE  (-1)                                          //## IGNORE
+#define ENUMERATION_VALUES_ARRAY ENUMERATION_NAME_              //## IGNORE
+    typedef double        SimpleType;                           //## IGNORE
+    typedef TextValue     TextType;                             //## IGNORE
+    typedef int           SelectType;                           //## IGNORE
+    typedef int_t         REF_ENTITY;                           //## IGNORE
+    typedef int_t         TypeNameIFC;                          //## IGNORE
+    template <typename TList> class SimpleTypeSerializer {};    //## IGNORE
 
     //
     // Defined types
