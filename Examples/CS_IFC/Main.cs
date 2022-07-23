@@ -1,8 +1,4 @@
-﻿using System;
-using RDF;
-using IFC4;
-using System.Diagnostics;
-
+﻿
 namespace CS_IFC
 {
     class CMain
@@ -13,6 +9,8 @@ namespace CS_IFC
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            CS_IFC.IFC4_test();
+
             IfcBlobTextureExample.Run();
         }
     }

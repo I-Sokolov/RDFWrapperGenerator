@@ -827,7 +827,7 @@ namespace NAMESPACE_NAME
         public void put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst; ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, i); }
         //## AttributeEnumGet
 
-        public Enums.ENUMERATION_NAME? get_ATtr_NAME() { var str = getString("ATTR_NAME", ifcengine.sdaiSTRING); var ind = EnumIndex.FromString(str, Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
+        public Enums.ENUMERATION_NAME? get_ATtr_NAME() { var str = getString("ATTR_NAME", ifcengine.sdaiENUM); var ind = EnumIndex.FromString(str, Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
         //## AttributeEnumPut
         public void put_ATTR_NAME(Enums.ENUMERATION_NAME value) { var str = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiENUM, str); }
         //## AttributeSelectAccessor
