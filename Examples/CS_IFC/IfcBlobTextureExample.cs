@@ -23,7 +23,7 @@ namespace CS_IFC
             string rasterCode = "0"; //first 0 means full bytes
             rasterCode += Convert.ToHexString(rasterBytes); //followed by hex string
 
-            ifcengine.sdaiPutAttrBN(ifcBlobTexture, "RasterCode", ifcengine.sdaiSTRING, rasterCode);
+            ifcengine.sdaiPutAttrBN(ifcBlobTexture, "RasterCode", ifcengine.sdaiBINARY, rasterCode);
 
             ifcengine.sdaiSaveModelBN(model, "CSBinary.ifc");
             ifcengine.sdaiCloseModel(model);
