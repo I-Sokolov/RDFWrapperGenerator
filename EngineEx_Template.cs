@@ -887,7 +887,7 @@ namespace NAMESPACE_NAME
         //## AttributeSelectAccessor        
         public GEN_TYPE_NAME_accessor getOrPut_ATTR_NAME() { return new GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", 0); }
         //## AttributeAggregationGet
-        public List<REF_ENTITY> get_ATTr_NAME() { return (new AggregationTypeSerializer()).FromAttr(m_instance, "ATTR_NAME"); }
+        public AggregationType get_ATTr_NAME() { return (new AggregationTypeSerializer()).FromAttr(m_instance, "ATTR_NAME"); }
         //## AttributeAggregationPut
         public void put_ATTr_NAME(IEnumerable<SimpleType> lst) { (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, "ATTR_NAME"); }
         //public void put_ATTr_NAME_untyped(IEnumerable lst) { (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, "ATTR_NAME"); }

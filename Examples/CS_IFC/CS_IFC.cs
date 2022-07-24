@@ -272,7 +272,6 @@ namespace CS_IFC
             relIntersect.put_ImpliedOrder(LOGICAL_VALUE.False);
             ifcLogical = relIntersect.get_ImpliedOrder();
             ASSERT(ifcLogical.Value == LOGICAL_VALUE.False);
-#if NOT_NOW
 
             //
             // Aggregations
@@ -282,44 +281,39 @@ namespace CS_IFC
             var site = IfcSite.Create(ifcModel);
 
             IfcCompoundPlaneAngleMeasure longitude;
-            site.get_RefLongitude(longitude);
-            ASSERT(longitude.size() == 0);
+            longitude = site.get_RefLongitude();
+            ASSERT(longitude.Count == 0);
 
-            longitude.push_back(54);
+            longitude = new IfcCompoundPlaneAngleMeasure();
+            longitude.Add(54);
             site.put_RefLongitude(longitude);
 
-            longitude.clear();
-            site.get_RefLongitude(longitude);
-            ASSERT(longitude.size() == 1 && longitude.front() == 54);
+            longitude = site.get_RefLongitude();
+            ASSERT(longitude.Count == 1 && longitude[0] == 54);
 
-            std.list<int_t> lstInt;
-            site.get_RefLongitude(lstInt);
-            ASSERT(lstInt.size() == 1 && lstInt.front() == 54);
 
-            int64_t rint[] = { 3, 4 };
-            site.put_RefLongitude(rint, 2);
+            Int64[] rint = { 3, 4 };
+            site.put_RefLongitude(rint);
 
-            longitude.clear();
-            site.get_RefLongitude(longitude);
-            ASSERT(longitude.size() == 2 && longitude.front() == 3 && longitude.back() == 4);
+            longitude = site.get_RefLongitude();
+            ASSERT(longitude.Count == 2 && longitude[0] == 3 && longitude[1] == 4);
 
             //double unnamed
             var point = IfcCartesianPoint.Create(ifcModel);
 
-            ListOfIfcLengthMeasure coords;
-            point.get_Coordinates(coords);
-            ASSERT(coords.empty());
+            ListOfIfcLengthMeasure coords = point.get_Coordinates();
+            ASSERT(coords.Count==0);
 
-            double my2DPoint[] = { 1.0, 2.0 }; //can use array to set
-            point.put_Coordinates(my2DPoint, 2);
+            double[] my2DPoint = { 1.0, 2.0 }; //can use array to set
+            point.put_Coordinates(my2DPoint);
 
-            coords.clear();
-            point.get_Coordinates(coords);
-            ASSERT(coords.size() == 2 && coords.front() == 1 && coords.back() == 2);
+            coords = point.get_Coordinates();
+            ASSERT(coords.Count == 2 && coords[0] == 1 && coords[1] == 2);
 
-            coords.push_back(3);
+            coords.Add(3);
             point.put_Coordinates(coords); //can use sdt.list to set
-            ASSERT(coords.size() == 3 && coords.front() == 1 && coords.back() == 3);
+            ASSERT(coords.Count == 3 && coords[0] == 1 && coords[2] == 3);
+#if NOT_NOW
 
             //string
             ListOfIfcLabel middleNames;
