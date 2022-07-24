@@ -852,52 +852,47 @@ namespace NAMESPACE_NAME
     public class ENTITY_NAME : /*PARENT_NAME*/Entity
     {
         /// <summary>
-        /// Constructs object of this C++ class that wraps existing SdaiInstance of ENTITY_NAME
+        /// Constructs object of this C# class that wraps existing SdaiInstance of ENTITY_NAME
         /// </summary>
         /// <param name="instance">An instance to interact with</param>
         public ENTITY_NAME(SdaiInstance instance) : base(instance) { }
         public ENTITY_NAME() : base(0) { }
-
-        public static implicit operator ENTITY_NAME(SdaiInstance instance) => new ENTITY_NAME(instance);
-
-        protected override TextValue EntityName () { return "ENTITY_NAME"; }
 
         //## EntityCreateMethod
         /// <summary>
         /// Create new instace of ENTITY_NAME and returns object of this class to interact with
         /// </summary>
         public static new ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst != 0); return inst; }
-        //## AttributeSimpleGet
 
+        public static implicit operator ENTITY_NAME(SdaiInstance instance) => new ENTITY_NAME(instance);
+
+        //## AttributeSimpleGet
         public BaseCType? get_ATTR_NAME() { return get_BaseCType("ATTR_NAME", ifcengine.sdaiTYPE);}
         //## AttributeSimplePut
         public void put_ATTR_NAME(BaseCType value) { ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, ref value); }
         //## AttributeTextGet
-
         public TextValue get_attr_NAME() { return get_string("ATTR_NAME", ifcengine.sdaiTYPE); }
         //## AttributeTextPut
         public void put_ATTR_NAME(TextValue value) { ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiTYPE, value); }
         //## AttributeEntityGet
-
         public REF_ENTITY get_Attr_NAME() { SdaiInstance inst = 0; ifcengine.sdaiGetAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, out inst); return new REF_ENTITY (inst); }
         //## AttributeEntityPut
         public void put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst; ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, i); }
         //## AttributeEnumGet
-
         public Enums.ENUMERATION_NAME? get_ATtr_NAME() { var str = get_string("ATTR_NAME", ifcengine.sdaiENUM); var ind = EnumIndex.FromString(str, Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
         //## AttributeEnumPut
         public void put_ATTR_NAME(Enums.ENUMERATION_NAME value) { var str = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiENUM, str); }
-        //## AttributeSelectAccessor
-        
+        //## AttributeSelectAccessor        
         public GEN_TYPE_NAME_accessor getOrPut_ATTR_NAME() { return new GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", 0); }
         //## AttributeAggregationGet
-
         public List<REF_ENTITY> get_ATTr_NAME() { return (new AggregationTypeSerializer()).FromAttr(m_instance, "ATTR_NAME"); }
         //## AttributeAggregationPut
         public void put_ATTr_NAME(IEnumerable<SimpleType> lst) { (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, "ATTR_NAME"); }
-        public void put_ATTr_NAME(IEnumerable lst) { (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, "ATTR_NAME"); }
+        //public void put_ATTr_NAME_untyped(IEnumerable lst) { (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, "ATTR_NAME"); }
         //## AttributeAggregationPutArray
         //## EntityEnd
+
+        protected override TextValue EntityName() { return "ENTITY_NAME"; }
     };
 
     //## SelectEntityGetImplementation

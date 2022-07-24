@@ -214,7 +214,15 @@ namespace CS_IFC
             as_int = measureWithUnit.get_ValueComponent().as_int();
             as_bool = measureWithUnit.get_ValueComponent().as_bool();
             ASSERT(as_double==null && (as_text == "my text") && as_int==null && as_bool==null);
-#if NOT_NOW
+
+            //
+            // simple aggrgations in select
+            //
+            double[] arrDouble = { 2, 5 };
+            measureWithUnit.put_ValueComponent().put_IfcMeasureValue().put_IfcComplexNumber(arrDouble);
+            complexVal = measureWithUnit.get_ValueComponent().get_IfcMeasureValue().get_IfcComplexNumber();
+            ASSERT(complexVal.Count==2 && complexVal[0]==2 && complexVal[1]==5);
+
             //
             // entities select
             //
@@ -224,7 +232,7 @@ namespace CS_IFC
             var organization = actor.get_TheActor().get_IfcOrganization();
             ASSERT(person == 0 && organization == 0);
 
-            SdaiInstance instance = actor.get_TheActor().as_instance();
+            Int64 instance = actor.get_TheActor().as_instance();
             ASSERT(instance == 0);
 
             var setPerson = IfcPerson.Create(ifcModel);
@@ -240,29 +248,31 @@ namespace CS_IFC
             instance = actor.get_TheActor().as_instance();
             ASSERT(instance == person);
 
+            ASSERT(person.get_Identification() == "justApeson");
+
             ASSERT(actor.get_TheActor().is_IfcPerson());
             ASSERT(!actor.get_TheActor().is_IfcOrganization());
 
             //
             // LOGICAL VALUES
             //
-
-            ASSERT(curve.get_ClosedCurve().IsNull());
-            curve.put_ClosedCurve(IfcLogical.Unknown);
-            ASSERT(curve.get_ClosedCurve().Value() == IfcLogical.Unknown);
+            ASSERT(curve.get_ClosedCurve()==null);
+            curve.put_ClosedCurve(Enums.LOGICAL_VALUE.Unknown);
+            ASSERT(curve.get_ClosedCurve().Value == Enums.LOGICAL_VALUE.Unknown);
 
             var ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
-            ASSERT(ifcLogical.IsNull());
-            measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcLogical(IfcLogical.True);
+            ASSERT(ifcLogical==null);
+            measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcLogical(Enums.LOGICAL_VALUE.True);
             ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
-            ASSERT(ifcLogical.Value() == IfcLogical.True);
+            ASSERT(ifcLogical.Value == Enums.LOGICAL_VALUE.True);
 
             var relIntersect = IfcRelInterferesElements.Create(ifcModel);
             ifcLogical = relIntersect.get_ImpliedOrder();
-            ASSERT(ifcLogical.IsNull());
-            relIntersect.put_ImpliedOrder(LOGICAL_VALUE.False);
+            ASSERT(ifcLogical==null);
+            relIntersect.put_ImpliedOrder(Enums.LOGICAL_VALUE.False);
             ifcLogical = relIntersect.get_ImpliedOrder();
-            ASSERT(ifcLogical.Value() == LOGICAL_VALUE.False);
+            ASSERT(ifcLogical.Value == Enums.LOGICAL_VALUE.False);
+#if NOT_NOW
 
             //
             // Aggregations
