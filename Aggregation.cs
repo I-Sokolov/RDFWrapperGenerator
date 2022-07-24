@@ -68,8 +68,9 @@ namespace RDFWrappers
             string elemIfcType;
             string elemApiType;
             string sdaiType;
+            string enumValues;
 
-            Generator.Template template = GetAggregatedType(typeDef, out elemIfcType, out elemApiType, out sdaiType);
+            Generator.Template template = GetAggregatedType(typeDef, out elemIfcType, out elemApiType, out sdaiType, out enumValues);
 
             if (template != Generator.Template.None)
             {
@@ -101,6 +102,8 @@ namespace RDFWrappers
                         generator.m_replacements[Generator.KWD_REF_ENTITY] = elemApiType;
                         generator.m_replacements[Generator.KWD_TYPE_NAME] = elemApiType;
                         generator.m_replacements[Generator.KWD_TypeNameIFC] = elemIfcType;
+                        if (enumValues != null)
+                            generator.m_replacements[Generator.KWD_ENUMERATION_VALUES_ARRAY] = enumValues;
                         generator.WriteByTemplate(template);
                     }
 
@@ -157,13 +160,14 @@ namespace RDFWrappers
             return name.ToString();
         }
 
-        private Generator.Template GetAggregatedType(TypeDef typeDef, out string elemIfcType, out string elemApiType, out string sdaiType)
+        private Generator.Template GetAggregatedType(TypeDef typeDef, out string elemIfcType, out string elemApiType, out string sdaiType, out string enumValues)
         {
             Generator.Template template = Generator.Template.None;
 
             elemIfcType = null;
             elemApiType = null;
             sdaiType = null;
+            enumValues = null;
 
             string baseType = null;
             Select select = null;
@@ -213,6 +217,7 @@ namespace RDFWrappers
                 elemIfcType = enumeration.name;
                 elemApiType = elemIfcType;
                 sdaiType = "sdaiENUM";
+                enumValues = enumeration.name + "_";
                 template = Generator.Template.AggregationOfEnum;
             }
             else if (typeDef.domain == 0 && typeDef.attrType == RDF.enum_express_attr_type.__LOGICAL)
@@ -220,6 +225,7 @@ namespace RDFWrappers
                 elemIfcType = "LOGICAL_VALUE";
                 elemApiType = elemIfcType;
                 sdaiType = "sdaiLOGICAL";
+                enumValues = "LOGICAL_VALUE_";
                 template = Generator.Template.AggregationOfEnum;
             }
             else if ((select = typeDef.IsSelect()) != null)
@@ -241,6 +247,10 @@ namespace RDFWrappers
                             System.Diagnostics.Debug.Assert(false, "not tested");
                             break;
                         case enum_express_declaration.__ENUM:
+                            elemIfcType = definedType.name;
+                            //find enum name in foundation elemApiType = foundation.;
+                            sdaiType = "sdaiENUM";
+                            enumValues = elemApiType + "_";
                             template = Generator.Template.AggregationOfEnum;
                             System.Diagnostics.Debug.Assert(false, "not tested");
                             break;
@@ -280,13 +290,14 @@ namespace RDFWrappers
             bool nested = false;
             string elemIfcType = null;
             string elemApiType = null;
+            string enumValues = null;
             string sdaiType = null;
             Generator.Template template = Generator.Template.None;
 
             if (typeDef.aggregation != 0)
             {
                 //unnamed aggregation
-                template = GetAggregatedType(typeDef, out elemIfcType, out elemApiType, out sdaiType);
+                template = GetAggregatedType(typeDef, out elemIfcType, out elemApiType, out sdaiType, out enumValues);
                 if (template != Generator.Template.None)
                 {
                     aggrTypeName = elemIfcType;
@@ -315,7 +326,7 @@ namespace RDFWrappers
                 {
                     var definedType = new DefinedType(typeDef.domain);
                     aggrTypeName = definedType.name;
-                    template = GetAggregatedType(definedType, out elemIfcType, out elemApiType, out sdaiType);
+                    template = GetAggregatedType(definedType, out elemIfcType, out elemApiType, out sdaiType, out enumValues);
                 }
                 else
                 {

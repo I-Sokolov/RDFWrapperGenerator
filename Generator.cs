@@ -55,6 +55,8 @@ namespace RDFWrappers
             EnumerationBegin,
             EnumerationElement,
             EnumerationEnd,
+            EnumerationNamesBegin,
+            EnumerationNames,
             EnumerationsEnd,
             AggregationTypesBegin,
             AggregationOfSimple,
@@ -235,7 +237,15 @@ namespace RDFWrappers
             foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENUM])
             {
                 var enumeration = new Enumeraion(decl.Value);
-                WriteEnumeration(enumeration);
+                WriteEnumerationClass(enumeration);
+            }
+
+            WriteByTemplate(Template.EnumerationNamesBegin);
+
+            foreach (var decl in m_schema.m_declarations[RDF.enum_express_declaration.__ENUM])
+            {
+                var enumeration = new Enumeraion(decl.Value);
+                WriteEnumerationNames(enumeration);
             }
 
             WriteByTemplate(Template.EnumerationsEnd);
@@ -246,14 +256,13 @@ namespace RDFWrappers
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="enumeraion"></param>
-        private void WriteEnumeration(Enumeraion enumeraion)
+        private void WriteEnumerationClass(Enumeraion enumeraion)
         {
             m_replacements[KWD_ENUMERATION_NAME] = enumeraion.name;
 
             WriteByTemplate(Template.EnumerationBegin);
 
             int i = 0;
-            var values = new StringBuilder();
             foreach (var _e in enumeraion.GetValues())
             {               
                 string e = ValidateIdentifier (_e);
@@ -263,18 +272,33 @@ namespace RDFWrappers
 
                 WriteByTemplate(Template.EnumerationElement);
 
-                if (i>0)
-                    values.Append(", ");
-                values.Append("\"");
-                values.Append(e);
-                values.Append("\"");
-
                 i++;
             }
 
-            m_replacements[KWD_ENUM_VALUES] = values.ToString ();
-
             WriteByTemplate(Template.EnumerationEnd);
+        }
+
+        private void WriteEnumerationNames(Enumeraion enumeraion)
+        {
+            m_replacements[KWD_ENUMERATION_NAME] = enumeraion.name;
+
+            var values = new StringBuilder();
+            bool first = true;
+            foreach (var e in enumeraion.GetValues())
+            {
+                if (first)
+                    first = false;
+                else
+                    values.Append(", ");
+
+                values.Append("\"");
+                values.Append(e);
+                values.Append("\"");
+            }
+
+            m_replacements[KWD_ENUM_VALUES] = values.ToString();
+
+            WriteByTemplate(Template.EnumerationNames);
         }
 
         /// <summary>

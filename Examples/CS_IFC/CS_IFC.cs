@@ -39,7 +39,7 @@ namespace CS_IFC
             wall.put_Name("Wall name");
             wall.put_Description("My wall description");
             wall.put_OwnerHistory(ownerHistory);
-            wall.put_PredefinedType(Enums.IfcWallTypeEnum.POLYGONAL);
+            wall.put_PredefinedType(IfcWallTypeEnum.POLYGONAL);
 
             guid = wall.get_GlobalId();
             name = wall.get_Name();
@@ -50,7 +50,7 @@ namespace CS_IFC
                    && name == "Wall name"
                    && guid == "7-7-7"
                    && oh == ownerHistory
-                   && predType.Value == Enums.IfcWallTypeEnum.POLYGONAL
+                   && predType.Value == IfcWallTypeEnum.POLYGONAL
             );
 
             var profile = IfcRectangleProfileDef.Create(ifcModel);
@@ -257,21 +257,21 @@ namespace CS_IFC
             // LOGICAL VALUES
             //
             ASSERT(curve.get_ClosedCurve()==null);
-            curve.put_ClosedCurve(Enums.LOGICAL_VALUE.Unknown);
-            ASSERT(curve.get_ClosedCurve().Value == Enums.LOGICAL_VALUE.Unknown);
+            curve.put_ClosedCurve(LOGICAL_VALUE.Unknown);
+            ASSERT(curve.get_ClosedCurve().Value == LOGICAL_VALUE.Unknown);
 
             var ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
             ASSERT(ifcLogical==null);
-            measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcLogical(Enums.LOGICAL_VALUE.True);
+            measureWithUnit.put_ValueComponent().put_IfcSimpleValue().put_IfcLogical(LOGICAL_VALUE.True);
             ifcLogical = measureWithUnit.get_ValueComponent().get_IfcSimpleValue().get_IfcLogical();
-            ASSERT(ifcLogical.Value == Enums.LOGICAL_VALUE.True);
+            ASSERT(ifcLogical.Value == LOGICAL_VALUE.True);
 
             var relIntersect = IfcRelInterferesElements.Create(ifcModel);
             ifcLogical = relIntersect.get_ImpliedOrder();
             ASSERT(ifcLogical==null);
-            relIntersect.put_ImpliedOrder(Enums.LOGICAL_VALUE.False);
+            relIntersect.put_ImpliedOrder(LOGICAL_VALUE.False);
             ifcLogical = relIntersect.get_ImpliedOrder();
-            ASSERT(ifcLogical.Value == Enums.LOGICAL_VALUE.False);
+            ASSERT(ifcLogical.Value == LOGICAL_VALUE.False);
 #if NOT_NOW
 
             //

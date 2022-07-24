@@ -728,20 +728,22 @@ namespace NAMESPACE_NAME
     //
     // Enumerations
     //
-    public class Enums
+    public enum LOGICAL_VALUE { False = 0, True = 1, Unknown = 2 };
+    //## TEMPLATE: EnumerationBegin
+
+    public enum ENUMERATION_NAME
     {
-        public static TextValue[] ENUMERATION_VALUES_ARRAY = null;
-
-        public enum LOGICAL_VALUE { False = 0, True = 1, Unknown = 2 };
+        //## EnumerationElement
+        ENUMERATION_ELEMENT = 1234,
+        //## EnumerationEnd
+    };
+    //## EnumerationNamesBegin
+    //
+    class EnumNames
+    {
+        public static TextValue[] ENUMERATION_VALUES_ARRAY = null; //## IGNORE
         public static TextValue[] LOGICAL_VALUE_ = { "F", "T", "U" };
-        //## TEMPLATE: EnumerationBegin
-
-        public enum ENUMERATION_NAME
-        {
-            //## EnumerationElement
-            ENUMERATION_ELEMENT = 1234,
-            //## EnumerationEnd
-        };
+        //## EnumerationNames
         public static TextValue[] ENUMERATION_NAME_ = { "ENUMERATION_STRING_VALUES" };
         //## TEMPLATE: EnumerationsEnd
     }
@@ -766,9 +768,9 @@ namespace NAMESPACE_NAME
     public class AggregationType : List<REF_ENTITY> { }
     public class AggregationTypeSerializer : AggrSerializerInstance<REF_ENTITY, AggregationType> { }
     //## AggregationOfEnum
-    public class AggregationTyPe : List<Enums.ENUMERATION_NAME> { }
+    public class AggregationTyPe : List<ENUMERATION_NAME> { }
     //TODO public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
-    public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiENUM) { } };
+    public class AggregationTyPeSerializer : AggrSerializerEnum<ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(EnumNames.ENUMERATION_VALUES_ARRAY, ifcengine.sdaiENUM) { } };
     //## AggregationOfAggregation
     public class SIMpleType : List<SimpleType> { }  //## IGNORE
     public class SIMpleTypeSerializer : AggrSerializer_SimpleType<SimpleType, AggregationTYpe> { } //## IGNORE
@@ -812,9 +814,9 @@ namespace NAMESPACE_NAME
         public void put_REF_ENTITY(REF_ENTITY inst) { putEntityInstance("TypeNameUpper", inst); }
         //## SelectEnumerationGet
         public bool is_TypeNAmeIFC() { return IsADBType("TypeNameUpper"); }
-        public Enums.ENUMERATION_NAME? get_TypeNAmeIFC() { int ind = getEnumerationIndex("TypeNameUpper", Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
+        public ENUMERATION_NAME? get_TypeNAmeIFC() { int ind = getEnumerationIndex("TypeNameUpper", EnumNames.ENUMERATION_VALUES_ARRAY); return EnumValue<ENUMERATION_NAME>.FromIndex(ind); }
         //## SelectEnumerationPut
-        public void put_TypeNAmeIFC(Enums.ENUMERATION_NAME value) { TextValue val = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); putEnumerationValue("TypeNameUpper", val); }
+        public void put_TypeNAmeIFC(ENUMERATION_NAME value) { TextValue val = EnumString<ENUMERATION_NAME>.FromValue(value, EnumNames.ENUMERATION_VALUES_ARRAY); putEnumerationValue("TypeNameUpper", val); }
         //## SelectAggregationGet
         public bool is_AggregationType() { return IsADBType("TypeNameUpper"); }
         public AggregationType get_AggregationType() { SdaiAggr aggr = getAggrValue("TypeNameUpper"); return (new AggregationTypeSerializer()).FromSdaiAggr(m_instance, aggr); }
@@ -879,9 +881,9 @@ namespace NAMESPACE_NAME
         //## AttributeEntityPut
         public void put_Attr_NAME(REF_ENTITY inst) { SdaiInstance i = inst; ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiINSTANCE, i); }
         //## AttributeEnumGet
-        public Enums.ENUMERATION_NAME? get_ATtr_NAME() { var str = get_string("ATTR_NAME", ifcengine.sdaiENUM); var ind = EnumIndex.FromString(str, Enums.ENUMERATION_VALUES_ARRAY); return EnumValue<Enums.ENUMERATION_NAME>.FromIndex(ind); }
+        public ENUMERATION_NAME? get_ATtr_NAME() { var str = get_string("ATTR_NAME", ifcengine.sdaiENUM); var ind = EnumIndex.FromString(str, EnumNames.ENUMERATION_VALUES_ARRAY); return EnumValue<ENUMERATION_NAME>.FromIndex(ind); }
         //## AttributeEnumPut
-        public void put_ATTR_NAME(Enums.ENUMERATION_NAME value) { var str = EnumString<Enums.ENUMERATION_NAME>.FromValue(value, Enums.ENUMERATION_VALUES_ARRAY); ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiENUM, str); }
+        public void put_ATTR_NAME(ENUMERATION_NAME value) { var str = EnumString<ENUMERATION_NAME>.FromValue(value, EnumNames.ENUMERATION_VALUES_ARRAY); ifcengine.sdaiPutAttrBN(m_instance, "ATTR_NAME", ifcengine.sdaiENUM, str); }
         //## AttributeSelectAccessor        
         public GEN_TYPE_NAME_accessor getOrPut_ATTR_NAME() { return new GEN_TYPE_NAME_accessor(m_instance, "ATTR_NAME", 0); }
         //## AttributeAggregationGet
