@@ -390,7 +390,7 @@ extern void IFC4_test()
     //
     auto points = IfcCartesianPointList2D::Create(ifcModel);
 
-    ListOfListOfIfcLengthMeasure lstCoords; //TODO: helper method ListOfListOfT::FromArray (T* r, int NumRow, int NumCol);
+    ListOfListOfIfcLengthMeasure lstCoords; 
     for (int i = 0; i < 4; i++) {
         lstCoords.push_back(ListOfIfcLengthMeasure());
         for (int j = 0; j < 2; j++) {

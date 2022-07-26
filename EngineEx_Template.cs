@@ -789,13 +789,24 @@ namespace NAMESPACE_NAME
 
     public class GEN_TYPE_NAME_accessor : Select
     {
+        /// <summary>
+        /// Use this constructor if you want to put value for attribute (scalar or aggregation)
+        /// </summary>
+        /// <param name="instance">instance you intent to modify</param>
+        /// <param name="attrName">scalar attribute you intent to modify, leave null for aggregations</param>
+        /// <param name="adb">leave null, it is for internal workflow</param>
         public GEN_TYPE_NAME_accessor(SdaiInstance instance, TextValue attrName = null, IntValue adb = 0) : base(instance, attrName, adb) { }
-
-        /// do not use this constructor, it is for internal workflow
-        public GEN_TYPE_NAME_accessor() : base (null) { }
-
-        /// do not use this constructor, it is for internal workflow
+        
+        /// <summary>
+        /// Use this constructore to put nested select value
+        /// </summary>
+        /// <param name="outer">outer select</param>
         public GEN_TYPE_NAME_accessor(Select outer) : base(outer) { }
+
+        /// <summary>
+        /// !!! do not use this constructor, it is for internal workflow
+        /// </summary>
+        public GEN_TYPE_NAME_accessor() : base(null) { }
 
         //## SelectSimpleGet
         public bool is_TypeNameIfc() { return IsADBType("TypeNameUpper"); }

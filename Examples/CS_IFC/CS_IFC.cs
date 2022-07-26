@@ -348,23 +348,20 @@ namespace CS_IFC
 
             ListOfListOfIfcLengthMeasure coordListCheck = pointList.get_CoordList();
             ASSERT_EQ(coordList, coordListCheck);
-#if NOT_NOW
 
             //
             // Aggregation in select 
             // 
             var prop = IfcPropertySingleValue.Create(ifcModel);
 
-            IfcComplexNumber cplxNum;
-            prop.get_NominalValue().get_IfcMeasureValue().get_IfcComplexNumber(cplxNum);
-            ASSERT(cplxNum.size() == 0);
+            IfcComplexNumber cplxNum = prop.get_NominalValue().get_IfcMeasureValue().get_IfcComplexNumber();
+            ASSERT(cplxNum.Count == 0);
 
-            double cplx[] = { 2.1, 1.5 };
-            prop.put_NominalValue().put_IfcMeasureValue().put_IfcComplexNumber(cplx, 2);
+            double[] cplx = { 2.1, 1.5 };
+            prop.put_NominalValue().put_IfcMeasureValue().put_IfcComplexNumber(cplx);
 
-            prop.get_NominalValue().get_IfcMeasureValue().get_IfcComplexNumber(cplxNum);
-            ASSERT(cplxNum.size() == 2 && cplxNum.front() == 2.1 && cplxNum.back() == 1.5);
-
+            cplxNum=prop.get_NominalValue().get_IfcMeasureValue().get_IfcComplexNumber();
+            ASSERT(cplxNum.Count == 2 && cplxNum[0] == 2.1 && cplxNum[1] == 1.5);
 
             //
             //IndexedPolyCurve
@@ -373,52 +370,46 @@ namespace CS_IFC
 
             ASSERT(poly.get_Points() == 0);
 
-            ListOfIfcSegmentIndexSelect segments;
-            poly.get_Segments(segments);
-            ASSERT(segments.empty());
+            ListOfIfcSegmentIndexSelect gotSegments = poly.get_Segments();
+            ASSERT(gotSegments.Count==0);
 
             //2D points
-            double rpt[] ={
-        0,0,
-        1,0,
-        1,1,
-        0,1
-    };
+            double[] rpt ={
+                        0,0,
+                        1,0,
+                        1,1,
+                        0,1
+            };
 
             //indexes of line and arc;
-            IfcPositiveInteger line[] = { 0, 1 };
-            IfcPositiveInteger arc[] = { 1, 2, 3 };
+            Int64[] line = { 0, 1 };
+            Int64[] arc = { 1, 2, 3 };
 
             //create points list
             //
             var points = IfcCartesianPointList2D.Create(ifcModel);
 
-            ListOfListOfIfcLengthMeasure lstCoords; //TODO: helper method ListOfListOfT.FromArray (T* r, int NumRow, int NumCol);
-            for (int i = 0; i < 4; i++)
+            var lstCoords = new ListOfListOfIfcLengthMeasure(); 
+            for (i = 0; i < 4; i++)
             {
-                lstCoords.push_back(ListOfIfcLengthMeasure());
+                lstCoords.Add(new ListOfIfcLengthMeasure());
                 for (int j = 0; j < 2; j++)
                 {
-                    lstCoords.back().push_back(rpt[2 * i + j]);
+                    lstCoords.Last().Add(rpt[2 * i + j]);
                 }
             }
 
             points.put_CoordList(lstCoords);
 
-            //create segments list
+            //create segments list =
             //
-            segments.clear();
-
-            IfcSegmentIndexSelect segment(poly);
-            segment.put_IfcLineIndex(line, 2);
-            segments.push_back(segment);
-
-            segment.put_IfcArcIndex(arc, 3);
-            segments.push_back(segment);
+            IfcSegmentIndexSelect[] putSegments = { new IfcSegmentIndexSelect(poly), new IfcSegmentIndexSelect(poly) };
+            putSegments[0].put_IfcLineIndex(line);
+            putSegments[1].put_IfcArcIndex(arc);
 
             //
             //
-            poly.put_Segments(segments);
+            poly.put_Segments(putSegments);
             poly.put_Points(points);
             poly.put_SelfIntersect(false);
 
@@ -426,63 +417,62 @@ namespace CS_IFC
             // get and check
             //
             points = 0;
-            coordList.clear();
-            segments.clear();
 
             var pts = poly.get_Points();
-            points = IfcCartesianPointList2D(pts); //TODO isInstanceOf!
+            points = new IfcCartesianPointList2D(pts); //TODO isInstanceOf!
             ASSERT(points != 0);
 
-            points.get_CoordList(coordList);
-            ASSERT(coordList.size() == 4);
-            i = 0;
-            for (var & coord : coordList)
-            {
-                ASSERT(coord.size() == 2);
-                ASSERT(coord.front() == rpt[2 * i] && coord.back() == rpt[2 * i + 1]);
-                i++;
-            }
+            building = new IfcBuilding(pts);
+            ASSERT(building == 0);
 
-            poly.get_Segments(segments);
-            ASSERT(segments.size() == 2);
+            coordList = points.get_CoordList();
+            ASSERT_EQ(coordList, lstCoords);
 
-            IfcArcIndex arcInd;
-            IfcLineIndex lineInd;
-            segments.front().get_IfcArcIndex(arcInd);
-            segments.front().get_IfcLineIndex(lineInd);
+            gotSegments = poly.get_Segments();
+            ASSERT(gotSegments.Count == 2);
 
-            ASSERT(arcInd.empty());
-            ASSERT(lineInd.size() == 2 && lineInd.front() == 0 && lineInd.back() == 1);
+            IfcArcIndex arcInd = gotSegments[0].get_IfcArcIndex();
+            IfcLineIndex lineInd = gotSegments[0].get_IfcLineIndex();
+            ASSERT(arcInd.Count == 0);
+            ASSERT_EQ(lineInd, line);
 
-            arcInd.clear();
-            lineInd.clear();
-            segments.back().get_IfcArcIndex(arcInd);
-            segments.back().get_IfcLineIndex(lineInd);
-
-            ASSERT(arcInd.size() == 3 && arcInd.front() == 1 && arcInd.back() == 3);
-            ASSERT(lineInd.empty());
+            arcInd = gotSegments[1].get_IfcArcIndex();
+            lineInd = gotSegments[1].get_IfcLineIndex();
+            ASSERT_EQ(arcInd, arc);
+            ASSERT(lineInd.Count==0);
 
             //append line
-            lineInd.push_back(3);
-            lineInd.push_back(0);
-            segment.put_IfcLineIndex(lineInd);
-            segments.push_back(segment);
+            var line2 = new IfcLineIndex();
+            line2.Add(3);
+            line2.Add(1);
+            var segment3 = new IfcSegmentIndexSelect(poly);
+            segment3.put_IfcLineIndex(line2);
 
-            poly.put_Segments(segments);
+            var putLstSegments = putSegments.ToList();
+            putLstSegments.Add(segment3);
+
+            poly.put_Segments(putLstSegments);
 
             //check now
-            segments.clear();
-            poly.get_Segments(segments);
-            ASSERT(segments.size() == 3);
+            gotSegments = poly.get_Segments();
+            ASSERT(gotSegments.Count == 3);
 
-            segment = segments.back();
-            arcInd.clear();
-            lineInd.clear();
-            segment.get_IfcArcIndex(arcInd);
-            segment.get_IfcLineIndex(lineInd);
+            arcInd = gotSegments[0].get_IfcArcIndex();
+            lineInd = gotSegments[0].get_IfcLineIndex();
+            ASSERT(arcInd.Count == 0);
+            ASSERT_EQ(lineInd, line);
 
-            ASSERT(arcInd.empty());
-            ASSERT(lineInd.size() == 2 && lineInd.front() == 3 && lineInd.back() == 0);
+            arcInd = gotSegments[1].get_IfcArcIndex();
+            lineInd = gotSegments[1].get_IfcLineIndex();
+            ASSERT_EQ(arcInd, arc);
+            ASSERT(lineInd.Count == 0);
+
+            arcInd = gotSegments[2].get_IfcArcIndex();
+            lineInd = gotSegments[2].get_IfcLineIndex();
+            ASSERT(arcInd.Count==0);
+            ASSERT_EQ(lineInd, line2);
+
+#if NOT_NOW
 
             ///
             /// Aggregation of instances
@@ -496,29 +486,29 @@ namespace CS_IFC
 
             ListOfIfcRepresentation lstRep;
             prodRepr.get_Representations(lstRep);
-            ASSERT(lstRep.empty());
+            ASSERT(lstRep.Count==0);
 
             var repr = IfcShapeRepresentation.Create(ifcModel);
-            lstRep.push_back(repr);
+            lstRep.Add(repr);
             prodRepr.put_Representations(lstRep);
 
             lstRep.clear();
             prodRepr.get_Representations(lstRep);
-            ASSERT(lstRep.size() == 1 && lstRep.front() == repr);
+            ASSERT(lstRep.Count == 1 && lstRep.front() == repr);
 
             SetOfIfcRepresentationItem lstItems;
             repr.get_Items(lstItems);
-            ASSERT(lstItems.size() == 0);
+            ASSERT(lstItems.Count == 0);
 
-            lstItems.push_back(poly);
-            lstItems.push_back(triangFaceSet);
-            lstItems.push_back(curve);
+            lstItems.Add(poly);
+            lstItems.Add(triangFaceSet);
+            lstItems.Add(curve);
 
             repr.put_Items(lstItems);
 
             lstItems.clear();
             repr.get_Items(lstItems);
-            ASSERT(lstItems.size() == 3 && lstItems.front() == poly && lstItems.back() == curve);
+            ASSERT(lstItems.Count == 3 && lstItems.front() == poly && lstItems.Last() == curve);
 
             ///
             /// Defined type aggregation of instance
@@ -526,19 +516,19 @@ namespace CS_IFC
 
             SetOfIfcObjectDefinition relObj;
             relProps.get_RelatedObjects(relObj);
-            ASSERT(relObj.empty());
+            ASSERT(relObj.Count==0);
 
-            relObj.push_back(wall);
+            relObj.Add(wall);
 
             relProps.put_RelatedObjects(relObj);
 
             relObj.clear();
             relProps.get_RelatedObjects(relObj);
-            ASSERT(relObj.size() == 1 && relObj.front() == wall);
+            ASSERT(relObj.Count == 1 && relObj.front() == wall);
 
             IfcPropertySetDefinitionSet psSet;
             relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
-            ASSERT(psSet.size() == 0);
+            ASSERT(psSet.Count == 0);
 
             ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
 
@@ -548,14 +538,14 @@ namespace CS_IFC
             relProps.put_RelatingPropertyDefinition().put_IfcPropertySetDefinition(emptyPset);
             ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == emptyPset);
             relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
-            ASSERT(psSet.size() == 0);
+            ASSERT(psSet.Count == 0);
 
-            psSet.push_back(emptyPset);
+            psSet.Add(emptyPset);
             relProps.put_RelatingPropertyDefinition().put_IfcPropertySetDefinitionSet(psSet);
             ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
             psSet.clear();
             relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
-            ASSERT(psSet.size() == 1 && psSet.front() == emptyPset);
+            ASSERT(psSet.Count == 1 && psSet.front() == emptyPset);
 #endif
             /// 
             /// 
@@ -580,7 +570,7 @@ namespace CS_IFC
                 ASSERT(get.get_IfcPropertySetDefinition() == 0);
                 psSet.clear();
                 get.get_IfcPropertySetDefinitionSet(psSet);
-                ASSERT(psSet.size() == 1);
+                ASSERT(psSet.Count == 1);
                 name = psSet.front().get_Name();
                 ASSERT(!strcmp(name, "Empty property set"));
             }
@@ -619,7 +609,7 @@ namespace CS_IFC
                     }
                     else
                     {
-                        ASSERT(it1.Current == null && it2.Current == null);
+                        ASSERT(false); //no comparision is implemented
                     }
                 }
 
