@@ -12,6 +12,8 @@ namespace CS_IFC
             CS_IFC.IFC4_test();
 
             IfcBlobTextureExample.Run();
+
+            HelloWall.Run();
         }
     }
 }

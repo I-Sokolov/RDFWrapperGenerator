@@ -833,7 +833,7 @@ namespace NAMESPACE_NAME
         public AggregationType get_AggregationType() { SdaiAggr aggr = getAggrValue("TypeNameUpper"); return (new AggregationTypeSerializer()).FromSdaiAggr(m_instance, aggr); }
         //## SelectAggregationPut
         public void put_AggregationType(IEnumerable<REF_ENTITY> lst) { SdaiAggr aggr = (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, null); putAggrValue("TypeNameUpper", aggr); }
-        public void put_AggregationType(IEnumerable lst) { SdaiAggr aggr = (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, null); putAggrValue("TypeNameUpper", aggr); }
+        //public void put_AggregationType(IEnumerable lst) { SdaiAggr aggr = (new AggregationTypeSerializer()).ToSdaiAggr(lst, m_instance, null); putAggrValue("TypeNameUpper", aggr); }
         //## SelectAggregationPutArray
         //## SelectNested
         public GEN_TYPE_NAME_accessor nestedSelectAccess_GEN_TYPE_NAME() { return new GEN_TYPE_NAME_accessor(this); }
