@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +12,6 @@ namespace CS_IFC
 {
     class CS_IFC
     {
-        private static void ASSERT(bool c)
-        {
-            Debug.Assert(c);
-        }
-
         public static void IFC4_test()
         {
             var ifcModel = ifcengine.sdaiCreateModelBN(0, (string)null, "IFC4");
@@ -313,22 +308,20 @@ namespace CS_IFC
             coords.Add(3);
             point.put_Coordinates(coords); //can use sdt.list to set
             ASSERT(coords.Count == 3 && coords[0] == 1 && coords[2] == 3);
-#if NOT_NOW
 
             //string
-            ListOfIfcLabel middleNames;
-            person.get_MiddleNames(middleNames);
-            ASSERT(middleNames.empty());
+            ListOfIfcLabel middleNames = person.get_MiddleNames();
+            ASSERT(middleNames.Count==0);
 
-            const char* DaliMiddleNames[] = { "Domingo", "Felipe", "Jacinto" };
-            person.put_MiddleNames(DaliMiddleNames, 3);
+            string[] DaliMiddleNames = { "Domingo", "Felipe", "Jacinto" };
+            person.put_MiddleNames(DaliMiddleNames);
 
-            person.get_MiddleNames(middleNames);
-            ASSERT(middleNames.size() == 3);
+            middleNames = person.get_MiddleNames();
+            ASSERT(middleNames.Count == 3);
             int i = 0;
-            for (var m : middleNames)
+            foreach (var m in middleNames)
             {
-                ASSERT(0 == strcmp(m, DaliMiddleNames[i++]));
+                ASSERT(m == DaliMiddleNames[i++]);
             }
 
             //
@@ -336,28 +329,26 @@ namespace CS_IFC
             //
             var pointList = IfcCartesianPointList3D.Create(ifcModel);
 
-            ListOfListOfIfcLengthMeasure coordList;
-
-            pointList.get_CoordList(coordList);
-            ASSERT(coordList.empty());
+            ListOfListOfIfcLengthMeasure coordList = pointList.get_CoordList();
+            ASSERT(coordList.Count==0);
 
             //point (1,0.1)
-            coordList.push_back(ListOfIfcLengthMeasure());
-            coordList.back().push_back(1);
-            coordList.back().push_back(0);
-            coordList.back().push_back(1);
+            coordList.Add(new ListOfIfcLengthMeasure());
+            coordList.Last().Add(1);
+            coordList.Last().Add(0);
+            coordList.Last().Add(1);
 
             //point (0,1,0)
-            coordList.push_back(ListOfIfcLengthMeasure());
-            coordList.back().push_back(0);
-            coordList.back().push_back(1);
-            coordList.back().push_back(0);
+            coordList.Add(new ListOfIfcLengthMeasure());
+            coordList.Last().Add(0);
+            coordList.Last().Add(1);
+            coordList.Last().Add(0);
 
             pointList.put_CoordList(coordList);
 
-            ListOfListOfIfcLengthMeasure coordListCheck;
-            pointList.get_CoordList(coordListCheck);
-            ASSERT(coordList == coordListCheck);
+            ListOfListOfIfcLengthMeasure coordListCheck = pointList.get_CoordList();
+            ASSERT_EQ(coordList, coordListCheck);
+#if NOT_NOW
 
             //
             // Aggregation in select 
@@ -597,5 +588,47 @@ namespace CS_IFC
             sdaiCloseModel(ifcModel);
 #endif
         }
+
+        private static void ASSERT(bool c)
+        {
+            Debug.Assert(c);
+        }
+
+        private static void ASSERT_EQ(IEnumerable lst1, IEnumerable lst2)
+        {
+            var it1 = lst1.GetEnumerator();
+            var it2 = lst2.GetEnumerator();
+
+            bool m1 = it1.MoveNext();
+            bool m2 = it2.MoveNext();
+            while (m1 && m2)
+            {
+                var cmp1 = it1.Current as IComparable;
+                var cmp2 = it2.Current as IComparable;
+                if (cmp1 != null && cmp2 != null)
+                {
+                    ASSERT(cmp1.Equals(cmp2));
+                }
+                else
+                {
+                    var lst11 = it1.Current as IEnumerable;
+                    var lst22 = it2.Current as IEnumerable;
+                    if (lst11 != null && lst22 != null)
+                    {
+                        ASSERT_EQ(lst11, lst22);
+                    }
+                    else
+                    {
+                        ASSERT(it1.Current == null && it2.Current == null);
+                    }
+                }
+
+                m1 = it1.MoveNext();
+                m2 = it2.MoveNext();
+            }
+
+            ASSERT(!m1 && !m2);
+        }
+
     }
 }
