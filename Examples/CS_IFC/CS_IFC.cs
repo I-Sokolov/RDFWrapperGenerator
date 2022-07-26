@@ -542,32 +542,30 @@ namespace CS_IFC
             /// 
             ifcengine.sdaiSaveModelBN(ifcModel, "Test.ifc");
             ifcengine.sdaiCloseModel(ifcModel);
-#if NOT_NOW
-            ifcModel = sdaiOpenModelBN(NULL, "Test.ifc", "IFC4");
 
-            var entityIfcRelDefinesByProperties = sdaiGetEntity(ifcModel, "IfcRelDefinesByProperties");
-            ASSERT(entityIfcRelDefinesByProperties);
+            ifcModel = ifcengine.sdaiOpenModelBN(0, "Test.ifc", "IFC4");
 
-            int_t* rels = sdaiGetEntityExtent(ifcModel, entityIfcRelDefinesByProperties);
-            var N_rels = sdaiGetMemberCount(rels);
+            var entityIfcRelDefinesByProperties = ifcengine.sdaiGetEntity(ifcModel, "IfcRelDefinesByProperties");
+            ASSERT(entityIfcRelDefinesByProperties!=0);
+
+            var rels = ifcengine.sdaiGetEntityExtent(ifcModel, entityIfcRelDefinesByProperties);
+            var N_rels = ifcengine.sdaiGetMemberCount(rels);
             ASSERT(N_rels == 1);
-            for (int_t i = 0; i < N_rels; i++)
+            for (i = 0; i < N_rels; i++)
             {
 
-                int_t rel = 0;
-                engiGetAggrElement(rels, i, sdaiINSTANCE, &rel);
+                Int64 rel = 0;
+                ifcengine.engiGetAggrElement(rels, i, ifcengine.sdaiINSTANCE, out rel);
 
-                var get = IfcRelDefinesByProperties(rel).get_RelatingPropertyDefinition();
+                var get = ((IfcRelDefinesByProperties)(rel)).get_RelatingPropertyDefinition();
                 ASSERT(get.get_IfcPropertySetDefinition() == 0);
-                psSet.clear();
-                get.get_IfcPropertySetDefinitionSet(psSet);
+                psSet = get.get_IfcPropertySetDefinitionSet();
                 ASSERT(psSet.Count == 1);
-                name = psSet.front().get_Name();
-                ASSERT(!strcmp(name, "Empty property set"));
+                name = psSet[0].get_Name();
+                ASSERT(name == "Empty property set");
             }
 
-            sdaiCloseModel(ifcModel);
-#endif
+            ifcengine.sdaiCloseModel(ifcModel);
         }
 
         private static void ASSERT(bool c)
