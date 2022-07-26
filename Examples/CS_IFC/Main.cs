@@ -10,10 +10,9 @@ namespace CS_IFC
         static void Main(string[] args)
         {
             CS_IFC.IFC4_test();
-
             IfcBlobTextureExample.Run();
-
             HelloWall.Run();
+            GuideExample.Run();
         }
     }
 }

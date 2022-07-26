@@ -82,7 +82,7 @@ extern void GuideExamples()
 
     //
     // Definded types
-    // C++ types are defined for each EXPRESS defined typa and implicitly converted to base C++ type
+    // C++ types are declared for each EXPRESS defined type and implicitly converted to base C++ type
     //
    
     IFC4::IfcPositiveLengthMeasure measureHeight = 2000;
