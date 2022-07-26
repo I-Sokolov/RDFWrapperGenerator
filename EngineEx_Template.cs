@@ -871,13 +871,13 @@ namespace NAMESPACE_NAME
         public ENTITY_NAME(SdaiInstance instance) : base(instance) { }
         public ENTITY_NAME() : base(0) { }
 
+        public static implicit operator ENTITY_NAME(SdaiInstance instance) => new ENTITY_NAME(instance);
+
         //## EntityCreateMethod
         /// <summary>
         /// Create new instace of ENTITY_NAME and returns object of this class to interact with
         /// </summary>
         public static new ENTITY_NAME Create(SdaiModel model) { SdaiInstance inst = ifcengine.sdaiCreateInstanceBN(model, "ENTITY_NAME"); Debug.Assert(inst != 0); return inst; }
-
-        public static implicit operator ENTITY_NAME(SdaiInstance instance) => new ENTITY_NAME(instance);
 
         //## AttributeSimpleGet
         public BaseCType? get_ATTR_NAME() { return get_BaseCType("ATTR_NAME", ifcengine.sdaiTYPE);}
