@@ -472,7 +472,6 @@ namespace CS_IFC
             ASSERT(arcInd.Count==0);
             ASSERT_EQ(lineInd, line2);
 
-#if NOT_NOW
 
             ///
             /// Aggregation of instances
@@ -484,20 +483,17 @@ namespace CS_IFC
             wall.put_Representation(prodRepr);
             ASSERT(wall.get_Representation() == prodRepr);
 
-            ListOfIfcRepresentation lstRep;
-            prodRepr.get_Representations(lstRep);
+            ListOfIfcRepresentation lstRep = prodRepr.get_Representations();
             ASSERT(lstRep.Count==0);
 
             var repr = IfcShapeRepresentation.Create(ifcModel);
             lstRep.Add(repr);
             prodRepr.put_Representations(lstRep);
 
-            lstRep.clear();
-            prodRepr.get_Representations(lstRep);
-            ASSERT(lstRep.Count == 1 && lstRep.front() == repr);
+            lstRep = prodRepr.get_Representations();
+            ASSERT(lstRep.Count == 1 && lstRep.First() == repr);
 
-            SetOfIfcRepresentationItem lstItems;
-            repr.get_Items(lstItems);
+            SetOfIfcRepresentationItem lstItems = repr.get_Items();
             ASSERT(lstItems.Count == 0);
 
             lstItems.Add(poly);
@@ -506,30 +502,24 @@ namespace CS_IFC
 
             repr.put_Items(lstItems);
 
-            lstItems.clear();
-            repr.get_Items(lstItems);
-            ASSERT(lstItems.Count == 3 && lstItems.front() == poly && lstItems.Last() == curve);
+            var lstGotItems = repr.get_Items();
+            ASSERT_EQ(lstGotItems, lstItems);
 
             ///
             /// Defined type aggregation of instance
             var relProps = IfcRelDefinesByProperties.Create(ifcModel);
 
-            SetOfIfcObjectDefinition relObj;
-            relProps.get_RelatedObjects(relObj);
+            SetOfIfcObjectDefinition relObj = relProps.get_RelatedObjects();
             ASSERT(relObj.Count==0);
 
             relObj.Add(wall);
-
             relProps.put_RelatedObjects(relObj);
 
-            relObj.clear();
-            relProps.get_RelatedObjects(relObj);
-            ASSERT(relObj.Count == 1 && relObj.front() == wall);
+            var relObjGot = relProps.get_RelatedObjects();
+            ASSERT_EQ(relObj, relObjGot);
 
-            IfcPropertySetDefinitionSet psSet;
-            relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
+            IfcPropertySetDefinitionSet psSet = relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet();
             ASSERT(psSet.Count == 0);
-
             ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
 
             var emptyPset = IfcPropertySet.Create(ifcModel);
@@ -537,16 +527,17 @@ namespace CS_IFC
 
             relProps.put_RelatingPropertyDefinition().put_IfcPropertySetDefinition(emptyPset);
             ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == emptyPset);
-            relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
+
+            psSet = relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet();
             ASSERT(psSet.Count == 0);
 
             psSet.Add(emptyPset);
             relProps.put_RelatingPropertyDefinition().put_IfcPropertySetDefinitionSet(psSet);
             ASSERT(relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinition() == 0);
-            psSet.clear();
-            relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet(psSet);
-            ASSERT(psSet.Count == 1 && psSet.front() == emptyPset);
-#endif
+            
+            var psSetGot = relProps.get_RelatingPropertyDefinition().get_IfcPropertySetDefinitionSet();
+            ASSERT_EQ(psSet, psSetGot);
+
             /// 
             /// 
             ifcengine.sdaiSaveModelBN(ifcModel, "Test.ifc");
