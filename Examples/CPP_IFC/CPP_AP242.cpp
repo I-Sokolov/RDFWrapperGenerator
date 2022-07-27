@@ -112,6 +112,14 @@ static void test_list3()
     assert(!strcmp(test, "Test vertex point"));
 
     //
+    auto prodDefOccur = product_definition_occurrence::Create(model);
+    assert(prodDefOccur.get_definition().get_product_definition() == 0);
+    
+    auto prodDef = product_definition::Create(model);
+    prodDefOccur.put_definition().put_product_definition(prodDef);
+    assert(prodDefOccur.get_definition().get_product_definition() == prodDef);
+
+    //
     set_of_ir_usage_item lstUsageItems;
     auto appliedUsageRights = applied_usage_right::Create(model);
     appliedUsageRights.get_items(lstUsageItems);
