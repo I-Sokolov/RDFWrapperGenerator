@@ -1,4 +1,6 @@
 
+#include <vector>
+
 #include "O:\DevArea\RDF\RDFWrappers\bin\Debug\net5.0\AP242.h"
 using namespace AP242;
 
@@ -8,6 +10,7 @@ static void test_multi_parent();
 extern void AP242_test()
 {
     test_multi_parent();
+    
     test_list3();
 }
 
@@ -148,6 +151,23 @@ static void test_list3()
     listedLogical.get_values(lstLogical);
     assert(lstLogical.size() == 3 && lstLogical.front() == LOGICAL_VALUE::True && lstLogical.back() == LOGICAL_VALUE::Unknown);
 
+    //
+    auto extreme = extreme_instance::Create(model);
+    
+    auto dir = direction::Create(model);
+
+    set_of_location_of_extreme_value_select setLocations;
+    extreme.get_locations_of_extreme_value(setLocations);
+    assert(setLocations.size() == 0);
+
+    setLocations.push_back(location_of_extreme_value_select(extreme));
+    setLocations.back()._inspected_shape_element_select().put_direction(dir);
+
+    extreme.put_locations_of_extreme_value(setLocations);
+
+    std::vector<location_of_extreme_value_select> getLocations;
+    extreme.get_locations_of_extreme_value(getLocations);
+    assert(getLocations.size() == 1 && getLocations[0]._inspected_shape_element_select().get_direction() == dir);
 
     //
     sdaiSaveModelBN(model, "Test.ap");
