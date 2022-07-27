@@ -2,7 +2,7 @@
   "profiles": {
     "RDFWrappers": {
       "commandName": "Project",
-      "commandLineArgs": "--schema IFC4 -h 0",
+      "commandLineArgs": "--schema AP242 -h 0",
       "nativeDebugging": true
     }
   }

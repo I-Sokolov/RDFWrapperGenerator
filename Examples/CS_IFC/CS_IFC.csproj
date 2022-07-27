@@ -17,7 +17,11 @@
 
   <ItemGroup>
     <Compile Include="..\..\ifcengine.cs" />
+    <Compile Include="O:\DevArea\RDF\RDFWrappers\bin\Debug\net5.0\IFC2x3.cs" />
     <Compile Include="O:\DevArea\RDF\RDFWrappers\bin\Debug\net5.0\IFC4.cs" />
+    <Compile Include="O:\DevArea\RDF\RDFWrappers\bin\Debug\net5.0\IFC4x3.cs" />
+    <Compile Include="O:\DevArea\RDF\RDFWrappers\bin\Debug\net5.0\AP242.cs" />
+    <Compile Include="O:\DevArea\RDF\RDFWrappers\bin\Debug\net5.0\CIS2.cs" />
   </ItemGroup>
 
 </Project>

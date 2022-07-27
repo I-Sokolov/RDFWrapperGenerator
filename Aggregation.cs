@@ -243,6 +243,10 @@ namespace RDFWrappers
                     switch (foundation.declarationType)
                     {
                         case enum_express_declaration.__ENTITY:
+                            elemIfcType = definedType.name;
+                            elemApiType = elemIfcType;
+                            //???? or find name of foundation elemApiType = foundation.;
+                            sdaiType = "sdaiINSTANCE";
                             template = Generator.Template.AggregationOfInstance;
                             System.Diagnostics.Debug.Assert(false, "not tested");
                             break;
@@ -255,6 +259,9 @@ namespace RDFWrappers
                             System.Diagnostics.Debug.Assert(false, "not tested");
                             break;
                         case enum_express_declaration.__SELECT:
+                            elemIfcType = definedType.name;
+                            elemApiType = elemIfcType;
+                            sdaiType = "---- sdaiType is not set for SELECT -----";
                             template = Generator.Template.AggregationOfSelect;
                             break;
                         default:
@@ -262,17 +269,6 @@ namespace RDFWrappers
                             System.Diagnostics.Debug.Assert(false);
                             break;
                     }
-
-                    elemIfcType = definedType.name;
-                    if (generator.m_cs)
-                    {
-                        elemApiType = definedType.GetBaseCSType();
-                    }
-                    else
-                    {
-                        elemApiType = elemIfcType;
-                    }
-                    sdaiType = definedType.GetSdaiType();
                 }
             }
 
