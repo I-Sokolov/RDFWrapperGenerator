@@ -137,19 +137,41 @@ namespace RDFWrappers
             //
             if (aggregation == 0)
             {
+                Generator.Template template;
+                switch (foundation.declarationType)
+                {
+                    case enum_express_declaration.__UNDEF:
+                        template = Generator.Template.DefinedTypeSimple;
+                        break;
+                    case enum_express_declaration.__ENTITY:
+                        System.Diagnostics.Debug.Assert(false); //not tested
+                        template = Generator.Template.DefinedTypeEntity;
+                        break;
+                    case enum_express_declaration.__ENUM:
+                        template = Generator.Template.DefinedTypeEnum;
+                        break;
+                    case enum_express_declaration.__SELECT:
+                        template = Generator.Template.DefinedTypeSelect;
+                        break;
+                    default:
+                        throw new System.ApplicationException(foundation.declarationType.ToString() + ": unexpected declaration type (defined type should not be here)");
+                }
+
+
                 generator.m_replacements[Generator.KWD_DEFINED_TYPE] = name;
-                generator.WriteByTemplate(Generator.Template.DefinedType);
+                generator.WriteByTemplate(template);
 
                 if (foundation.declarationType == enum_express_declaration.__SELECT)
                 {
                     generator.m_replacements[Generator.KWD_DEFINED_TYPE] = name + "_put";
                     generator.m_replacements[Generator.KWD_SimpleType] = referTypeName + "_put";
-                    generator.WriteByTemplate(Generator.Template.DefinedType);
+                    generator.WriteByTemplate(template);
 
                     generator.m_replacements[Generator.KWD_DEFINED_TYPE] = name + "_get";
                     generator.m_replacements[Generator.KWD_SimpleType] = referTypeName + "_get";
-                    generator.WriteByTemplate(Generator.Template.DefinedType);
+                    generator.WriteByTemplate(template);
                 }
+
             }
             else
             {

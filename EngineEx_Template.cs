@@ -15,10 +15,15 @@ namespace NAMESPACE_NAME
 
     using IntValue = Int64;
     using TextValue = String;
-
     using SimpleType = Double; //## IGNORE
     using BaseCType = Double; //## IGNORE
-
+    public class SIMpleType : List<SimpleType> { }  //## IGNORE
+    public class SImpleType : Select                        //##IGNORE
+    {                                                       //##IGNORE
+        public SImpleType() : base(null) { }                //##IGNORE
+        public SImpleType(Select outer) : base(outer) { }   //## IGNORE
+        public SImpleType(SdaiInstance instance, TextValue attrName = null, IntValue adb = 0) : base(instance, attrName, adb) { }//##IGNORE
+    }                                                       //##IGNORE
     /// <summary>
     /// 
     /// </summary>
@@ -442,7 +447,7 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializer_IntValue<TElem, TList> : AggrSerializer<IntValue, TList> 
+    public class AggrSerializer_IntValue<TElem, TList> : AggrSerializer<IntValue, TList>
         where TList : List<IntValue>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out IntValue elem)
@@ -459,7 +464,7 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializer_double<TElem, TList> : AggrSerializer<double, TList> 
+    public class AggrSerializer_double<TElem, TList> : AggrSerializer<double, TList>
         where TList : List<double>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out double elem)
@@ -473,7 +478,7 @@ namespace NAMESPACE_NAME
         }
     };
 
-    public class AggrSerializerText<TElem, TList> : AggrSerializer<TextValue, TList> 
+    public class AggrSerializerText<TElem, TList> : AggrSerializer<TextValue, TList>
         where TList : List<TextValue>, new()
     {
         private IntValue m_sdaiType;
@@ -496,8 +501,8 @@ namespace NAMESPACE_NAME
         }
     };
 
-    public class AggrSerializerInstance<TElem, TList> : AggrSerializer<TElem, TList> 
-        where TElem : Entity, new() 
+    public class AggrSerializerInstance<TElem, TList> : AggrSerializer<TElem, TList>
+        where TElem : Entity, new()
         where TList : List<TElem>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TElem elem)
@@ -518,8 +523,8 @@ namespace NAMESPACE_NAME
     /// <summary>
     /// 
     /// </summary>
-    public class AggrSerializerEnum<TEnum, TList> : AggrSerializer<TEnum, TList> 
-        where TEnum : struct, Enum 
+    public class AggrSerializerEnum<TEnum, TList> : AggrSerializer<TEnum, TList>
+        where TEnum : struct, Enum
         where TList : List<TEnum>, new()
     {
         private IntValue m_sdaiType;
@@ -589,9 +594,9 @@ namespace NAMESPACE_NAME
         }
     };
 
-    public class AggrSerializerSelect<TSelect, TList> : AggrSerializer<TSelect, TList> 
+    public class AggrSerializerSelect<TSelect, TList> : AggrSerializer<TSelect, TList>
         where TSelect : Select, new()
-        where TList: List<TSelect>, new ()
+        where TList : List<TSelect>, new()
     {
         protected override bool GetAggrElement(SdaiInstance inst, SdaiAggr aggr, IntValue i, out TSelect elem)
         {
@@ -635,7 +640,7 @@ namespace NAMESPACE_NAME
             Set(instance);
         }
 
-        public void Set (SdaiInstance instance)
+        public void Set(SdaiInstance instance)
         {
             m_instance = instance;
 
@@ -655,7 +660,7 @@ namespace NAMESPACE_NAME
         /// </summary>
         public static implicit operator SdaiInstance(Entity instance) => instance.m_instance;
 
-        protected BaseCType? get_BaseCType (TextValue attrName, IntValue sdaiType) { return null; } //##IGNORE
+        protected BaseCType? get_BaseCType(TextValue attrName, IntValue sdaiType) { return null; } //##IGNORE
         protected TextValue get_string(TextValue attrName, IntValue sdaiType)
         {
             IntPtr ptr = IntPtr.Zero;
@@ -671,11 +676,11 @@ namespace NAMESPACE_NAME
         }
         public double? get_double(TextValue attrName, IntValue sdaiType)
         {
-            double val = 0; 
-            if (ifcengine.sdaiGetAttrBN(m_instance, attrName, sdaiType, out val) != 0) 
-                return val; 
-            else 
-                return null; 
+            double val = 0;
+            if (ifcengine.sdaiGetAttrBN(m_instance, attrName, sdaiType, out val) != 0)
+                return val;
+            else
+                return null;
         }
         public IntValue? get_IntValue(TextValue attrName, IntValue sdaiType)
         {
@@ -722,7 +727,42 @@ namespace NAMESPACE_NAME
     }
     //## TEMPLATE: ClassForwardDeclaration
     //## TEMPLATE: DefinedTypesBegin
-    //## TEMPLATE: DefinedType
+
+    //
+    // Defined types
+    // 
+    //## TEMPLATE: DefinedTypeSimple
+    //## TEMPLATE: DefinedTypeEntity
+    public class DEFINED_TYPE_NAMe : ENTITY_NAME
+    {
+        public DEFINED_TYPE_NAMe(SdaiInstance instance) : base(instance) { }
+        public DEFINED_TYPE_NAMe() : base(0) { }
+        public static implicit operator DEFINED_TYPE_NAMe(SdaiInstance instance) => new DEFINED_TYPE_NAMe(instance);
+    }
+    //## TEMPLATE: DefinedTypeEnum
+    //## TEMPLATE: DefinedTypeSelect
+
+    public class DEFINED_TYPE_NAME : SImpleType 
+    {
+        /// <summary>
+        /// Use this constructor if you want to put value for attribute (scalar or aggregation)
+        /// </summary>
+        /// <param name="instance">instance you intent to modify</param>
+        /// <param name="attrName">scalar attribute you intent to modify, leave null for aggregations</param>
+        /// <param name="adb">leave null, it is for internal workflow</param>
+        public DEFINED_TYPE_NAME(SdaiInstance instance, TextValue attrName = null, IntValue adb = 0) : base(instance, attrName, adb) { }
+
+        /// <summary>
+        /// Use this constructore to put nested select value
+        /// </summary>
+        /// <param name="outer">outer select</param>
+        public DEFINED_TYPE_NAME(Select outer) : base(outer) { }
+
+        /// <summary>
+        /// !!! do not use this constructor, it is for internal workflow
+        /// </summary>
+        public DEFINED_TYPE_NAME() : base(null) { }
+    }
     //## TEMPLATE: EnumerationsBegin
 
     //
@@ -772,12 +812,10 @@ namespace NAMESPACE_NAME
     //TODO public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
     public class AggregationTyPeSerializer : AggrSerializerEnum<ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(EnumNames.ENUMERATION_VALUES_ARRAY, ifcengine.sdaiENUM) { } };
     //## AggregationOfAggregation
-    public class SIMpleType : List<SimpleType> { }  //## IGNORE
     public class SIMpleTypeSerializer : AggrSerializer_SimpleType<SimpleType, AggregationTYpe> { } //## IGNORE
     public class AggregationTYPe : List<SIMpleType> { }
     public class AggregationTYPeSerializer : AggrSerializerAggr<SIMpleType, SIMpleTypeSerializer, AggregationTYPe> { }
     //## AggregationOfSelect
-    public class SImpleType : Select { public SImpleType () : base(null) { } } //## IGNORE
     public class AggregationTYPE : List<SImpleType> { }
     public class AggregationTYPESerializer : AggrSerializerSelect<SImpleType, AggregationTYPE> { }
     //## SelectsBegin

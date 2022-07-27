@@ -563,7 +563,13 @@ namespace NAMESPACE_NAME
     //
     // Defined types
     // 
-//## TEMPLATE: DefinedType
+//## TEMPLATE: DefinedTypeSimple
+    typedef SimpleType DEFINED_TYPE_NAME;
+    //## TEMPLATE: DefinedTypeEntity
+    typedef SimpleType DEFINED_TYPE_NAME;
+    //## TEMPLATE: DefinedTypeEnum
+    typedef SimpleType DEFINED_TYPE_NAME;
+    //## TEMPLATE: DefinedTypeSelect
     typedef SimpleType DEFINED_TYPE_NAME;
     //## TEMPLATE: EnumerationsBegin
 
