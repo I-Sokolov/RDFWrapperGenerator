@@ -308,7 +308,7 @@ namespace NAMESPACE_NAME
         }
 
         //
-        virtual void FromSdaiAggr(TList& lst, SdaiInstance inst, SdaiAggr aggr) = 0;  //TODO rework get/appendAggrElement
+        virtual void FromSdaiAggr(TList& lst, SdaiInstance inst, SdaiAggr aggr) = 0; 
         virtual SdaiAggr ToSdaiAggr(TList& lst, SdaiInstance instance, TextValue attrName) = 0;
     };
 
