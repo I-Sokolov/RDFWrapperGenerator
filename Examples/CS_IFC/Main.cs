@@ -13,6 +13,7 @@ namespace CS_IFC
             IfcBlobTextureExample.Run();
             HelloWall.Run();
             GuideExample.Run();
+            CS_AP242.Run();
         }
     }
 }
