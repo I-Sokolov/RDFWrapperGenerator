@@ -391,7 +391,7 @@ namespace NAMESPACE_NAME
 
     }
 
-    abstract class AggrSerializer<TElem, TList> : IAggrSerializerObj //TODO do we need these classes public?
+    abstract class AggrSerializer<TElem, TList> : IAggrSerializerObj 
         where TList : List<TElem>, new()
     {
         //
@@ -807,8 +807,8 @@ namespace NAMESPACE_NAME
     class AggregationTypeSerializer : AggrSerializerInstance<REF_ENTITY, AggregationType> { }
     //## AggregationOfEnum
     public class AggregationTyPe : List<ENUMERATION_NAME> { }
-    //TODO public class AggregationTyPeSerializer : AggrSerializerEnum<Enums.ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(Enums.ENUMERATION_NAME_, ifcengine.sdaiTYPE) { } };
-    class AggregationTyPeSerializer : AggrSerializerEnum<ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(EnumNames.ENUMERATION_VALUES_ARRAY, ifcengine.sdaiENUM) { } };
+    class AggregationTyPeSerializer : AggrSerializerEnum<ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(EnumNames.ENUMERATION_VALUES_ARRAY, ifcengine.sdaiTYPE) { } };
+    //class AggregationTyPeSerializer : AggrSerializerEnum<ENUMERATION_NAME, AggregationTyPe> { public AggregationTyPeSerializer() : base(EnumNames.ENUMERATION_VALUES_ARRAY, ifcengine.sdaiENUM) { } };
     //## AggregationOfAggregation
     class SIMpleTypeSerializer : AggrSerializer_SimpleType<SimpleType, AggregationTYpe> { } //## IGNORE
     public class AggregationTYPe : List<SIMpleType> { }

@@ -606,8 +606,7 @@ namespace NAMESPACE_NAME
     template <typename TList> class AggregationTYpeSerializer : public AggrSerializerInstance<TList, SimpleType> {};
     //## AggregationOfEnum
     typedef std::list<TypeNameIFC> AggregationTyPe;
-    //TODO - template <typename TList> class AggregationTyPeSerializer : public AggrSerializerEnum<TList, ENUMERATION_NAME, ENUMERATION_VALUES_ARRAY, sdaiTYPE> {};
-    template <typename TList> class AggregationTyPeSerializer : public AggrSerializerEnum<TList, ENUMERATION_NAME, ENUMERATION_VALUES_ARRAY, sdaiENUM> {};
+    template <typename TList> class AggregationTyPeSerializer : public AggrSerializerEnum<TList, ENUMERATION_NAME, ENUMERATION_VALUES_ARRAY, sdaiTYPE> {};
     //## AggregationOfAggregation
     typedef std::list<SimpleType> AggregationTYPe;
     template <typename TList> class AggregationTYPeSerializer : public AggrSerializerAggr<TList, SimpleType, SimpleTypeSerializer<SimpleType>> {};
