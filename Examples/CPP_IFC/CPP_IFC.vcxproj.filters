@@ -27,7 +27,7 @@
     <ClCompile Include="HelloWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestBinaries.cpp">
+    <ClCompile Include="EngineTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GuideExample.cpp">
@@ -42,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\bin\Debug\net5.0\AP242.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\bin\Debug\net5.0\IFC4x3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

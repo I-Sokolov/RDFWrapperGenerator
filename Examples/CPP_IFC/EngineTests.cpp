@@ -3,7 +3,9 @@
 
 using namespace IFC4;
 
-extern void TestBinaries()
+#define FILE_NAME "EngineTests.ifc"
+
+static void TestBinaries(SdaiModel ifcModel)
 {
 #define NC 4
     char rasterCode[NC * 1024 * 4 + 2];
@@ -13,10 +15,6 @@ extern void TestBinaries()
     for (int i = 1; i < NC * 1024 * 4; i++) {
         rasterCode[i] = 'A' + i % 3;
     }
-
-    int_t  ifcModel = sdaiCreateModelBN(0, NULL, "IFC4");
-    SetSPFFHeaderItem(ifcModel, 9, 0, sdaiSTRING, "IFC4");
-    SetSPFFHeaderItem(ifcModel, 9, 1, sdaiSTRING, 0);
 
     //
     //scalar attribute
@@ -75,16 +73,15 @@ extern void TestBinaries()
     //
     //save and read
 
-    sdaiSaveModelBN(ifcModel, "Binaries.ifc");
-    sdaiCloseModel(ifcModel);
+    sdaiSaveModelBN(ifcModel, FILE_NAME);
 
     //
     // Re-read
     //
-    ifcModel = sdaiOpenModelBN(NULL, "Binaries.ifc", "IFC4");
+    SdaiModel readModel = sdaiOpenModelBN(NULL, FILE_NAME, "IFC4");
 
-    auto entityBlobTexture = sdaiGetEntity(ifcModel, "IfcBlobTexture");
-    auto blobTextureAggr = sdaiGetEntityExtent(ifcModel, entityBlobTexture);
+    auto entityBlobTexture = sdaiGetEntity(readModel, "IfcBlobTexture");
+    auto blobTextureAggr = sdaiGetEntityExtent(readModel, entityBlobTexture);
     auto N = sdaiGetMemberCount(blobTextureAggr);
     assert(N == 1);
     for (int_t i = 0; i < N; i++) {
@@ -94,8 +91,8 @@ extern void TestBinaries()
         assert(0 == strcmp(code, rasterCode));
     }
 
-    auto entityPixelTexture = sdaiGetEntity(ifcModel, "IfcPixelTexture");
-    auto pixelTextureAggr = sdaiGetEntityExtent(ifcModel, entityPixelTexture);
+    auto entityPixelTexture = sdaiGetEntity(readModel, "IfcPixelTexture");
+    auto pixelTextureAggr = sdaiGetEntityExtent(readModel, entityPixelTexture);
     N = sdaiGetMemberCount(pixelTextureAggr);
     assert(N == 1);
     for (int_t i = 0; i < N; i++) {
@@ -106,8 +103,8 @@ extern void TestBinaries()
         assert(lstBin.size() == 2 && !strcmp(lstBin.front(), rasterCode) && !strcmp(lstBin.back(), rasterCode));
     }
 
-    auto entityValue = sdaiGetEntity(ifcModel, "IfcAppliedValue");
-    auto valueAggr = sdaiGetEntityExtent(ifcModel, entityValue);
+    auto entityValue = sdaiGetEntity(readModel, "IfcAppliedValue");
+    auto valueAggr = sdaiGetEntityExtent(readModel, entityValue);
     N = sdaiGetMemberCount(pixelTextureAggr);
     assert(N == 1);
     for (int_t i = 0; i < N; i++) {
@@ -117,7 +114,36 @@ extern void TestBinaries()
         assert(!strcmp(v, rasterCode));
     }
 
-    sdaiCloseModel(ifcModel);
-
 }
 
+static void TestNulls(SdaiModel model)
+{
+    auto window = IfcWindow::Create(model);
+
+    assert(window.get_PredefinedType().IsNull());
+    window.put_PredefinedType(IfcWindowTypeEnum::SKYLIGHT);
+    assert(window.get_PredefinedType().Value()==IfcWindowTypeEnum::SKYLIGHT);
+    sdaiPutAttrBN(window, "PredefinedType", sdaiENUM, NULL);
+    assert(window.get_PredefinedType().IsNull());
+
+    assert(window.get_OverallWidth().IsNull());
+    window.put_OverallWidth(50);
+    assert(window.get_OverallWidth().Value() == 50);
+    sdaiPutAttrBN(window, "OverallWidth", sdaiREAL, NULL);
+    assert(window.get_OverallWidth().IsNull());
+
+    auto unit = IfcSIUnit::Create(model);
+}
+
+extern void EngineTests(void)
+{
+    SdaiModel  ifcModel = sdaiCreateModelBN(0, NULL, "IFC4");
+    SetSPFFHeaderItem(ifcModel, 9, 0, sdaiSTRING, "IFC4");
+    SetSPFFHeaderItem(ifcModel, 9, 1, sdaiSTRING, 0);
+
+    TestBinaries(ifcModel);
+    TestNulls(ifcModel);
+
+    sdaiSaveModelBN(ifcModel, FILE_NAME);
+    sdaiCloseModel(ifcModel);
+}
